@@ -1,8 +1,7 @@
 package org.zalando.intellij.swagger.completion.traversal;
 
-import com.intellij.json.JsonElementTypes;
 import com.intellij.psi.PsiElement;
-import org.zalando.intellij.swagger.completion.traversal.Traversal;
+import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 
 public class PositionResolver {
 
@@ -19,7 +18,11 @@ public class PositionResolver {
     }
 
     public boolean shouldQuote() {
-        return !psiElement.toString().contains(JsonElementTypes.DOUBLE_QUOTED_STRING.toString());
+        return traversal.shouldQuote(psiElement);
+    }
+
+    public CompletionStyle.QuoteStyle getQuoteStyle() {
+        return traversal.getQuoteStyle();
     }
 
     public boolean completeInfoKey() {
@@ -88,5 +91,9 @@ public class PositionResolver {
 
     public boolean completeParameterDefinitionKey() {
         return traversal.isParameterDefinition(psiElement);
+    }
+
+    public boolean completeMimeValue() {
+        return traversal.isMimeValue(psiElement);
     }
 }

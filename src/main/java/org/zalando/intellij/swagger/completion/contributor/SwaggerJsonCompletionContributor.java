@@ -6,6 +6,7 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.level.LevelCompletionFactory;
+import org.zalando.intellij.swagger.completion.level.value.ValueCompletionFactory;
 import org.zalando.intellij.swagger.completion.traversal.JsonTraversal;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 import org.zalando.intellij.swagger.file.FileDetector;
@@ -33,10 +34,13 @@ public class SwaggerJsonCompletionContributor extends CompletionContributor {
         }
 
         final PsiElement psiElement = parameters.getPosition();
+        final PositionResolver positionResolver = new PositionResolver(psiElement, jsonTraversal);
         if (jsonTraversal.isKey(psiElement)) {
-            final PositionResolver positionResolver = new PositionResolver(psiElement, jsonTraversal);
             LevelCompletionFactory.from(positionResolver)
-                    .ifPresent(levelCompletion -> levelCompletion.fill(result, positionResolver.shouldQuote()));
+                    .ifPresent(levelCompletion -> levelCompletion.fill(result));
+        } else {
+            ValueCompletionFactory.from(positionResolver)
+                    .ifPresent(valueCompletion -> valueCompletion.fill(result));
         }
     }
 }

@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.zalando.intellij.swagger.completion.level.LevelCompletionFactory;
+import org.zalando.intellij.swagger.completion.level.value.ValueCompletionFactory;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 import org.zalando.intellij.swagger.completion.traversal.YamlTraversal;
 import org.zalando.intellij.swagger.file.FileDetector;
@@ -34,12 +35,15 @@ public class SwaggerYamlCompletionContributor extends CompletionContributor {
         }
 
         PsiElement psiElement = parameters.getPosition();
-        if(psiElement.getParent() instanceof YAMLKeyValue) {
+        if (psiElement.getParent() instanceof YAMLKeyValue) {
             psiElement = psiElement.getParent().getParent();
         }
 
         final PositionResolver positionResolver = new PositionResolver(psiElement, yamlTraversal);
         LevelCompletionFactory.from(positionResolver)
-                .ifPresent(levelCompletion -> levelCompletion.fill(result, false));
+                .ifPresent(levelCompletion -> levelCompletion.fill(result));
+
+        ValueCompletionFactory.from(positionResolver)
+                .ifPresent(valueCompletion -> valueCompletion.fill(result));
     }
 }

@@ -2,18 +2,23 @@ package org.zalando.intellij.swagger.completion.level;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import org.jetbrains.annotations.NotNull;
+import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
-import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
 import static org.zalando.intellij.swagger.completion.level.LookupElementBuilderFactory.create;
+import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
 
-public class XmlLevelCompletion implements LevelCompletion {
+class XmlLevelCompletion extends LevelCompletion {
 
-    public void fill(@NotNull final CompletionResultSet result, final boolean shouldQuote) {
-        result.addElement(create("name", optional(shouldQuote)));
-        result.addElement(create("namespace", optional(shouldQuote)));
-        result.addElement(create("prefix", optional(shouldQuote)));
-        result.addElement(create("attribute", optional(shouldQuote)));
-        result.addElement(create("wrapped", optional(shouldQuote)));
+    XmlLevelCompletion(final PositionResolver positionResolver) {
+        super(positionResolver);
+    }
+
+    public void fill(@NotNull final CompletionResultSet result) {
+        result.addElement(create("name", optional(positionResolver)));
+        result.addElement(create("namespace", optional(positionResolver)));
+        result.addElement(create("prefix", optional(positionResolver)));
+        result.addElement(create("attribute", optional(positionResolver)));
+        result.addElement(create("wrapped", optional(positionResolver)));
     }
 
 }

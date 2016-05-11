@@ -5,6 +5,7 @@ import org.jetbrains.yaml.psi.YAMLFile;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.jetbrains.yaml.psi.YAMLMapping;
 import org.jetbrains.yaml.psi.YAMLSequenceItem;
+import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 
 import java.util.Optional;
 
@@ -167,6 +168,15 @@ public class YamlTraversal implements Traversal {
                 .isPresent();
     }
 
+    @Override
+    public boolean isMimeValue(final PsiElement psiElement) {
+        final boolean insideConsumerOrProduces = Optional.ofNullable(getNthYamlKeyValue(psiElement, 1))
+                .map(YAMLKeyValue::getName)
+                .filter(name -> name.equals("consumes") || name.equals("produces"))
+                .isPresent();
+        return insideConsumerOrProduces && hasSequenceItemAsParent(psiElement);
+    }
+
     private YAMLKeyValue getNthYamlKeyValue(final PsiElement psiElement, int nth) {
         if (psiElement == null) {
             return null;
@@ -181,4 +191,16 @@ public class YamlTraversal implements Traversal {
         return getNthYamlKeyValue(psiElement.getParent(), nth);
     }
 
+    /*
+        For YAML no quotes needed (if the strings do not contain any reserved characters)
+     */
+    @Override
+    public boolean shouldQuote(final PsiElement psiElement) {
+        return false;
+    }
+
+    @Override
+    public CompletionStyle.QuoteStyle getQuoteStyle() {
+        return CompletionStyle.QuoteStyle.SINGLE;
+    }
 }

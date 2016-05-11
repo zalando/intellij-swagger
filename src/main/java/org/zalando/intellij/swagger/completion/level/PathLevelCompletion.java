@@ -2,20 +2,27 @@ package org.zalando.intellij.swagger.completion.level;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.completion.style.CompletionStyleFactory;
+import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
-public class PathLevelCompletion implements LevelCompletion {
+import static org.zalando.intellij.swagger.completion.level.LookupElementBuilderFactory.*;
+import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
 
-    public void fill(@NotNull final CompletionResultSet result, final boolean shouldQuote) {
-        result.addElement(LookupElementBuilderFactory.create("$ref", CompletionStyleFactory.optional(shouldQuote)));
-        result.addElement(LookupElementBuilderFactory.create("get", CompletionStyleFactory.optional(shouldQuote)));
-        result.addElement(LookupElementBuilderFactory.create("put", CompletionStyleFactory.optional(shouldQuote)));
-        result.addElement(LookupElementBuilderFactory.create("post", CompletionStyleFactory.optional(shouldQuote)));
-        result.addElement(LookupElementBuilderFactory.create("delete", CompletionStyleFactory.optional(shouldQuote)));
-        result.addElement(LookupElementBuilderFactory.create("options", CompletionStyleFactory.optional(shouldQuote)));
-        result.addElement(LookupElementBuilderFactory.create("head", CompletionStyleFactory.optional(shouldQuote)));
-        result.addElement(LookupElementBuilderFactory.create("patch", CompletionStyleFactory.optional(shouldQuote)));
-        result.addElement(LookupElementBuilderFactory.create("parameters", CompletionStyleFactory.optional(shouldQuote)));
+class PathLevelCompletion extends LevelCompletion {
+
+    PathLevelCompletion(final PositionResolver positionResolver) {
+        super(positionResolver);
+    }
+
+    public void fill(@NotNull final CompletionResultSet result) {
+        result.addElement(create("$ref", optional(positionResolver)));
+        result.addElement(create("get", optional(positionResolver)));
+        result.addElement(create("put", optional(positionResolver)));
+        result.addElement(create("post", optional(positionResolver)));
+        result.addElement(create("delete", optional(positionResolver)));
+        result.addElement(create("options", optional(positionResolver)));
+        result.addElement(create("head", optional(positionResolver)));
+        result.addElement(create("patch", optional(positionResolver)));
+        result.addElement(create("parameters", optional(positionResolver)));
     }
 
 }
