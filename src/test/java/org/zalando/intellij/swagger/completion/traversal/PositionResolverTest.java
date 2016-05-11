@@ -169,4 +169,11 @@ public class PositionResolverTest {
 
         assertTrue(positionResolver.completeMimeValue());
     }
+
+    @Test
+    public void thatCompletesSchemesValue() {
+        when(traversal.isSchemesValue(psiElement)).thenReturn(true);
+
+        assertTrue(positionResolver.completeSchemesValue());
+    }
 }

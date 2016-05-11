@@ -270,4 +270,16 @@ public class JsonTraversal implements Traversal {
         return CompletionStyle.QuoteStyle.DOUBLE;
     }
 
+    @Override
+    public boolean isSchemesValue(final PsiElement psiElement) {
+        return Optional.ofNullable(psiElement.getParent())
+                .map(PsiElement::getParent)
+                .map(PsiElement::getParent)
+                .filter(element -> element instanceof JsonProperty)
+                .map(JsonProperty.class::cast)
+                .map(JsonProperty::getName)
+                .filter(name -> name.equals("schemes"))
+                .isPresent();
+    }
+
 }

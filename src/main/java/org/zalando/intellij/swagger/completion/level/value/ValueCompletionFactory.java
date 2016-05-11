@@ -10,6 +10,8 @@ public class ValueCompletionFactory {
 
         if (positionResolver.completeMimeValue()) {
             return Optional.of(new MimeValueCompletion(positionResolver));
+        } else if (positionResolver.completeSchemesValue()) {
+            return Optional.of(new SchemesValueCompletion(positionResolver));
         } else {
             return Optional.empty();
         }

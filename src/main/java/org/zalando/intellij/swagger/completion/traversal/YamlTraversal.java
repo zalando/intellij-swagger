@@ -203,4 +203,13 @@ public class YamlTraversal implements Traversal {
     public CompletionStyle.QuoteStyle getQuoteStyle() {
         return CompletionStyle.QuoteStyle.SINGLE;
     }
+
+    @Override
+    public boolean isSchemesValue(final PsiElement psiElement) {
+        final boolean insideSchemes = Optional.ofNullable(getNthYamlKeyValue(psiElement, 1))
+                .map(YAMLKeyValue::getName)
+                .filter(name -> name.equals("schemes"))
+                .isPresent();
+        return insideSchemes && hasSequenceItemAsParent(psiElement);
+    }
 }
