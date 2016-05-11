@@ -48,4 +48,6 @@ interface Traversal {
     boolean shouldQuote(final PsiElement psiElement);
 
     CompletionStyle.QuoteStyle getQuoteStyle();
+
+    boolean isSchemesValue(PsiElement psiElement);
 }

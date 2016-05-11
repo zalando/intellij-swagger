@@ -96,4 +96,8 @@ public class PositionResolver {
     public boolean completeMimeValue() {
         return traversal.isMimeValue(psiElement);
     }
+
+    public boolean completeSchemesValue() {
+        return traversal.isSchemesValue(psiElement);
+    }
 }

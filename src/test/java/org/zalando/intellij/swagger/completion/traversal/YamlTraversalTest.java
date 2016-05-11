@@ -245,4 +245,43 @@ public class YamlTraversalTest {
 
         assertTrue(yamlTraversal.isDefinitions(psiElement1));
     }
+
+    @Test
+    public void thatMimeValueIsResolvedForConsumesObject() {
+        final PsiElement psiElement = mock(PsiElement.class);
+        final YAMLSequenceItem yamlSequenceItem = mock(YAMLSequenceItem.class);
+        final YAMLKeyValue yamlKeyValue = mock(YAMLKeyValue.class);
+
+        when(psiElement.getParent()).thenReturn(yamlSequenceItem);
+        when(yamlSequenceItem.getParent()).thenReturn(yamlKeyValue);
+        when(yamlKeyValue.getName()).thenReturn("consumes");
+
+        assertTrue(yamlTraversal.isMimeValue(yamlSequenceItem));
+    }
+
+    @Test
+    public void thatMimeValueIsResolvedForProducesObject() {
+        final PsiElement psiElement = mock(PsiElement.class);
+        final YAMLSequenceItem yamlSequenceItem = mock(YAMLSequenceItem.class);
+        final YAMLKeyValue yamlKeyValue = mock(YAMLKeyValue.class);
+
+        when(psiElement.getParent()).thenReturn(yamlSequenceItem);
+        when(yamlSequenceItem.getParent()).thenReturn(yamlKeyValue);
+        when(yamlKeyValue.getName()).thenReturn("produces");
+
+        assertTrue(yamlTraversal.isMimeValue(yamlSequenceItem));
+    }
+
+    @Test
+    public void thatSchemesValueIsResolved() {
+        final PsiElement psiElement = mock(PsiElement.class);
+        final YAMLSequenceItem yamlSequenceItem = mock(YAMLSequenceItem.class);
+        final YAMLKeyValue yamlKeyValue = mock(YAMLKeyValue.class);
+
+        when(psiElement.getParent()).thenReturn(yamlSequenceItem);
+        when(yamlSequenceItem.getParent()).thenReturn(yamlKeyValue);
+        when(yamlKeyValue.getName()).thenReturn("schemes");
+
+        assertTrue(yamlTraversal.isSchemesValue(yamlSequenceItem));
+    }
 }

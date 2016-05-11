@@ -6,7 +6,6 @@ import com.intellij.json.psi.JsonValue;
 import com.intellij.psi.PsiElement;
 import org.junit.Before;
 import org.junit.Test;
-import org.zalando.intellij.swagger.completion.traversal.JsonTraversal;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -340,5 +339,20 @@ public class JsonTraversalTest {
         when(psiElement.toString()).thenReturn("DOUBLE_QUOTED_STRING");
 
         assertFalse(jsonTraversal.shouldQuote(psiElement));
+    }
+
+    @Test
+    public void thatSchemesValueIsResolved() {
+        final PsiElement psiElement1 = mock(PsiElement.class);
+        final PsiElement psiElement2 = mock(PsiElement.class);
+        final PsiElement psiElement3 = mock(PsiElement.class);
+        final JsonProperty jsonProperty = mock(JsonProperty.class);
+
+        when(psiElement1.getParent()).thenReturn(psiElement2);
+        when(psiElement2.getParent()).thenReturn(psiElement3);
+        when(psiElement3.getParent()).thenReturn(jsonProperty);
+        when(jsonProperty.getName()).thenReturn("schemes");
+
+        assertTrue(jsonTraversal.isSchemesValue(psiElement1));
     }
 }
