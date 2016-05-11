@@ -16,7 +16,11 @@ Swagger Plugin identifies YAML and JSON specifications with the following rules:
 
 ## Development
 
-Developing Swagger Plugin is easy, just run
+Developing Swagger Plugin is easy, there are only two steps:
+
+1. Change YAML plugin JAR paths to match your environment in *gradle.build*.
+
+2. Execute the following command:
 
 ```./gradlew runIdea```
 
