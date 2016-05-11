@@ -1,0 +1,43 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+plugins {
+    id "org.jetbrains.intellij" version "0.0.20"
+}
+
+apply plugin: 'idea'
+apply plugin: 'org.jetbrains.intellij'
+apply plugin: 'java'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.12'
+}
+
+intellij {
+    version '2016.1'
+    plugins 'yaml' //Bundled plugin dependencies
+    pluginName 'intellij-swagger'
+}
+
+group 'org.zalando.intellij'
+version '0.0.2'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'commons-io:commons-io:2.5'
+    compile 'com.google.code.gson:gson:2.6.2'
+    compileOnly files('/path/to/yaml/plugin/jar')
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile 'org.mockito:mockito-all:1.10.19'
+    testCompile files('/path/to/yaml/plugin/jar')
+}
