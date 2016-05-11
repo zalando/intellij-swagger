@@ -1,4 +1,4 @@
-package org.zalando.intellij.swagger.completion;
+package org.zalando.intellij.swagger.completion.style;
 
 public class CompletionStyleFactory {
 

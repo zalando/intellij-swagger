@@ -4,6 +4,7 @@ import com.intellij.psi.PsiElement;
 import org.junit.Before;
 import org.junit.Test;
 import org.zalando.intellij.swagger.completion.traversal.JsonTraversal;
+import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

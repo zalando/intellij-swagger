@@ -1,23 +1,6 @@
-package org.zalando.intellij.swagger.completion;
+package org.zalando.intellij.swagger.completion.level;
 
-import org.zalando.intellij.swagger.completion.level.ContactLevelCompletion;
-import org.zalando.intellij.swagger.completion.level.DefinitionsLevelCompletion;
-import org.zalando.intellij.swagger.completion.level.ExternalDocsLevelCompletion;
-import org.zalando.intellij.swagger.completion.level.HeaderLevelCompletion;
-import org.zalando.intellij.swagger.completion.level.InfoLevelCompletion;
-import org.zalando.intellij.swagger.completion.level.ItemsLevelCompletion;
-import org.zalando.intellij.swagger.completion.level.LicenseLevelCompletion;
-import org.zalando.intellij.swagger.completion.level.OperationLevelCompletion;
-import org.zalando.intellij.swagger.completion.level.ParameterDefinitionLevelCompletion;
-import org.zalando.intellij.swagger.completion.level.ParametersLevelCompletion;
-import org.zalando.intellij.swagger.completion.level.PathLevelCompletion;
-import org.zalando.intellij.swagger.completion.level.ResponseLevelCompletion;
-import org.zalando.intellij.swagger.completion.level.ResponsesLevelCompletion;
-import org.zalando.intellij.swagger.completion.level.RootLevelCompletion;
-import org.zalando.intellij.swagger.completion.level.SchemaLevelCompletion;
-import org.zalando.intellij.swagger.completion.level.SecurityDefinitionLevelCompletion;
-import org.zalando.intellij.swagger.completion.level.TagsLevelCompletion;
-import org.zalando.intellij.swagger.completion.level.XmlLevelCompletion;
+import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
 import java.util.Optional;
 

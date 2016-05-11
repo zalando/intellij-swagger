@@ -1,4 +1,4 @@
-package org.zalando.intellij.swagger.completion;
+package org.zalando.intellij.swagger.completion.level;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import org.jetbrains.annotations.NotNull;

@@ -33,9 +33,9 @@
     <idea-version since-build="145.258"/>
 
     <extensions defaultExtensionNs="com.intellij">
-        <completion.contributor language="JSON" implementationClass="org.zalando.intellij.swagger.completion.SwaggerJsonCompletionContributor"/>
+        <completion.contributor language="JSON" implementationClass="org.zalando.intellij.swagger.completion.contributor.SwaggerJsonCompletionContributor"/>
 
-        <completion.contributor language="yaml" implementationClass="org.zalando.intellij.swagger.completion.SwaggerYamlCompletionContributor"/>
+        <completion.contributor language="yaml" implementationClass="org.zalando.intellij.swagger.completion.contributor.SwaggerYamlCompletionContributor"/>
     </extensions>
 
 

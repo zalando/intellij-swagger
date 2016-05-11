@@ -1,11 +1,13 @@
-package org.zalando.intellij.swagger.completion;
+package org.zalando.intellij.swagger.completion.contributor;
 
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import org.zalando.intellij.swagger.completion.level.LevelCompletionFactory;
 import org.zalando.intellij.swagger.completion.traversal.JsonTraversal;
+import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 import org.zalando.intellij.swagger.file.FileDetector;
 
 public class SwaggerJsonCompletionContributor extends CompletionContributor {

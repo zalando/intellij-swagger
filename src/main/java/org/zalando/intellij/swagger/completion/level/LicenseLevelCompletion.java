@@ -2,11 +2,10 @@ package org.zalando.intellij.swagger.completion.level;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.completion.LevelCompletion;
 
-import static org.zalando.intellij.swagger.completion.CompletionStyleFactory.optional;
-import static org.zalando.intellij.swagger.completion.CompletionStyleFactory.required;
-import static org.zalando.intellij.swagger.completion.LookupElementBuilderFactory.create;
+import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
+import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.required;
+import static org.zalando.intellij.swagger.completion.level.LookupElementBuilderFactory.create;
 
 public class LicenseLevelCompletion implements LevelCompletion {
 

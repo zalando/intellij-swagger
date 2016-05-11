@@ -1,6 +1,7 @@
-package org.zalando.intellij.swagger.completion;
+package org.zalando.intellij.swagger.completion.level;
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 
 public class LookupElementBuilderFactory {
 

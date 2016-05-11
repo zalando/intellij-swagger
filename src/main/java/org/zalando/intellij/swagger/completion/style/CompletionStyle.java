@@ -1,8 +1,8 @@
-package org.zalando.intellij.swagger.completion;
+package org.zalando.intellij.swagger.completion.style;
 
-class CompletionStyle {
+public class CompletionStyle {
 
-    enum FontWeight {
+    public enum FontWeight {
         NORMAL, BOLD
     }
 

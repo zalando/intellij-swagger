@@ -2,9 +2,7 @@ package org.zalando.intellij.swagger.completion.level;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.completion.CompletionStyleFactory;
-import org.zalando.intellij.swagger.completion.LevelCompletion;
-import org.zalando.intellij.swagger.completion.LookupElementBuilderFactory;
+import org.zalando.intellij.swagger.completion.style.CompletionStyleFactory;
 
 public class ExternalDocsLevelCompletion implements LevelCompletion {
 

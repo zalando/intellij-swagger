@@ -1,92 +1,92 @@
-package org.zalando.intellij.swagger.completion;
+package org.zalando.intellij.swagger.completion.traversal;
 
 import com.intellij.json.JsonElementTypes;
 import com.intellij.psi.PsiElement;
 import org.zalando.intellij.swagger.completion.traversal.Traversal;
 
-class PositionResolver {
+public class PositionResolver {
 
     private final PsiElement psiElement;
     private final Traversal traversal;
 
-    PositionResolver(final PsiElement psiElement, final Traversal traversal) {
+    public PositionResolver(final PsiElement psiElement, final Traversal traversal) {
         this.psiElement = psiElement;
         this.traversal = traversal;
     }
 
-    boolean completeRootKey() {
+    public boolean completeRootKey() {
         return traversal.isRoot(psiElement);
     }
 
-    boolean shouldQuote() {
+    public boolean shouldQuote() {
         return !psiElement.toString().contains(JsonElementTypes.DOUBLE_QUOTED_STRING.toString());
     }
 
-    boolean completeInfoKey() {
+    public boolean completeInfoKey() {
         return traversal.isInfo(psiElement);
     }
 
-    boolean completeContactKey() {
+    public boolean completeContactKey() {
         return traversal.isContact(psiElement);
     }
 
-    boolean completeLicenseKey() {
+    public boolean completeLicenseKey() {
         return traversal.isLicense(psiElement);
     }
 
-    boolean completePathKey() {
+    public boolean completePathKey() {
         return traversal.isPath(psiElement);
     }
 
-    boolean completeOperationKey() {
+    public boolean completeOperationKey() {
         return traversal.isOperation(psiElement);
     }
 
-    boolean completeExternalDocsKey() {
+    public boolean completeExternalDocsKey() {
         return traversal.isExternalDocs(psiElement);
     }
 
-    boolean completeParametersKey() {
+    public boolean completeParametersKey() {
         return traversal.isParameters(psiElement);
     }
 
-    boolean completeItemsKey() {
+    public boolean completeItemsKey() {
         return traversal.isItems(psiElement);
     }
 
-    boolean completeResponsesKey() {
+    public boolean completeResponsesKey() {
         return traversal.isResponses(psiElement);
     }
 
-    boolean completeResponseKey() {
+    public boolean completeResponseKey() {
         return traversal.isResponse(psiElement);
     }
 
-    boolean completeHeaderKey() {
+    public boolean completeHeaderKey() {
         return traversal.isHeader(psiElement);
     }
 
-    boolean completeTagKey() {
+    public boolean completeTagKey() {
         return traversal.isTag(psiElement);
     }
 
-    boolean completeSecurityDefinitionKey() {
+    public boolean completeSecurityDefinitionKey() {
         return traversal.isSecurityDefinition(psiElement);
     }
 
-    boolean completeSchemaKey() {
+    public boolean completeSchemaKey() {
         return traversal.isSchema(psiElement);
     }
 
-    boolean completeXmlKey() {
+    public boolean completeXmlKey() {
         return traversal.isXml(psiElement);
     }
 
-    boolean completeDefinitionsKey() {
+    public boolean completeDefinitionsKey() {
         return traversal.isDefinitions(psiElement);
     }
 
-    boolean completeParameterDefinitionKey() {
+    public boolean completeParameterDefinitionKey() {
         return traversal.isParameterDefinition(psiElement);
     }
 }
