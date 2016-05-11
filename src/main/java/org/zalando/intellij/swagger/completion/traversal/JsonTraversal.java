@@ -1,9 +1,11 @@
 package org.zalando.intellij.swagger.completion.traversal;
 
+import com.intellij.json.JsonElementTypes;
 import com.intellij.json.psi.JsonFile;
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 
 import java.util.Optional;
 
@@ -245,4 +247,27 @@ public class JsonTraversal implements Traversal {
                 .filter(name -> name.equals("parameters"))
                 .isPresent();
     }
+
+    @Override
+    public boolean isMimeValue(final PsiElement psiElement) {
+        return Optional.ofNullable(psiElement.getParent())
+                .map(PsiElement::getParent)
+                .map(PsiElement::getParent)
+                .filter(element -> element instanceof JsonProperty)
+                .map(JsonProperty.class::cast)
+                .map(JsonProperty::getName)
+                .filter(name -> name.equals("consumes") || name.equals("produces"))
+                .isPresent();
+    }
+
+    @Override
+    public boolean shouldQuote(final PsiElement psiElement) {
+        return !psiElement.toString().contains(JsonElementTypes.DOUBLE_QUOTED_STRING.toString());
+    }
+
+    @Override
+    public CompletionStyle.QuoteStyle getQuoteStyle() {
+        return CompletionStyle.QuoteStyle.DOUBLE;
+    }
+
 }

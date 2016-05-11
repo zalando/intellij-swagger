@@ -1,8 +1,9 @@
 package org.zalando.intellij.swagger.completion.traversal;
 
 import com.intellij.psi.PsiElement;
+import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 
-public interface Traversal {
+interface Traversal {
 
     boolean isKey(final PsiElement psiElement);
 
@@ -41,4 +42,10 @@ public interface Traversal {
     boolean isDefinitions(final PsiElement psiElement);
 
     boolean isParameterDefinition(final PsiElement psiElement);
+
+    boolean isMimeValue(final PsiElement psiElement);
+
+    boolean shouldQuote(final PsiElement psiElement);
+
+    CompletionStyle.QuoteStyle getQuoteStyle();
 }

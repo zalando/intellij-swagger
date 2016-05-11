@@ -2,17 +2,24 @@ package org.zalando.intellij.swagger.completion.level;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.completion.style.CompletionStyleFactory;
+import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
-public class InfoLevelCompletion implements LevelCompletion {
+import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
+import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.required;
 
-    public void fill(@NotNull final CompletionResultSet result, final boolean shouldQuote) {
-        result.addElement(LookupElementBuilderFactory.create("title", CompletionStyleFactory.required(shouldQuote)));
-        result.addElement(LookupElementBuilderFactory.create("description", CompletionStyleFactory.optional(shouldQuote)));
-        result.addElement(LookupElementBuilderFactory.create("termsOfService", CompletionStyleFactory.optional(shouldQuote)));
-        result.addElement(LookupElementBuilderFactory.create("contact", CompletionStyleFactory.optional(shouldQuote)));
-        result.addElement(LookupElementBuilderFactory.create("license", CompletionStyleFactory.optional(shouldQuote)));
-        result.addElement(LookupElementBuilderFactory.create("version", CompletionStyleFactory.required(shouldQuote)));
+class InfoLevelCompletion extends LevelCompletion {
+
+    InfoLevelCompletion(final PositionResolver positionResolver) {
+        super(positionResolver);
+    }
+
+    public void fill(@NotNull final CompletionResultSet result) {
+        result.addElement(LookupElementBuilderFactory.create("title", required(positionResolver)));
+        result.addElement(LookupElementBuilderFactory.create("description", optional(positionResolver)));
+        result.addElement(LookupElementBuilderFactory.create("termsOfService", optional(positionResolver)));
+        result.addElement(LookupElementBuilderFactory.create("contact", optional(positionResolver)));
+        result.addElement(LookupElementBuilderFactory.create("license", optional(positionResolver)));
+        result.addElement(LookupElementBuilderFactory.create("version", required(positionResolver)));
     }
 
 }

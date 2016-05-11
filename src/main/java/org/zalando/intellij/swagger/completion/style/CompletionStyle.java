@@ -6,12 +6,20 @@ public class CompletionStyle {
         NORMAL, BOLD
     }
 
-    private final FontWeight fontWeight;
-    private final boolean shouldQuote;
+    public enum QuoteStyle {
+        SINGLE, DOUBLE
+    }
 
-    CompletionStyle(final FontWeight fontWeight, final boolean shouldQuote) {
+    private final FontWeight fontWeight;
+    private final QuoteStyle quoteStyle;
+
+    CompletionStyle(final FontWeight fontWeight) {
+        this(fontWeight, null);
+    }
+
+    CompletionStyle(final FontWeight fontWeight, final QuoteStyle quoteStyle) {
         this.fontWeight = fontWeight;
-        this.shouldQuote = shouldQuote;
+        this.quoteStyle = quoteStyle;
     }
 
     public FontWeight getFontWeight() {
@@ -19,7 +27,7 @@ public class CompletionStyle {
     }
 
     public boolean isShouldQuote() {
-        return shouldQuote;
+        return quoteStyle != null;
     }
 
 }

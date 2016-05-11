@@ -1,14 +1,14 @@
-package org.zalando.intellij.swagger.completion.level;
+package org.zalando.intellij.swagger.completion.level.value;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
-public abstract class LevelCompletion {
+public abstract class ValueCompletion {
 
     final PositionResolver positionResolver;
 
-    protected LevelCompletion(final PositionResolver positionResolver) {
+    ValueCompletion(final PositionResolver positionResolver) {
         this.positionResolver = positionResolver;
     }
 
