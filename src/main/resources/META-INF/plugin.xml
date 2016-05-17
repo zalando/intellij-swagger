@@ -43,8 +43,10 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <completion.contributor language="JSON" implementationClass="org.zalando.intellij.swagger.completion.contributor.SwaggerJsonCompletionContributor"/>
-
         <completion.contributor language="yaml" implementationClass="org.zalando.intellij.swagger.completion.contributor.SwaggerYamlCompletionContributor"/>
+
+        <psi.referenceContributor implementation="org.zalando.intellij.swagger.reference.contributor.SwaggerYamlReferenceContributor"/>
+        <psi.referenceContributor implementation="org.zalando.intellij.swagger.reference.contributor.SwaggerJsonReferenceContributor"/>
     </extensions>
 
 

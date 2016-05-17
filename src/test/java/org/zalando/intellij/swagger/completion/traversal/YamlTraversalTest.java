@@ -1,6 +1,5 @@
 package org.zalando.intellij.swagger.completion.traversal;
 
-import com.intellij.json.psi.JsonProperty;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.yaml.psi.YAMLFile;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
