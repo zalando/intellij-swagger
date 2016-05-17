@@ -1,5 +1,6 @@
 package org.zalando.intellij.swagger.completion.traversal;
 
+import com.google.common.collect.Lists;
 import com.intellij.json.psi.JsonFile;
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.json.psi.JsonValue;
@@ -7,8 +8,9 @@ import com.intellij.psi.PsiElement;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import java.util.List;
+
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -354,5 +356,25 @@ public class JsonTraversalTest {
         when(jsonProperty.getName()).thenReturn("schemes");
 
         assertTrue(jsonTraversal.isSchemesValue(psiElement1));
+    }
+
+    @Test
+    public void thatChildPropertiesAreResolved() throws Exception {
+        final PsiElement rootElement = mock(PsiElement.class);
+        final JsonProperty rootProperty = mock(JsonProperty.class);
+        final JsonValue rootPropertyValue = mock(JsonValue.class);
+        final JsonProperty rootPropertyChild = mock(JsonProperty.class);
+        final List<JsonProperty> rootPropertyChildren = Lists.newArrayList(rootPropertyChild);
+        final List<PsiElement> rootProperties = Lists.newArrayList(rootProperty);
+
+        when(rootPropertyValue.getChildren()).thenReturn(rootPropertyChildren.toArray(new JsonProperty[1]));
+        when(rootProperty.getValue()).thenReturn(rootPropertyValue);
+        when(rootProperty.getName()).thenReturn("definitions");
+        when(rootElement.getChildren()).thenReturn(rootProperties.toArray(new PsiElement[1]));
+
+        final List<JsonProperty> properties = jsonTraversal.getChildPropertiesByName(rootElement, "definitions");
+
+        assertEquals(1, properties.size());
+        assertEquals(rootPropertyChild, properties.get(0));
     }
 }

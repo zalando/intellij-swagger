@@ -1,12 +1,16 @@
 package org.zalando.intellij.swagger.completion.traversal;
 
+import com.google.common.collect.Lists;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.yaml.psi.YAMLFile;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.jetbrains.yaml.psi.YAMLMapping;
+import org.jetbrains.yaml.psi.YAMLPsiElement;
 import org.jetbrains.yaml.psi.YAMLSequenceItem;
+import org.jetbrains.yaml.psi.YAMLValue;
 import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 
+import java.util.List;
 import java.util.Optional;
 
 public class YamlTraversal implements Traversal {
@@ -211,5 +215,16 @@ public class YamlTraversal implements Traversal {
                 .filter(name -> name.equals("schemes"))
                 .isPresent();
         return insideSchemes && hasSequenceItemAsParent(psiElement);
+    }
+
+    public List<YAMLPsiElement> getChildPropertiesByName(final YAMLPsiElement yamlPsiElement, final String propertyName) {
+        return yamlPsiElement.getYAMLElements().stream()
+                .filter(child -> child instanceof YAMLKeyValue)
+                .map(YAMLKeyValue.class::cast)
+                .filter(yamlKeyValue -> propertyName.equals(yamlKeyValue.getName()))
+                .findAny()
+                .map(YAMLKeyValue::getValue)
+                .map(YAMLValue::getYAMLElements)
+                .orElse(Lists.newArrayList());
     }
 }

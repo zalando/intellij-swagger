@@ -1,5 +1,6 @@
 package org.zalando.intellij.swagger.completion.traversal;
 
+import com.google.common.collect.Lists;
 import com.intellij.json.JsonElementTypes;
 import com.intellij.json.psi.JsonFile;
 import com.intellij.json.psi.JsonProperty;
@@ -7,7 +8,10 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class JsonTraversal implements Traversal {
 
@@ -280,6 +284,19 @@ public class JsonTraversal implements Traversal {
                 .map(JsonProperty::getName)
                 .filter(name -> name.equals("schemes"))
                 .isPresent();
+    }
+
+    public List<JsonProperty> getChildPropertiesByName(final PsiElement element, final String propertyName) {
+        return Arrays.asList(element.getChildren()).stream()
+                .filter(child -> child instanceof JsonProperty)
+                .map(JsonProperty.class::cast)
+                .filter(jsonProperty -> propertyName.equals(jsonProperty.getName()))
+                .findAny()
+                .map(JsonProperty::getValue)
+                .map(jsonValue -> Arrays.asList(jsonValue.getChildren()))
+                .map(children -> children.stream().filter(e -> e instanceof JsonProperty))
+                .map(children -> children.map(JsonProperty.class::cast).collect(Collectors.toList()))
+                .orElse(Lists.newArrayList());
     }
 
 }

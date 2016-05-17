@@ -1,0 +1,45 @@
+package org.zalando.intellij.swagger.reference;
+
+import com.intellij.json.psi.JsonLiteral;
+import com.intellij.json.psi.JsonProperty;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReferenceBase;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.zalando.intellij.swagger.completion.traversal.JsonTraversal;
+
+import java.util.List;
+
+public class JsonParameterReference extends PsiReferenceBase<PsiElement> {
+
+    private final String targetParameterKey;
+    private final JsonTraversal jsonTraversal;
+
+    public JsonParameterReference(@NotNull final JsonLiteral selectedElement,
+                                  @NotNull final String targetParameterKey,
+                                  @NotNull final JsonTraversal jsonTraversal) {
+        super(selectedElement);
+        this.targetParameterKey = targetParameterKey;
+        this.jsonTraversal = jsonTraversal;
+    }
+
+    @Nullable
+    @Override
+    public PsiElement resolve() {
+        return getParametersChildren().stream()
+                .filter(jsonProperty -> targetParameterKey.equals(jsonProperty.getName()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private List<JsonProperty> getParametersChildren() {
+        return jsonTraversal.getChildPropertiesByName(
+                getElement().getContainingFile().getChildren()[0], "parameters");
+    }
+
+    @NotNull
+    @Override
+    public Object[] getVariants() {
+        return new Object[0];
+    }
+}
