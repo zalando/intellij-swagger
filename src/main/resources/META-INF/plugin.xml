@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>org.zalando.intellij.swagger</id>
     <name>Swagger Plugin</name>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <vendor email="sebastian.monte@zalando.de" url="https://tech.zalando.com/">Zalando SE</vendor>
 
     <depends>com.intellij.modules.lang</depends>
@@ -16,6 +16,14 @@
     ]]></description>
 
     <change-notes><![CDATA[
+           version 0.0.3
+           <br/>
+           <ul>
+           <li>MIME value auto completion for produces and consumes fields</li>
+           <li>Scheme value auto completion</li>
+           <li>Support for RubyMine and PyCharm</li>
+           </ul>
+
            version 0.0.2
            <br/>
            <ul>
