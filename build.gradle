@@ -23,7 +23,7 @@ intellij {
 }
 
 group 'org.zalando.intellij'
-version '0.0.3'
+version '0.0.4'
 
 apply plugin: 'java'
 

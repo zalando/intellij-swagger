@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>org.zalando.intellij.swagger</id>
     <name>Swagger Plugin</name>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <vendor email="sebastian.monte@zalando.de" url="https://tech.zalando.com/">Zalando SE</vendor>
 
     <depends>com.intellij.modules.lang</depends>
@@ -10,12 +10,16 @@
     <description><![CDATA[
      <p>Swagger plugin for IntelliJ IDEA.</p>
 
-     <p><b>Features:</b> Swagger fields auto completion (YAML & JSON). More to come!</p>
-
      <p>In order for the auto completion to be activated, the Swagger specification file must be named "swagger.yaml" or "swagger.yml" or "swagger.json" and/or a "swagger" key must exist.</p>
     ]]></description>
 
     <change-notes><![CDATA[
+           version 0.0.4
+           <br/>
+           <ul>
+           <li>Support navigation from $ref to declaration</li>
+           </ul>
+
            version 0.0.3
            <br/>
            <ul>
