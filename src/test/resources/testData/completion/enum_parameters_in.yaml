@@ -2,7 +2,7 @@ swagger: 2
 host: somewhere.com
 basePath: /basePath
 produces:
-  - application/<caret>
+  - application/json
 paths:
   /pathA:
     get:

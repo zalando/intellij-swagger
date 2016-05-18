@@ -15,6 +15,21 @@ public abstract class SwaggerCodeInsightFixtureTestCase extends LightCodeInsight
 
     protected static final String TEST_DATA_ROOT = "testData";
 
+    private final boolean myYamlNotJson;
+
+    protected SwaggerCodeInsightFixtureTestCase(boolean yamlNotJson) {
+        myYamlNotJson = yamlNotJson;
+    }
+
+    protected final String getFileExtesnionWithDot() {
+        return myYamlNotJson ? ".yaml" : ".json";
+    }
+
+    protected String getTestDataFileName() {
+        String testName = getTestName(true);
+        return testName + getFileExtesnionWithDot();
+    }
+
     @Override
     public final String getBasePath() {
         throw new UnsupportedOperationException("Should not be called, getTestDataPath overridden");
@@ -38,6 +53,11 @@ public abstract class SwaggerCodeInsightFixtureTestCase extends LightCodeInsight
         }
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + " " + (myYamlNotJson ? "(yaml)" : "(json)");
+    }
+
     protected static class AssertableList<T> {
         private final List<T> myActualList;
 
@@ -59,5 +79,6 @@ public abstract class SwaggerCodeInsightFixtureTestCase extends LightCodeInsight
             return this;
         }
     }
+
 
 }

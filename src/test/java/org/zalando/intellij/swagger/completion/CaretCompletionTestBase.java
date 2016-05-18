@@ -5,7 +5,11 @@ import org.zalando.intellij.swagger.SwaggerCodeInsightFixtureTestCase;
 
 import java.util.List;
 
-public class CodeInsightFixtureCompletionTest extends SwaggerCodeInsightFixtureTestCase {
+public abstract class CaretCompletionTestBase extends SwaggerCodeInsightFixtureTestCase {
+
+    protected CaretCompletionTestBase(boolean yamlNotJson) {
+        super(yamlNotJson);
+    }
 
     protected String getTestDataFolder() {
         return TEST_DATA_ROOT + "/completion";
@@ -39,8 +43,7 @@ public class CodeInsightFixtureCompletionTest extends SwaggerCodeInsightFixtureT
     }
 
     private AssertableList<String> getCaretCompletions() {
-        String testName = getTestName(true);
-        String testDataFile = testName + ".yaml";
+        String testDataFile = getTestDataFileName();
         return getCaretCompletions(testDataFile);
     }
 
