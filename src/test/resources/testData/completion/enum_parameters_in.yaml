@@ -1,0 +1,16 @@
+swagger: 2
+host: somewhere.com
+basePath: /basePath
+produces:
+  - application/<caret>
+paths:
+  /pathA:
+    get:
+      parameters:
+        - name: paramA
+          in: <caret>
+      responses:
+        "200":
+          description: ok
+        default:
+          description: Unexpected error
