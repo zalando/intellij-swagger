@@ -1,11 +1,16 @@
 package org.zalando.intellij.swagger.completion;
 
+import com.intellij.util.net.HTTPMethod;
 import org.jetbrains.annotations.NotNull;
 import org.junit.*;
 import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.zalando.intellij.swagger.completion.SwaggerFixture.JsonOrYaml;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 @RunWith(Parameterized.class)
 public class CaretCompletionTest {
@@ -45,7 +50,7 @@ public class CaretCompletionTest {
     }
 
     @Test
-    public void testTopLevelConsumes() {
+    public void testGlobalConsumes() {
         getCaretCompletions("mediaType_consumes")
                 .assertNotContains("consumes", "produces")
                 .assertNotContains("paths")
@@ -53,11 +58,27 @@ public class CaretCompletionTest {
     }
 
     @Test
-    public void testTopLevelProduces() {
+    public void testGlobalProduces() {
         getCaretCompletions("mediaType_produces")
                 .assertNotContains("consumes", "produces")
                 .assertNotContains("paths")
                 .assertContains("application/xml", "image/*", "text/plain");
+    }
+
+    @Test
+    public void testHttpOperations() {
+        //see swagger spec, all but 'trace' operations are supported
+        Collection<String> allButTrace = Arrays.stream(HTTPMethod.values())
+                .filter(m -> m != HTTPMethod.TRACE)
+                .map(HTTPMethod::name)
+                .map(String::toLowerCase)
+                .sorted()
+                .collect(Collectors.toList());
+
+        getCaretCompletions("http_operations")
+                .assertContains(allButTrace)
+                .assertContains("$ref")
+                .assertNotContains("trace");
     }
 
     @Ignore("Expected, not yet implemented")

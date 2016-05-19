@@ -79,16 +79,28 @@ public class SwaggerFixture {
             myActualList = new ArrayList<>(list);
         }
 
+        public AssertableList<T> assertContains(Iterable<T> elements) {
+            for (T next : elements) {
+                assertContainsOne(next);
+            }
+            return this;
+        }
+
         public AssertableList<T> assertContains(T... elements) {
             for (T next : elements) {
-                MatcherAssert.assertThat(myActualList, IsCollectionContaining.hasItem(next));
+                assertContainsOne(next);
             }
+            return this;
+        }
+
+        public AssertableList<T> assertContainsOne(T element) {
+            Assert.assertThat(myActualList, IsCollectionContaining.hasItem(element));
             return this;
         }
 
         public AssertableList<T> assertNotContains(T... badElements) {
             for (T nextBad : badElements) {
-                MatcherAssert.assertThat(myActualList, IsNot.not(IsCollectionContaining.hasItem(nextBad)));
+                Assert.assertThat(myActualList, IsNot.not(IsCollectionContaining.hasItem(nextBad)));
             }
             return this;
         }
