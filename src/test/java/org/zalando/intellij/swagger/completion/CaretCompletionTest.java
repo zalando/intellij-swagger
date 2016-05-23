@@ -40,7 +40,7 @@ public class CaretCompletionTest {
 
     @Test
     public void testTopLevelCompletion() {
-        getCaretCompletions("topLevel")
+        getCaretCompletions("top_level")
                 .assertContains("basePath", "produces", "consumes", "schemes", "host", "paths")
                 .assertContains("tags", "parameters", "responses")
                 .assertNotContains("head", "get", "post")
