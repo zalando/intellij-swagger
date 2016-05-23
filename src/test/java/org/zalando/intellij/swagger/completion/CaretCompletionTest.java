@@ -36,7 +36,6 @@ public class CaretCompletionTest {
     @After
     public void tearDownAfter() throws Exception {
         myFixture.tearDown();
-        myFixture = null;
     }
 
     @Test
