@@ -31,7 +31,7 @@ public class CaretCompletionTest {
 
     @Before
     public void setUpBefore() throws Exception {
-        myFixture = SwaggerFixture.forResourceFolder("testData/completion");
+        myFixture = SwaggerFixture.forResourceFolder("testing/completion");
     }
 
     @After
@@ -51,7 +51,7 @@ public class CaretCompletionTest {
 
     @Test
     public void testGlobalConsumes() {
-        getCaretCompletions("mediaType_consumes")
+        getCaretCompletions("media_type_consumes")
                 .assertNotContains("consumes", "produces")
                 .assertNotContains("paths")
                 .assertContains("application/xml", "image/*", "text/plain");
@@ -59,7 +59,7 @@ public class CaretCompletionTest {
 
     @Test
     public void testGlobalProduces() {
-        getCaretCompletions("mediaType_produces")
+        getCaretCompletions("media_type_produces")
                 .assertNotContains("consumes", "produces")
                 .assertNotContains("paths")
                 .assertContains("application/xml", "image/*", "text/plain");
