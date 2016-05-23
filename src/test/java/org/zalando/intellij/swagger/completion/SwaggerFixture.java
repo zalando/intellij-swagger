@@ -6,7 +6,6 @@ import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
 import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.TestFixtureBuilder;
 import com.intellij.testFramework.fixtures.impl.LightTempDirTestFixtureImpl;
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.IsCollectionContaining;
 import org.hamcrest.core.IsNot;
 import org.hamcrest.core.IsNull;
@@ -44,14 +43,14 @@ public class SwaggerFixture {
     }
 
     @NotNull
-    public AssertableList<String> getCompletions(@NotNull String caretFileName) {
+    public AssertableList getCompletions(@NotNull String caretFileName) {
         List<String> results = myCodeInsightFixture.getCompletionVariants(caretFileName);
         Assert.assertThat(results, IsNull.notNullValue());
-        return new AssertableList<>(results);
+        return new AssertableList(results);
     }
 
     @NotNull
-    public AssertableList<String> getCompletions(@NotNull String caretFileNoExt, @NotNull JsonOrYaml fileKind) {
+    public AssertableList getCompletions(@NotNull String caretFileNoExt, @NotNull JsonOrYaml fileKind) {
         String fullName = fileKind.getFileName(caretFileNoExt);
         return getCompletions(fullName);
     }
@@ -68,38 +67,38 @@ public class SwaggerFixture {
 
         @NotNull
         public String getFileName(@NotNull String base) {
-            return base.endsWith(".") ? base + myFileExtension : base + "." + myFileExtension;
+            return base + "." + myFileExtension;
         }
     }
 
-    public static class AssertableList<T> {
-        private final List<T> myActualList;
+    public static class AssertableList {
+        private final List<String> myActualList;
 
-        public AssertableList(List<T> list) {
+        public AssertableList(List<String> list) {
             myActualList = new ArrayList<>(list);
         }
 
-        public AssertableList<T> assertContains(Iterable<T> elements) {
-            for (T next : elements) {
+        public AssertableList assertContains(Iterable<String> elements) {
+            for (String next : elements) {
                 assertContainsOne(next);
             }
             return this;
         }
 
-        public AssertableList<T> assertContains(T... elements) {
-            for (T next : elements) {
+        public AssertableList assertContains(String... elements) {
+            for (String next : elements) {
                 assertContainsOne(next);
             }
             return this;
         }
 
-        public AssertableList<T> assertContainsOne(T element) {
+        public AssertableList assertContainsOne(String element) {
             Assert.assertThat(myActualList, IsCollectionContaining.hasItem(element));
             return this;
         }
 
-        public AssertableList<T> assertNotContains(T... badElements) {
-            for (T nextBad : badElements) {
+        public AssertableList assertNotContains(String... badElements) {
+            for (String nextBad : badElements) {
                 Assert.assertThat(myActualList, IsNot.not(IsCollectionContaining.hasItem(nextBad)));
             }
             return this;
@@ -107,16 +106,10 @@ public class SwaggerFixture {
     }
 
     @NotNull
-    private static String toAbsolutePath(@NotNull String resourcesRelatedPath) {
+    private static String toAbsolutePath(@NotNull String resourcesRelatedPath) throws URISyntaxException {
         URL url = ClassLoader.getSystemClassLoader().getResource(resourcesRelatedPath);
-        if (url == null) {
-            throw new IllegalStateException("Can't locate: " + resourcesRelatedPath);
-        }
-        try {
-            return new File(url.toURI()).getAbsolutePath();
-        } catch (URISyntaxException e) {
-            throw new IllegalStateException("Should not happen: path: " + resourcesRelatedPath + ", url: " + url, e);
-        }
+        assert url != null;
+        return new File(url.toURI()).getAbsolutePath();
     }
 
 }

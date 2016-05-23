@@ -2,8 +2,10 @@ package org.zalando.intellij.swagger.completion;
 
 import com.intellij.util.net.HTTPMethod;
 import org.jetbrains.annotations.NotNull;
-import org.junit.*;
-import org.junit.rules.TestName;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.zalando.intellij.swagger.completion.SwaggerFixture.JsonOrYaml;
@@ -14,9 +16,6 @@ import java.util.stream.Collectors;
 
 @RunWith(Parameterized.class)
 public class CaretCompletionTest {
-    @Rule
-    public TestName testName = new TestName();
-
     private SwaggerFixture myFixture;
     private final JsonOrYaml myJsonOrYaml;
 
@@ -89,7 +88,7 @@ public class CaretCompletionTest {
     }
 
     @NotNull
-    private SwaggerFixture.AssertableList<String> getCaretCompletions(@NotNull String testFileNoExt) {
+    private SwaggerFixture.AssertableList getCaretCompletions(@NotNull String testFileNoExt) {
         return myFixture.getCompletions(testFileNoExt, myJsonOrYaml);
     }
 
