@@ -1,6 +1,8 @@
 package org.zalando.intellij.swagger.completion.level;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.InsertHandler;
+import com.intellij.codeInsight.lookup.LookupElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
@@ -14,11 +16,12 @@ class ResponseLevelCompletion extends LevelCompletion {
         super(positionResolver);
     }
 
-    public void fill(@NotNull final CompletionResultSet result) {
-        result.addElement(create("description", required(positionResolver)));
-        result.addElement(create("schema", optional(positionResolver)));
-        result.addElement(create("headers", optional(positionResolver)));
-        result.addElement(create("examples", optional(positionResolver)));
+    public void fill(@NotNull final CompletionResultSet result,
+                     @NotNull final InsertHandler<LookupElement> insertHandler) {
+        result.addElement(create("description", required(positionResolver), insertHandler));
+        result.addElement(create("schema", optional(positionResolver), insertHandler));
+        result.addElement(create("headers", optional(positionResolver), insertHandler));
+        result.addElement(create("examples", optional(positionResolver), insertHandler));
     }
 
 }

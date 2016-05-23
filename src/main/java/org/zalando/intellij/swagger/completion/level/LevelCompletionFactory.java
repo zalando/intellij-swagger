@@ -1,5 +1,7 @@
 package org.zalando.intellij.swagger.completion.level;
 
+import com.intellij.codeInsight.completion.InsertHandler;
+import com.intellij.codeInsight.lookup.LookupElement;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
 import java.util.Optional;

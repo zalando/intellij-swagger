@@ -1,6 +1,8 @@
 package org.zalando.intellij.swagger.completion.level;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.InsertHandler;
+import com.intellij.codeInsight.lookup.LookupElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
@@ -14,10 +16,11 @@ class TagsLevelCompletion extends LevelCompletion {
         super(positionResolver);
     }
 
-    public void fill(@NotNull final CompletionResultSet result) {
-        result.addElement(create("name", required(positionResolver)));
-        result.addElement(create("description", optional(positionResolver)));
-        result.addElement(create("externalDocs", optional(positionResolver)));
+    public void fill(@NotNull final CompletionResultSet result,
+                     @NotNull final InsertHandler<LookupElement> insertHandler) {
+        result.addElement(create("name", required(positionResolver), insertHandler));
+        result.addElement(create("description", optional(positionResolver), insertHandler));
+        result.addElement(create("externalDocs", optional(positionResolver), insertHandler));
     }
 
 }

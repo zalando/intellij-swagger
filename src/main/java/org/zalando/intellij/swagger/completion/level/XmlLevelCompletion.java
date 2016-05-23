@@ -1,6 +1,8 @@
 package org.zalando.intellij.swagger.completion.level;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.InsertHandler;
+import com.intellij.codeInsight.lookup.LookupElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
@@ -13,12 +15,13 @@ class XmlLevelCompletion extends LevelCompletion {
         super(positionResolver);
     }
 
-    public void fill(@NotNull final CompletionResultSet result) {
-        result.addElement(create("name", optional(positionResolver)));
-        result.addElement(create("namespace", optional(positionResolver)));
-        result.addElement(create("prefix", optional(positionResolver)));
-        result.addElement(create("attribute", optional(positionResolver)));
-        result.addElement(create("wrapped", optional(positionResolver)));
+    public void fill(@NotNull final CompletionResultSet result,
+                     @NotNull final InsertHandler<LookupElement> insertHandler) {
+        result.addElement(create("name", optional(positionResolver), insertHandler));
+        result.addElement(create("namespace", optional(positionResolver), insertHandler));
+        result.addElement(create("prefix", optional(positionResolver), insertHandler));
+        result.addElement(create("attribute", optional(positionResolver), insertHandler));
+        result.addElement(create("wrapped", optional(positionResolver), insertHandler));
     }
 
 }

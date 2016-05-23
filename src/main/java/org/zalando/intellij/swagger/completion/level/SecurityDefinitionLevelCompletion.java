@@ -1,6 +1,8 @@
 package org.zalando.intellij.swagger.completion.level;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.InsertHandler;
+import com.intellij.codeInsight.lookup.LookupElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
@@ -14,15 +16,16 @@ class SecurityDefinitionLevelCompletion extends LevelCompletion {
         super(positionResolver);
     }
 
-    public void fill(@NotNull final CompletionResultSet result) {
-        result.addElement(create("type", required(positionResolver)));
-        result.addElement(create("description", optional(positionResolver)));
-        result.addElement(create("name", required(positionResolver)));
-        result.addElement(create("in", required(positionResolver)));
-        result.addElement(create("flow", required(positionResolver)));
-        result.addElement(create("authorizationUrl", required(positionResolver)));
-        result.addElement(create("tokenUrl", required(positionResolver)));
-        result.addElement(create("scopes", required(positionResolver)));
+    public void fill(@NotNull final CompletionResultSet result,
+                     @NotNull final InsertHandler<LookupElement> insertHandler) {
+        result.addElement(create("type", required(positionResolver), insertHandler));
+        result.addElement(create("description", optional(positionResolver), insertHandler));
+        result.addElement(create("name", required(positionResolver), insertHandler));
+        result.addElement(create("in", required(positionResolver), insertHandler));
+        result.addElement(create("flow", required(positionResolver), insertHandler));
+        result.addElement(create("authorizationUrl", required(positionResolver), insertHandler));
+        result.addElement(create("tokenUrl", required(positionResolver), insertHandler));
+        result.addElement(create("scopes", required(positionResolver), insertHandler));
 
     }
 

@@ -1,6 +1,8 @@
 package org.zalando.intellij.swagger.completion.level;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.InsertHandler;
+import com.intellij.codeInsight.lookup.LookupElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
@@ -13,16 +15,17 @@ class PathLevelCompletion extends LevelCompletion {
         super(positionResolver);
     }
 
-    public void fill(@NotNull final CompletionResultSet result) {
-        result.addElement(create("$ref", optional(positionResolver)));
-        result.addElement(create("get", optional(positionResolver)));
-        result.addElement(create("put", optional(positionResolver)));
-        result.addElement(create("post", optional(positionResolver)));
-        result.addElement(create("delete", optional(positionResolver)));
-        result.addElement(create("options", optional(positionResolver)));
-        result.addElement(create("head", optional(positionResolver)));
-        result.addElement(create("patch", optional(positionResolver)));
-        result.addElement(create("parameters", optional(positionResolver)));
+    public void fill(@NotNull final CompletionResultSet result,
+                     @NotNull final InsertHandler<LookupElement> insertHandler) {
+        result.addElement(create("$ref", optional(positionResolver), insertHandler));
+        result.addElement(create("get", optional(positionResolver), insertHandler));
+        result.addElement(create("put", optional(positionResolver), insertHandler));
+        result.addElement(create("post", optional(positionResolver), insertHandler));
+        result.addElement(create("delete", optional(positionResolver), insertHandler));
+        result.addElement(create("options", optional(positionResolver), insertHandler));
+        result.addElement(create("head", optional(positionResolver), insertHandler));
+        result.addElement(create("patch", optional(positionResolver), insertHandler));
+        result.addElement(create("parameters", optional(positionResolver), insertHandler));
     }
 
 }

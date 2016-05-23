@@ -1,6 +1,8 @@
 package org.zalando.intellij.swagger.completion.level;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.InsertHandler;
+import com.intellij.codeInsight.lookup.LookupElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
@@ -13,8 +15,9 @@ class ExternalDocsLevelCompletion extends LevelCompletion {
     }
 
     @Override
-    public void fill(@NotNull final CompletionResultSet result) {
-        result.addElement(LookupElementBuilderFactory.create("description", optional(positionResolver)));
-        result.addElement(LookupElementBuilderFactory.create("url", optional(positionResolver)));
+    public void fill(@NotNull final CompletionResultSet result,
+                     @NotNull final InsertHandler<LookupElement> insertHandler) {
+        result.addElement(LookupElementBuilderFactory.create("description", optional(positionResolver), insertHandler));
+        result.addElement(LookupElementBuilderFactory.create("url", optional(positionResolver), insertHandler));
     }
 }
