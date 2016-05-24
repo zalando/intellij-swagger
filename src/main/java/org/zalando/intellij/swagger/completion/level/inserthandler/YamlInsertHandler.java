@@ -12,7 +12,7 @@ public class YamlInsertHandler implements InsertHandler<LookupElement> {
 
     @Override
     public void handleInsert(final InsertionContext context, final LookupElement item) {
-        if (!StringUtils.nextCharIsColon(getStringAfterAutoCompletedValue(context))) {
+        if (!StringUtils.nextCharAfterSpacesIsColonOrQuote(getStringAfterAutoCompletedValue(context))) {
             final FieldType fieldType = FieldType.fromFieldName(item.getLookupString());
 
             if (fieldType == FieldType.ARRAY) {

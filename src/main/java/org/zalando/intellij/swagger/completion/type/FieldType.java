@@ -1,6 +1,7 @@
 package org.zalando.intellij.swagger.completion.type;
 
 import com.google.common.collect.Sets;
+import org.zalando.intellij.swagger.completion.level.string.StringUtils;
 
 import java.util.Set;
 
@@ -151,9 +152,10 @@ public enum FieldType {
     );
 
     public static FieldType fromFieldName(final String fieldName) {
-        if (ARRAY_FIELDS.contains(fieldName)) {
+        final String cleanedFieldName = StringUtils.removeAllQuotes(fieldName);
+        if (ARRAY_FIELDS.contains(cleanedFieldName)) {
             return ARRAY;
-        } else if (OBJECT_FIELDS.contains(fieldName)) {
+        } else if (OBJECT_FIELDS.contains(cleanedFieldName)) {
             return OBJECT;
         } else {
             return STRING;

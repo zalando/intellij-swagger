@@ -10,22 +10,32 @@ public class StringUtilsTest {
 
     @Test
     public void thatReturnsTrueWhenNextCharIsColon() throws Exception {
-        assertTrue(StringUtils.nextCharIsColon(":"));
+        assertTrue(StringUtils.nextCharAfterSpacesIsColonOrQuote(":"));
+    }
+
+    @Test
+    public void thatReturnsTrueWhenNextCharIsQuote() throws Exception {
+        assertTrue(StringUtils.nextCharAfterSpacesIsColonOrQuote("\""));
     }
 
     @Test
     public void thatReturnsTrueWhenNextCharIsColonPrefixedBySpace() throws Exception {
-        assertTrue(StringUtils.nextCharIsColon(" :"));
+        assertTrue(StringUtils.nextCharAfterSpacesIsColonOrQuote(" :"));
+    }
+
+    @Test
+    public void thatReturnsTrueWhenNextCharIsQuotePrefixedBySpace() throws Exception {
+        assertTrue(StringUtils.nextCharAfterSpacesIsColonOrQuote(" \""));
     }
 
     @Test
     public void thatReturnsFalseWhenNextCharIsNotColon() throws Exception {
-        assertFalse(StringUtils.nextCharIsColon("a:"));
+        assertFalse(StringUtils.nextCharAfterSpacesIsColonOrQuote("a:"));
     }
 
     @Test
     public void thatReturnsFalseWhenOnlySpace() throws Exception {
-        assertFalse(StringUtils.nextCharIsColon(" "));
+        assertFalse(StringUtils.nextCharAfterSpacesIsColonOrQuote(" "));
     }
 
     @Test

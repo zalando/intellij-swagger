@@ -2,11 +2,11 @@ package org.zalando.intellij.swagger.completion.level.string;
 
 public class StringUtils {
 
-    public static boolean nextCharIsColon(final String string) {
+    public static boolean nextCharAfterSpacesIsColonOrQuote(final String string) {
         for (int i = 0; i < string.length(); i++) {
             final char c = string.charAt(i);
             if (c != ' ') {
-                return c == ':';
+                return c == ':' || c == '\"';
             }
         }
         return false;
@@ -22,5 +22,9 @@ public class StringUtils {
             count++;
         }
         return count;
+    }
+
+    public static String removeAllQuotes(final String string) {
+        return string.replace("'", "").replace("\"", "");
     }
 }

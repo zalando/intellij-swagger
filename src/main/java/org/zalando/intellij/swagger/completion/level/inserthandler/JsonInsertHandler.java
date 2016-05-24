@@ -12,7 +12,7 @@ public class JsonInsertHandler implements InsertHandler<LookupElement> {
 
     @Override
     public void handleInsert(final InsertionContext context, final LookupElement item) {
-        if (!StringUtils.nextCharIsColon(getStringAfterAutoCompletedValue(context))) {
+        if (!StringUtils.nextCharAfterSpacesIsColonOrQuote(getStringAfterAutoCompletedValue(context))) {
             final FieldType fieldType = FieldType.fromFieldName(item.getLookupString());
 
             if (fieldType == FieldType.ARRAY) {
@@ -27,25 +27,27 @@ public class JsonInsertHandler implements InsertHandler<LookupElement> {
 
     private void insertString(final InsertionContext context) {
         final String stringToInsert = ": \"\"";
-        EditorModificationUtil.insertStringAtCaret(context.getEditor(), stringToInsert, false, true, 3);
+        EditorModificationUtil.insertStringAtCaret(context.getEditor(), stringToInsert, false, true, stringToInsert.length() - 1);
     }
 
     private void insertObject(final InsertionContext context, final LookupElement item) {
         final String indentation = getIndentation(context, item);
-        final String stringToInsert = ": {\n" + indentation + 2 + "\n" + indentation + "}";
-        EditorModificationUtil.insertStringAtCaret(context.getEditor(), stringToInsert, false, true, indentation.length() + 2);
+        final String lineLeftPadding = org.apache.commons.lang.StringUtils.repeat(" ", indentation.length() + 2);
+        final String stringToInsert = ": {\n" + lineLeftPadding + "\n" + indentation + "}";
+        EditorModificationUtil.insertStringAtCaret(context.getEditor(), stringToInsert, false, true, lineLeftPadding.length() + 4);
     }
 
     private String getIndentation(final InsertionContext context, final LookupElement item) {
         final String stringBeforeAutoCompletedValue = getStringBeforeAutoCompletedValue(context, item);
         final int numberOfSpaces = StringUtils.getNumberOfSpacesInRowStartingFromEnd(stringBeforeAutoCompletedValue);
-        return org.apache.commons.lang.StringUtils.repeat(" ", numberOfSpaces + 2);
+        return org.apache.commons.lang.StringUtils.repeat(" ", numberOfSpaces);
     }
 
     private void insertArray(final InsertionContext context, final LookupElement item) {
         final String indentation = getIndentation(context, item);
-        final String stringToInsert = ":\n" + indentation + "- ";
-        EditorModificationUtil.insertStringAtCaret(context.getEditor(), stringToInsert, false, true, stringToInsert.length());
+        final String lineLeftPadding = org.apache.commons.lang.StringUtils.repeat(" ", indentation.length() + 2);
+        final String stringToInsert = ": [\n" + lineLeftPadding + "\n" + indentation + "]";
+        EditorModificationUtil.insertStringAtCaret(context.getEditor(), stringToInsert, false, true, lineLeftPadding.length() + 4);
     }
 
     @NotNull
