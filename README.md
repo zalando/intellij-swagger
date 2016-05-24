@@ -1,22 +1,18 @@
-# Swagger Plugin for IntelliJ IDEA
-Swagger Plugin makes it easy to edit Swagger specification files inside IntelliJ IDEA. It supports YAML and JSON formats.
+# Swagger Plugin
+Swagger Plugin is a plugin that makes it easy to edit Swagger specification files inside IntelliJ IDEA. JetBrains has posted it [here](https://plugins.jetbrains.com/plugin/8347).
 
 Features:
-- Field auto completion
+- Field auto-completion
 
-## Installation
+### Usage
 
-Swagger Plugin can be found at https://plugins.jetbrains.com/plugin/8347.
-
-## Usage
-
-Swagger Plugin identifies YAML and JSON specifications with the following rules:
+Swagger Plugin supports and identifies YAML and JSON specifications with the following rules:
 - **YAML:** File is named swagger.yaml or swagger.yml or "swagger" field exists in the YAML document
 - **JSON:** File is named swagger.json or "swagger" field exists in the JSON root object
 
 ## Development
 
-Developing Swagger Plugin is easy, there are only two steps:
+Developing with Swagger Plugin is easy. Just follow two steps:
 
 1. Change YAML plugin JAR paths to match your environment in *gradle.build*.
 
@@ -27,7 +23,7 @@ Developing Swagger Plugin is easy, there are only two steps:
 This will start IntelliJ IDEA with the plugin installed.
 
 ## How to Contribute
-If you want to contribute, please fork and create a pull request.
+To contribute, please fork and create a pull request.
 
 ### Bug Fixes
 If you find a bug, it would be awesome if you created an issue about it. Please include a clear description of the problem so that we can fix it!
