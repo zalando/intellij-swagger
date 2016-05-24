@@ -8,7 +8,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.zalando.intellij.swagger.completion.SwaggerFixture.JsonOrYaml;
+import org.zalando.intellij.swagger.fixture.SwaggerFixture;
+import org.zalando.intellij.swagger.fixture.SwaggerFixture.JsonOrYaml;
 
 import java.util.Arrays;
 import java.util.Collection;

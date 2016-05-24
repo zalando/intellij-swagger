@@ -1,5 +1,7 @@
-package org.zalando.intellij.swagger.completion;
+package org.zalando.intellij.swagger.fixture;
 
+import com.intellij.codeInsight.completion.CompletionType;
+import com.intellij.codeInsight.lookup.LookupManager;
 import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture;
 import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
@@ -53,6 +55,18 @@ public class SwaggerFixture {
     public AssertableList getCompletions(@NotNull String caretFileNoExt, @NotNull JsonOrYaml fileKind) {
         String fullName = fileKind.getFileName(caretFileNoExt);
         return getCompletions(fullName);
+    }
+
+    public void complete(final String testFileNoExt, final JsonOrYaml fileKind) {
+        myCodeInsightFixture.configureByFile(fileKind.getFileName(testFileNoExt));
+        myCodeInsightFixture.complete(CompletionType.BASIC, 2);
+        if (LookupManager.getActiveLookup(myCodeInsightFixture.getEditor()) != null) {
+            myCodeInsightFixture.type('\n');
+        }
+    }
+
+    public void checkResultByFile(final String testFileNoExt, final JsonOrYaml fileKind) {
+        myCodeInsightFixture.checkResultByFile(fileKind.getFileName(testFileNoExt));
     }
 
     public enum JsonOrYaml {
