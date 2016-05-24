@@ -1,0 +1,9 @@
+{
+  "swagger": "2.0",
+  "host": "somewhere.com",
+  "basePath": "/basePath",
+  "consumes": [
+    "image/jpeg",
+    "<caret>
+  ]
+}

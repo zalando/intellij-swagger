@@ -1,0 +1,10 @@
+{
+  "swagger": "2.0",
+  "host": "somewhere.com",
+  "basePath": "/basePath",
+  "paths": {
+    "/pathA": {
+      "<caret>
+    }
+  }
+}

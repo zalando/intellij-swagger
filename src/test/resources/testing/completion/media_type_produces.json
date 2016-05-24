@@ -1,0 +1,20 @@
+{
+  "swagger": "2.0",
+  "host": "somewhere.com",
+  "basePath": "/basePath",
+  "produces": [
+    "application/xml",
+    "<caret>
+  ],
+  "paths": {
+    "/pathA": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "ok"
+          }
+        }
+      }
+    }
+  }
+}

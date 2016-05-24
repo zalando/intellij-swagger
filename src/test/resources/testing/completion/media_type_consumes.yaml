@@ -1,0 +1,6 @@
+swagger: 2
+host: somewhere.com
+basePath: /basePath
+consumes:
+  - image/jpeg
+  - <caret>
