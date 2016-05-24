@@ -1,5 +1,5 @@
 # Swagger Plugin
-Swagger Plugin is a plugin that makes it easy to edit Swagger specification files inside IntelliJ IDEA. JetBrains has posted it [here](https://plugins.jetbrains.com/plugin/8347).
+Swagger Plugin makes it easy to edit Swagger specification files inside IntelliJ IDEA. JetBrains has posted it [here](https://plugins.jetbrains.com/plugin/8347).
 
 Features:
 - Field auto-completion
