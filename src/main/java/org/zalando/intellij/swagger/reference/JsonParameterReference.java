@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.zalando.intellij.swagger.completion.traversal.JsonTraversal;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class JsonParameterReference extends PsiReferenceBase<PsiElement> {
 
@@ -33,8 +34,10 @@ public class JsonParameterReference extends PsiReferenceBase<PsiElement> {
     }
 
     private List<JsonProperty> getParametersChildren() {
-        return jsonTraversal.getChildPropertiesByName(
-                getElement().getContainingFile().getChildren()[0], "parameters");
+        return jsonTraversal.getChildrenOf("parameters", getElement().getContainingFile()).stream()
+                .filter(psiElement -> psiElement instanceof JsonProperty)
+                .map(JsonProperty.class::cast)
+                .collect(Collectors.toList());
     }
 
     @NotNull

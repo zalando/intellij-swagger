@@ -2,6 +2,8 @@ package org.zalando.intellij.swagger.completion.level.value;
 
 import com.google.common.net.MediaType;
 import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.InsertHandler;
+import com.intellij.codeInsight.lookup.LookupElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
@@ -100,7 +102,8 @@ class MimeValueCompletion extends ValueCompletion {
     }
 
     @Override
-    public void fill(@NotNull final CompletionResultSet result) {
+    public void fill(@NotNull final CompletionResultSet result,
+                     @NotNull final InsertHandler<LookupElement> insertHandler) {
         MEDIA_TYPES.stream().forEach(mediaType ->
                 result.addElement(create(mediaType, optional(positionResolver))));
 

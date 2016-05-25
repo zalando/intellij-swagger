@@ -5,6 +5,7 @@ import com.intellij.json.JsonElementTypes;
 import com.intellij.json.psi.JsonFile;
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 
@@ -286,17 +287,40 @@ public class JsonTraversal implements Traversal {
                 .isPresent();
     }
 
-    public List<JsonProperty> getChildPropertiesByName(final PsiElement element, final String propertyName) {
-        return Arrays.asList(element.getChildren()).stream()
+    @Override
+    public boolean isRefValue(final PsiElement psiElement) {
+        return Optional.ofNullable(psiElement.getParent())
+                .map(PsiElement::getParent)
+                .filter(element -> element instanceof JsonProperty)
+                .map(JsonProperty.class::cast)
+                .map(JsonProperty::getName)
+                .filter(name -> name.equals("$ref"))
+                .isPresent();
+    }
+
+    @Override
+    public List<PsiElement> getChildrenOf(final String propertyName, final PsiFile psiFile) {
+        return getRootChildren(psiFile).stream()
                 .filter(child -> child instanceof JsonProperty)
                 .map(JsonProperty.class::cast)
                 .filter(jsonProperty -> propertyName.equals(jsonProperty.getName()))
                 .findAny()
                 .map(JsonProperty::getValue)
                 .map(jsonValue -> Arrays.asList(jsonValue.getChildren()))
-                .map(children -> children.stream().filter(e -> e instanceof JsonProperty))
-                .map(children -> children.map(JsonProperty.class::cast).collect(Collectors.toList()))
                 .orElse(Lists.newArrayList());
+    }
+
+    @Override
+    public List<String> getKeyNamesOf(final String propertyName, final PsiFile containingFile) {
+        return getChildrenOf(propertyName, containingFile).stream()
+                .filter(el -> el instanceof JsonProperty)
+                .map(JsonProperty.class::cast)
+                .map(JsonProperty::getName)
+                .collect(Collectors.toList());
+    }
+
+    private List<PsiElement> getRootChildren(final PsiFile psiFile) {
+        return Arrays.asList(psiFile.getChildren()[0].getChildren());
     }
 
 }

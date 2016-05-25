@@ -3,6 +3,9 @@ package org.zalando.intellij.swagger.completion.traversal;
 import com.intellij.psi.PsiElement;
 import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 
+import java.util.List;
+import java.util.Optional;
+
 public class PositionResolver {
 
     private final PsiElement psiElement;
@@ -100,4 +103,17 @@ public class PositionResolver {
     public boolean completeSchemesValue() {
         return traversal.isSchemesValue(psiElement);
     }
+
+    public boolean completeRefValue() {
+        return traversal.isRefValue(psiElement);
+    }
+
+    public List<PsiElement> getChildrenOf(final String propertyName) {
+        return traversal.getChildrenOf(propertyName, psiElement.getContainingFile());
+    }
+
+    public List<String> getKeyNamesOf(final String propertyName) {
+        return traversal.getKeyNamesOf(propertyName, psiElement.getContainingFile());
+    }
+
 }

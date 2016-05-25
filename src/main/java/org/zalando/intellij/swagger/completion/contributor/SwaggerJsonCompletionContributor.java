@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.level.LevelCompletionFactory;
 import org.zalando.intellij.swagger.completion.level.inserthandler.JsonInsertHandler;
+import org.zalando.intellij.swagger.completion.level.inserthandler.JsonValueInsertHandler;
 import org.zalando.intellij.swagger.completion.level.value.ValueCompletionFactory;
 import org.zalando.intellij.swagger.completion.traversal.JsonTraversal;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
@@ -14,21 +15,24 @@ import org.zalando.intellij.swagger.file.FileDetector;
 
 public class SwaggerJsonCompletionContributor extends CompletionContributor {
 
-    private FileDetector fileDetector;
-    private JsonTraversal jsonTraversal;
-    private JsonInsertHandler jsonInsertHandler;
+    private final FileDetector fileDetector;
+    private final JsonTraversal jsonTraversal;
+    private final JsonInsertHandler jsonInsertHandler;
+    private final JsonValueInsertHandler jsonValueInsertHandler;
 
     /* Constructor for IntelliJ IDEA bootstrap */
     public SwaggerJsonCompletionContributor() {
-        this(new FileDetector(), new JsonTraversal(), new JsonInsertHandler());
+        this(new FileDetector(), new JsonTraversal(), new JsonInsertHandler(), new JsonValueInsertHandler());
     }
 
     private SwaggerJsonCompletionContributor(final FileDetector fileDetector,
                                              final JsonTraversal jsonTraversal,
-                                             final JsonInsertHandler jsonInsertHandler) {
+                                             final JsonInsertHandler jsonInsertHandler,
+                                             final JsonValueInsertHandler jsonValueInsertHandler) {
         this.fileDetector = fileDetector;
         this.jsonTraversal = jsonTraversal;
         this.jsonInsertHandler = jsonInsertHandler;
+        this.jsonValueInsertHandler = jsonValueInsertHandler;
     }
 
     @Override
@@ -44,7 +48,7 @@ public class SwaggerJsonCompletionContributor extends CompletionContributor {
                     .ifPresent(levelCompletion -> levelCompletion.fill(result, jsonInsertHandler));
         } else {
             ValueCompletionFactory.from(positionResolver)
-                    .ifPresent(valueCompletion -> valueCompletion.fill(result));
+                    .ifPresent(valueCompletion -> valueCompletion.fill(result, jsonValueInsertHandler));
         }
     }
 }

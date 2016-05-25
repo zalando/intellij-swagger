@@ -12,6 +12,8 @@ public class ValueCompletionFactory {
             return Optional.of(new MimeValueCompletion(positionResolver));
         } else if (positionResolver.completeSchemesValue()) {
             return Optional.of(new SchemesValueCompletion(positionResolver));
+        } else if (positionResolver.completeRefValue()) {
+            return Optional.of(new RefValueCompletion(positionResolver));
         } else {
             return Optional.empty();
         }

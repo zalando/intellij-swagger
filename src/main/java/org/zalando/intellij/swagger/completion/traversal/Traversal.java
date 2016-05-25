@@ -1,7 +1,11 @@
 package org.zalando.intellij.swagger.completion.traversal;
 
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import org.zalando.intellij.swagger.completion.style.CompletionStyle;
+
+import java.util.List;
+import java.util.Optional;
 
 interface Traversal {
 
@@ -49,5 +53,12 @@ interface Traversal {
 
     CompletionStyle.QuoteStyle getQuoteStyle();
 
-    boolean isSchemesValue(PsiElement psiElement);
+    boolean isSchemesValue(final PsiElement psiElement);
+
+    boolean isRefValue(final PsiElement psiElement);
+
+    List<PsiElement> getChildrenOf(final String propertyName, final PsiFile psiFile);
+
+    List<String> getKeyNamesOf(final String propertyName, final PsiFile containingFile);
+
 }

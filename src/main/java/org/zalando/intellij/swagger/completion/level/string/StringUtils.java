@@ -27,4 +27,11 @@ public class StringUtils {
     public static String removeAllQuotes(final String string) {
         return string.replace("'", "").replace("\"", "");
     }
+
+    public static boolean hasSingleQuoteBeforeColonStartingFromEnd(final String string) {
+        final int lastIndexOfColon = string.lastIndexOf(":");
+        final int lastIndexOfSingleQuote = string.lastIndexOf("'");
+
+        return lastIndexOfSingleQuote > lastIndexOfColon;
+    }
 }

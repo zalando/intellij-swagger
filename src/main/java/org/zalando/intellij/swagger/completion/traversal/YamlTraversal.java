@@ -2,16 +2,18 @@ package org.zalando.intellij.swagger.completion.traversal;
 
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.yaml.psi.YAMLFile;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.jetbrains.yaml.psi.YAMLMapping;
-import org.jetbrains.yaml.psi.YAMLPsiElement;
 import org.jetbrains.yaml.psi.YAMLSequenceItem;
 import org.jetbrains.yaml.psi.YAMLValue;
 import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class YamlTraversal implements Traversal {
 
@@ -195,9 +197,6 @@ public class YamlTraversal implements Traversal {
         return getNthYamlKeyValue(psiElement.getParent(), nth);
     }
 
-    /*
-        For YAML no quotes needed (if the strings do not contain any reserved characters)
-     */
     @Override
     public boolean shouldQuote(final PsiElement psiElement) {
         return false;
@@ -217,14 +216,44 @@ public class YamlTraversal implements Traversal {
         return insideSchemes && hasSequenceItemAsParent(psiElement);
     }
 
-    public List<YAMLPsiElement> getChildPropertiesByName(final YAMLPsiElement yamlPsiElement, final String propertyName) {
-        return yamlPsiElement.getYAMLElements().stream()
+    @Override
+    public boolean isRefValue(final PsiElement psiElement) {
+        return Optional.ofNullable(getNthYamlKeyValue(psiElement, 1))
+                .map(YAMLKeyValue::getName)
+                .filter(name -> name.equals("$ref"))
+                .isPresent();
+    }
+
+    @Override
+    public List<PsiElement> getChildrenOf(final String propertyName, final PsiFile psiFile) {
+        return getRootChildren(psiFile).stream()
                 .filter(child -> child instanceof YAMLKeyValue)
                 .map(YAMLKeyValue.class::cast)
                 .filter(yamlKeyValue -> propertyName.equals(yamlKeyValue.getName()))
                 .findAny()
                 .map(YAMLKeyValue::getValue)
                 .map(YAMLValue::getYAMLElements)
+                .map(c -> c.stream().map(PsiElement.class::cast).collect(Collectors.toList()))
                 .orElse(Lists.newArrayList());
     }
+
+    @Override
+    public List<String> getKeyNamesOf(final String propertyName, final PsiFile containingFile) {
+        return getChildrenOf(propertyName, containingFile).stream()
+                .filter(el -> el instanceof YAMLKeyValue)
+                .map(YAMLKeyValue.class::cast)
+                .map(YAMLKeyValue::getName)
+                .collect(Collectors.toList());
+    }
+
+    private List<PsiElement> getRootChildren(final PsiFile psiFile) {
+        return Optional.of(psiFile)
+                .filter(file -> file instanceof YAMLFile)
+                .map(YAMLFile.class::cast)
+                .map(yamlFile -> yamlFile.getDocuments().get(0))
+                .map(yamlDocument -> yamlDocument.getYAMLElements().get(0))
+                .map(psiElement -> Arrays.asList(psiElement.getChildren()))
+                .orElse(Lists.newArrayList());
+    }
+
 }

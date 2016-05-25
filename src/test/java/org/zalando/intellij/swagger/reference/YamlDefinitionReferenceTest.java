@@ -1,9 +1,9 @@
 package org.zalando.intellij.swagger.reference;
 
 import com.google.common.collect.Lists;
-import org.jetbrains.yaml.psi.YAMLDocument;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
-import org.jetbrains.yaml.psi.YAMLPsiElement;
 import org.jetbrains.yaml.psi.YAMLQuotedText;
 import org.junit.Test;
 import org.zalando.intellij.swagger.completion.traversal.YamlTraversal;
@@ -18,19 +18,15 @@ import static org.mockito.Mockito.when;
 public class YamlDefinitionReferenceTest {
 
     @Test
-    public void thatDefinitionElementIsResolved() throws Exception {
+    public void thatDefinitionElementIsResolved() {
+        final PsiFile psiFile = mock(PsiFile.class);
         final YamlTraversal yamlTraversal = mock(YamlTraversal.class);
         final YAMLQuotedText selectedElement = mock(YAMLQuotedText.class);
         final YAMLKeyValue definitionKeyValue = mock(YAMLKeyValue.class);
-        final List<YAMLPsiElement> allDefinitions = Lists.newArrayList(definitionKeyValue);
-        final YAMLDocument yamlDocument = mock(YAMLDocument.class);
-        final YAMLKeyValue rootElement = mock(YAMLKeyValue.class);
-        final List<YAMLPsiElement> yamlElements = Lists.newArrayList(rootElement);
+        final List<PsiElement> allDefinitions = Lists.newArrayList(definitionKeyValue);
 
-        when(rootElement.getYAMLElements()).thenReturn(Lists.newArrayList(definitionKeyValue));
-        when(yamlDocument.getYAMLElements()).thenReturn(yamlElements);
-        when(selectedElement.getParent()).thenReturn(yamlDocument);
-        when(yamlTraversal.getChildPropertiesByName(rootElement, "definitions")).thenReturn(allDefinitions);
+        when(selectedElement.getContainingFile()).thenReturn(psiFile);
+        when(yamlTraversal.getChildrenOf("definitions", psiFile)).thenReturn(allDefinitions);
         when(definitionKeyValue.getName()).thenReturn("definitionName");
 
         final YamlDefinitionReference yamlDefinitionReference =
@@ -40,19 +36,12 @@ public class YamlDefinitionReferenceTest {
     }
 
     @Test
-    public void thatUnknownDefinitionElementIsResolvedToNull() throws Exception {
+    public void thatUnknownDefinitionElementIsResolvedToNull() {
+        final PsiFile psiFile = mock(PsiFile.class);
         final YamlTraversal yamlTraversal = mock(YamlTraversal.class);
         final YAMLQuotedText selectedElement = mock(YAMLQuotedText.class);
-        final YAMLKeyValue definitionKeyValue = mock(YAMLKeyValue.class);
-        final YAMLDocument yamlDocument = mock(YAMLDocument.class);
-        final YAMLKeyValue rootElement = mock(YAMLKeyValue.class);
-        final List<YAMLPsiElement> yamlElements = Lists.newArrayList(rootElement);
 
-        when(rootElement.getYAMLElements()).thenReturn(Lists.newArrayList(definitionKeyValue));
-        when(yamlDocument.getYAMLElements()).thenReturn(yamlElements);
-        when(selectedElement.getParent()).thenReturn(yamlDocument);
-        when(yamlTraversal.getChildPropertiesByName(rootElement, "definitions")).thenReturn(Lists.newArrayList());
-        when(definitionKeyValue.getName()).thenReturn("definitionName");
+        when(yamlTraversal.getChildrenOf("definitions", psiFile)).thenReturn(Lists.newArrayList());
 
         YamlDefinitionReference yamlDefinitionReference =
                 new YamlDefinitionReference(selectedElement, "definitionName", yamlTraversal);

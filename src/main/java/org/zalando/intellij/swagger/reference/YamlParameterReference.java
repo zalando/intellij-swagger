@@ -4,12 +4,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceBase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.yaml.psi.YAMLDocument;
 import org.jetbrains.yaml.psi.YAMLPsiElement;
 import org.jetbrains.yaml.psi.YAMLQuotedText;
 import org.zalando.intellij.swagger.completion.traversal.YamlTraversal;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class YamlParameterReference extends PsiReferenceBase<PsiElement> {
 
@@ -41,18 +41,10 @@ public class YamlParameterReference extends PsiReferenceBase<PsiElement> {
     }
 
     private List<YAMLPsiElement> getParametersChildren() {
-        return yamlTraversal.getChildPropertiesByName(getYamlDocument(getElement())
-                .getYAMLElements().get(0), "parameters");
-    }
-
-    private YAMLDocument getYamlDocument(final PsiElement psiElement) {
-        if (psiElement == null) {
-            return null;
-        } else if (psiElement instanceof YAMLDocument) {
-            return (YAMLDocument) psiElement;
-        }
-
-        return getYamlDocument(psiElement.getParent());
+        return yamlTraversal.getChildrenOf("parameters", getElement().getContainingFile()).stream()
+                .filter(psiElement -> psiElement instanceof YAMLPsiElement)
+                .map(YAMLPsiElement.class::cast)
+                .collect(Collectors.toList());
     }
 
 }

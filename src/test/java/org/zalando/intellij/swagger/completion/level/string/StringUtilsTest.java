@@ -2,9 +2,7 @@ package org.zalando.intellij.swagger.completion.level.string;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class StringUtilsTest {
 
@@ -51,6 +49,16 @@ public class StringUtilsTest {
     @Test
     public void thatEmptyStringHasNoSpacesInRow() throws Exception {
         assertEquals(0, StringUtils.getNumberOfSpacesInRowStartingFromEnd(""));
+    }
+
+    @Test
+    public void thatStringHasSingleQuoteIsBeforeColon() throws Exception {
+        assertTrue(StringUtils.hasSingleQuoteBeforeColonStartingFromEnd("$ref: 'somevalue"));
+    }
+
+    @Test
+    public void thatStringDoesNotHaveSingleQuoteIsBeforeColon() throws Exception {
+        assertFalse(StringUtils.hasSingleQuoteBeforeColonStartingFromEnd("$ref: somevalue"));
     }
 
 }

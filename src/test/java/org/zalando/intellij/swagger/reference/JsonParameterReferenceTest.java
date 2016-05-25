@@ -18,21 +18,16 @@ import static org.mockito.Mockito.when;
 public class JsonParameterReferenceTest {
 
     @Test
-    public void thatParameterElementIsResolved() throws Exception {
+    public void thatParameterElementIsResolved() {
         final PsiFile psiFile = mock(PsiFile.class);
-        final PsiElement firstFileChild = mock(PsiElement.class);
         final JsonStringLiteral jsonStringLiteral = mock(JsonStringLiteral.class);
         final JsonTraversal jsonTraversal = mock(JsonTraversal.class);
         final JsonProperty parameterProperty = mock(JsonProperty.class);
-        List<JsonProperty> allParameters = Lists.newArrayList(parameterProperty);
-
-        final PsiElement[] fileChildren = new PsiElement[1];
-        fileChildren[0] = firstFileChild;
+        List<PsiElement> allParameters = Lists.newArrayList(parameterProperty);
 
         when(jsonStringLiteral.getContainingFile()).thenReturn(psiFile);
-        when(psiFile.getChildren()).thenReturn(fileChildren);
         when(parameterProperty.getName()).thenReturn("parameterName");
-        when(jsonTraversal.getChildPropertiesByName(firstFileChild, "parameters")).thenReturn(allParameters);
+        when(jsonTraversal.getChildrenOf("parameters", psiFile)).thenReturn(allParameters);
 
         final JsonParameterReference jsonParameterReference =
                 new JsonParameterReference(jsonStringLiteral, "parameterName", jsonTraversal);
@@ -41,18 +36,13 @@ public class JsonParameterReferenceTest {
     }
 
     @Test
-    public void thatUnknownParameterElementIsResolvedToNull() throws Exception {
+    public void thatUnknownParameterElementIsResolvedToNull() {
         final PsiFile psiFile = mock(PsiFile.class);
-        final PsiElement firstFileChild = mock(PsiElement.class);
         final JsonStringLiteral jsonStringLiteral = mock(JsonStringLiteral.class);
         final JsonTraversal jsonTraversal = mock(JsonTraversal.class);
 
-        final PsiElement[] fileChildren = new PsiElement[1];
-        fileChildren[0] = firstFileChild;
-
         when(jsonStringLiteral.getContainingFile()).thenReturn(psiFile);
-        when(psiFile.getChildren()).thenReturn(fileChildren);
-        when(jsonTraversal.getChildPropertiesByName(firstFileChild, "parameters")).thenReturn(Lists.newArrayList());
+        when(jsonTraversal.getChildrenOf("parameters", psiFile)).thenReturn(Lists.newArrayList());
 
         final JsonParameterReference jsonParameterReference =
                 new JsonParameterReference(jsonStringLiteral, "parameterName", jsonTraversal);

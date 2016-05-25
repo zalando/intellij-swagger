@@ -1,6 +1,8 @@
 package org.zalando.intellij.swagger.reference;
 
 import com.google.common.collect.Lists;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.yaml.psi.YAMLDocument;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.jetbrains.yaml.psi.YAMLPsiElement;
@@ -18,19 +20,15 @@ import static org.mockito.Mockito.when;
 public class YamlParameterReferenceTest {
 
     @Test
-    public void thatParameterElementIsResolved() throws Exception {
+    public void thatParameterElementIsResolved() {
+        final PsiFile psiFile = mock(PsiFile.class);
         final YamlTraversal yamlTraversal = mock(YamlTraversal.class);
         final YAMLQuotedText selectedElement = mock(YAMLQuotedText.class);
         final YAMLKeyValue parameterKeyValue = mock(YAMLKeyValue.class);
-        final List<YAMLPsiElement> allParamaters = Lists.newArrayList(parameterKeyValue);
-        final YAMLDocument yamlDocument = mock(YAMLDocument.class);
-        final YAMLKeyValue rootElement = mock(YAMLKeyValue.class);
-        final List<YAMLPsiElement> yamlElements = Lists.newArrayList(rootElement);
+        final List<PsiElement> allParameters = Lists.newArrayList(parameterKeyValue);
 
-        when(rootElement.getYAMLElements()).thenReturn(Lists.newArrayList(parameterKeyValue));
-        when(yamlDocument.getYAMLElements()).thenReturn(yamlElements);
-        when(selectedElement.getParent()).thenReturn(yamlDocument);
-        when(yamlTraversal.getChildPropertiesByName(rootElement, "parameters")).thenReturn(allParamaters);
+        when(selectedElement.getContainingFile()).thenReturn(psiFile);
+        when(yamlTraversal.getChildrenOf("parameters", psiFile)).thenReturn(allParameters);
         when(parameterKeyValue.getName()).thenReturn("parameterName");
 
         final YamlParameterReference yamlParameterReference =
@@ -40,19 +38,12 @@ public class YamlParameterReferenceTest {
     }
 
     @Test
-    public void thatUnknownParameterElementIsResolvedToNull() throws Exception {
+    public void thatUnknownParameterElementIsResolvedToNull() {
+        final PsiFile psiFile = mock(PsiFile.class);
         final YamlTraversal yamlTraversal = mock(YamlTraversal.class);
         final YAMLQuotedText selectedElement = mock(YAMLQuotedText.class);
-        final YAMLKeyValue parameterKeyValue = mock(YAMLKeyValue.class);
-        final YAMLDocument yamlDocument = mock(YAMLDocument.class);
-        final YAMLKeyValue rootElement = mock(YAMLKeyValue.class);
-        final List<YAMLPsiElement> yamlElements = Lists.newArrayList(rootElement);
 
-        when(rootElement.getYAMLElements()).thenReturn(Lists.newArrayList(parameterKeyValue));
-        when(yamlDocument.getYAMLElements()).thenReturn(yamlElements);
-        when(selectedElement.getParent()).thenReturn(yamlDocument);
-        when(yamlTraversal.getChildPropertiesByName(rootElement, "parameters")).thenReturn(Lists.newArrayList());
-        when(parameterKeyValue.getName()).thenReturn("parameterName");
+        when(yamlTraversal.getChildrenOf("parameters", psiFile)).thenReturn(Lists.newArrayList());
 
         final YamlParameterReference yamlParameterReference =
                 new YamlParameterReference(selectedElement, "parameterName", yamlTraversal);

@@ -80,6 +80,12 @@ public class CaretCompletionTest {
                 .assertNotContains("trace");
     }
 
+    @Test
+    public void testRefValue() throws Exception {
+        getCaretCompletions("ref_value")
+                .assertContains("#/definitions/Pets", "#/definitions/Error");
+    }
+
     @Ignore("Expected, not yet implemented")
     @Test
     public void enumValuesCompletion_ParametersIn() {

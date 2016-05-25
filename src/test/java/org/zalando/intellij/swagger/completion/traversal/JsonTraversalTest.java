@@ -5,6 +5,7 @@ import com.intellij.json.psi.JsonFile;
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.json.psi.JsonValue;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -360,19 +361,22 @@ public class JsonTraversalTest {
 
     @Test
     public void thatChildPropertiesAreResolved() throws Exception {
+        final PsiFile psiFile = mock(PsiFile.class);
         final PsiElement rootElement = mock(PsiElement.class);
         final JsonProperty rootProperty = mock(JsonProperty.class);
         final JsonValue rootPropertyValue = mock(JsonValue.class);
         final JsonProperty rootPropertyChild = mock(JsonProperty.class);
         final List<JsonProperty> rootPropertyChildren = Lists.newArrayList(rootPropertyChild);
         final List<PsiElement> rootProperties = Lists.newArrayList(rootProperty);
+        final PsiElement[] children = {rootElement};
 
+        when(psiFile.getChildren()).thenReturn(children);
         when(rootPropertyValue.getChildren()).thenReturn(rootPropertyChildren.toArray(new JsonProperty[1]));
         when(rootProperty.getValue()).thenReturn(rootPropertyValue);
         when(rootProperty.getName()).thenReturn("definitions");
         when(rootElement.getChildren()).thenReturn(rootProperties.toArray(new PsiElement[1]));
 
-        final List<JsonProperty> properties = jsonTraversal.getChildPropertiesByName(rootElement, "definitions");
+        final List<PsiElement> properties = jsonTraversal.getChildrenOf("definitions", psiFile);
 
         assertEquals(1, properties.size());
         assertEquals(rootPropertyChild, properties.get(0));
