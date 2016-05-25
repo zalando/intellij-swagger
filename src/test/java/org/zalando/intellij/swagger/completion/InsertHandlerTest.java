@@ -52,4 +52,14 @@ public class InsertHandlerTest {
         myFixture.complete("field_array", myJsonOrYaml);
         myFixture.checkResultByFile("field_array_after", myJsonOrYaml);
     }
+
+    @Test
+    public void thatStringValuesAreHandled() {
+        myFixture.complete("value_string_no_quotes", myJsonOrYaml);
+        myFixture.checkResultByFile("value_string_no_quotes_after", myJsonOrYaml);
+
+        myFixture.complete("value_string_in_quotes", myJsonOrYaml);
+        myFixture.checkResultByFile("value_string_in_quotes_after", myJsonOrYaml);
+
+    }
 }
