@@ -10,14 +10,13 @@ import static org.zalando.intellij.swagger.completion.style.CompletionStyleFacto
 
 class ExternalDocsLevelCompletion extends LevelCompletion {
 
-    ExternalDocsLevelCompletion(final PositionResolver positionResolver) {
-        super(positionResolver);
+    ExternalDocsLevelCompletion(final PositionResolver positionResolver, final CompletionResultSet completionResultSet) {
+        super(positionResolver, completionResultSet);
     }
 
     @Override
-    public void fill(@NotNull final CompletionResultSet result,
-                     @NotNull final InsertHandler<LookupElement> insertHandler) {
-        result.addElement(LookupElementBuilderFactory.create("description", optional(positionResolver), insertHandler));
-        result.addElement(LookupElementBuilderFactory.create("url", optional(positionResolver), insertHandler));
+    public void fill(@NotNull final InsertHandler<LookupElement> insertHandler) {
+        addUnique("description", optional(positionResolver), insertHandler);
+        addUnique("url", optional(positionResolver), insertHandler);
     }
 }

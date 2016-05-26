@@ -6,33 +6,31 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
-import static org.zalando.intellij.swagger.completion.level.LookupElementBuilderFactory.create;
 import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
 import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.required;
 
 class RootLevelCompletion extends LevelCompletion {
 
-    RootLevelCompletion(final PositionResolver positionResolver) {
-        super(positionResolver);
+    RootLevelCompletion(final PositionResolver positionResolver, final CompletionResultSet completionResultSet) {
+        super(positionResolver, completionResultSet);
     }
 
-    public void fill(@NotNull final CompletionResultSet result,
-                     @NotNull final InsertHandler<LookupElement> insertHandler) {
-        result.addElement(create("swagger", required(positionResolver), insertHandler));
-        result.addElement(create("info", required(positionResolver), insertHandler));
-        result.addElement(create("host", optional(positionResolver), insertHandler));
-        result.addElement(create("basePath", optional(positionResolver), insertHandler));
-        result.addElement(create("schemes", optional(positionResolver), insertHandler));
-        result.addElement(create("consumes", optional(positionResolver), insertHandler));
-        result.addElement(create("produces", optional(positionResolver), insertHandler));
-        result.addElement(create("paths", required(positionResolver), insertHandler));
-        result.addElement(create("definitions", optional(positionResolver), insertHandler));
-        result.addElement(create("parameters", optional(positionResolver), insertHandler));
-        result.addElement(create("responses", optional(positionResolver), insertHandler));
-        result.addElement(create("securityDefinitions", optional(positionResolver), insertHandler));
-        result.addElement(create("security", optional(positionResolver), insertHandler));
-        result.addElement(create("tags", optional(positionResolver), insertHandler));
-        result.addElement(create("externalDocs", optional(positionResolver), insertHandler));
+    public void fill(@NotNull final InsertHandler<LookupElement> insertHandler) {
+        addUnique("swagger", required(positionResolver), insertHandler);
+        addUnique("info", required(positionResolver), insertHandler);
+        addUnique("host", optional(positionResolver), insertHandler);
+        addUnique("basePath", optional(positionResolver), insertHandler);
+        addUnique("schemes", optional(positionResolver), insertHandler);
+        addUnique("consumes", optional(positionResolver), insertHandler);
+        addUnique("produces", optional(positionResolver), insertHandler);
+        addUnique("paths", required(positionResolver), insertHandler);
+        addUnique("definitions", optional(positionResolver), insertHandler);
+        addUnique("parameters", optional(positionResolver), insertHandler);
+        addUnique("responses", optional(positionResolver), insertHandler);
+        addUnique("securityDefinitions", optional(positionResolver), insertHandler);
+        addUnique("security", optional(positionResolver), insertHandler);
+        addUnique("tags", optional(positionResolver), insertHandler);
+        addUnique("externalDocs", optional(positionResolver), insertHandler);
     }
 
 }

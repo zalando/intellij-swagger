@@ -6,24 +6,22 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
-import static org.zalando.intellij.swagger.completion.level.LookupElementBuilderFactory.*;
 import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
 import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.required;
 
 class InfoLevelCompletion extends LevelCompletion {
 
-    InfoLevelCompletion(final PositionResolver positionResolver) {
-        super(positionResolver);
+    InfoLevelCompletion(final PositionResolver positionResolver, final CompletionResultSet completionResultSet) {
+        super(positionResolver, completionResultSet);
     }
 
-    public void fill(@NotNull final CompletionResultSet result,
-                     @NotNull final InsertHandler<LookupElement> insertHandler) {
-        result.addElement(create("title", required(positionResolver), insertHandler));
-        result.addElement(create("description", optional(positionResolver), insertHandler));
-        result.addElement(create("termsOfService", optional(positionResolver), insertHandler));
-        result.addElement(create("contact", optional(positionResolver), insertHandler));
-        result.addElement(create("license", optional(positionResolver), insertHandler));
-        result.addElement(create("version", required(positionResolver), insertHandler));
+    public void fill(@NotNull final InsertHandler<LookupElement> insertHandler) {
+        addUnique("title", required(positionResolver), insertHandler);
+        addUnique("description", optional(positionResolver), insertHandler);
+        addUnique("termsOfService", optional(positionResolver), insertHandler);
+        addUnique("contact", optional(positionResolver), insertHandler);
+        addUnique("license", optional(positionResolver), insertHandler);
+        addUnique("version", required(positionResolver), insertHandler);
     }
 
 }

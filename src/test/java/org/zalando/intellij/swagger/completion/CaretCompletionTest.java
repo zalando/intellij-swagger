@@ -40,27 +40,29 @@ public class CaretCompletionTest {
     }
 
     @Test
-    public void testTopLevelCompletion() {
+    public void thatRootKeyIsCompleted() {
         getCaretCompletions("top_level")
-                .assertContains("basePath", "produces", "consumes", "schemes", "host", "paths")
-                .assertContains("tags", "parameters", "responses")
-                .assertNotContains("head", "get", "post")
-                .assertNotContains("operationId");
+                .assertContains("basePath", "produces", "consumes", "schemes",
+                        "paths", "tags", "parameters", "responses")
+                .assertNotContains("head", "get", "post", "operationId");
+    }
+
+    @Test
+    public void thatExistingKeysAreNotShown() {
+        getCaretCompletions("top_level").assertNotContains("swagger", "host");
     }
 
     @Test
     public void testGlobalConsumes() {
         getCaretCompletions("media_type_consumes")
-                .assertNotContains("consumes", "produces")
-                .assertNotContains("paths")
-                .assertContains("application/xml", "image/*", "text/plain");
+                .assertContains("application/xml", "image/*", "text/plain")
+                .assertNotContains("consumes", "produces", "paths");
     }
 
     @Test
     public void testGlobalProduces() {
         getCaretCompletions("media_type_produces")
-                .assertNotContains("consumes", "produces")
-                .assertNotContains("paths")
+                .assertNotContains("consumes", "produces", "paths")
                 .assertContains("application/xml", "image/*", "text/plain");
     }
 

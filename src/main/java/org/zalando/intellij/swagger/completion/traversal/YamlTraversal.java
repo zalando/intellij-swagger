@@ -246,6 +246,17 @@ public class YamlTraversal implements Traversal {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public boolean isUniqueKey(final String keyName, final PsiElement psiElement) {
+        return Optional.ofNullable(psiElement.getParent())
+                .map(PsiElement::getParent)
+                .map(el -> Arrays.asList(el.getChildren()))
+                .map(children -> children.stream().filter(c -> c instanceof YAMLKeyValue))
+                .map(childrenStream -> childrenStream.map(YAMLKeyValue.class::cast))
+                .map(childrenStream -> childrenStream.noneMatch(yamlKeyValue -> keyName.equals(yamlKeyValue.getName())))
+                .orElse(true);
+    }
+
     private List<PsiElement> getRootChildren(final PsiFile psiFile) {
         return Optional.of(psiFile)
                 .filter(file -> file instanceof YAMLFile)

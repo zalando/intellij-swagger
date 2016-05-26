@@ -2,7 +2,6 @@ package org.zalando.intellij.swagger.completion.level.inserthandler;
 
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;
-import com.intellij.codeInsight.completion.OffsetKey;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.util.text.CharArrayUtil;
 import org.apache.commons.lang.StringUtils;

@@ -48,8 +48,8 @@ public class SwaggerYamlCompletionContributor extends CompletionContributor {
         }
 
         final PositionResolver positionResolver = new PositionResolver(psiElement, yamlTraversal);
-        LevelCompletionFactory.from(positionResolver)
-                .ifPresent(levelCompletion -> levelCompletion.fill(result, yamlInsertHandler));
+        LevelCompletionFactory.from(positionResolver, result)
+                .ifPresent(levelCompletion -> levelCompletion.fill(yamlInsertHandler));
 
         ValueCompletionFactory.from(positionResolver)
                 .ifPresent(valueCompletion -> valueCompletion.fill(result, yamlValueInsertHandler));

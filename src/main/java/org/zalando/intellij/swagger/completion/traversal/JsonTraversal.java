@@ -319,6 +319,18 @@ public class JsonTraversal implements Traversal {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public boolean isUniqueKey(final String keyName, final PsiElement psiElement) {
+        return Optional.ofNullable(psiElement.getParent())
+                .map(PsiElement::getParent)
+                .map(PsiElement::getParent)
+                .map(el -> Arrays.asList(el.getChildren()))
+                .map(children -> children.stream().filter(c -> c instanceof JsonProperty))
+                .map(childrenStream -> childrenStream.map(JsonProperty.class::cast))
+                .map(childrenStream -> childrenStream.noneMatch(jsonProperty -> keyName.equals(jsonProperty.getName())))
+                .orElse(true);
+    }
+
     private List<PsiElement> getRootChildren(final PsiFile psiFile) {
         return Arrays.asList(psiFile.getChildren()[0].getChildren());
     }

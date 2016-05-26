@@ -4,7 +4,6 @@ import com.intellij.psi.PsiElement;
 import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 
 import java.util.List;
-import java.util.Optional;
 
 public class PositionResolver {
 
@@ -116,4 +115,7 @@ public class PositionResolver {
         return traversal.getKeyNamesOf(propertyName, psiElement.getContainingFile());
     }
 
+    public boolean isUniqueKey(final String keyName) {
+        return traversal.isUniqueKey(keyName, psiElement);
+    }
 }

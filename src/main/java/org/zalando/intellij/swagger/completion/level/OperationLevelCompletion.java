@@ -6,30 +6,28 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
-import static org.zalando.intellij.swagger.completion.level.LookupElementBuilderFactory.*;
 import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
 import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.required;
 
 class OperationLevelCompletion extends LevelCompletion {
 
-    OperationLevelCompletion(final PositionResolver positionResolver) {
-        super(positionResolver);
+    OperationLevelCompletion(final PositionResolver positionResolver, final CompletionResultSet completionResultSet) {
+        super(positionResolver, completionResultSet);
     }
 
-    public void fill(@NotNull final CompletionResultSet result,
-                     @NotNull final InsertHandler<LookupElement> insertHandler) {
-        result.addElement(create("tags", optional(positionResolver), insertHandler));
-        result.addElement(create("summary", optional(positionResolver), insertHandler));
-        result.addElement(create("description", optional(positionResolver), insertHandler));
-        result.addElement(create("externalDocs", optional(positionResolver), insertHandler));
-        result.addElement(create("operationId", optional(positionResolver), insertHandler));
-        result.addElement(create("consumes", optional(positionResolver), insertHandler));
-        result.addElement(create("produces", optional(positionResolver), insertHandler));
-        result.addElement(create("parameters", optional(positionResolver), insertHandler));
-        result.addElement(create("responses", required(positionResolver), insertHandler));
-        result.addElement(create("schemes", optional(positionResolver), insertHandler));
-        result.addElement(create("deprecated", optional(positionResolver), insertHandler));
-        result.addElement(create("security", optional(positionResolver), insertHandler));
+    public void fill(@NotNull final InsertHandler<LookupElement> insertHandler) {
+        addUnique("tags", optional(positionResolver), insertHandler);
+        addUnique("summary", optional(positionResolver), insertHandler);
+        addUnique("description", optional(positionResolver), insertHandler);
+        addUnique("externalDocs", optional(positionResolver), insertHandler);
+        addUnique("operationId", optional(positionResolver), insertHandler);
+        addUnique("consumes", optional(positionResolver), insertHandler);
+        addUnique("produces", optional(positionResolver), insertHandler);
+        addUnique("parameters", optional(positionResolver), insertHandler);
+        addUnique("responses", required(positionResolver), insertHandler);
+        addUnique("schemes", optional(positionResolver), insertHandler);
+        addUnique("deprecated", optional(positionResolver), insertHandler);
+        addUnique("security", optional(positionResolver), insertHandler);
     }
 
 }

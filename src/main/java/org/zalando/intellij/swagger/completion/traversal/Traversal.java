@@ -5,7 +5,6 @@ import com.intellij.psi.PsiFile;
 import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 
 import java.util.List;
-import java.util.Optional;
 
 interface Traversal {
 
@@ -61,4 +60,5 @@ interface Traversal {
 
     List<String> getKeyNamesOf(final String propertyName, final PsiFile containingFile);
 
+    boolean isUniqueKey(String keyName, final PsiElement psiElement);
 }

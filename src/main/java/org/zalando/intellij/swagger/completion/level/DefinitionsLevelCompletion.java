@@ -8,14 +8,13 @@ import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
 class DefinitionsLevelCompletion extends LevelCompletion {
 
-    DefinitionsLevelCompletion(final PositionResolver positionResolver) {
-        super(positionResolver);
+    DefinitionsLevelCompletion(final PositionResolver positionResolver, final CompletionResultSet completionResultSet) {
+        super(positionResolver, completionResultSet);
     }
 
     @Override
-    public void fill(@NotNull final CompletionResultSet result,
-                     @NotNull final InsertHandler<LookupElement> insertHandler) {
-        new SchemaLevelCompletion(positionResolver).fill(result, insertHandler);
+    public void fill(@NotNull final InsertHandler<LookupElement> insertHandler) {
+        new SchemaLevelCompletion(positionResolver, completionResultSet).fill(insertHandler);
     }
 
 }

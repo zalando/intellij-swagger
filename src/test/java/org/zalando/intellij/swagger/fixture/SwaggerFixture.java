@@ -111,6 +111,13 @@ public class SwaggerFixture {
             return this;
         }
 
+        public AssertableList assertNotContains(Iterable<String> badElements) {
+            for (String nextBad : badElements) {
+                Assert.assertThat(myActualList, IsNot.not(IsCollectionContaining.hasItem(nextBad)));
+            }
+            return this;
+        }
+
         public AssertableList assertNotContains(String... badElements) {
             for (String nextBad : badElements) {
                 Assert.assertThat(myActualList, IsNot.not(IsCollectionContaining.hasItem(nextBad)));

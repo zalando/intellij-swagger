@@ -1,7 +1,5 @@
 package org.zalando.intellij.swagger.completion;
 
-import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.codeInsight.lookup.LookupManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
