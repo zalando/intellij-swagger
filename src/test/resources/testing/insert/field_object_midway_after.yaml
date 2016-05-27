@@ -1,0 +1,4 @@
+swagger: 2.0
+info:
+  <caret>
+host: somewhere.com

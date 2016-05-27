@@ -58,6 +58,17 @@ public class InsertHandlerTest {
 
         myFixture.complete("value_string_in_quotes", myJsonOrYaml);
         myFixture.checkResultByFile("value_string_in_quotes_after", myJsonOrYaml);
+    }
 
+    @Test
+    public void testCommaAfterMidwayObject() {
+        myFixture.complete("field_object_midway", myJsonOrYaml);
+        myFixture.checkResultByFile("field_object_midway_after", myJsonOrYaml);
+    }
+
+    @Test
+    public void testCommaAfterMidwayArray() {
+        myFixture.complete("field_array_midway", myJsonOrYaml);
+        myFixture.checkResultByFile("field_array_midway_after", myJsonOrYaml);
     }
 }
