@@ -1,12 +1,16 @@
 package org.zalando.intellij.swagger.completion.traversal;
 
 import com.google.common.collect.Lists;
+import com.intellij.codeInsight.completion.InsertHandler;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.json.JsonElementTypes;
 import com.intellij.json.psi.JsonFile;
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
+import org.zalando.intellij.swagger.completion.level.field.Field;
+import org.zalando.intellij.swagger.completion.level.inserthandler.JsonInsertHandler;
 import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 
 import java.util.Arrays;
@@ -329,6 +333,24 @@ public class JsonTraversal implements Traversal {
                 .map(childrenStream -> childrenStream.map(JsonProperty.class::cast))
                 .map(childrenStream -> childrenStream.noneMatch(jsonProperty -> keyName.equals(jsonProperty.getName())))
                 .orElse(true);
+    }
+
+    @Override
+    public InsertHandler<LookupElement> createInsertHandler(final Field field) {
+        return new JsonInsertHandler(this, field);
+    }
+
+    public boolean isLastChild(@NotNull PsiElement psiElement) {
+        final Optional<PsiElement> lastChildOfParent = Optional.ofNullable(psiElement.getParent())
+                .map(PsiElement::getParent)
+                .map(PsiElement::getParent)
+                .map(el -> el.getChildren()[el.getChildren().length - 1]);
+
+        final Optional<PsiElement> child = Optional.of(psiElement)
+                .map(PsiElement::getParent)
+                .map(PsiElement::getParent);
+
+        return lastChildOfParent.equals(child);
     }
 
     private List<PsiElement> getRootChildren(final PsiFile psiFile) {

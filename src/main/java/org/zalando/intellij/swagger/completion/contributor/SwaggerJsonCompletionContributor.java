@@ -5,8 +5,8 @@ import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import org.zalando.intellij.swagger.completion.level.LevelCompletion;
 import org.zalando.intellij.swagger.completion.level.LevelCompletionFactory;
-import org.zalando.intellij.swagger.completion.level.inserthandler.JsonInsertHandler;
 import org.zalando.intellij.swagger.completion.level.inserthandler.JsonValueInsertHandler;
 import org.zalando.intellij.swagger.completion.level.value.ValueCompletionFactory;
 import org.zalando.intellij.swagger.completion.traversal.JsonTraversal;
@@ -17,21 +17,18 @@ public class SwaggerJsonCompletionContributor extends CompletionContributor {
 
     private final FileDetector fileDetector;
     private final JsonTraversal jsonTraversal;
-    private final JsonInsertHandler jsonInsertHandler;
     private final JsonValueInsertHandler jsonValueInsertHandler;
 
     /* Constructor for IntelliJ IDEA bootstrap */
     public SwaggerJsonCompletionContributor() {
-        this(new FileDetector(), new JsonTraversal(), new JsonInsertHandler(), new JsonValueInsertHandler());
+        this(new FileDetector(), new JsonTraversal(), new JsonValueInsertHandler());
     }
 
     private SwaggerJsonCompletionContributor(final FileDetector fileDetector,
                                              final JsonTraversal jsonTraversal,
-                                             final JsonInsertHandler jsonInsertHandler,
                                              final JsonValueInsertHandler jsonValueInsertHandler) {
         this.fileDetector = fileDetector;
         this.jsonTraversal = jsonTraversal;
-        this.jsonInsertHandler = jsonInsertHandler;
         this.jsonValueInsertHandler = jsonValueInsertHandler;
     }
 
@@ -45,7 +42,7 @@ public class SwaggerJsonCompletionContributor extends CompletionContributor {
         final PositionResolver positionResolver = new PositionResolver(psiElement, jsonTraversal);
         if (jsonTraversal.isKey(psiElement)) {
             LevelCompletionFactory.from(positionResolver, result)
-                    .ifPresent(levelCompletion -> levelCompletion.fill(jsonInsertHandler));
+                    .ifPresent(LevelCompletion::fill);
         } else {
             ValueCompletionFactory.from(positionResolver)
                     .ifPresent(valueCompletion -> valueCompletion.fill(result, jsonValueInsertHandler));

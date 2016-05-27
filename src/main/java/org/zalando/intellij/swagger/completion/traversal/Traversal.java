@@ -1,7 +1,10 @@
 package org.zalando.intellij.swagger.completion.traversal;
 
+import com.intellij.codeInsight.completion.InsertHandler;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import org.zalando.intellij.swagger.completion.level.field.Field;
 import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 
 import java.util.List;
@@ -61,4 +64,6 @@ interface Traversal {
     List<String> getKeyNamesOf(final String propertyName, final PsiFile containingFile);
 
     boolean isUniqueKey(String keyName, final PsiElement psiElement);
+
+    InsertHandler<LookupElement> createInsertHandler(Field field);
 }

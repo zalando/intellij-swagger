@@ -1,9 +1,9 @@
 package org.zalando.intellij.swagger.completion.level;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.completion.InsertHandler;
-import com.intellij.codeInsight.lookup.LookupElement;
-import org.jetbrains.annotations.NotNull;
+import org.zalando.intellij.swagger.completion.level.field.ArrayField;
+import org.zalando.intellij.swagger.completion.level.field.ObjectField;
+import org.zalando.intellij.swagger.completion.level.field.StringField;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
 import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
@@ -15,22 +15,22 @@ class RootLevelCompletion extends LevelCompletion {
         super(positionResolver, completionResultSet);
     }
 
-    public void fill(@NotNull final InsertHandler<LookupElement> insertHandler) {
-        addUnique("swagger", required(positionResolver), insertHandler);
-        addUnique("info", required(positionResolver), insertHandler);
-        addUnique("host", optional(positionResolver), insertHandler);
-        addUnique("basePath", optional(positionResolver), insertHandler);
-        addUnique("schemes", optional(positionResolver), insertHandler);
-        addUnique("consumes", optional(positionResolver), insertHandler);
-        addUnique("produces", optional(positionResolver), insertHandler);
-        addUnique("paths", required(positionResolver), insertHandler);
-        addUnique("definitions", optional(positionResolver), insertHandler);
-        addUnique("parameters", optional(positionResolver), insertHandler);
-        addUnique("responses", optional(positionResolver), insertHandler);
-        addUnique("securityDefinitions", optional(positionResolver), insertHandler);
-        addUnique("security", optional(positionResolver), insertHandler);
-        addUnique("tags", optional(positionResolver), insertHandler);
-        addUnique("externalDocs", optional(positionResolver), insertHandler);
+    public void fill() {
+        addUnique(new StringField("swagger"), required(positionResolver));
+        addUnique(new ObjectField("info"), required(positionResolver));
+        addUnique(new StringField("host"), optional(positionResolver));
+        addUnique(new StringField("basePath"), optional(positionResolver));
+        addUnique(new ArrayField("schemes"), optional(positionResolver));
+        addUnique(new ArrayField("consumes"), optional(positionResolver));
+        addUnique(new ArrayField("produces"), optional(positionResolver));
+        addUnique(new ObjectField("paths"), required(positionResolver));
+        addUnique(new ObjectField("definitions"), optional(positionResolver));
+        addUnique(new ObjectField("parameters"), optional(positionResolver));
+        addUnique(new ObjectField("responses"), optional(positionResolver));
+        addUnique(new ObjectField("securityDefinitions"), optional(positionResolver));
+        addUnique(new ArrayField("security"), optional(positionResolver));
+        addUnique(new ArrayField("tags"), optional(positionResolver));
+        addUnique(new ObjectField("externalDocs"), optional(positionResolver));
     }
 
 }

@@ -6,8 +6,8 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
+import org.zalando.intellij.swagger.completion.level.LevelCompletion;
 import org.zalando.intellij.swagger.completion.level.LevelCompletionFactory;
-import org.zalando.intellij.swagger.completion.level.inserthandler.YamlInsertHandler;
 import org.zalando.intellij.swagger.completion.level.inserthandler.YamlValueInsertHandler;
 import org.zalando.intellij.swagger.completion.level.value.ValueCompletionFactory;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
@@ -18,21 +18,18 @@ public class SwaggerYamlCompletionContributor extends CompletionContributor {
 
     private final FileDetector fileDetector;
     private final YamlTraversal yamlTraversal;
-    private final YamlInsertHandler yamlInsertHandler;
     private final YamlValueInsertHandler yamlValueInsertHandler;
 
     /* Constructor for IntelliJ IDEA bootstrap */
     public SwaggerYamlCompletionContributor() {
-        this(new FileDetector(), new YamlTraversal(), new YamlInsertHandler(), new YamlValueInsertHandler());
+        this(new FileDetector(), new YamlTraversal(), new YamlValueInsertHandler());
     }
 
     private SwaggerYamlCompletionContributor(final FileDetector fileDetector,
                                              final YamlTraversal yamlTraversal,
-                                             final YamlInsertHandler yamlInsertHandler,
                                              final YamlValueInsertHandler yamlValueInsertHandler) {
         this.fileDetector = fileDetector;
         this.yamlTraversal = yamlTraversal;
-        this.yamlInsertHandler = yamlInsertHandler;
         this.yamlValueInsertHandler = yamlValueInsertHandler;
     }
 
@@ -49,7 +46,7 @@ public class SwaggerYamlCompletionContributor extends CompletionContributor {
 
         final PositionResolver positionResolver = new PositionResolver(psiElement, yamlTraversal);
         LevelCompletionFactory.from(positionResolver, result)
-                .ifPresent(levelCompletion -> levelCompletion.fill(yamlInsertHandler));
+                .ifPresent(LevelCompletion::fill);
 
         ValueCompletionFactory.from(positionResolver)
                 .ifPresent(valueCompletion -> valueCompletion.fill(result, yamlValueInsertHandler));

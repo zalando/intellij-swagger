@@ -1,9 +1,8 @@
 package org.zalando.intellij.swagger.completion.level;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.completion.InsertHandler;
-import com.intellij.codeInsight.lookup.LookupElement;
-import org.jetbrains.annotations.NotNull;
+import org.zalando.intellij.swagger.completion.level.field.ObjectField;
+import org.zalando.intellij.swagger.completion.level.field.StringField;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
 import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
@@ -15,13 +14,13 @@ class InfoLevelCompletion extends LevelCompletion {
         super(positionResolver, completionResultSet);
     }
 
-    public void fill(@NotNull final InsertHandler<LookupElement> insertHandler) {
-        addUnique("title", required(positionResolver), insertHandler);
-        addUnique("description", optional(positionResolver), insertHandler);
-        addUnique("termsOfService", optional(positionResolver), insertHandler);
-        addUnique("contact", optional(positionResolver), insertHandler);
-        addUnique("license", optional(positionResolver), insertHandler);
-        addUnique("version", required(positionResolver), insertHandler);
+    public void fill() {
+        addUnique(new StringField("title"), required(positionResolver));
+        addUnique(new StringField("description"), optional(positionResolver));
+        addUnique(new StringField("termsOfService"), optional(positionResolver));
+        addUnique(new ObjectField("contact"), optional(positionResolver));
+        addUnique(new ObjectField("license"), optional(positionResolver));
+        addUnique(new StringField("version"), required(positionResolver));
     }
 
 }

@@ -1,9 +1,9 @@
 package org.zalando.intellij.swagger.completion.level;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.completion.InsertHandler;
-import com.intellij.codeInsight.lookup.LookupElement;
-import org.jetbrains.annotations.NotNull;
+import org.zalando.intellij.swagger.completion.level.field.ArrayField;
+import org.zalando.intellij.swagger.completion.level.field.ObjectField;
+import org.zalando.intellij.swagger.completion.level.field.StringField;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
 import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
@@ -15,19 +15,19 @@ class OperationLevelCompletion extends LevelCompletion {
         super(positionResolver, completionResultSet);
     }
 
-    public void fill(@NotNull final InsertHandler<LookupElement> insertHandler) {
-        addUnique("tags", optional(positionResolver), insertHandler);
-        addUnique("summary", optional(positionResolver), insertHandler);
-        addUnique("description", optional(positionResolver), insertHandler);
-        addUnique("externalDocs", optional(positionResolver), insertHandler);
-        addUnique("operationId", optional(positionResolver), insertHandler);
-        addUnique("consumes", optional(positionResolver), insertHandler);
-        addUnique("produces", optional(positionResolver), insertHandler);
-        addUnique("parameters", optional(positionResolver), insertHandler);
-        addUnique("responses", required(positionResolver), insertHandler);
-        addUnique("schemes", optional(positionResolver), insertHandler);
-        addUnique("deprecated", optional(positionResolver), insertHandler);
-        addUnique("security", optional(positionResolver), insertHandler);
+    public void fill() {
+        addUnique(new ArrayField("tags"), optional(positionResolver));
+        addUnique(new StringField("summary"), optional(positionResolver));
+        addUnique(new StringField("description"), optional(positionResolver));
+        addUnique(new ObjectField("externalDocs"), optional(positionResolver));
+        addUnique(new StringField("operationId"), optional(positionResolver));
+        addUnique(new ArrayField("consumes"), optional(positionResolver));
+        addUnique(new ArrayField("produces"), optional(positionResolver));
+        addUnique(new ArrayField("parameters"), optional(positionResolver));
+        addUnique(new ObjectField("responses"), required(positionResolver));
+        addUnique(new ArrayField("schemes"), optional(positionResolver));
+        addUnique(new StringField("deprecated"), optional(positionResolver));
+        addUnique(new ArrayField("security"), optional(positionResolver));
     }
 
 }

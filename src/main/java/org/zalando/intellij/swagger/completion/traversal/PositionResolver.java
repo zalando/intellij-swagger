@@ -1,6 +1,9 @@
 package org.zalando.intellij.swagger.completion.traversal;
 
+import com.intellij.codeInsight.completion.InsertHandler;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
+import org.zalando.intellij.swagger.completion.level.field.Field;
 import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 
 import java.util.List;
@@ -117,5 +120,9 @@ public class PositionResolver {
 
     public boolean isUniqueKey(final String keyName) {
         return traversal.isUniqueKey(keyName, psiElement);
+    }
+
+    public InsertHandler<LookupElement> createInsertHandler(final Field field) {
+        return traversal.createInsertHandler(field);
     }
 }

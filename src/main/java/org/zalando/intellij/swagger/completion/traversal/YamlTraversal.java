@@ -1,6 +1,8 @@
 package org.zalando.intellij.swagger.completion.traversal;
 
 import com.google.common.collect.Lists;
+import com.intellij.codeInsight.completion.InsertHandler;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.yaml.psi.YAMLFile;
@@ -8,6 +10,8 @@ import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.jetbrains.yaml.psi.YAMLMapping;
 import org.jetbrains.yaml.psi.YAMLSequenceItem;
 import org.jetbrains.yaml.psi.YAMLValue;
+import org.zalando.intellij.swagger.completion.level.field.Field;
+import org.zalando.intellij.swagger.completion.level.inserthandler.YamlInsertHandler;
 import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 
 import java.util.Arrays;
@@ -255,6 +259,11 @@ public class YamlTraversal implements Traversal {
                 .map(childrenStream -> childrenStream.map(YAMLKeyValue.class::cast))
                 .map(childrenStream -> childrenStream.noneMatch(yamlKeyValue -> keyName.equals(yamlKeyValue.getName())))
                 .orElse(true);
+    }
+
+    @Override
+    public InsertHandler<LookupElement> createInsertHandler(final Field field) {
+        return new YamlInsertHandler(field);
     }
 
     private List<PsiElement> getRootChildren(final PsiFile psiFile) {

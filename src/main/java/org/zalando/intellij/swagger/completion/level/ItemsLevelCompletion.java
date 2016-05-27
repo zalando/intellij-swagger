@@ -1,9 +1,9 @@
 package org.zalando.intellij.swagger.completion.level;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.completion.InsertHandler;
-import com.intellij.codeInsight.lookup.LookupElement;
-import org.jetbrains.annotations.NotNull;
+import org.zalando.intellij.swagger.completion.level.field.ArrayField;
+import org.zalando.intellij.swagger.completion.level.field.ObjectField;
+import org.zalando.intellij.swagger.completion.level.field.StringField;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
 import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
@@ -15,24 +15,24 @@ class ItemsLevelCompletion extends LevelCompletion {
         super(positionResolver, completionResultSet);
     }
 
-    public void fill(@NotNull final InsertHandler<LookupElement> insertHandler) {
-        addUnique("type", required(positionResolver), insertHandler);
-        addUnique("format", optional(positionResolver), insertHandler);
-        addUnique("items", optional(positionResolver), insertHandler);
-        addUnique("collectionFormat", optional(positionResolver), insertHandler);
-        addUnique("default", optional(positionResolver), insertHandler);
-        addUnique("maximum", optional(positionResolver), insertHandler);
-        addUnique("exclusiveMaximum", optional(positionResolver), insertHandler);
-        addUnique("minimum", optional(positionResolver), insertHandler);
-        addUnique("exclusiveMinimum", optional(positionResolver), insertHandler);
-        addUnique("maxLength", optional(positionResolver), insertHandler);
-        addUnique("minLength", optional(positionResolver), insertHandler);
-        addUnique("pattern", optional(positionResolver), insertHandler);
-        addUnique("maxItems", optional(positionResolver), insertHandler);
-        addUnique("minItems", optional(positionResolver), insertHandler);
-        addUnique("uniqueItems", optional(positionResolver), insertHandler);
-        addUnique("enum", optional(positionResolver), insertHandler);
-        addUnique("multipleOf", optional(positionResolver), insertHandler);
+    public void fill() {
+        addUnique(new StringField("type"), required(positionResolver));
+        addUnique(new StringField("format"), optional(positionResolver));
+        addUnique(new ObjectField("items"), optional(positionResolver));
+        addUnique(new StringField("collectionFormat"), optional(positionResolver));
+        addUnique(new StringField("default"), optional(positionResolver));
+        addUnique(new StringField("maximum"), optional(positionResolver));
+        addUnique(new StringField("exclusiveMaximum"), optional(positionResolver));
+        addUnique(new StringField("minimum"), optional(positionResolver));
+        addUnique(new StringField("exclusiveMinimum"), optional(positionResolver));
+        addUnique(new StringField("maxLength"), optional(positionResolver));
+        addUnique(new StringField("minLength"), optional(positionResolver));
+        addUnique(new StringField("pattern"), optional(positionResolver));
+        addUnique(new StringField("maxItems"), optional(positionResolver));
+        addUnique(new StringField("minItems"), optional(positionResolver));
+        addUnique(new StringField("uniqueItems"), optional(positionResolver));
+        addUnique(new ArrayField("enum"), optional(positionResolver));
+        addUnique(new StringField("multipleOf"), optional(positionResolver));
     }
 
 }
