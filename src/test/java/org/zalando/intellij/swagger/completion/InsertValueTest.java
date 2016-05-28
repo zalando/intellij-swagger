@@ -35,11 +35,11 @@ public class InsertValueTest {
 
     @Test
     public void thatStringValuesAreHandled() {
-        myFixture.complete("value_string_no_quotes", myJsonOrYaml);
-        myFixture.checkResultByFile("value_string_no_quotes_after", myJsonOrYaml);
+        myFixture.complete("string_no_quotes", myJsonOrYaml);
+        myFixture.checkResultByFile("string_no_quotes_after", myJsonOrYaml);
 
-        myFixture.complete("value_string_in_quotes", myJsonOrYaml);
-        myFixture.checkResultByFile("value_string_in_quotes_after", myJsonOrYaml);
+        myFixture.complete("string_in_quotes", myJsonOrYaml);
+        myFixture.checkResultByFile("string_in_quotes_after", myJsonOrYaml);
     }
 
 }
