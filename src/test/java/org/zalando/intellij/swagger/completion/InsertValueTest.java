@@ -1,45 +1,31 @@
 package org.zalando.intellij.swagger.completion;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.zalando.intellij.swagger.fixture.SwaggerFixture;
 import org.zalando.intellij.swagger.fixture.SwaggerFixture.JsonOrYaml;
 
 @RunWith(Parameterized.class)
-public class InsertValueTest {
-
-    private SwaggerFixture myFixture;
-    private final JsonOrYaml myJsonOrYaml;
+public class InsertValueTest extends AbstractJsonOrYamlCompletionTest {
+    public InsertValueTest(JsonOrYaml jsonOrYaml) {
+        super(jsonOrYaml);
+    }
 
     @Parameterized.Parameters(name = "inputKind: {0}")
     public static Object[] parameters() {
         return JsonOrYaml.values();
     }
 
-    public InsertValueTest(JsonOrYaml jsonOrYaml) {
-        myJsonOrYaml = jsonOrYaml;
-    }
-
     @Before
     public void setUpBefore() throws Exception {
-        myFixture = SwaggerFixture.forResourceFolder("testing/insert/value");
-    }
-
-    @After
-    public void tearDownAfter() throws Exception {
-        myFixture.tearDown();
+        useResourceFolder("testing/insert/value");
     }
 
     @Test
     public void thatStringValuesAreHandled() {
-        myFixture.complete("string_no_quotes", myJsonOrYaml);
-        myFixture.checkResultByFile("string_no_quotes_after", myJsonOrYaml);
-
-        myFixture.complete("string_in_quotes", myJsonOrYaml);
-        myFixture.checkResultByFile("string_in_quotes_after", myJsonOrYaml);
+        completeAndCheckResultsByFile("string_no_quotes");
+        completeAndCheckResultsByFile("string_in_quotes");
     }
 
 }
