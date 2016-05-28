@@ -1,6 +1,7 @@
 package org.zalando.intellij.swagger.completion;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -23,9 +24,26 @@ public class InsertValueTest extends AbstractJsonOrYamlCompletionTest {
     }
 
     @Test
-    public void thatReferenceValuesAreHandled() {
+    public void thatRefValuesAreCompleted() {
         completeAndCheckResultsByFile("ref_no_quotes");
+    }
+
+    @Test
+    public void thatRefValuesCompletion_RespectQuotes() {
         completeAndCheckResultsByFile("ref_in_quotes");
     }
+
+    @Ignore("see issue #25")
+    @Test
+    public void thatRefValuesCompletion_RespectEnteredPrefix() {
+        completeAndCheckResultsByFile("ref_in_quotes_with_prefix");
+    }
+
+    @Ignore("see issue #22")
+    @Test
+    public void thatRefValuesCompletion_WorksForUnquotedJsonPointerStart() {
+        completeAndCheckResultsByFile("ref_no_quotes_pointer");
+    }
+
 
 }
