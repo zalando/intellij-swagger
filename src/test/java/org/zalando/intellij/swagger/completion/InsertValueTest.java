@@ -23,9 +23,9 @@ public class InsertValueTest extends AbstractJsonOrYamlCompletionTest {
     }
 
     @Test
-    public void thatStringValuesAreHandled() {
-        completeAndCheckResultsByFile("string_no_quotes");
-        completeAndCheckResultsByFile("string_in_quotes");
+    public void thatReferenceValuesAreHandled() {
+        completeAndCheckResultsByFile("ref_no_quotes");
+        completeAndCheckResultsByFile("ref_in_quotes");
     }
 
 }
