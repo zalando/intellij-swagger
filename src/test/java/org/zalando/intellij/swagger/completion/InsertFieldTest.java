@@ -25,7 +25,7 @@ public class InsertFieldTest {
 
     @Before
     public void setUpBefore() throws Exception {
-        myFixture = SwaggerFixture.forResourceFolder("testing/insert");
+        myFixture = SwaggerFixture.forResourceFolder("testing/insert/field");
     }
 
     @After
