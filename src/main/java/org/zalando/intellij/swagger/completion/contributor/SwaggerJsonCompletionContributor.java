@@ -44,8 +44,12 @@ public class SwaggerJsonCompletionContributor extends CompletionContributor {
             LevelCompletionFactory.from(positionResolver, result)
                     .ifPresent(LevelCompletion::fill);
         } else {
+            CompletionResultSet withFixedPrefix =
+                    jsonTraversal.getCustomCompletionPrefix(parameters.getPosition(), parameters.getOffset())
+                            .map(result::withPrefixMatcher)
+                            .orElse(result);
             ValueCompletionFactory.from(positionResolver)
-                    .ifPresent(valueCompletion -> valueCompletion.fill(result, jsonValueInsertHandler));
+                    .ifPresent(valueCompletion -> valueCompletion.fill(withFixedPrefix, jsonValueInsertHandler));
         }
     }
 }
