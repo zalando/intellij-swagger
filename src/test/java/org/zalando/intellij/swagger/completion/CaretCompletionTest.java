@@ -77,11 +77,18 @@ public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
                 .assertContains("#/definitions/Pets", "#/definitions/Error");
     }
 
-    @Ignore("Expected, not yet implemented")
+    @Ignore("See issue #30")
     @Test
     public void enumValuesCompletion_ParametersIn() {
         getCaretCompletions("enum_parameters_in")
                 .assertContains("path", "header", "query", "formData", "body");
+    }
+
+    @Ignore("See issue #21")
+    @Test
+    public void booleanValuesCompletion_ParametersRequired() {
+        getCaretCompletions("boolean_parameters_required")
+                .assertContains("true", "false");
     }
 
 }
