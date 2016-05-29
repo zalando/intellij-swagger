@@ -33,10 +33,10 @@ public class InsertValueTest extends AbstractJsonOrYamlCompletionTest {
         completeAndCheckResultsByFile("ref_in_quotes");
     }
 
-    @Ignore("see issue #25")
     @Test
     public void thatRefValuesCompletion_RespectEnteredPrefix() {
         completeAndCheckResultsByFile("ref_in_quotes_with_prefix");
+        completeAndCheckResultsByFile("ref_in_quotes_with_prefix2", "ref_in_quotes_with_prefix_after");
     }
 
     @Ignore("see issue #22")
