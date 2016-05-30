@@ -1,0 +1,10 @@
+swagger: 2.0
+paths:
+  /some-path:
+    get:
+      parameters:
+        - name: p1
+          in: query
+          required: <caret>
+          type: number
+          format: double

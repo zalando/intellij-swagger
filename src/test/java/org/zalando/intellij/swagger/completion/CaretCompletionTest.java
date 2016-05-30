@@ -1,14 +1,11 @@
 package org.zalando.intellij.swagger.completion;
 
 import com.intellij.util.net.HTTPMethod;
-import org.jetbrains.annotations.NotNull;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.zalando.intellij.swagger.fixture.SwaggerFixture;
 import org.zalando.intellij.swagger.fixture.SwaggerFixture.JsonOrYaml;
 
 import java.util.Arrays;
@@ -16,27 +13,19 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @RunWith(Parameterized.class)
-public class CaretCompletionTest {
-    private SwaggerFixture myFixture;
-    private final JsonOrYaml myJsonOrYaml;
+public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
+    public CaretCompletionTest(JsonOrYaml jsonOrYaml) {
+        super(jsonOrYaml);
+    }
 
     @Parameterized.Parameters(name = "inputKind: {0}")
     public static Object[] parameters() {
         return JsonOrYaml.values();
     }
 
-    public CaretCompletionTest(JsonOrYaml jsonOrYaml) {
-        myJsonOrYaml = jsonOrYaml;
-    }
-
     @Before
     public void setUpBefore() throws Exception {
-        myFixture = SwaggerFixture.forResourceFolder("testing/completion");
-    }
-
-    @After
-    public void tearDownAfter() throws Exception {
-        myFixture.tearDown();
+        useResourceFolder("testing/completion");
     }
 
     @Test
@@ -88,16 +77,18 @@ public class CaretCompletionTest {
                 .assertContains("#/definitions/Pets", "#/definitions/Error");
     }
 
-    @Ignore("Expected, not yet implemented")
+    @Ignore("See issue #30")
     @Test
     public void enumValuesCompletion_ParametersIn() {
         getCaretCompletions("enum_parameters_in")
                 .assertContains("path", "header", "query", "formData", "body");
     }
 
-    @NotNull
-    private SwaggerFixture.AssertableList getCaretCompletions(@NotNull String testFileNoExt) {
-        return myFixture.getCompletions(testFileNoExt, myJsonOrYaml);
+    @Ignore("See issue #21")
+    @Test
+    public void booleanValuesCompletion_ParametersRequired() {
+        getCaretCompletions("boolean_parameters_required")
+                .assertContains("true", "false");
     }
 
 }

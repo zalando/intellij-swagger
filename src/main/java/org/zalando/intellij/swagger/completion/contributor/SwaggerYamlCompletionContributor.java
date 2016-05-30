@@ -48,7 +48,12 @@ public class SwaggerYamlCompletionContributor extends CompletionContributor {
         LevelCompletionFactory.from(positionResolver, result)
                 .ifPresent(LevelCompletion::fill);
 
+        CompletionResultSet withFixedPrefix =
+                yamlTraversal.getCustomCompletionPrefix(parameters.getPosition(), parameters.getOffset())
+                        .map(result::withPrefixMatcher)
+                        .orElse(result);
+
         ValueCompletionFactory.from(positionResolver)
-                .ifPresent(valueCompletion -> valueCompletion.fill(result, yamlValueInsertHandler));
+                .ifPresent(valueCompletion -> valueCompletion.fill(withFixedPrefix, yamlValueInsertHandler));
     }
 }
