@@ -39,7 +39,6 @@ public class InsertValueTest extends AbstractJsonOrYamlCompletionTest {
         completeAndCheckResultsByFile("ref_in_quotes_with_prefix2", "ref_in_quotes_with_prefix_after");
     }
 
-    @Ignore("see issue #22")
     @Test
     public void thatRefValuesCompletion_WorksForUnquotedJsonPointerStart() {
         completeAndCheckResultsByFile("ref_no_quotes_pointer");

@@ -15,26 +15,37 @@ public class YamlValueInsertHandler implements InsertHandler<LookupElement> {
     @Override
     public void handleInsert(final InsertionContext insertionContext, final LookupElement lookupElement) {
         if (StringUtils.containsAny(lookupElement.getLookupString(), RESERVED_YAML_CHARS)) {
-            final int caretOffset = insertionContext.getEditor().getCaretModel().getOffset();
-            final CharSequence chars = insertionContext.getDocument().getCharsSequence();
-
-            final boolean hasEndingQuote = CharArrayUtil.regionMatches(chars, caretOffset, "'");
-            if (!hasEndingQuote) {
-                insertionContext.getDocument().insertString(caretOffset, "'");
-            }
-
-            final int startOfLookupStringOffset = caretOffset - lookupElement.getLookupString().length();
-            final boolean hasStartingQuote = hasStartingQuote(insertionContext);
-            if (!hasStartingQuote) {
-                insertionContext.getDocument().insertString(startOfLookupStringOffset, "'");
-            }
+            handleEndingQuote(insertionContext);
+            handleStartingQuote(insertionContext, lookupElement);
+            handleCommentCharacters(insertionContext, lookupElement);
         }
     }
 
-    private boolean hasStartingQuote(final InsertionContext insertionContext) {
+    private void handleCommentCharacters(final InsertionContext insertionContext, final LookupElement lookupElement) {
         final int caretOffset = insertionContext.getEditor().getCaretModel().getOffset();
-        final String documentText = insertionContext.getDocument().getText();
-        return org.zalando.intellij.swagger.completion.level.string.StringUtils
-                .hasSingleQuoteBeforeColonStartingFromEnd(documentText.substring(0, caretOffset));
+        final int startOfLookupStringOffset = caretOffset - lookupElement.getLookupString().length() - 1;
+        final boolean hasCommentPrefix = insertionContext.getDocument().getText().charAt(startOfLookupStringOffset - 1) == '#';
+        if (hasCommentPrefix) {
+            insertionContext.getDocument().deleteString(startOfLookupStringOffset - 1, startOfLookupStringOffset);
+        }
+    }
+
+    private void handleStartingQuote(final InsertionContext insertionContext, final LookupElement lookupElement) {
+        final int caretOffset = insertionContext.getEditor().getCaretModel().getOffset();
+        final int startOfLookupStringOffset = caretOffset - lookupElement.getLookupString().length();
+        final boolean hasStartingQuote = insertionContext.getDocument().getText().charAt(startOfLookupStringOffset - 1) == '\'';
+        if (!hasStartingQuote) {
+            insertionContext.getDocument().insertString(startOfLookupStringOffset, "'");
+        }
+    }
+
+    private void handleEndingQuote(final InsertionContext insertionContext) {
+        final int caretOffset = insertionContext.getEditor().getCaretModel().getOffset();
+        final CharSequence chars = insertionContext.getDocument().getCharsSequence();
+
+        final boolean hasEndingQuote = CharArrayUtil.regionMatches(chars, caretOffset, "'");
+        if (!hasEndingQuote) {
+            insertionContext.getDocument().insertString(caretOffset, "'");
+        }
     }
 }

@@ -40,16 +40,15 @@ public class SwaggerJsonCompletionContributor extends CompletionContributor {
 
         final PsiElement psiElement = parameters.getPosition();
         final PositionResolver positionResolver = new PositionResolver(psiElement, jsonTraversal);
-        if (jsonTraversal.isKey(psiElement)) {
-            LevelCompletionFactory.from(positionResolver, result)
-                    .ifPresent(LevelCompletion::fill);
-        } else {
-            CompletionResultSet withFixedPrefix =
-                    jsonTraversal.getCustomCompletionPrefix(parameters.getPosition(), parameters.getOffset())
-                            .map(result::withPrefixMatcher)
-                            .orElse(result);
-            ValueCompletionFactory.from(positionResolver)
-                    .ifPresent(valueCompletion -> valueCompletion.fill(withFixedPrefix, jsonValueInsertHandler));
-        }
+        LevelCompletionFactory.from(positionResolver, result)
+                .ifPresent(LevelCompletion::fill);
+
+        CompletionResultSet withFixedPrefix =
+                jsonTraversal.getCustomCompletionPrefix(parameters.getPosition(), parameters.getOffset())
+                        .map(result::withPrefixMatcher)
+                        .orElse(result);
+
+        ValueCompletionFactory.from(positionResolver, parameters.getEditor())
+                .ifPresent(valueCompletion -> valueCompletion.fill(withFixedPrefix, jsonValueInsertHandler));
     }
 }
