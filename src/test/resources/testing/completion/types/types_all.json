@@ -1,0 +1,14 @@
+{
+  "swagger": "2.0",
+  "host": "somewhere.com",
+  "definitions": {
+    "SomeType": {
+      "properties": {
+        "propA": {
+          "type": "<caret>",
+          "description": ""
+        }
+      }
+    }
+  }
+}
