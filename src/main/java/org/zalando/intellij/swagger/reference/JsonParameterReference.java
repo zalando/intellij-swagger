@@ -4,6 +4,7 @@ import com.intellij.json.psi.JsonLiteral;
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceBase;
+import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.zalando.intellij.swagger.completion.traversal.JsonTraversal;
@@ -44,5 +45,10 @@ public class JsonParameterReference extends PsiReferenceBase<PsiElement> {
     @Override
     public Object[] getVariants() {
         return new Object[0];
+    }
+
+    @Override
+    public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
+        return super.handleElementRename("#/parameters/" + newElementName);
     }
 }

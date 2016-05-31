@@ -1,0 +1,21 @@
+{
+  "/path": {
+    "get": {
+      "parameters": [
+        {
+          "$ref": "#/parameters/paramName"
+        }
+      ]
+    }
+  },
+  "parameters": {
+    "<caret>paramName": {
+      "name": "limit",
+      "in": "query",
+      "description": "Limits the number of returned results",
+      "required": false,
+      "type": "number",
+      "format": "int32"
+    }
+  }
+}

@@ -57,6 +57,8 @@
 
         <psi.referenceContributor implementation="org.zalando.intellij.swagger.reference.contributor.SwaggerYamlReferenceContributor"/>
         <psi.referenceContributor implementation="org.zalando.intellij.swagger.reference.contributor.SwaggerJsonReferenceContributor"/>
+
+        <lang.findUsagesProvider language="yaml" implementationClass="org.zalando.intellij.swagger.reference.usage.YamlFindUsagesProvider"/>
     </extensions>
 
 

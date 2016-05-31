@@ -2,6 +2,7 @@ package org.zalando.intellij.swagger.fixture;
 
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupManager;
+import com.intellij.psi.PsiDocumentManager;
 import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture;
 import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SwaggerFixture {
+
     private final CodeInsightTestFixture myCodeInsightFixture;
 
     @NotNull
@@ -29,7 +31,7 @@ public class SwaggerFixture {
         return new SwaggerFixture(absolutePath);
     }
 
-    public SwaggerFixture(@NotNull String folderAbsolutePath) throws Exception {
+    private SwaggerFixture(@NotNull String folderAbsolutePath) throws Exception {
         IdeaTestFixtureFactory factory = IdeaTestFixtureFactory.getFixtureFactory();
         LightProjectDescriptor projectDescriptor = LightProjectDescriptor.EMPTY_PROJECT_DESCRIPTOR;
         TestFixtureBuilder<IdeaProjectTestFixture> fixtureBuilder = factory.createLightFixtureBuilder(projectDescriptor);
@@ -45,7 +47,7 @@ public class SwaggerFixture {
     }
 
     @NotNull
-    public AssertableList getCompletions(@NotNull String caretFileName) {
+    private AssertableList getCompletions(@NotNull String caretFileName) {
         List<String> results = myCodeInsightFixture.getCompletionVariants(caretFileName);
         Assert.assertThat(results, IsNull.notNullValue());
         return new AssertableList(results);
@@ -63,6 +65,11 @@ public class SwaggerFixture {
         if (LookupManager.getActiveLookup(myCodeInsightFixture.getEditor()) != null) {
             myCodeInsightFixture.type('\n');
         }
+    }
+
+    public void rename(final String newName, final String testFileNoExt, final JsonOrYaml fileKind) {
+        myCodeInsightFixture.configureByFile(fileKind.getFileName(testFileNoExt));
+        myCodeInsightFixture.renameElementAtCaret(newName);
     }
 
     public void checkResultByFile(final String testFileNoExt, final JsonOrYaml fileKind) {

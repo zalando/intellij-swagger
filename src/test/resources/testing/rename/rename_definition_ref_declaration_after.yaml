@@ -1,0 +1,25 @@
+swagger: 2.0
+paths:
+  /pets:
+    get:
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/NewPets'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  <caret>NewPets:
+    type: array
+  Error:
+    required:
+      - code'
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string

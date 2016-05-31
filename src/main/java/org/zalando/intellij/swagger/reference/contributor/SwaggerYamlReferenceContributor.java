@@ -10,7 +10,6 @@ import com.intellij.psi.PsiReferenceRegistrar;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.YAMLLanguage;
-import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.jetbrains.yaml.psi.YAMLQuotedText;
 import org.zalando.intellij.swagger.completion.traversal.YamlTraversal;
 import org.zalando.intellij.swagger.reference.YamlDefinitionReference;
@@ -71,15 +70,15 @@ public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
 
 
     private PsiElementPattern.Capture<YAMLQuotedText> definitionsPattern() {
-        return psiElement(YAMLQuotedText.class).withText(StandardPatterns.string().contains("#/definitions/"))
-                .withParent(psiElement(YAMLKeyValue.class)
-                        .withLanguage(YAMLLanguage.INSTANCE));
+        return psiElement(YAMLQuotedText.class)
+                .withText(StandardPatterns.string().contains("#/definitions/"))
+                .withLanguage(YAMLLanguage.INSTANCE);
     }
 
     private PsiElementPattern.Capture<YAMLQuotedText> parametersPattern() {
-        return psiElement(YAMLQuotedText.class).withText(StandardPatterns.string().contains("#/parameters/"))
-                .withParent(psiElement(YAMLKeyValue.class)
-                        .withLanguage(YAMLLanguage.INSTANCE));
+        return psiElement(YAMLQuotedText.class)
+                .withText(StandardPatterns.string().contains("#/parameters/"))
+                .withLanguage(YAMLLanguage.INSTANCE);
     }
 
 }

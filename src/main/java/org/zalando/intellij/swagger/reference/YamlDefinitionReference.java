@@ -2,11 +2,13 @@ package org.zalando.intellij.swagger.reference;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceBase;
+import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.yaml.psi.YAMLPsiElement;
 import org.jetbrains.yaml.psi.YAMLQuotedText;
 import org.zalando.intellij.swagger.completion.traversal.YamlTraversal;
+import org.zalando.intellij.swagger.reference.element.YamlElementGenerator;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,4 +49,9 @@ public class YamlDefinitionReference extends PsiReferenceBase<PsiElement> {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
+        final PsiElement newValue = YamlElementGenerator.createSingleQuotedValue(getElement().getProject(), "#/definitions/" + newElementName);
+        return getElement().replace(newValue);
+    }
 }

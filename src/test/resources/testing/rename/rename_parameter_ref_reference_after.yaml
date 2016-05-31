@@ -1,0 +1,13 @@
+/path:
+  get:
+    parameters:
+      -
+        $ref: '#/parameters/<caret>newName'
+parameters:
+  newName:
+    name: limit
+    in: query
+    description: Limits the number of returned results
+    required: false
+    type: number
+    format: int32
