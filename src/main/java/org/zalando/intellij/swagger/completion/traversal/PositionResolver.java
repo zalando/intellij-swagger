@@ -113,14 +113,13 @@ public class PositionResolver {
 
     private boolean refValueStartingWithHash(final Editor editor) {
         final int offset = editor.getCaretModel().getOffset() - 1;
-        final char charAtOffset = editor.getDocument().getText().charAt(offset);
         final int lineNumber = editor.getDocument().getLineNumber(offset);
 
         final int lineStartOffset = editor.getDocument().getLineStartOffset(lineNumber);
         final int lineEndOffset = editor.getDocument().getLineEndOffset(lineNumber);
         final String lineText = editor.getDocument().getText().substring(lineStartOffset, lineEndOffset);
 
-        return charAtOffset == '#' && lineText.contains("$ref");
+        return lineText.contains("$ref");
     }
 
     public List<PsiElement> getChildrenOf(final String propertyName) {

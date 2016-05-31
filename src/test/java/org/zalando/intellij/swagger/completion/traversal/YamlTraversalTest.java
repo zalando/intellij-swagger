@@ -38,30 +38,6 @@ public class YamlTraversalTest {
     }
 
     @Test
-    public void thatKeyIsResolvedFromYamlMapping() {
-        final PsiElement psiElement1 = mock(PsiElement.class);
-        final PsiElement psiElement2 = mock(PsiElement.class);
-        final YAMLMapping yamlMapping = mock(YAMLMapping.class);
-
-        when(psiElement1.getParent()).thenReturn(psiElement2);
-        when(psiElement2.getParent()).thenReturn(yamlMapping);
-
-        assertTrue(yamlTraversal.isKey(psiElement1));
-    }
-
-    @Test
-    public void thatKeyIsResolvedFromYamlKeyValue() {
-        final PsiElement psiElement1 = mock(PsiElement.class);
-        final PsiElement psiElement2 = mock(PsiElement.class);
-        final YAMLKeyValue yamlKeyValue = mock(YAMLKeyValue.class);
-
-        when(psiElement1.getParent()).thenReturn(psiElement2);
-        when(psiElement2.getParent()).thenReturn(yamlKeyValue);
-
-        assertTrue(yamlTraversal.isKey(psiElement1));
-    }
-
-    @Test
     public void thatInfoIsResolved() {
         final PsiElement psiElement1 = mock(PsiElement.class);
         final PsiElement psiElement2 = mock(PsiElement.class);

@@ -2,13 +2,13 @@ package org.zalando.intellij.swagger.fixture;
 
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupManager;
-import com.intellij.psi.PsiDocumentManager;
 import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture;
 import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
 import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.TestFixtureBuilder;
 import com.intellij.testFramework.fixtures.impl.LightTempDirTestFixtureImpl;
+import org.hamcrest.core.Is;
 import org.hamcrest.core.IsCollectionContaining;
 import org.hamcrest.core.IsNot;
 import org.hamcrest.core.IsNull;
@@ -129,6 +129,11 @@ public class SwaggerFixture {
             for (String nextBad : badElements) {
                 Assert.assertThat(myActualList, IsNot.not(IsCollectionContaining.hasItem(nextBad)));
             }
+            return this;
+        }
+
+        public AssertableList isOfSize(final int size) {
+            Assert.assertThat(myActualList.size(), Is.is(size));
             return this;
         }
     }

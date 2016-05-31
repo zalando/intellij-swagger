@@ -3,6 +3,7 @@ package org.zalando.intellij.swagger.completion.level.inserthandler;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.EditorModificationUtil;
 import com.intellij.util.text.CharArrayUtil;
 
@@ -15,19 +16,28 @@ public class JsonValueInsertHandler implements InsertHandler<LookupElement> {
 
     private void handleCommentCharacters(final InsertionContext insertionContext, final LookupElement lookupElement) {
         final int caretOffset = insertionContext.getEditor().getCaretModel().getOffset();
+        final Document document = insertionContext.getDocument();
+
         if (quoted(lookupElement)) {
             final int startOfLookupStringOffset = caretOffset - lookupElement.getLookupString().length();
             final boolean hasCommentPrefix =
-                    CharArrayUtil.regionMatches(insertionContext.getDocument().getCharsSequence(), startOfLookupStringOffset - 1, "#\"#");
+                    CharArrayUtil.regionMatches(document.getCharsSequence(), startOfLookupStringOffset - 1, "#\"#");
             if (hasCommentPrefix) {
-                insertionContext.getDocument().deleteString(startOfLookupStringOffset - 1, startOfLookupStringOffset);
+                document.deleteString(startOfLookupStringOffset - 1, startOfLookupStringOffset);
                 EditorModificationUtil.moveCaretRelatively(insertionContext.getEditor(), -1);
+            } else {
+                final boolean hasCommentPrefixWithSlash =
+                        CharArrayUtil.regionMatches(document.getCharsSequence(), startOfLookupStringOffset - 2, "#/");
+                if(hasCommentPrefixWithSlash) {
+                    document.deleteString(startOfLookupStringOffset - 2, startOfLookupStringOffset);
+                    EditorModificationUtil.moveCaretRelatively(insertionContext.getEditor(), -1);
+                }
             }
         } else {
             final int startOfLookupStringOffset = caretOffset - lookupElement.getLookupString().length() - 1;
-            final boolean hasCommentPrefix = insertionContext.getDocument().getText().charAt(startOfLookupStringOffset - 1) == '#';
+            final boolean hasCommentPrefix = document.getText().charAt(startOfLookupStringOffset - 1) == '#';
             if (hasCommentPrefix) {
-                insertionContext.getDocument().deleteString(startOfLookupStringOffset - 1, startOfLookupStringOffset);
+                document.deleteString(startOfLookupStringOffset - 1, startOfLookupStringOffset);
             }
         }
     }

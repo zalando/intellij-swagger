@@ -27,6 +27,12 @@ public class YamlValueInsertHandler implements InsertHandler<LookupElement> {
         final boolean hasCommentPrefix = insertionContext.getDocument().getText().charAt(startOfLookupStringOffset - 1) == '#';
         if (hasCommentPrefix) {
             insertionContext.getDocument().deleteString(startOfLookupStringOffset - 1, startOfLookupStringOffset);
+        } else {
+            final boolean hasCommentPrefixWithSlash =
+                    CharArrayUtil.regionMatches(insertionContext.getDocument().getCharsSequence(), startOfLookupStringOffset - 2, "#/");
+            if(hasCommentPrefixWithSlash) {
+                insertionContext.getDocument().deleteString(startOfLookupStringOffset - 2, startOfLookupStringOffset);
+            }
         }
     }
 

@@ -28,15 +28,6 @@ public class YamlTraversal implements Traversal {
     }
 
     @Override
-    public boolean isKey(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof YAMLMapping || element instanceof YAMLKeyValue)
-                .isPresent();
-    }
-
-    @Override
     public boolean isInfo(final PsiElement psiElement) {
         return Optional.ofNullable(getNthYamlKeyValue(psiElement, 1))
                 .map(YAMLKeyValue::getName)

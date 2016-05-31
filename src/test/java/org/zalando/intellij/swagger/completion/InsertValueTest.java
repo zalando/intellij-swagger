@@ -44,5 +44,9 @@ public class InsertValueTest extends AbstractJsonOrYamlCompletionTest {
         completeAndCheckResultsByFile("ref_no_quotes_pointer");
     }
 
+    @Test
+    public void thatRefValuesCompletion_WorksForUnquotedJsonPointerStartWithSlash() {
+        completeAndCheckResultsByFile("ref_no_quotes_pointer_with_slash");
+    }
 
 }

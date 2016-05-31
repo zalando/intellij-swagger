@@ -37,14 +37,6 @@ public class PositionResolverTest {
     }
 
     @Test
-    public void thatDoesNotCompleteRootKey() {
-        when(traversal.isKey(psiElement)).thenReturn(false);
-        when(traversal.isRoot(psiElement)).thenReturn(false);
-
-        assertFalse(positionResolver.completeRootKey());
-    }
-
-    @Test
     public void thatDoesNotCompleteRootKeyWhenKeyIsNotRoot() {
         when(traversal.isRoot(psiElement)).thenReturn(false);
 

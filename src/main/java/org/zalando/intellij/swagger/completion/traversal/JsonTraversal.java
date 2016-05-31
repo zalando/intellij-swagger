@@ -24,7 +24,7 @@ public class JsonTraversal implements Traversal {
         return psiElement.getParent().getParent().getParent().getParent() instanceof JsonFile;
     }
 
-    public boolean isKey(final PsiElement psiElement) {
+    public boolean isKey(final PsiElement psiElement, final String lineContent) {
         final PsiElement firstParent = psiElement.getParent();
         return Optional.ofNullable(firstParent)
                 .map(PsiElement::getParent)
@@ -32,8 +32,13 @@ public class JsonTraversal implements Traversal {
                 .map(JsonProperty.class::cast)
                 .map(JsonProperty::getNameElement)
                 .filter(nameElement -> nameElement == firstParent)
-                .isPresent();
+                .isPresent() && refNotInLine(lineContent);
     }
+
+    private boolean refNotInLine(final String lineContent) {
+        return !lineContent.contains("$ref");
+    }
+
 
     public boolean isInfo(final PsiElement psiElement) {
         return Optional.ofNullable(psiElement.getParent())

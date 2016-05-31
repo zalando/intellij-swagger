@@ -41,19 +41,6 @@ public class JsonTraversalTest {
     }
 
     @Test
-    public void thatKeyIsResolved() {
-        final PsiElement psiElement = mock(PsiElement.class);
-        final JsonProperty jsonProperty = mock(JsonProperty.class);
-        final JsonValue jsonValue = mock(JsonValue.class);
-
-        when(psiElement.getParent()).thenReturn(jsonValue);
-        when(jsonValue.getParent()).thenReturn(jsonProperty);
-        when(jsonProperty.getNameElement()).thenReturn(jsonValue);
-
-        assertTrue(jsonTraversal.isKey(psiElement));
-    }
-
-    @Test
     public void thatInfoIsResolved() {
         final PsiElement psiElement1 = mock(PsiElement.class);
         final PsiElement psiElement2 = mock(PsiElement.class);

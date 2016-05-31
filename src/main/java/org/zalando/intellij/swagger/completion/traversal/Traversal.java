@@ -17,8 +17,6 @@ import static com.intellij.patterns.StandardPatterns.character;
 
 interface Traversal {
 
-    boolean isKey(final PsiElement psiElement);
-
     boolean isRoot(final PsiElement psiElement);
 
     boolean isInfo(final PsiElement psiElement);
