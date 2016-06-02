@@ -72,10 +72,17 @@ public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
     }
 
     @Test
-    public void testRefValue() throws Exception {
-        getCaretCompletions("ref_value")
+    public void testDefinitionRefValue() throws Exception {
+        getCaretCompletions("definition_ref_value")
                 .assertContains("#/definitions/Pets", "#/definitions/Error")
                 .isOfSize(2);
+    }
+
+    @Test
+    public void testParameterRefValue() throws Exception {
+        getCaretCompletions("parameter_ref_value")
+                .assertContains("#/parameters/Dog")
+                .isOfSize(1);
     }
 
     @Ignore("See issue #30")

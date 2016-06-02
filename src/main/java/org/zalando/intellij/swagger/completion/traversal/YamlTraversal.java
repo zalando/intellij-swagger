@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.yaml.psi.YAMLFile;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
-import org.jetbrains.yaml.psi.YAMLMapping;
+import org.jetbrains.yaml.psi.YAMLSequence;
 import org.jetbrains.yaml.psi.YAMLSequenceItem;
 import org.jetbrains.yaml.psi.YAMLValue;
 import org.zalando.intellij.swagger.completion.level.field.Field;
@@ -166,7 +166,7 @@ public class YamlTraversal implements Traversal {
         return Optional.ofNullable(getNthYamlKeyValue(psiElement, 2))
                 .map(YAMLKeyValue::getName)
                 .filter(name -> name.equals("parameters"))
-                .isPresent();
+                .isPresent() && !isInsideParametersArray(psiElement);
     }
 
     @Override
@@ -192,6 +192,19 @@ public class YamlTraversal implements Traversal {
         return getNthYamlKeyValue(psiElement.getParent(), nth);
     }
 
+    private <T extends PsiElement> Optional<T> getNthOfType(final PsiElement psiElement, int nth, Class<T> targetType) {
+        if (psiElement == null) {
+            return Optional.empty();
+        } else if (targetType.isAssignableFrom(psiElement.getClass())) {
+            if (nth == 1) {
+                return Optional.of(targetType.cast(psiElement));
+            } else {
+                nth--;
+            }
+        }
+        return getNthOfType(psiElement.getParent(), nth, targetType);
+    }
+
     @Override
     public boolean shouldQuote(final PsiElement psiElement) {
         return false;
@@ -212,10 +225,29 @@ public class YamlTraversal implements Traversal {
     }
 
     @Override
-    public boolean isRefValue(final PsiElement psiElement) {
+    public boolean isDefinitionRefValue(final PsiElement psiElement) {
+        return isRefValue(psiElement) && !isInsideParametersArray(psiElement);
+    }
+
+    @Override
+    public boolean isParameterRefValue(final PsiElement psiElement) {
+        return isRefValue(psiElement) && isInsideParametersArray(psiElement);
+    }
+
+    private boolean isRefValue(final PsiElement psiElement) {
         return Optional.ofNullable(getNthYamlKeyValue(psiElement, 1))
                 .map(YAMLKeyValue::getName)
                 .filter(name -> name.equals("$ref"))
+                .isPresent();
+    }
+
+    private boolean isInsideParametersArray(final PsiElement psiElement) {
+        return getNthOfType(psiElement, 1, YAMLSequence.class)
+                .map(YAMLSequence::getParent)
+                .filter(el -> el instanceof YAMLKeyValue)
+                .map(YAMLKeyValue.class::cast)
+                .map(YAMLKeyValue::getName)
+                .filter(name -> name.equals("parameters"))
                 .isPresent();
     }
 

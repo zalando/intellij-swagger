@@ -3,13 +3,11 @@
   "paths": {
     "/pets": {
       "get": {
-        "responses": {
-          "200": {
-            "schema": {
-              "$ref": <caret>
-            }
+        "parameters": [
+          {
+            "$ref": "<caret>"
           }
-        }
+        ]
       }
     }
   },
@@ -17,6 +15,10 @@
     "Pets": {
     },
     "Error": {
+    }
+  },
+  "parameters": {
+    "Dog": {
     }
   }
 }

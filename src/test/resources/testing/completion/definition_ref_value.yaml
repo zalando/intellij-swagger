@@ -5,7 +5,9 @@ paths:
       responses:
         200:
           schema:
-            $ref: #<caret>
+            $ref: <caret>
 definitions:
   Pets:
   Error:
+parameters:
+  Dog:

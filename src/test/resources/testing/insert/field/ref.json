@@ -6,17 +6,11 @@
         "responses": {
           "200": {
             "schema": {
-              "$ref": "#/definitions/Error"<caret>
+              $r<caret>
             }
           }
         }
       }
-    }
-  },
-  "definitions": {
-    "Pets": {
-    },
-    "Error": {
     }
   }
 }

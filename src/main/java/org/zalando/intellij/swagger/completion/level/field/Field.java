@@ -4,6 +4,10 @@ public abstract class Field {
 
     protected final String name;
 
+    public Field() {
+        this("unknown");
+    }
+
     protected Field(final String name) {
         this.name = name;
     }

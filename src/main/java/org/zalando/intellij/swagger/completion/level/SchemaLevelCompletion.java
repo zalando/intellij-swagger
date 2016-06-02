@@ -3,6 +3,7 @@ package org.zalando.intellij.swagger.completion.level;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import org.zalando.intellij.swagger.completion.level.field.ArrayField;
 import org.zalando.intellij.swagger.completion.level.field.ObjectField;
+import org.zalando.intellij.swagger.completion.level.field.RefField;
 import org.zalando.intellij.swagger.completion.level.field.StringField;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
@@ -16,7 +17,7 @@ public class SchemaLevelCompletion extends LevelCompletion {
 
     @Override
     public void fill() {
-        addUnique(new StringField("$ref"), optional(positionResolver));
+        addUnique(new RefField(), optional(positionResolver));
         addUnique(new StringField("format"), optional(positionResolver));
         addUnique(new StringField("title"), optional(positionResolver));
         addUnique(new StringField("description"), optional(positionResolver));

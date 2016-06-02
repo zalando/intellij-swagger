@@ -18,5 +18,9 @@
     },
     "Error": {
     }
+  },
+  "parameters": {
+    "Dog": {
+    }
   }
 }

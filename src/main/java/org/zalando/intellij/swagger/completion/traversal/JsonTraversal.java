@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.json.JsonElementTypes;
+import com.intellij.json.psi.JsonArray;
 import com.intellij.json.psi.JsonFile;
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.psi.PsiElement;
@@ -297,13 +298,35 @@ public class JsonTraversal implements Traversal {
     }
 
     @Override
-    public boolean isRefValue(final PsiElement psiElement) {
+    public boolean isDefinitionRefValue(final PsiElement psiElement) {
+        return isRefValue(psiElement) && !jsonPropertyIsInsideParametersArray(psiElement);
+    }
+
+    @Override
+    public boolean isParameterRefValue(final PsiElement psiElement) {
+        return isRefValue(psiElement) && jsonPropertyIsInsideParametersArray(psiElement);
+    }
+
+    private boolean isRefValue(final PsiElement psiElement) {
         return Optional.ofNullable(psiElement.getParent())
                 .map(PsiElement::getParent)
                 .filter(element -> element instanceof JsonProperty)
                 .map(JsonProperty.class::cast)
                 .map(JsonProperty::getName)
                 .filter(name -> name.equals("$ref"))
+                .isPresent();
+    }
+
+    private boolean jsonPropertyIsInsideParametersArray(final PsiElement psiElement) {
+        return Optional.ofNullable(psiElement.getParent())
+                .map(PsiElement::getParent)
+                .map(PsiElement::getParent)
+                .map(PsiElement::getParent)
+                .map(PsiElement::getParent)
+                .filter(element -> element instanceof JsonProperty)
+                .map(JsonProperty.class::cast)
+                .map(JsonProperty::getName)
+                .filter(name -> name.equals("parameters"))
                 .isPresent();
     }
 

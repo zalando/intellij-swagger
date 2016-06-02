@@ -54,7 +54,7 @@ public class SwaggerYamlCompletionContributor extends CompletionContributor {
                         .map(result::withPrefixMatcher)
                         .orElse(result);
 
-        ValueCompletionFactory.from(positionResolver, parameters.getEditor())
+        ValueCompletionFactory.from(positionResolver)
                 .ifPresent(valueCompletion -> valueCompletion.fill(withFixedPrefix, yamlValueInsertHandler));
     }
 

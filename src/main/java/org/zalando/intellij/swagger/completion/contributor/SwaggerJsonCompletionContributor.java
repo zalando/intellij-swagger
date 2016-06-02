@@ -58,7 +58,7 @@ public class SwaggerJsonCompletionContributor extends CompletionContributor {
                             .map(result::withPrefixMatcher)
                             .orElse(result);
 
-            ValueCompletionFactory.from(positionResolver, parameters.getEditor())
+            ValueCompletionFactory.from(positionResolver)
                     .ifPresent(valueCompletion -> valueCompletion.fill(withFixedPrefix, jsonValueInsertHandler));
         }
     }

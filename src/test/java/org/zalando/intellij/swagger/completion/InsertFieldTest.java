@@ -46,4 +46,9 @@ public class InsertFieldTest extends AbstractJsonOrYamlCompletionTest {
     public void testCommaAfterMidwayArray() {
         completeAndCheckResultsByFile("array_midway");
     }
+
+    @Test
+    public void thatRefFieldValueIsQuoted() {
+        completeAndCheckResultsByFile("ref");
+    }
 }

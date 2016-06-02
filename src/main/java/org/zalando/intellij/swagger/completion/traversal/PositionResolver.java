@@ -2,7 +2,6 @@ package org.zalando.intellij.swagger.completion.traversal;
 
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import org.zalando.intellij.swagger.completion.level.field.Field;
 import org.zalando.intellij.swagger.completion.style.CompletionStyle;
@@ -107,19 +106,12 @@ public class PositionResolver {
         return traversal.isSchemesValue(psiElement);
     }
 
-    public boolean completeRefValue(final Editor editor) {
-        return traversal.isRefValue(psiElement) || refValueStartingWithHash(editor);
+    public boolean completeDefinitionRefValue() {
+        return traversal.isDefinitionRefValue(psiElement);
     }
 
-    private boolean refValueStartingWithHash(final Editor editor) {
-        final int offset = editor.getCaretModel().getOffset() - 1;
-        final int lineNumber = editor.getDocument().getLineNumber(offset);
-
-        final int lineStartOffset = editor.getDocument().getLineStartOffset(lineNumber);
-        final int lineEndOffset = editor.getDocument().getLineEndOffset(lineNumber);
-        final String lineText = editor.getDocument().getText().substring(lineStartOffset, lineEndOffset);
-
-        return lineText.contains("$ref");
+    public boolean completeParameterRefValue() {
+        return traversal.isParameterRefValue(psiElement);
     }
 
     public List<PsiElement> getChildrenOf(final String propertyName) {
@@ -137,4 +129,5 @@ public class PositionResolver {
     public InsertHandler<LookupElement> createInsertHandler(final Field field) {
         return traversal.createInsertHandler(field);
     }
+
 }

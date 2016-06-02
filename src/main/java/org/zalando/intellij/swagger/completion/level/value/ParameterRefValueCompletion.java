@@ -12,26 +12,17 @@ import java.util.stream.Collectors;
 import static org.zalando.intellij.swagger.completion.level.LookupElementBuilderFactory.create;
 import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
 
-class RefValueCompletion extends ValueCompletion {
+class ParameterRefValueCompletion extends ValueCompletion {
 
-    RefValueCompletion(final PositionResolver positionResolver) {
+    ParameterRefValueCompletion(final PositionResolver positionResolver) {
         super(positionResolver);
     }
 
     @Override
     public void fill(@NotNull final CompletionResultSet result,
                      @NotNull final InsertHandler<LookupElement> insertHandler) {
-        getRefCandidates().stream()
+        getParameterKeys().stream()
                 .forEach(refValue -> result.addElement(create(refValue, optional(positionResolver), insertHandler)));
-    }
-
-    private List<String> getRefCandidates() {
-        final List<String> parameterKeys = getParameterKeys();
-        final List<String> definitionKeys = getDefinitionKeys();
-
-        parameterKeys.addAll(definitionKeys);
-
-        return parameterKeys;
     }
 
     private List<String> getParameterKeys() {
@@ -40,9 +31,4 @@ class RefValueCompletion extends ValueCompletion {
                 .collect(Collectors.toList());
     }
 
-    private List<String> getDefinitionKeys() {
-        return positionResolver.getKeyNamesOf("definitions").stream()
-                .map(keyName -> "#/definitions/" + keyName)
-                .collect(Collectors.toList());
-    }
 }

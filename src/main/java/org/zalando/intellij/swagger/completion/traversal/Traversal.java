@@ -61,7 +61,9 @@ interface Traversal {
 
     boolean isSchemesValue(final PsiElement psiElement);
 
-    boolean isRefValue(final PsiElement psiElement);
+    boolean isDefinitionRefValue(final PsiElement psiElement);
+
+    boolean isParameterRefValue(PsiElement psiElement);
 
     List<PsiElement> getChildrenOf(final String propertyName, final PsiFile psiFile);
 
@@ -83,7 +85,7 @@ interface Traversal {
      */
     @NotNull
     default Optional<String> getCustomCompletionPrefix(PsiElement psiElement, int caretOffsetInFile) {
-        if (!isRefValue(psiElement)) {
+        if (!isDefinitionRefValue(psiElement)) {
             // standard platform behavior is good enough
             return Optional.empty();
         }

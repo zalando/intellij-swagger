@@ -3,6 +3,7 @@ package org.zalando.intellij.swagger.completion.level;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import org.zalando.intellij.swagger.completion.level.field.ArrayField;
 import org.zalando.intellij.swagger.completion.level.field.ObjectField;
+import org.zalando.intellij.swagger.completion.level.field.RefField;
 import org.zalando.intellij.swagger.completion.level.field.StringField;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
@@ -15,7 +16,7 @@ class PathLevelCompletion extends LevelCompletion {
     }
 
     public void fill() {
-        addUnique(new StringField("$ref"), optional(positionResolver));
+        addUnique(new RefField(), optional(positionResolver));
         addUnique(new ObjectField("get"), optional(positionResolver));
         addUnique(new ObjectField("put"), optional(positionResolver));
         addUnique(new ObjectField("post"), optional(positionResolver));
