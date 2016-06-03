@@ -61,5 +61,7 @@ public class SwaggerJsonCompletionContributor extends CompletionContributor {
             ValueCompletionFactory.from(positionResolver)
                     .ifPresent(valueCompletion -> valueCompletion.fill(withFixedPrefix, jsonValueInsertHandler));
         }
+
+        result.stopHere();
     }
 }

@@ -130,4 +130,7 @@ public class PositionResolver {
         return traversal.createInsertHandler(field);
     }
 
+    public boolean completeBooleanValue() {
+        return traversal.isBooleanValue(psiElement);
+    }
 }

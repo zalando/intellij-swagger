@@ -16,6 +16,8 @@ public class ValueCompletionFactory {
             return Optional.of(new DefinitionRefValueCompletion(positionResolver));
         } else if (positionResolver.completeParameterRefValue()) {
             return Optional.of(new ParameterRefValueCompletion(positionResolver));
+        } else if (positionResolver.completeBooleanValue()) {
+            return Optional.of(new BooleanValueCompletion(positionResolver));
         } else {
             return Optional.empty();
         }

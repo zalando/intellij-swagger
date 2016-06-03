@@ -1,6 +1,7 @@
 package org.zalando.intellij.swagger.completion.traversal;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
@@ -17,6 +18,7 @@ import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class YamlTraversal implements Traversal {
@@ -287,6 +289,24 @@ public class YamlTraversal implements Traversal {
     @Override
     public InsertHandler<LookupElement> createInsertHandler(final Field field) {
         return new YamlInsertHandler(field);
+    }
+
+    @Override
+    public boolean isBooleanValue(final PsiElement psiElement) {
+        return elementIsDirectValueOfKey(psiElement, "deprecated", "required", "allowEmptyValue",
+                "exclusiveMaximum", "exclusiveMinimum", "uniqueItems", "readOnly", "attribute", "wrapped");
+    }
+
+    private boolean elementIsDirectValueOfKey(final PsiElement psiElement, final String... keyNames) {
+        final Set<String> targetKeyNames = Sets.newHashSet(keyNames);
+        return Optional.ofNullable(getNthYamlKeyValue(psiElement, 1))
+                .map(YAMLKeyValue::getName)
+                .filter(targetKeyNames::contains)
+                .isPresent() &&
+                !Optional.ofNullable(psiElement.getParent())
+                        .map(PsiElement::getParent)
+                        .filter(el -> el instanceof YAMLSequenceItem)
+                        .isPresent();
     }
 
     private List<PsiElement> getRootChildren(final PsiFile psiFile) {

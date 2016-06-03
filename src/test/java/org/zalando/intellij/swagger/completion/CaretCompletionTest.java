@@ -92,11 +92,16 @@ public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
                 .assertContains("path", "header", "query", "formData", "body");
     }
 
-    @Ignore("See issue #21")
     @Test
-    public void booleanValuesCompletion_ParametersRequired() {
+    public void thatBooleanValuesAreSuggested() {
         getCaretCompletions("boolean_parameters_required")
                 .assertContains("true", "false");
+    }
+
+    @Test
+    public void thatBooleanValuesAreNotSuggestedForRequiredKeyInSchema() {
+        getCaretCompletions("required_key_in_schema")
+                .assertNotContains("true", "false");
     }
 
 }

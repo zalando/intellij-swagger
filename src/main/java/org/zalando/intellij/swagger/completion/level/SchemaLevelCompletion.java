@@ -35,7 +35,7 @@ public class SchemaLevelCompletion extends LevelCompletion {
         addUnique(new StringField("uniqueItems"), optional(positionResolver));
         addUnique(new StringField("maxProperties"), optional(positionResolver));
         addUnique(new StringField("minProperties"), optional(positionResolver));
-        addUnique(new StringField("required"), optional(positionResolver));
+        addUnique(new ArrayField("required"), optional(positionResolver));
         addUnique(new ArrayField("enum"), optional(positionResolver));
         addUnique(new StringField("type"), optional(positionResolver));
         addUnique(new ObjectField("items"), optional(positionResolver));

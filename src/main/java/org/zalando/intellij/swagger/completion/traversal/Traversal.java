@@ -97,4 +97,5 @@ interface Traversal {
             CompletionData.NOT_JAVA_ID.andNot(character().oneOf('/', '#'));
 
 
+    boolean isBooleanValue(PsiElement psiElement);
 }

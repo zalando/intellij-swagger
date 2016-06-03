@@ -56,6 +56,8 @@ public class SwaggerYamlCompletionContributor extends CompletionContributor {
 
         ValueCompletionFactory.from(positionResolver)
                 .ifPresent(valueCompletion -> valueCompletion.fill(withFixedPrefix, yamlValueInsertHandler));
+
+        result.stopHere();
     }
 
 }

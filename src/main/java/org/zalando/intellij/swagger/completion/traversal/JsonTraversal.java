@@ -1,10 +1,10 @@
 package org.zalando.intellij.swagger.completion.traversal;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.json.JsonElementTypes;
-import com.intellij.json.psi.JsonArray;
 import com.intellij.json.psi.JsonFile;
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.psi.PsiElement;
@@ -17,6 +17,7 @@ import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class JsonTraversal implements Traversal {
@@ -277,7 +278,8 @@ public class JsonTraversal implements Traversal {
 
     @Override
     public boolean shouldQuote(final PsiElement psiElement) {
-        return !psiElement.toString().contains(JsonElementTypes.DOUBLE_QUOTED_STRING.toString());
+        return !psiElement.toString().contains(JsonElementTypes.DOUBLE_QUOTED_STRING.toString())
+                && !isBooleanValue(psiElement);
     }
 
     @Override
@@ -366,6 +368,23 @@ public class JsonTraversal implements Traversal {
     @Override
     public InsertHandler<LookupElement> createInsertHandler(final Field field) {
         return new JsonInsertHandler(this, field);
+    }
+
+    @Override
+    public boolean isBooleanValue(final PsiElement psiElement) {
+        return elementIsValueOfKey(psiElement, "deprecated", "required", "allowEmptyValue",
+                "exclusiveMaximum", "exclusiveMinimum", "uniqueItems", "readOnly", "attribute", "wrapped");
+    }
+
+    private boolean elementIsValueOfKey(final PsiElement psiElement, final String... keyNames) {
+        final Set<String> targetKeyNames = Sets.newHashSet(keyNames);
+        return Optional.ofNullable(psiElement.getParent())
+                .map(PsiElement::getParent)
+                .filter(element -> element instanceof JsonProperty)
+                .map(JsonProperty.class::cast)
+                .map(JsonProperty::getName)
+                .filter(targetKeyNames::contains)
+                .isPresent();
     }
 
     public boolean isLastChild(@NotNull PsiElement psiElement) {
