@@ -78,14 +78,14 @@ interface Traversal {
      * of caret as a prefix. Sometimes this has to be overridden (see #25 for the requirement to include also
      * '/' and '#'). This method allows to override standard behavior for specific locations.
      *
-     * @param psiElement        element whoch owns the caret
+     * @param psiElement        element which owns the caret
      * @param caretOffsetInFile file based offset of caret
      * @return custom prefix for given position of caret inside given {@link PsiElement}, or {@link Optional#empty()}
      * when standard behavior is good enough.
      */
     @NotNull
     default Optional<String> getCustomCompletionPrefix(PsiElement psiElement, int caretOffsetInFile) {
-        if (!isDefinitionRefValue(psiElement)) {
+        if (!isDefinitionRefValue(psiElement) && !isParameterRefValue(psiElement)) {
             // standard platform behavior is good enough
             return Optional.empty();
         }

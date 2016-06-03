@@ -23,14 +23,17 @@ public class InsertValueTest extends AbstractJsonOrYamlCompletionTest {
     }
 
     @Test
-    public void thatRefValuesCompletion_RespectQuotes() {
-        completeAndCheckResultsByFile("ref_in_quotes");
+    public void thatDefinitionRefValuesAreCompleted() {
+        completeAndCheckResultsByFile("definition_ref_in_quotes", "definition_ref_after");
+        completeAndCheckResultsByFile("definition_ref_in_quotes_with_prefix", "definition_ref_after");
+        completeAndCheckResultsByFile("definition_ref_in_quotes_with_prefix2", "definition_ref_after");
     }
 
     @Test
-    public void thatRefValuesCompletion_RespectEnteredPrefix() {
-        completeAndCheckResultsByFile("ref_in_quotes_with_prefix");
-        completeAndCheckResultsByFile("ref_in_quotes_with_prefix2", "ref_in_quotes_with_prefix_after");
+    public void thatParameterRefValuesAreCompleted() {
+        completeAndCheckResultsByFile("parameter_ref_in_quotes", "parameter_ref_after");
+        completeAndCheckResultsByFile("parameter_ref_in_quotes_with_prefix", "parameter_ref_after");
+        completeAndCheckResultsByFile("parameter_ref_in_quotes_with_prefix2", "parameter_ref_after");
     }
 
 }
