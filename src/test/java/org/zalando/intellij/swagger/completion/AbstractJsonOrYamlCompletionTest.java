@@ -43,12 +43,6 @@ public abstract class AbstractJsonOrYamlCompletionTest {
         myFixture.checkResultByFile(afterFileNoExt, myJsonOrYaml);
     }
 
-    protected void renameAtCaretAndCheckResultsByFile(final String newName,
-                                                      @NotNull String beforeFile) {
-        myFixture.rename(newName, beforeFile, myJsonOrYaml);
-        myFixture.checkResultByFile(getAfterFileName(beforeFile), myJsonOrYaml);
-    }
-
     @NotNull
     private String getAfterFileName(final @NotNull String beforeFile) {
         return beforeFile + "_after";

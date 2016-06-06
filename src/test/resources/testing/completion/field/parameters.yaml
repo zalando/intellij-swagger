@@ -1,0 +1,6 @@
+swagger: 2
+paths:
+  /pathA:
+    get:
+      parameters:
+        - <caret>

@@ -2,7 +2,6 @@ package org.zalando.intellij.swagger.completion.level;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import org.zalando.intellij.swagger.completion.level.field.Field;
-import org.zalando.intellij.swagger.completion.level.inserthandler.JsonInsertHandler;
 import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 

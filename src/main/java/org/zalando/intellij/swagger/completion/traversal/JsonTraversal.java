@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.json.JsonElementTypes;
+import com.intellij.json.psi.JsonArray;
 import com.intellij.json.psi.JsonFile;
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.psi.PsiElement;
@@ -20,13 +21,20 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class JsonTraversal implements Traversal {
+public class JsonTraversal extends Traversal {
 
+    @Override
+    Optional<String> getNameOfNthKey(final PsiElement psiElement, final int nth) {
+        return getNthOfType(psiElement, nth, JsonProperty.class)
+                .map(JsonProperty::getName);
+    }
+
+    @Override
     public boolean isRoot(@NotNull final PsiElement psiElement) {
         return psiElement.getParent().getParent().getParent().getParent() instanceof JsonFile;
     }
 
-    public boolean isKey(final PsiElement psiElement, final String lineContent) {
+    public boolean isKey(final PsiElement psiElement) {
         final PsiElement firstParent = psiElement.getParent();
         return Optional.ofNullable(firstParent)
                 .map(PsiElement::getParent)
@@ -34,245 +42,6 @@ public class JsonTraversal implements Traversal {
                 .map(JsonProperty.class::cast)
                 .map(JsonProperty::getNameElement)
                 .filter(nameElement -> nameElement == firstParent)
-                .isPresent() && refNotInLine(lineContent);
-    }
-
-    private boolean refNotInLine(final String lineContent) {
-        return !lineContent.contains("$ref");
-    }
-
-
-    public boolean isInfo(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(name -> name.equals("info"))
-                .isPresent();
-    }
-
-    public boolean isContact(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(name -> name.equals("contact"))
-                .isPresent();
-    }
-
-    public boolean isLicense(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(name -> name.equals("license"))
-                .isPresent();
-    }
-
-    public boolean isPath(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(name -> name.equals("paths"))
-                .isPresent();
-    }
-
-    public boolean isOperation(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(name -> name.equals("paths"))
-                .isPresent();
-    }
-
-    public boolean isExternalDocs(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(name -> name.equals("externalDocs"))
-                .isPresent();
-    }
-
-    public boolean isParameters(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(name -> name.equals("parameters"))
-                .isPresent();
-    }
-
-    public boolean isItems(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(name -> name.equals("items"))
-                .isPresent();
-    }
-
-    public boolean isResponses(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(name -> name.equals("responses"))
-                .isPresent();
-    }
-
-    public boolean isResponse(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(name -> name.equals("responses"))
-                .isPresent();
-    }
-
-    public boolean isHeader(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(name -> name.equals("headers"))
-                .isPresent();
-    }
-
-    public boolean isTag(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(name -> name.equals("tags"))
-                .isPresent();
-    }
-
-    public boolean isSecurityDefinition(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(name -> name.equals("securityDefinitions"))
-                .isPresent();
-    }
-
-    public boolean isSchema(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(name -> name.equals("schema"))
-                .isPresent();
-    }
-
-    public boolean isXml(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(name -> name.equals("xml"))
-                .isPresent();
-    }
-
-    public boolean isDefinitions(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(name -> name.equals("definitions"))
-                .isPresent();
-    }
-
-    public boolean isParameterDefinition(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(name -> name.equals("parameters"))
-                .isPresent();
-    }
-
-    @Override
-    public boolean isMimeValue(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(name -> name.equals("consumes") || name.equals("produces"))
                 .isPresent();
     }
 
@@ -283,43 +52,22 @@ public class JsonTraversal implements Traversal {
     }
 
     @Override
+    public boolean isPath(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, 3, "paths");
+    }
+
+    @Override
+    public boolean isOperation(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, 4, "paths");
+    }
+
+    @Override
     public CompletionStyle.QuoteStyle getQuoteStyle() {
         return CompletionStyle.QuoteStyle.DOUBLE;
     }
 
     @Override
-    public boolean isSchemesValue(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(name -> name.equals("schemes"))
-                .isPresent();
-    }
-
-    @Override
-    public boolean isDefinitionRefValue(final PsiElement psiElement) {
-        return isRefValue(psiElement) && !jsonPropertyIsInsideParametersArray(psiElement);
-    }
-
-    @Override
-    public boolean isParameterRefValue(final PsiElement psiElement) {
-        return isRefValue(psiElement) && jsonPropertyIsInsideParametersArray(psiElement);
-    }
-
-    private boolean isRefValue(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(name -> name.equals("$ref"))
-                .isPresent();
-    }
-
-    private boolean jsonPropertyIsInsideParametersArray(final PsiElement psiElement) {
+    public boolean elementIsInsideParametersArray(final PsiElement psiElement) {
         return Optional.ofNullable(psiElement.getParent())
                 .map(PsiElement::getParent)
                 .map(PsiElement::getParent)
@@ -371,12 +119,107 @@ public class JsonTraversal implements Traversal {
     }
 
     @Override
-    public boolean isBooleanValue(final PsiElement psiElement) {
-        return elementIsValueOfKey(psiElement, "deprecated", "required", "allowEmptyValue",
-                "exclusiveMaximum", "exclusiveMinimum", "uniqueItems", "readOnly", "attribute", "wrapped");
+    boolean elementIsInsideArray(final PsiElement psiElement) {
+        return getNthOfType(psiElement, Integer.MAX_VALUE, JsonArray.class) != null;
     }
 
-    private boolean elementIsValueOfKey(final PsiElement psiElement, final String... keyNames) {
+    @Override
+    int getInfoNth() {
+        return 2;
+    }
+
+    @Override
+    int getContactNth() {
+        return 2;
+    }
+
+    @Override
+    int getLicenseNth() {
+        return 2;
+    }
+
+    @Override
+    int getPathNth() {
+        return 3;
+    }
+
+    @Override
+    int getOperationNth() {
+        return 3;
+    }
+
+    @Override
+    int getExternalDocsNth() {
+        return 2;
+    }
+
+    @Override
+    int getParametersNth() {
+        return 2;
+    }
+
+    @Override
+    int getItemsNth() {
+        return 2;
+    }
+
+    @Override
+    int getResponsesNth() {
+        return 2;
+    }
+
+    @Override
+    int getResponseNth() {
+        return 3;
+    }
+
+    @Override
+    int getHeadersNth() {
+        return 2;
+    }
+
+    @Override
+    int getTagsNth() {
+        return 2;
+    }
+
+    @Override
+    int getSecurityDefinitionsNth() {
+        return 3;
+    }
+
+    @Override
+    int getSchemaNth() {
+        return 2;
+    }
+
+    @Override
+    int getXmlNth() {
+        return 2;
+    }
+
+    @Override
+    int getDefinitionsNth() {
+        return 3;
+    }
+
+    @Override
+    int getParameterDefinitionNth() {
+        return 3;
+    }
+
+    @Override
+    int getMimeNth() {
+        return 1;
+    }
+
+    @Override
+    int getSchemesNth() {
+        return 1;
+    }
+
+    @Override
+    public boolean elementIsDirectValueOfKey(final PsiElement psiElement, final String... keyNames) {
         final Set<String> targetKeyNames = Sets.newHashSet(keyNames);
         return Optional.ofNullable(psiElement.getParent())
                 .map(PsiElement::getParent)

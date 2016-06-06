@@ -1,0 +1,4 @@
+swagger: 2
+securityDefinitions:
+  api_key:
+    <caret>

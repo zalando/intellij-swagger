@@ -15,63 +15,176 @@ import java.util.Optional;
 
 import static com.intellij.patterns.StandardPatterns.character;
 
-interface Traversal {
+abstract class Traversal {
 
-    boolean isRoot(final PsiElement psiElement);
+    abstract boolean elementIsInsideParametersArray(final PsiElement psiElement);
 
-    boolean isInfo(final PsiElement psiElement);
+    abstract Optional<String> getNameOfNthKey(final PsiElement psiElement, int nthKey);
 
-    boolean isContact(final PsiElement psiElement);
+    abstract boolean isRoot(final PsiElement psiElement);
 
-    boolean isLicense(final PsiElement psiElement);
+    abstract boolean shouldQuote(final PsiElement psiElement);
 
-    boolean isPath(final PsiElement psiElement);
+    abstract CompletionStyle.QuoteStyle getQuoteStyle();
 
-    boolean isOperation(final PsiElement psiElement);
+    abstract boolean elementIsDirectValueOfKey(final PsiElement psiElement, final String... keyNames);
 
-    boolean isExternalDocs(final PsiElement psiElement);
+    abstract List<PsiElement> getChildrenOf(final String propertyName, final PsiFile psiFile);
 
-    boolean isParameters(final PsiElement psiElement);
+    abstract List<String> getKeyNamesOf(final String propertyName, final PsiFile containingFile);
 
-    boolean isItems(final PsiElement psiElement);
+    abstract boolean isUniqueKey(String keyName, final PsiElement psiElement);
 
-    boolean isResponses(final PsiElement psiElement);
+    abstract InsertHandler<LookupElement> createInsertHandler(Field field);
 
-    boolean isResponse(final PsiElement psiElement);
+    abstract boolean elementIsInsideArray(final PsiElement psiElement);
 
-    boolean isHeader(final PsiElement psiElement);
+    <T extends PsiElement> Optional<T> getNthOfType(final PsiElement psiElement, int nth, Class<T> targetType) {
+        if (psiElement == null) {
+            return Optional.empty();
+        } else if (targetType.isAssignableFrom(psiElement.getClass())) {
+            if (nth == 1) {
+                return Optional.of(targetType.cast(psiElement));
+            } else {
+                nth--;
+            }
+        }
+        return getNthOfType(psiElement.getParent(), nth, targetType);
+    }
 
-    boolean isTag(final PsiElement psiElement);
 
-    boolean isSecurityDefinition(final PsiElement psiElement);
+    final boolean isInfo(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, getInfoNth(), "info");
+    }
 
-    boolean isSchema(final PsiElement psiElement);
+    abstract int getInfoNth();
 
-    boolean isXml(final PsiElement psiElement);
+    abstract int getContactNth();
 
-    boolean isDefinitions(final PsiElement psiElement);
+    abstract int getLicenseNth();
 
-    boolean isParameterDefinition(final PsiElement psiElement);
+    abstract int getPathNth();
 
-    boolean isMimeValue(final PsiElement psiElement);
+    abstract int getOperationNth();
 
-    boolean shouldQuote(final PsiElement psiElement);
+    abstract int getExternalDocsNth();
 
-    CompletionStyle.QuoteStyle getQuoteStyle();
+    abstract int getParametersNth();
 
-    boolean isSchemesValue(final PsiElement psiElement);
+    abstract int getItemsNth();
 
-    boolean isDefinitionRefValue(final PsiElement psiElement);
+    abstract int getResponsesNth();
 
-    boolean isParameterRefValue(PsiElement psiElement);
+    abstract int getResponseNth();
 
-    List<PsiElement> getChildrenOf(final String propertyName, final PsiFile psiFile);
+    abstract int getHeadersNth();
 
-    List<String> getKeyNamesOf(final String propertyName, final PsiFile containingFile);
+    abstract int getTagsNth();
 
-    boolean isUniqueKey(String keyName, final PsiElement psiElement);
+    abstract int getSecurityDefinitionsNth();
 
-    InsertHandler<LookupElement> createInsertHandler(Field field);
+    abstract int getSchemaNth();
+
+    abstract int getXmlNth();
+
+    abstract int getDefinitionsNth();
+
+    abstract int getParameterDefinitionNth();
+
+    abstract int getMimeNth();
+
+    abstract int getSchemesNth();
+
+    final boolean isContact(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, getContactNth(), "contact");
+    }
+
+    final boolean isLicense(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, getLicenseNth(), "license");
+    }
+
+    boolean isPath(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, getPathNth(), "paths");
+    }
+
+    boolean isOperation(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, getOperationNth(), "paths");
+    }
+
+    final boolean isExternalDocs(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, getExternalDocsNth(), "externalDocs");
+    }
+
+    final boolean isParameters(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, getParametersNth(), "parameters") && elementIsInsideArray(psiElement);
+    }
+
+    final boolean isItems(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, getItemsNth(), "items");
+    }
+
+    final boolean isResponses(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, getResponsesNth(), "responses");
+    }
+
+    final boolean isResponse(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, getResponseNth(), "responses");
+    }
+
+    final boolean isHeader(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, getHeadersNth(), "headers");
+    }
+
+    final boolean isTag(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, getTagsNth(), "tags");
+    }
+
+    final boolean isSecurityDefinition(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, getSecurityDefinitionsNth(), "securityDefinitions");
+    }
+
+    final boolean isSchema(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, getSchemaNth(), "schema");
+    }
+
+    final boolean isXml(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, getXmlNth(), "xml");
+    }
+
+    final boolean isDefinitions(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, getDefinitionsNth(), "definitions");
+    }
+
+    final boolean isParameterDefinition(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, getParameterDefinitionNth(), "parameters") && !elementIsInsideParametersArray(psiElement);
+    }
+
+    final boolean isMimeValue(final PsiElement psiElement) {
+        return (nthKeyEquals(psiElement, getMimeNth(), "consumes") || nthKeyEquals(psiElement, 1, "produces")) &&
+                elementIsInsideArray(psiElement);
+    }
+
+    final boolean isSchemesValue(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, getSchemesNth(), "schemes") && elementIsInsideArray(psiElement);
+    }
+
+    boolean isDefinitionRefValue(final PsiElement psiElement) {
+        return isRefValue(psiElement) && !elementIsInsideParametersArray(psiElement);
+    }
+
+    boolean isParameterRefValue(final PsiElement psiElement) {
+        return isRefValue(psiElement) && elementIsInsideParametersArray(psiElement);
+    }
+
+    private boolean isRefValue(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, 1, "$ref");
+    }
+
+    boolean nthKeyEquals(final PsiElement psiElement, final int nth, final String targetName) {
+        return getNameOfNthKey(psiElement, nth)
+                .filter(name -> name.equals(targetName))
+                .isPresent();
+    }
 
     /**
      * By default platform considers all the {@link Character#isJavaIdentifierPart(char)} characters at the left
@@ -84,7 +197,7 @@ interface Traversal {
      * when standard behavior is good enough.
      */
     @NotNull
-    default Optional<String> getCustomCompletionPrefix(PsiElement psiElement, int caretOffsetInFile) {
+    public Optional<String> getCustomCompletionPrefix(PsiElement psiElement, int caretOffsetInFile) {
         if (!isDefinitionRefValue(psiElement) && !isParameterRefValue(psiElement)) {
             // standard platform behavior is good enough
             return Optional.empty();
@@ -97,5 +210,9 @@ interface Traversal {
             CompletionData.NOT_JAVA_ID.andNot(character().oneOf('/', '#'));
 
 
-    boolean isBooleanValue(PsiElement psiElement);
+    boolean isBooleanValue(final PsiElement psiElement) {
+        return elementIsDirectValueOfKey(psiElement, "deprecated", "required", "allowEmptyValue",
+                "exclusiveMaximum", "exclusiveMinimum", "uniqueItems", "readOnly", "attribute", "wrapped");
+    }
+
 }

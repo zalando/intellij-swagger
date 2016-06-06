@@ -21,190 +21,18 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class YamlTraversal implements Traversal {
+public class YamlTraversal extends Traversal {
+
+    @Override
+    Optional<String> getNameOfNthKey(final PsiElement psiElement, final int nth) {
+        return getNthOfType(psiElement, nth, YAMLKeyValue.class)
+                .map(YAMLKeyValue::getName);
+    }
 
     @Override
     public boolean isRoot(final PsiElement psiElement) {
         return psiElement.getParent().getParent() instanceof YAMLFile ||
                 psiElement.getParent().getParent().getParent().getParent() instanceof YAMLFile;
-    }
-
-    @Override
-    public boolean isInfo(final PsiElement psiElement) {
-        return Optional.ofNullable(getNthYamlKeyValue(psiElement, 1))
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("info"))
-                .isPresent();
-    }
-
-    @Override
-    public boolean isContact(final PsiElement psiElement) {
-        return Optional.ofNullable(getNthYamlKeyValue(psiElement, 1))
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("contact"))
-                .isPresent();
-    }
-
-    @Override
-    public boolean isLicense(final PsiElement psiElement) {
-        return Optional.ofNullable(getNthYamlKeyValue(psiElement, 1))
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("license"))
-                .isPresent();
-    }
-
-    @Override
-    public boolean isPath(final PsiElement psiElement) {
-        return Optional.ofNullable(getNthYamlKeyValue(psiElement, 2))
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("paths"))
-                .isPresent();
-    }
-
-    @Override
-    public boolean isOperation(final PsiElement psiElement) {
-        return Optional.ofNullable(getNthYamlKeyValue(psiElement, 3))
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("paths"))
-                .isPresent();
-    }
-
-    @Override
-    public boolean isExternalDocs(final PsiElement psiElement) {
-        return Optional.ofNullable(getNthYamlKeyValue(psiElement, 1))
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("externalDocs"))
-                .isPresent();
-    }
-
-    @Override
-    public boolean isParameters(final PsiElement psiElement) {
-        final boolean insideParameters = Optional.ofNullable(getNthYamlKeyValue(psiElement, 1))
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("parameters"))
-                .isPresent();
-        return insideParameters && hasSequenceItemAsParent(psiElement);
-    }
-
-    private boolean hasSequenceItemAsParent(final PsiElement psiElement) {
-        return psiElement != null &&
-                (psiElement instanceof YAMLSequenceItem || hasSequenceItemAsParent(psiElement.getParent()));
-    }
-
-    @Override
-    public boolean isItems(final PsiElement psiElement) {
-        return Optional.ofNullable(getNthYamlKeyValue(psiElement, 1))
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("items"))
-                .isPresent();
-    }
-
-    @Override
-    public boolean isResponses(final PsiElement psiElement) {
-        return Optional.ofNullable(getNthYamlKeyValue(psiElement, 1))
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("responses"))
-                .isPresent();
-    }
-
-    @Override
-    public boolean isResponse(final PsiElement psiElement) {
-        return Optional.ofNullable(getNthYamlKeyValue(psiElement, 2))
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("responses"))
-                .isPresent();
-    }
-
-    @Override
-    public boolean isHeader(final PsiElement psiElement) {
-        return Optional.ofNullable(getNthYamlKeyValue(psiElement, 2))
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("headers"))
-                .isPresent();
-    }
-
-    @Override
-    public boolean isTag(final PsiElement psiElement) {
-        return Optional.ofNullable(getNthYamlKeyValue(psiElement, 1))
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("tags"))
-                .isPresent();
-    }
-
-    @Override
-    public boolean isSecurityDefinition(final PsiElement psiElement) {
-        return Optional.ofNullable(getNthYamlKeyValue(psiElement, 2))
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("securityDefinitions"))
-                .isPresent();
-    }
-
-    @Override
-    public boolean isSchema(final PsiElement psiElement) {
-        return Optional.ofNullable(getNthYamlKeyValue(psiElement, 1))
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("schema"))
-                .isPresent();
-    }
-
-    @Override
-    public boolean isXml(final PsiElement psiElement) {
-        return Optional.ofNullable(getNthYamlKeyValue(psiElement, 1))
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("xml"))
-                .isPresent();
-    }
-
-    @Override
-    public boolean isDefinitions(final PsiElement psiElement) {
-        return Optional.ofNullable(getNthYamlKeyValue(psiElement, 2))
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("definitions"))
-                .isPresent();
-    }
-
-    @Override
-    public boolean isParameterDefinition(final PsiElement psiElement) {
-        return Optional.ofNullable(getNthYamlKeyValue(psiElement, 2))
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("parameters"))
-                .isPresent() && !isInsideParametersArray(psiElement);
-    }
-
-    @Override
-    public boolean isMimeValue(final PsiElement psiElement) {
-        final boolean insideConsumerOrProduces = Optional.ofNullable(getNthYamlKeyValue(psiElement, 1))
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("consumes") || name.equals("produces"))
-                .isPresent();
-        return insideConsumerOrProduces && hasSequenceItemAsParent(psiElement);
-    }
-
-    private YAMLKeyValue getNthYamlKeyValue(final PsiElement psiElement, int nth) {
-        if (psiElement == null) {
-            return null;
-        } else if (psiElement instanceof YAMLKeyValue) {
-            if (nth == 1) {
-                return (YAMLKeyValue) psiElement;
-            } else {
-                nth--;
-            }
-        }
-
-        return getNthYamlKeyValue(psiElement.getParent(), nth);
-    }
-
-    private <T extends PsiElement> Optional<T> getNthOfType(final PsiElement psiElement, int nth, Class<T> targetType) {
-        if (psiElement == null) {
-            return Optional.empty();
-        } else if (targetType.isAssignableFrom(psiElement.getClass())) {
-            if (nth == 1) {
-                return Optional.of(targetType.cast(psiElement));
-            } else {
-                nth--;
-            }
-        }
-        return getNthOfType(psiElement.getParent(), nth, targetType);
     }
 
     @Override
@@ -218,32 +46,7 @@ public class YamlTraversal implements Traversal {
     }
 
     @Override
-    public boolean isSchemesValue(final PsiElement psiElement) {
-        final boolean insideSchemes = Optional.ofNullable(getNthYamlKeyValue(psiElement, 1))
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("schemes"))
-                .isPresent();
-        return insideSchemes && hasSequenceItemAsParent(psiElement);
-    }
-
-    @Override
-    public boolean isDefinitionRefValue(final PsiElement psiElement) {
-        return isRefValue(psiElement) && !isInsideParametersArray(psiElement);
-    }
-
-    @Override
-    public boolean isParameterRefValue(final PsiElement psiElement) {
-        return isRefValue(psiElement) && isInsideParametersArray(psiElement);
-    }
-
-    private boolean isRefValue(final PsiElement psiElement) {
-        return Optional.ofNullable(getNthYamlKeyValue(psiElement, 1))
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("$ref"))
-                .isPresent();
-    }
-
-    private boolean isInsideParametersArray(final PsiElement psiElement) {
+    public boolean elementIsInsideParametersArray(final PsiElement psiElement) {
         return getNthOfType(psiElement, 1, YAMLSequence.class)
                 .map(YAMLSequence::getParent)
                 .filter(el -> el instanceof YAMLKeyValue)
@@ -292,14 +95,108 @@ public class YamlTraversal implements Traversal {
     }
 
     @Override
-    public boolean isBooleanValue(final PsiElement psiElement) {
-        return elementIsDirectValueOfKey(psiElement, "deprecated", "required", "allowEmptyValue",
-                "exclusiveMaximum", "exclusiveMinimum", "uniqueItems", "readOnly", "attribute", "wrapped");
+    boolean elementIsInsideArray(final PsiElement psiElement) {
+        return getNthOfType(psiElement, Integer.MAX_VALUE, YAMLSequence.class) != null;
     }
 
-    private boolean elementIsDirectValueOfKey(final PsiElement psiElement, final String... keyNames) {
+    @Override
+    int getInfoNth() {
+        return 1;
+    }
+
+    @Override
+    int getContactNth() {
+        return 1;
+    }
+
+    @Override
+    int getLicenseNth() {
+        return 1;
+    }
+
+    @Override
+    int getPathNth() {
+        return 2;
+    }
+
+    @Override
+    int getOperationNth() {
+        return 3;
+    }
+
+    @Override
+    int getExternalDocsNth() {
+        return 1;
+    }
+
+    @Override
+    int getParametersNth() {
+        return 1;
+    }
+
+    @Override
+    int getItemsNth() {
+        return 1;
+    }
+
+    @Override
+    int getResponsesNth() {
+        return 1;
+    }
+
+    @Override
+    int getResponseNth() {
+        return 2;
+    }
+
+    @Override
+    int getHeadersNth() {
+        return 1;
+    }
+
+    @Override
+    int getTagsNth() {
+        return 1;
+    }
+
+    @Override
+    int getSecurityDefinitionsNth() {
+        return 2;
+    }
+
+    @Override
+    int getSchemaNth() {
+        return 1;
+    }
+
+    @Override
+    int getXmlNth() {
+        return 1;
+    }
+
+    @Override
+    int getDefinitionsNth() {
+        return 2;
+    }
+
+    @Override
+    int getParameterDefinitionNth() {
+        return 2;
+    }
+
+    @Override
+    int getMimeNth() {
+        return 1;
+    }
+
+    @Override
+    int getSchemesNth() {
+        return 1;
+    }
+
+    public boolean elementIsDirectValueOfKey(final PsiElement psiElement, final String... keyNames) {
         final Set<String> targetKeyNames = Sets.newHashSet(keyNames);
-        return Optional.ofNullable(getNthYamlKeyValue(psiElement, 1))
+        return getNthOfType(psiElement, 1, YAMLKeyValue.class)
                 .map(YAMLKeyValue::getName)
                 .filter(targetKeyNames::contains)
                 .isPresent() &&

@@ -4,7 +4,6 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import org.zalando.intellij.swagger.completion.level.field.ArrayField;
 import org.zalando.intellij.swagger.completion.level.field.ObjectField;
 import org.zalando.intellij.swagger.completion.level.field.RefField;
-import org.zalando.intellij.swagger.completion.level.field.StringField;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
 import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
