@@ -151,7 +151,7 @@ public class YamlTraversal extends Traversal {
 
     @Override
     int getHeadersNth() {
-        return 1;
+        return 2;
     }
 
     @Override

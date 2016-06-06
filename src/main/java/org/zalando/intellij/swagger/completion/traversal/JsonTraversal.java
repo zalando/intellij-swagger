@@ -175,7 +175,7 @@ public class JsonTraversal extends Traversal {
 
     @Override
     int getHeadersNth() {
-        return 2;
+        return 3;
     }
 
     @Override
