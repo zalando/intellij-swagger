@@ -1,10 +1,7 @@
 # Swagger Plugin
 Swagger Plugin makes it easy to edit Swagger specification files inside IntelliJ IDEA. You can find it on JetBrains' [plugin page](https://plugins.jetbrains.com/plugin/8347).
 
-Features:
-- Field name auto-completion
-- Value auto-completion for certain keys (produces, consumes for example)
-- $ref navigation
+![Swagger Plugin features](https://github.com/zalando/intellij-swagger/blob/master/docs/features.gif?raw=true)
 
 ### Usage
 
