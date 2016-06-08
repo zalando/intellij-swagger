@@ -23,4 +23,16 @@ public class ArrayField extends Field {
         final String nextLineIndentationPadding = org.apache.commons.lang.StringUtils.repeat(" ", indentation + 2);
         return ":\n" + nextLineIndentationPadding + "- <caret>";
     }
+
+    @Override
+    public String getCompleteJson(final int indentation) {
+        final String indentationPadding = org.apache.commons.lang.StringUtils.repeat(" ", indentation);
+        return indentationPadding + "\"" + name + "\"" + getJsonPlaceholderSuffix(indentation);
+    }
+
+    @Override
+    public String getCompleteYaml(final int indentation) {
+        final String indentationPadding = org.apache.commons.lang.StringUtils.repeat(" ", indentation);
+        return indentationPadding + name + getYamlPlaceholderSuffix(indentation);
+    }
 }

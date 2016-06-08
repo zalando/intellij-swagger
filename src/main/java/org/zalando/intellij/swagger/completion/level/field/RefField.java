@@ -20,4 +20,14 @@ public class RefField extends Field {
     public String getYamlPlaceholderSuffix(final int indentation) {
         return ": '<caret>'";
     }
+
+    @Override
+    public String getCompleteJson(final int indentation) {
+        return "";
+    }
+
+    @Override
+    public String getCompleteYaml(final int indentation) {
+        return "";
+    }
 }

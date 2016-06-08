@@ -1,5 +1,9 @@
 package org.zalando.intellij.swagger.reference;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import com.google.common.collect.Lists;
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.json.psi.JsonStringLiteral;
@@ -9,11 +13,6 @@ import org.junit.Test;
 import org.zalando.intellij.swagger.completion.traversal.JsonTraversal;
 
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class JsonParameterReferenceTest {
 

@@ -1,13 +1,15 @@
 package org.zalando.intellij.swagger.completion.level;
 
+import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import org.zalando.intellij.swagger.completion.level.field.ArrayField;
+import org.zalando.intellij.swagger.completion.level.field.ExternalDocsField;
+import org.zalando.intellij.swagger.completion.level.field.ItemsField;
 import org.zalando.intellij.swagger.completion.level.field.ObjectField;
 import org.zalando.intellij.swagger.completion.level.field.RefField;
 import org.zalando.intellij.swagger.completion.level.field.StringField;
+import org.zalando.intellij.swagger.completion.level.field.XmlField;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
-
-import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
 
 public class SchemaLevelCompletion extends LevelCompletion {
 
@@ -38,14 +40,14 @@ public class SchemaLevelCompletion extends LevelCompletion {
         addUnique(new ArrayField("required"), optional(positionResolver));
         addUnique(new ArrayField("enum"), optional(positionResolver));
         addUnique(new StringField("type"), optional(positionResolver));
-        addUnique(new ObjectField("items"), optional(positionResolver));
+        addUnique(new ItemsField(), optional(positionResolver));
         addUnique(new ArrayField("allOf"), optional(positionResolver));
         addUnique(new ObjectField("properties"), optional(positionResolver));
         addUnique(new ObjectField("additionalProperties"), optional(positionResolver));
         addUnique(new StringField("discriminator"), optional(positionResolver));
         addUnique(new StringField("readOnly"), optional(positionResolver));
-        addUnique(new ObjectField("xml"), optional(positionResolver));
-        addUnique(new ObjectField("externalDocs"), optional(positionResolver));
+        addUnique(new XmlField(), optional(positionResolver));
+        addUnique(new ExternalDocsField(), optional(positionResolver));
         addUnique(new ObjectField("example"), optional(positionResolver));
     }
 }

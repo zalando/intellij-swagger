@@ -1,5 +1,6 @@
 package org.zalando.intellij.swagger.completion.traversal;
 
+import static com.intellij.patterns.StandardPatterns.character;
 import com.intellij.codeInsight.completion.CompletionData;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -12,8 +13,6 @@ import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 
 import java.util.List;
 import java.util.Optional;
-
-import static com.intellij.patterns.StandardPatterns.character;
 
 abstract class Traversal {
 

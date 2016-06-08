@@ -1,0 +1,11 @@
+swagger: 2.0
+paths: 
+  /pets: 
+    get: 
+      responses: 
+        200: 
+          description: An paged array of pets
+          headers: 
+            x-next: 
+              items:
+                type:

@@ -1,5 +1,6 @@
 package org.zalando.intellij.swagger.reference.contributor;
 
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 import com.intellij.json.JsonLanguage;
 import com.intellij.json.psi.JsonLiteral;
 import com.intellij.patterns.PsiElementPattern;
@@ -18,8 +19,6 @@ import org.zalando.intellij.swagger.reference.YamlDefinitionReference;
 import org.zalando.intellij.swagger.reference.extractor.ValueExtractor;
 
 import java.util.Optional;
-
-import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
 

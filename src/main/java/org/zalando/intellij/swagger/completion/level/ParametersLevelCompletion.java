@@ -1,13 +1,13 @@
 package org.zalando.intellij.swagger.completion.level;
 
+import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
+import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.required;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import org.zalando.intellij.swagger.completion.level.field.ArrayField;
+import org.zalando.intellij.swagger.completion.level.field.ItemsField;
 import org.zalando.intellij.swagger.completion.level.field.ObjectField;
 import org.zalando.intellij.swagger.completion.level.field.StringField;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
-
-import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
-import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.required;
 
 class ParametersLevelCompletion extends LevelCompletion {
 
@@ -24,7 +24,7 @@ class ParametersLevelCompletion extends LevelCompletion {
         addUnique(new StringField("type"), optional(positionResolver));
         addUnique(new StringField("format"), optional(positionResolver));
         addUnique(new StringField("allowEmptyValue"), optional(positionResolver));
-        addUnique(new ObjectField("items"), optional(positionResolver));
+        addUnique(new ItemsField(), optional(positionResolver));
         addUnique(new StringField("collectionFormat"), optional(positionResolver));
         addUnique(new StringField("default"), optional(positionResolver));
         addUnique(new StringField("maximum"), optional(positionResolver));

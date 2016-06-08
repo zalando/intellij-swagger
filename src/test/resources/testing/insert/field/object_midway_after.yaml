@@ -1,4 +1,7 @@
 swagger: 2.0
 info:
-  <caret>
+  version: <caret>
+  title:
+  license:
+    name:
 host: somewhere.com

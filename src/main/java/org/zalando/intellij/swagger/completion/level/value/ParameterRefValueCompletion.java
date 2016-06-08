@@ -1,5 +1,7 @@
 package org.zalando.intellij.swagger.completion.level.value;
 
+import static org.zalando.intellij.swagger.completion.level.LookupElementBuilderFactory.create;
+import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -8,9 +10,6 @@ import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.zalando.intellij.swagger.completion.level.LookupElementBuilderFactory.create;
-import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
 
 class ParameterRefValueCompletion extends ValueCompletion {
 

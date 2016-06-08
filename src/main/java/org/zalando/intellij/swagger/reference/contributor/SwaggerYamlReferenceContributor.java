@@ -1,5 +1,6 @@
 package org.zalando.intellij.swagger.reference.contributor;
 
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.StandardPatterns;
 import com.intellij.psi.PsiElement;
@@ -17,8 +18,6 @@ import org.zalando.intellij.swagger.reference.YamlParameterReference;
 import org.zalando.intellij.swagger.reference.extractor.ValueExtractor;
 
 import java.util.Optional;
-
-import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
 

@@ -1,5 +1,7 @@
 package org.zalando.intellij.swagger.completion.level.value;
 
+import static org.zalando.intellij.swagger.completion.level.LookupElementBuilderFactory.create;
+import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
 import com.google.common.net.MediaType;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.InsertHandler;
@@ -9,9 +11,6 @@ import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.zalando.intellij.swagger.completion.level.LookupElementBuilderFactory.create;
-import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
 
 class MimeValueCompletion extends ValueCompletion {
 

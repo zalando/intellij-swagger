@@ -20,4 +20,16 @@ public class StringField extends Field {
     public String getYamlPlaceholderSuffix(final int indentation) {
         return ": <caret>";
     }
+
+    @Override
+    public String getCompleteJson(final int indentation) {
+        final String leftPadding = org.apache.commons.lang.StringUtils.repeat(" ", indentation);
+        return leftPadding + "\"" + name + "\": \"<caret>\"";
+    }
+
+    @Override
+    public String getCompleteYaml(final int indentation) {
+        final String leftPadding = org.apache.commons.lang.StringUtils.repeat(" ", indentation);
+        return leftPadding + name + ": <caret>";
+    }
 }

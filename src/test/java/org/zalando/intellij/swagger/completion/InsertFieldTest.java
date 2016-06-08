@@ -28,8 +28,43 @@ public class InsertFieldTest extends AbstractJsonOrYamlCompletionTest {
     }
 
     @Test
-    public void thatObjectFieldIsHandled() {
-        completeAndCheckResultsByFile("object");
+    public void thatInfoFieldIsPopulated() {
+        completeAndCheckResultsByFile("info");
+    }
+
+    @Test
+    public void thatContactFieldIsPopulated() {
+        completeAndCheckResultsByFile("contact");
+    }
+
+    @Test
+    public void thatExternalDocsFieldIsPopulated() {
+        completeAndCheckResultsByFile("external_docs");
+    }
+
+    @Test
+    public void thatItemsFieldIsPopulated() {
+        completeAndCheckResultsByFile("items");
+    }
+
+    @Test
+    public void thatLicenseFieldIsPopulated() {
+        completeAndCheckResultsByFile("license");
+    }
+
+    @Test
+    public void thatOperationFieldIsPopulated() {
+        completeAndCheckResultsByFile("operation");
+    }
+
+    @Test
+    public void thatResponseFieldIsPopulated() {
+        completeAndCheckResultsByFile("response");
+    }
+
+    @Test
+    public void thatXmlFieldIsPopulated() {
+        completeAndCheckResultsByFile("xml");
     }
 
     @Test

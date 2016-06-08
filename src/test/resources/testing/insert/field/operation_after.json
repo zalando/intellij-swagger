@@ -1,0 +1,17 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/pets": {
+      "get": {
+        "summary": "<caret>",
+        "operationId": "",
+        "parameters": [
+
+        ],
+        "responses": {
+
+        }
+      }
+    }
+  }
+}
