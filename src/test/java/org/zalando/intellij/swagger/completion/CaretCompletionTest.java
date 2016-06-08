@@ -2,7 +2,6 @@ package org.zalando.intellij.swagger.completion;
 
 import com.intellij.util.net.HTTPMethod;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -85,11 +84,11 @@ public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
                 .isOfSize(1);
     }
 
-    @Ignore("See issue #30")
     @Test
-    public void enumValuesCompletion_ParametersIn() {
-        getCaretCompletions("enum_parameters_in")
-                .assertContains("path", "header", "query", "formData", "body");
+    public void thatInValuesAreSuggested() {
+        getCaretCompletions("in")
+                .assertContains("path", "header", "query", "formData", "body")
+                .isOfSize(5);
     }
 
     @Test

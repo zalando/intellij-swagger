@@ -20,6 +20,8 @@ public class ValueCompletionFactory {
             return Optional.of(new BooleanValueCompletion(positionResolver));
         } else if (positionResolver.completeTypeValue()) {
             return Optional.of(new TypeValueCompletion(positionResolver));
+        } else if (positionResolver.completeInValue()) {
+            return Optional.of(new InValueCompletion(positionResolver));
         } else {
             return Optional.empty();
         }

@@ -218,4 +218,8 @@ abstract class Traversal {
     boolean isTypeValue(final PsiElement psiElement) {
         return elementIsDirectValueOfKey(psiElement, "type");
     }
+
+    boolean isInValue(final PsiElement psiElement) {
+        return elementIsDirectValueOfKey(psiElement, "in");
+    }
 }

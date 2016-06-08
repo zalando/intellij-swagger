@@ -1,0 +1,15 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/pathA": {
+      "get": {
+        "parameters": [
+          {
+            "name": "paramA",
+            "in": "<caret>"
+          }
+        ]
+      }
+    }
+  }
+}

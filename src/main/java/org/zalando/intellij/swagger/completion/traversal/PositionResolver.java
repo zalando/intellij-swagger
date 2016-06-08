@@ -137,4 +137,8 @@ public class PositionResolver {
     public boolean completeTypeValue() {
         return traversal.isTypeValue(psiElement);
     }
+
+    public boolean completeInValue() {
+        return traversal.isInValue(psiElement);
+    }
 }
