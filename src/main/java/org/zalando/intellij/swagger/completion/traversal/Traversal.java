@@ -214,4 +214,8 @@ abstract class Traversal {
                 "exclusiveMaximum", "exclusiveMinimum", "uniqueItems", "readOnly", "attribute", "wrapped");
     }
 
+
+    boolean isTypeValue(final PsiElement psiElement) {
+        return elementIsDirectValueOfKey(psiElement, "type");
+    }
 }

@@ -133,4 +133,8 @@ public class PositionResolver {
     public boolean completeBooleanValue() {
         return traversal.isBooleanValue(psiElement);
     }
+
+    public boolean completeTypeValue() {
+        return traversal.isTypeValue(psiElement);
+    }
 }

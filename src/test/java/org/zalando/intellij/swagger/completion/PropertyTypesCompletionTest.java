@@ -24,12 +24,11 @@ public class PropertyTypesCompletionTest extends AbstractJsonOrYamlCompletionTes
         useResourceFolder("testing/completion/types");
     }
 
-    @Ignore("See issue 13")
     @Test
     public void testJsonSchemaPrimitiveTypes() {
         getCaretCompletions("types_all")
-                //.assertContains("null") // json-schema defined primitive, not sure it is used in swagger
-                .assertContains("integer", "number", "string", "boolean");
+                .assertContains("integer", "number", "string", "boolean", "array")
+                .isOfSize(5);
     }
 
     @Ignore("See issue 13")
