@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>org.zalando.intellij.swagger</id>
     <name>Swagger Plugin</name>
-    <version>0.0.7</version>
+    <version>0.0.8</version>
     <vendor email="sebastian.monte@zalando.de" url="https://tech.zalando.com/">Zalando SE</vendor>
 
     <depends>com.intellij.modules.lang</depends>
@@ -15,6 +15,12 @@
     ]]></description>
 
     <change-notes><![CDATA[
+           version 0.0.8
+           <br/>
+           <ul>
+           <li>Populate certain fields (for example, "info") when auto completing</li>
+           </ul>
+
            version 0.0.7
            <br/>
            <ul>
