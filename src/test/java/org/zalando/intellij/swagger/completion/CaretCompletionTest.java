@@ -29,7 +29,7 @@ public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
 
     @Test
     public void thatRootKeyIsCompleted() {
-        getCaretCompletions("top_level")
+        getCaretCompletions("root")
                 .assertContains("basePath", "produces", "consumes", "schemes",
                         "paths", "tags", "parameters", "responses")
                 .assertNotContains("head", "get", "post", "operationId");
@@ -37,7 +37,7 @@ public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
 
     @Test
     public void thatExistingKeysAreNotShown() {
-        getCaretCompletions("top_level").assertNotContains("swagger", "host");
+        getCaretCompletions("root").assertNotContains("swagger", "host");
     }
 
     @Test
@@ -149,20 +149,20 @@ public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
     @Test
     public void thatParametersKeysAreSuggested() {
         getCaretCompletions("field/parameters")
-                .assertContains("name", "in", "description", "required", "schema", "type", "format",
+                .assertContains("$ref", "name", "in", "description", "required", "schema", "type", "format",
                         "allowEmptyValue", "items", "collectionFormat", "default", "maximum", "exclusiveMaximum",
                         "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern", "maxItems", "minItems",
                         "uniqueItems", "enum", "multipleOf")
-                .isOfSize(23);
+                .isOfSize(24);
     }
 
     @Test
     public void thatItemsKeysAreSuggested() {
         getCaretCompletions("field/items")
-                .assertContains("type", "format", "items", "collectionFormat", "default", "maximum",
+                .assertContains("$ref", "type", "format", "items", "collectionFormat", "default", "maximum",
                         "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern",
                         "maxItems", "minItems", "uniqueItems", "multipleOf")
-                .isOfSize(17);
+                .isOfSize(18);
     }
 
     @Test

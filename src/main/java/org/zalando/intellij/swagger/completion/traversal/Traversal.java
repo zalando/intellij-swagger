@@ -10,17 +10,28 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.level.field.Field;
 import org.zalando.intellij.swagger.completion.style.CompletionStyle;
+import org.zalando.intellij.swagger.completion.traversal.keydepth.KeyDepth;
 
 import java.util.List;
 import java.util.Optional;
 
-abstract class Traversal {
+public abstract class Traversal {
+
+    private final KeyDepth keyDepth;
+
+    public Traversal(final KeyDepth keyDepth) {
+        this.keyDepth = keyDepth;
+    }
+
+    public abstract boolean isKey(final PsiElement psiElement);
+
+    public abstract Optional<String> getKeyName(final PsiElement psiElement);
 
     abstract boolean elementIsInsideParametersArray(final PsiElement psiElement);
 
     abstract Optional<String> getNameOfNthKey(final PsiElement psiElement, int nthKey);
 
-    abstract boolean isRoot(final PsiElement psiElement);
+    public abstract boolean isRoot(final PsiElement psiElement);
 
     abstract boolean shouldQuote(final PsiElement psiElement);
 
@@ -52,126 +63,88 @@ abstract class Traversal {
     }
 
 
-    final boolean isInfo(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, getInfoNth(), "info");
+    public final boolean isInfo(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getInfoNth(), "info");
     }
 
-    abstract int getInfoNth();
-
-    abstract int getContactNth();
-
-    abstract int getLicenseNth();
-
-    abstract int getPathNth();
-
-    abstract int getOperationNth();
-
-    abstract int getExternalDocsNth();
-
-    abstract int getParametersNth();
-
-    abstract int getItemsNth();
-
-    abstract int getResponsesNth();
-
-    abstract int getResponseNth();
-
-    abstract int getHeadersNth();
-
-    abstract int getTagsNth();
-
-    abstract int getSecurityDefinitionsNth();
-
-    abstract int getSchemaNth();
-
-    abstract int getXmlNth();
-
-    abstract int getDefinitionsNth();
-
-    abstract int getParameterDefinitionNth();
-
-    abstract int getMimeNth();
-
-    abstract int getSchemesNth();
-
-    final boolean isContact(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, getContactNth(), "contact");
+    public final boolean isContact(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getContactNth(), "contact");
     }
 
-    final boolean isLicense(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, getLicenseNth(), "license");
+    public final boolean isLicense(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getLicenseNth(), "license");
     }
 
-    boolean isPath(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, getPathNth(), "paths");
+    public boolean isPath(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getPathNth(), "paths");
     }
 
-    boolean isOperation(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, getOperationNth(), "paths");
+    public boolean isOperation(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getOperationNth(), "paths") && !elementIsInsideArray(psiElement);
     }
 
-    final boolean isExternalDocs(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, getExternalDocsNth(), "externalDocs");
+    public final boolean isExternalDocs(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getExternalDocsNth(), "externalDocs");
     }
 
-    final boolean isParameters(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, getParametersNth(), "parameters") && elementIsInsideArray(psiElement);
+    public final boolean isParameters(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getParametersNth(), "parameters") && elementIsInsideArray(psiElement);
     }
 
-    final boolean isItems(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, getItemsNth(), "items");
+    public final boolean isItems(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getItemsNth(), "items");
     }
 
-    final boolean isResponses(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, getResponsesNth(), "responses");
+    public final boolean isResponses(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getResponsesNth(), "responses");
     }
 
-    final boolean isResponse(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, getResponseNth(), "responses");
+    public final boolean isResponse(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getResponseNth(), "responses");
     }
 
-    final boolean isHeader(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, getHeadersNth(), "headers");
+    public final boolean isHeader(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getHeadersNth(), "headers");
     }
 
-    final boolean isTag(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, getTagsNth(), "tags");
+    public final boolean isTag(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getTagsNth(), "tags");
     }
 
-    final boolean isSecurityDefinition(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, getSecurityDefinitionsNth(), "securityDefinitions");
+    public final boolean isSecurityDefinition(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getSecurityDefinitionsNth(), "securityDefinitions");
     }
 
-    final boolean isSchema(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, getSchemaNth(), "schema");
+    public final boolean isSchema(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getSchemaNth(), "schema");
     }
 
-    final boolean isXml(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, getXmlNth(), "xml");
+    public final boolean isXml(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getXmlNth(), "xml");
     }
 
-    final boolean isDefinitions(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, getDefinitionsNth(), "definitions");
+    public final boolean isDefinitions(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getDefinitionsNth(), "definitions");
     }
 
-    final boolean isParameterDefinition(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, getParameterDefinitionNth(), "parameters") && !elementIsInsideParametersArray(psiElement);
+    public final boolean isParameterDefinition(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getParameterDefinitionNth(), "parameters") && !elementIsInsideParametersArray(psiElement);
     }
 
-    final boolean isMimeValue(final PsiElement psiElement) {
-        return (nthKeyEquals(psiElement, getMimeNth(), "consumes") || nthKeyEquals(psiElement, 1, "produces")) &&
+    public final boolean isMimeValue(final PsiElement psiElement) {
+        return (nthKeyEquals(psiElement, keyDepth.getMimeNth(), "consumes") || nthKeyEquals(psiElement, keyDepth.getMimeNth(), "produces")) &&
                 elementIsInsideArray(psiElement);
     }
 
-    final boolean isSchemesValue(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, getSchemesNth(), "schemes") && elementIsInsideArray(psiElement);
+    public final boolean isSchemesValue(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getSchemesNth(), "schemes") && elementIsInsideArray(psiElement);
     }
 
-    boolean isDefinitionRefValue(final PsiElement psiElement) {
+    public boolean isDefinitionRefValue(final PsiElement psiElement) {
         return isRefValue(psiElement) && !elementIsInsideParametersArray(psiElement);
     }
 
-    boolean isParameterRefValue(final PsiElement psiElement) {
+    public boolean isParameterRefValue(final PsiElement psiElement) {
         return isRefValue(psiElement) && elementIsInsideParametersArray(psiElement);
     }
 
@@ -205,7 +178,7 @@ abstract class Traversal {
         return Optional.ofNullable(result);
     }
 
-    ElementPattern<Character> NOT_REF_VALUE_CHARACTER =
+    private ElementPattern<Character> NOT_REF_VALUE_CHARACTER =
             CompletionData.NOT_JAVA_ID.andNot(character().oneOf('/', '#'));
 
 

@@ -12,6 +12,7 @@ import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.PsiReferenceRegistrar;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
+import org.zalando.intellij.swagger.completion.traversal.keydepth.JsonCompletionKeyDepth;
 import org.zalando.intellij.swagger.completion.traversal.JsonTraversal;
 import org.zalando.intellij.swagger.reference.JsonDefinitionReference;
 import org.zalando.intellij.swagger.reference.JsonParameterReference;
@@ -26,7 +27,7 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
     private final JsonTraversal jsonTraversal;
 
     public SwaggerJsonReferenceContributor() {
-        this(new ValueExtractor(), new JsonTraversal());
+        this(new ValueExtractor(), new JsonTraversal(new JsonCompletionKeyDepth()));
     }
 
     private SwaggerJsonReferenceContributor(final ValueExtractor valueExtractor,

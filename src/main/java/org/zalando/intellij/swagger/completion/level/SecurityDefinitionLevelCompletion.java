@@ -1,10 +1,7 @@
 package org.zalando.intellij.swagger.completion.level;
 
-import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
-import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.required;
 import com.intellij.codeInsight.completion.CompletionResultSet;
-import org.zalando.intellij.swagger.completion.level.field.ObjectField;
-import org.zalando.intellij.swagger.completion.level.field.StringField;
+import org.zalando.intellij.swagger.completion.level.field.Fields;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
 class SecurityDefinitionLevelCompletion extends LevelCompletion {
@@ -14,15 +11,6 @@ class SecurityDefinitionLevelCompletion extends LevelCompletion {
     }
 
     public void fill() {
-        addUnique(new StringField("type"), required(positionResolver));
-        addUnique(new StringField("description"), optional(positionResolver));
-        addUnique(new StringField("name"), required(positionResolver));
-        addUnique(new StringField("in"), required(positionResolver));
-        addUnique(new StringField("flow"), required(positionResolver));
-        addUnique(new StringField("authorizationUrl"), required(positionResolver));
-        addUnique(new StringField("tokenUrl"), required(positionResolver));
-        addUnique(new ObjectField("scopes"), required(positionResolver));
-
+        Fields.securityDefinitions().forEach(this::addUnique);
     }
-
 }

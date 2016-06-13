@@ -59,7 +59,7 @@ public class SwaggerFixture {
         return getCompletions(fullName);
     }
 
-    public void complete(final String testFileNoExt, final JsonOrYaml fileKind) {
+    public void complete(@NotNull final String testFileNoExt, @NotNull final JsonOrYaml fileKind) {
         myCodeInsightFixture.configureByFile(fileKind.getFileName(testFileNoExt));
         myCodeInsightFixture.complete(CompletionType.BASIC, 2);
         if (LookupManager.getActiveLookup(myCodeInsightFixture.getEditor()) != null) {
@@ -67,13 +67,12 @@ public class SwaggerFixture {
         }
     }
 
-    public void rename(final String newName, final String testFileNoExt, final JsonOrYaml fileKind) {
-        myCodeInsightFixture.configureByFile(fileKind.getFileName(testFileNoExt));
-        myCodeInsightFixture.renameElementAtCaret(newName);
+    public void checkResultByFile(@NotNull final String testFileNoExt, @NotNull final JsonOrYaml fileKind) {
+        myCodeInsightFixture.checkResultByFile(fileKind.getFileName(testFileNoExt), true);
     }
 
-    public void checkResultByFile(final String testFileNoExt, final JsonOrYaml fileKind) {
-        myCodeInsightFixture.checkResultByFile(fileKind.getFileName(testFileNoExt), true);
+    public void testHighlighting(@NotNull final String testFileNoExt, @NotNull final JsonOrYaml fileKind) {
+        myCodeInsightFixture.testHighlighting(true, true, true, fileKind.getFileName(testFileNoExt));
     }
 
     public enum JsonOrYaml {

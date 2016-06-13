@@ -3,7 +3,7 @@ package org.zalando.intellij.swagger.completion.level.field;
 public class RefField extends Field {
 
     public RefField() {
-        super("$ref");
+        super("$ref", false);
     }
 
     @Override

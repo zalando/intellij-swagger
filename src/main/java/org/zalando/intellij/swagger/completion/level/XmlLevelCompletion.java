@@ -1,8 +1,7 @@
 package org.zalando.intellij.swagger.completion.level;
 
-import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
 import com.intellij.codeInsight.completion.CompletionResultSet;
-import org.zalando.intellij.swagger.completion.level.field.StringField;
+import org.zalando.intellij.swagger.completion.level.field.Fields;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
 class XmlLevelCompletion extends LevelCompletion {
@@ -12,11 +11,7 @@ class XmlLevelCompletion extends LevelCompletion {
     }
 
     public void fill() {
-        addUnique(new StringField("name"), optional(positionResolver));
-        addUnique(new StringField("namespace"), optional(positionResolver));
-        addUnique(new StringField("prefix"), optional(positionResolver));
-        addUnique(new StringField("attribute"), optional(positionResolver));
-        addUnique(new StringField("wrapped"), optional(positionResolver));
+        Fields.xml().forEach(this::addUnique);
     }
 
 }

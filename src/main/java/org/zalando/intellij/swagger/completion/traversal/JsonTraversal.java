@@ -8,12 +8,15 @@ import com.intellij.json.JsonElementTypes;
 import com.intellij.json.psi.JsonArray;
 import com.intellij.json.psi.JsonFile;
 import com.intellij.json.psi.JsonProperty;
+import com.intellij.json.psi.JsonValue;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.level.field.Field;
 import org.zalando.intellij.swagger.completion.level.inserthandler.JsonInsertHandler;
+import org.zalando.intellij.swagger.completion.level.string.StringUtils;
 import org.zalando.intellij.swagger.completion.style.CompletionStyle;
+import org.zalando.intellij.swagger.completion.traversal.keydepth.KeyDepth;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +25,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class JsonTraversal extends Traversal {
+
+    public JsonTraversal(final KeyDepth keyDepth) {
+        super(keyDepth);
+    }
 
     @Override
     Optional<String> getNameOfNthKey(final PsiElement psiElement, final int nth) {
@@ -43,6 +50,18 @@ public class JsonTraversal extends Traversal {
                 .map(JsonProperty::getNameElement)
                 .filter(nameElement -> nameElement == firstParent)
                 .isPresent();
+    }
+
+    public Optional<String> getKeyName(final PsiElement psiElement) {
+        final PsiElement firstParent = psiElement.getParent();
+        return Optional.ofNullable(firstParent)
+                .map(PsiElement::getParent)
+                .filter(jsonPropertyCandidate -> jsonPropertyCandidate instanceof JsonProperty)
+                .map(JsonProperty.class::cast)
+                .map(JsonProperty::getNameElement)
+                .filter(nameElement -> nameElement == firstParent)
+                .map(JsonValue::getText)
+                .map(StringUtils::removeAllQuotes);
     }
 
     @Override
@@ -120,102 +139,12 @@ public class JsonTraversal extends Traversal {
 
     @Override
     boolean elementIsInsideArray(final PsiElement psiElement) {
-        return getNthOfType(psiElement, Integer.MAX_VALUE, JsonArray.class) != null;
-    }
-
-    @Override
-    int getInfoNth() {
-        return 2;
-    }
-
-    @Override
-    int getContactNth() {
-        return 2;
-    }
-
-    @Override
-    int getLicenseNth() {
-        return 2;
-    }
-
-    @Override
-    int getPathNth() {
-        return 3;
-    }
-
-    @Override
-    int getOperationNth() {
-        return 3;
-    }
-
-    @Override
-    int getExternalDocsNth() {
-        return 2;
-    }
-
-    @Override
-    int getParametersNth() {
-        return 2;
-    }
-
-    @Override
-    int getItemsNth() {
-        return 2;
-    }
-
-    @Override
-    int getResponsesNth() {
-        return 2;
-    }
-
-    @Override
-    int getResponseNth() {
-        return 3;
-    }
-
-    @Override
-    int getHeadersNth() {
-        return 3;
-    }
-
-    @Override
-    int getTagsNth() {
-        return 2;
-    }
-
-    @Override
-    int getSecurityDefinitionsNth() {
-        return 3;
-    }
-
-    @Override
-    int getSchemaNth() {
-        return 2;
-    }
-
-    @Override
-    int getXmlNth() {
-        return 2;
-    }
-
-    @Override
-    int getDefinitionsNth() {
-        return 3;
-    }
-
-    @Override
-    int getParameterDefinitionNth() {
-        return 3;
-    }
-
-    @Override
-    int getMimeNth() {
-        return 1;
-    }
-
-    @Override
-    int getSchemesNth() {
-        return 1;
+        if (psiElement == null) {
+            return false;
+        } else if (psiElement instanceof JsonArray) {
+            return true;
+        }
+        return elementIsInsideArray(psiElement.getParent());
     }
 
     @Override

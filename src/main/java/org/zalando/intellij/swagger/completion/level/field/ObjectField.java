@@ -7,12 +7,16 @@ import java.util.List;
 public class ObjectField extends Field {
 
     public ObjectField(final String name) {
-        super(name);
+        super(name, false);
     }
 
     @Override
     public String getName() {
         return name;
+    }
+
+    public ObjectField(final String name, final boolean required) {
+        super(name, required);
     }
 
     @Override

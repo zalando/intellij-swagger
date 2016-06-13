@@ -1,0 +1,10 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/pathA": {
+      "get": {
+        <error descr="Invalid key">"unknown"</error>: ""
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/pathA": {
+      "get": {
+        "externalDocs": {
+          <error descr="Invalid key">"unknown"</error>: ""
+        }
+      }
+    }
+  }
+}

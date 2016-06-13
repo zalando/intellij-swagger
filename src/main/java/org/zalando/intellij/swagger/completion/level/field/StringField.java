@@ -2,8 +2,12 @@ package org.zalando.intellij.swagger.completion.level.field;
 
 public class StringField extends Field {
 
+    public StringField(final String name, final boolean required) {
+        super(name, required);
+    }
+
     public StringField(final String name) {
-        super(name);
+        super(name, false);
     }
 
     @Override

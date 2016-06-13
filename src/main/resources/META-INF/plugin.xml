@@ -83,6 +83,9 @@
         <psi.referenceContributor implementation="org.zalando.intellij.swagger.reference.contributor.SwaggerJsonReferenceContributor"/>
 
         <lang.findUsagesProvider language="yaml" implementationClass="org.zalando.intellij.swagger.reference.usage.YamlFindUsagesProvider"/>
+
+        <annotator language="JSON" implementationClass="org.zalando.intellij.swagger.annotator.JsonValidKeyAnnotator"/>
+        <annotator language="yaml" implementationClass="org.zalando.intellij.swagger.annotator.YamlValidKeyAnnotator"/>
     </extensions>
 
 

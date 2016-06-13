@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.json.psi.JsonArray;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.yaml.psi.YAMLFile;
@@ -14,6 +15,7 @@ import org.jetbrains.yaml.psi.YAMLValue;
 import org.zalando.intellij.swagger.completion.level.field.Field;
 import org.zalando.intellij.swagger.completion.level.inserthandler.YamlInsertHandler;
 import org.zalando.intellij.swagger.completion.style.CompletionStyle;
+import org.zalando.intellij.swagger.completion.traversal.keydepth.KeyDepth;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +24,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class YamlTraversal extends Traversal {
+
+    public YamlTraversal(final KeyDepth keyDepth) {
+        super(keyDepth);
+    }
 
     @Override
     Optional<String> getNameOfNthKey(final PsiElement psiElement, final int nth) {
@@ -43,6 +49,22 @@ public class YamlTraversal extends Traversal {
     @Override
     public CompletionStyle.QuoteStyle getQuoteStyle() {
         return CompletionStyle.QuoteStyle.SINGLE;
+    }
+
+    @Override
+    public boolean isKey(final PsiElement psiElement) {
+        return false;
+    }
+
+    @Override
+    public Optional<String> getKeyName(final PsiElement psiElement) {
+        return Optional.of(psiElement.getParent())
+                .filter(el -> el instanceof YAMLKeyValue)
+                .map(YAMLKeyValue.class::cast)
+                .map(YAMLKeyValue::getKey)
+                .filter(key -> key == psiElement)
+                .isPresent() ? Optional.of(((YAMLKeyValue) psiElement.getParent()).getKeyText()) : Optional.empty();
+
     }
 
     @Override
@@ -96,102 +118,12 @@ public class YamlTraversal extends Traversal {
 
     @Override
     boolean elementIsInsideArray(final PsiElement psiElement) {
-        return getNthOfType(psiElement, Integer.MAX_VALUE, YAMLSequence.class) != null;
-    }
-
-    @Override
-    int getInfoNth() {
-        return 1;
-    }
-
-    @Override
-    int getContactNth() {
-        return 1;
-    }
-
-    @Override
-    int getLicenseNth() {
-        return 1;
-    }
-
-    @Override
-    int getPathNth() {
-        return 2;
-    }
-
-    @Override
-    int getOperationNth() {
-        return 3;
-    }
-
-    @Override
-    int getExternalDocsNth() {
-        return 1;
-    }
-
-    @Override
-    int getParametersNth() {
-        return 1;
-    }
-
-    @Override
-    int getItemsNth() {
-        return 1;
-    }
-
-    @Override
-    int getResponsesNth() {
-        return 1;
-    }
-
-    @Override
-    int getResponseNth() {
-        return 2;
-    }
-
-    @Override
-    int getHeadersNth() {
-        return 2;
-    }
-
-    @Override
-    int getTagsNth() {
-        return 1;
-    }
-
-    @Override
-    int getSecurityDefinitionsNth() {
-        return 2;
-    }
-
-    @Override
-    int getSchemaNth() {
-        return 1;
-    }
-
-    @Override
-    int getXmlNth() {
-        return 1;
-    }
-
-    @Override
-    int getDefinitionsNth() {
-        return 2;
-    }
-
-    @Override
-    int getParameterDefinitionNth() {
-        return 2;
-    }
-
-    @Override
-    int getMimeNth() {
-        return 1;
-    }
-
-    @Override
-    int getSchemesNth() {
-        return 1;
+        if (psiElement == null) {
+            return false;
+        } else if (psiElement instanceof YAMLSequence) {
+            return true;
+        }
+        return elementIsInsideArray(psiElement.getParent());
     }
 
     public boolean elementIsDirectValueOfKey(final PsiElement psiElement, final String... keyNames) {

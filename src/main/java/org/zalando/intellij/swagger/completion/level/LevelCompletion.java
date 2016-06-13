@@ -5,7 +5,6 @@ import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import org.zalando.intellij.swagger.completion.level.field.Field;
-import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
 public abstract class LevelCompletion {
@@ -20,20 +19,16 @@ public abstract class LevelCompletion {
 
     public abstract void fill();
 
-    public void addUnique(final Field field,
-                          final CompletionStyle completionStyle) {
-
+    public void addUnique(final Field field) {
         if (positionResolver.isUniqueKey(field.getName())) {
-            completionResultSet.addElement(create(field, completionStyle, positionResolver.createInsertHandler(field)));
+            completionResultSet.addElement(create(field, positionResolver.createInsertHandler(field)));
         }
     }
 
-    private LookupElementBuilder create(final Field field,
-                                        final CompletionStyle completionStyle) {
-        final String value = completionStyle.isShouldQuote() ? "\"" + field.getName() + "\"" : field.getName();
-        LookupElementBuilder lookupElementBuilder = LookupElementBuilder.create(field, value);
+    private LookupElementBuilder create(final Field field) {
+        LookupElementBuilder lookupElementBuilder = LookupElementBuilder.create(field, field.getName());
 
-        if (completionStyle.getFontWeight() == CompletionStyle.FontWeight.BOLD) {
+        if (field.isRequired()) {
             lookupElementBuilder = lookupElementBuilder.bold();
         }
 
@@ -41,9 +36,8 @@ public abstract class LevelCompletion {
     }
 
     private LookupElementBuilder create(final Field field,
-                                        final CompletionStyle completionStyle,
                                         final InsertHandler<LookupElement> insertHandler) {
-        return create(field, completionStyle).withInsertHandler(insertHandler);
+        return create(field).withInsertHandler(insertHandler);
     }
 
 }

@@ -29,6 +29,10 @@ public abstract class AbstractJsonOrYamlCompletionTest {
         return myFixture.getCompletions(testFileNoExt, myJsonOrYaml);
     }
 
+    public final void testHighlighting(@NotNull String testFileNoExt) {
+        myFixture.testHighlighting(testFileNoExt, myJsonOrYaml);
+    }
+
     /**
      * This helper will invoke completion based on &lt;caret&gt; in the input file and
      * will check the results against the file named "&lt;input file name&gt;_after.*"

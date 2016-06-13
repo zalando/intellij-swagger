@@ -1,0 +1,5 @@
+swagger: 2
+paths:
+  /pathA:
+    get:
+      <error descr="Invalid key">unknown:</error>

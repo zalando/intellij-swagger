@@ -34,12 +34,8 @@ public class JsonCaretCompletionTest {
 
     @Test
     public void thatJsonKeyWithNoQuotesIsCompleted() {
-        final List<String> keysInQuotes = getExpectedElements().stream()
-                .map(value -> "\"" + value + "\"")
-                .collect(Collectors.toList());
-
         getCaretCompletions("key_with_no_quotes")
-                .assertContains(keysInQuotes)
+                .assertContains(getExpectedElements())
                 .assertNotContains(getExistingElements());
     }
 

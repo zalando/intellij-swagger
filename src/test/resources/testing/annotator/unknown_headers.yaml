@@ -1,0 +1,9 @@
+swagger: 2
+paths:
+  /pathA:
+    get:
+      responses:
+        200:
+          headers:
+            x-next:
+              <error descr="Invalid key">unknown:</error>

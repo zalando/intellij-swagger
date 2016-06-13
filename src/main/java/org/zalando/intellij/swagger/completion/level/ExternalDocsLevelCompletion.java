@@ -1,8 +1,7 @@
 package org.zalando.intellij.swagger.completion.level;
 
-import static org.zalando.intellij.swagger.completion.style.CompletionStyleFactory.optional;
 import com.intellij.codeInsight.completion.CompletionResultSet;
-import org.zalando.intellij.swagger.completion.level.field.StringField;
+import org.zalando.intellij.swagger.completion.level.field.Fields;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 
 class ExternalDocsLevelCompletion extends LevelCompletion {
@@ -13,7 +12,6 @@ class ExternalDocsLevelCompletion extends LevelCompletion {
 
     @Override
     public void fill() {
-        addUnique(new StringField("description"), optional(positionResolver));
-        addUnique(new StringField("url"), optional(positionResolver));
+        Fields.externalDocs().forEach(this::addUnique);
     }
 }

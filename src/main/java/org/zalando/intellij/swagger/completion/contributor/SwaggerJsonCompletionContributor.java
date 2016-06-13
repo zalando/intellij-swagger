@@ -9,6 +9,7 @@ import org.zalando.intellij.swagger.completion.level.LevelCompletion;
 import org.zalando.intellij.swagger.completion.level.LevelCompletionFactory;
 import org.zalando.intellij.swagger.completion.level.inserthandler.JsonValueInsertHandler;
 import org.zalando.intellij.swagger.completion.level.value.ValueCompletionFactory;
+import org.zalando.intellij.swagger.completion.traversal.keydepth.JsonCompletionKeyDepth;
 import org.zalando.intellij.swagger.completion.traversal.JsonTraversal;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
 import org.zalando.intellij.swagger.file.FileDetector;
@@ -21,7 +22,7 @@ public class SwaggerJsonCompletionContributor extends CompletionContributor {
 
     /* Constructor for IntelliJ IDEA bootstrap */
     public SwaggerJsonCompletionContributor() {
-        this(new FileDetector(), new JsonTraversal(), new JsonValueInsertHandler());
+        this(new FileDetector(), new JsonTraversal(new JsonCompletionKeyDepth()), new JsonValueInsertHandler());
     }
 
     private SwaggerJsonCompletionContributor(final FileDetector fileDetector,

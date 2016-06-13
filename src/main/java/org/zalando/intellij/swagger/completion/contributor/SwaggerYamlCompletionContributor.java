@@ -11,6 +11,7 @@ import org.zalando.intellij.swagger.completion.level.LevelCompletionFactory;
 import org.zalando.intellij.swagger.completion.level.inserthandler.YamlValueInsertHandler;
 import org.zalando.intellij.swagger.completion.level.value.ValueCompletionFactory;
 import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
+import org.zalando.intellij.swagger.completion.traversal.keydepth.YamlCompletionKeyDepth;
 import org.zalando.intellij.swagger.completion.traversal.YamlTraversal;
 import org.zalando.intellij.swagger.file.FileDetector;
 
@@ -22,7 +23,7 @@ public class SwaggerYamlCompletionContributor extends CompletionContributor {
 
     /* Constructor for IntelliJ IDEA bootstrap */
     public SwaggerYamlCompletionContributor() {
-        this(new FileDetector(), new YamlTraversal(), new YamlValueInsertHandler());
+        this(new FileDetector(), new YamlTraversal(new YamlCompletionKeyDepth()), new YamlValueInsertHandler());
     }
 
     private SwaggerYamlCompletionContributor(final FileDetector fileDetector,

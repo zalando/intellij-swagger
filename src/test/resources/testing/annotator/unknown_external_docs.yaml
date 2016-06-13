@@ -1,0 +1,6 @@
+swagger: 2
+paths:
+  /pathA:
+    get:
+      externalDocs:
+        <error descr="Invalid key">unknown:</error>

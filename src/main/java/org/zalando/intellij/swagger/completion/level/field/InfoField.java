@@ -10,7 +10,7 @@ public class InfoField extends ObjectField {
             ImmutableList.of(new StringField("version"), new StringField("title"), new LicenseField());
 
     public InfoField() {
-        super("info");
+        super("info", true);
     }
 
     @Override

@@ -3,7 +3,7 @@ package org.zalando.intellij.swagger.completion.level.field;
 public class ArrayField extends Field {
 
     public ArrayField(final String name) {
-        super(name);
+        super(name, false);
     }
 
     @Override

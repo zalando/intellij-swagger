@@ -5,6 +5,7 @@ import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.editor.EditorModificationUtil;
 import com.intellij.psi.PsiFile;
+import com.intellij.util.text.CharArrayUtil;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.level.field.Field;
 import org.zalando.intellij.swagger.completion.level.string.StringUtils;
@@ -23,11 +24,37 @@ public class JsonInsertHandler implements InsertHandler<LookupElement> {
     }
 
     @Override
-    public void handleInsert(final InsertionContext context, final LookupElement item) {
-        if (!StringUtils.nextCharAfterSpacesIsColonOrQuote(getStringAfterAutoCompletedValue(context))) {
-            final String suffixWithCaret = field.getJsonPlaceholderSuffix(getIndentation(context, item));
+    public void handleInsert(final InsertionContext insertionContext, final LookupElement lookupElement) {
+        handleStartingQuote(insertionContext, lookupElement);
+        handleEndingQuote(insertionContext);
+
+        if (!StringUtils.nextCharAfterSpacesIsColonOrQuote(getStringAfterAutoCompletedValue(insertionContext))) {
+            final String suffixWithCaret = field.getJsonPlaceholderSuffix(getIndentation(insertionContext, lookupElement));
             final String suffixWithoutCaret = suffixWithCaret.replace("<caret>", "");
-            EditorModificationUtil.insertStringAtCaret(context.getEditor(), withOptionalComma(suffixWithoutCaret, context), false, true, getCaretIndex(suffixWithCaret));
+            EditorModificationUtil.insertStringAtCaret(
+                    insertionContext.getEditor(),
+                    withOptionalComma(suffixWithoutCaret, insertionContext), false, true,
+                    getCaretIndex(suffixWithCaret));
+        }
+    }
+
+    private void handleStartingQuote(final InsertionContext insertionContext, final LookupElement lookupElement) {
+        final int caretOffset = insertionContext.getEditor().getCaretModel().getOffset();
+        final int startOfLookupStringOffset = caretOffset - lookupElement.getLookupString().length();
+        final boolean hasStartingQuote = insertionContext.getDocument().getText().charAt(startOfLookupStringOffset - 1) == '\"';
+        if (!hasStartingQuote) {
+            insertionContext.getDocument().insertString(startOfLookupStringOffset, "\"");
+        }
+    }
+
+    private void handleEndingQuote(final InsertionContext insertionContext) {
+        final int caretOffset = insertionContext.getEditor().getCaretModel().getOffset();
+        final CharSequence chars = insertionContext.getDocument().getCharsSequence();
+
+        final boolean hasEndingQuote = CharArrayUtil.regionMatches(chars, caretOffset, "\"");
+        if (!hasEndingQuote) {
+            insertionContext.getDocument().insertString(caretOffset, "\"");
+            EditorModificationUtil.moveCaretRelatively(insertionContext.getEditor(), 1);
         }
     }
 
@@ -51,7 +78,7 @@ public class JsonInsertHandler implements InsertHandler<LookupElement> {
 
     @NotNull
     private String getStringBeforeAutoCompletedValue(final InsertionContext context, final LookupElement item) {
-        return context.getDocument().getText().substring(0, context.getTailOffset() - item.getLookupString().length());
+        return context.getDocument().getText().substring(0, context.getTailOffset() - item.getLookupString().length() - 2);
     }
 
     private boolean shouldAddComma(final @NotNull InsertionContext context) {
