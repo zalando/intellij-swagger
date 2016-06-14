@@ -1,4 +1,4 @@
-package org.zalando.intellij.swagger.validator.field;
+package org.zalando.intellij.swagger.validator.value;
 
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.psi.PsiElement;
@@ -14,6 +14,7 @@ public class ValuesValidator {
     private final Traversal traversal;
 
     private final ReferenceValidator referenceValidator = new ReferenceValidator();
+    private final SchemesValidator schemesValidator = new SchemesValidator();
 
     public ValuesValidator(final Traversal traversal) {
         this.traversal = traversal;
@@ -31,6 +32,10 @@ public class ValuesValidator {
                     referenceValidator.validateParameterReference(getParameterRefValue(psiElement),
                             getAvailableParameters(psiElement), psiElement, annotationHolder);
                 }
+            }
+        } else if (traversal.isArrayStringElement(psiElement)) {
+            if (traversal.isSchemesValue(psiElement)) {
+                schemesValidator.validate(psiElement, annotationHolder);
             }
         }
     }

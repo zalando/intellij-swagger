@@ -1,11 +1,11 @@
-package org.zalando.intellij.swagger.annotator;
+package org.zalando.intellij.swagger.validator;
 
 import org.zalando.intellij.swagger.SwaggerLightCodeInsightFixtureTestCase;
 
-public class UnknownRefValueTest extends SwaggerLightCodeInsightFixtureTestCase {
+public class UnknownValueTest extends SwaggerLightCodeInsightFixtureTestCase {
 
     private void doTest(final String fileName) {
-        myFixture.testHighlighting(true, false, false, "annotator/" + fileName);
+        myFixture.testHighlighting(true, false, false, "validator/value/" + fileName);
     }
 
     public void testUnknownDefinitionRef() {
@@ -25,4 +25,10 @@ public class UnknownRefValueTest extends SwaggerLightCodeInsightFixtureTestCase 
         doTest("unknown_parameter_file_ref.json");
         doTest("unknown_parameter_file_ref.yaml");
     }
+
+    public void testUnknownScheme() {
+        doTest("unknown_scheme.json");
+        doTest("unknown_scheme.yaml");
+    }
+
 }

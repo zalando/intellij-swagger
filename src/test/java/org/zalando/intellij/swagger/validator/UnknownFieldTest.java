@@ -1,11 +1,11 @@
-package org.zalando.intellij.swagger.annotator;
+package org.zalando.intellij.swagger.validator;
 
 import org.zalando.intellij.swagger.SwaggerLightCodeInsightFixtureTestCase;
 
 public class UnknownFieldTest extends SwaggerLightCodeInsightFixtureTestCase {
 
     private void doTest(final String fileName) {
-        myFixture.testHighlighting(true, false, false, "annotator/" + fileName);
+        myFixture.testHighlighting(true, false, false, "validator/field/" + fileName);
     }
 
     public void testUnknownRootField() {

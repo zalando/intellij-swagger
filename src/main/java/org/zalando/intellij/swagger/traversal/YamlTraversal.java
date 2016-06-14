@@ -11,6 +11,7 @@ import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.jetbrains.yaml.psi.YAMLSequence;
 import org.jetbrains.yaml.psi.YAMLSequenceItem;
 import org.jetbrains.yaml.psi.YAMLValue;
+import org.jetbrains.yaml.psi.impl.YAMLPlainTextImpl;
 import org.zalando.intellij.swagger.completion.field.model.Field;
 import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 import org.zalando.intellij.swagger.completion.value.model.Value;
@@ -151,6 +152,12 @@ public class YamlTraversal extends Traversal {
                 !(psiElement instanceof YAMLKeyValue) &&
                 ((YAMLKeyValue) grandparent).getValue() == psiElement.getParent() &&
                 !"".equals(psiElement.getText().trim());
+    }
+
+    @Override
+    public boolean isArrayStringElement(final PsiElement psiElement) {
+        return psiElement.getParent() instanceof YAMLPlainTextImpl &&
+                psiElement.getParent().getParent() instanceof YAMLSequenceItem;
     }
 
     public boolean elementIsDirectValueOfKey(final PsiElement psiElement, final String... keyNames) {

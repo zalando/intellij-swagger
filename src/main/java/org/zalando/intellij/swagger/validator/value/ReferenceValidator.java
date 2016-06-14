@@ -1,4 +1,4 @@
-package org.zalando.intellij.swagger.validator.field;
+package org.zalando.intellij.swagger.validator.value;
 
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.psi.PsiElement;

@@ -204,4 +204,5 @@ public abstract class Traversal {
 
     public abstract boolean isValue(final PsiElement psiElement);
 
+    public abstract boolean isArrayStringElement(final PsiElement psiElement);
 }

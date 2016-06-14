@@ -4,7 +4,8 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.validator.field.ValuesValidator;
+import org.zalando.intellij.swagger.file.FileDetector;
+import org.zalando.intellij.swagger.validator.value.ValuesValidator;
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
 import org.zalando.intellij.swagger.traversal.keydepth.JsonCompletionKeyDepth;
 
@@ -14,6 +15,8 @@ public class JsonValidValueAnnotator implements Annotator {
 
     @Override
     public void annotate(@NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
-        valuesValidator.validate(psiElement, annotationHolder);
+        if (new FileDetector().isSwaggerJsonFile(psiElement.getContainingFile())) {
+            valuesValidator.validate(psiElement, annotationHolder);
+        }
     }
 }

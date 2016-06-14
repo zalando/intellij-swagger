@@ -7,16 +7,17 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.json.JsonElementTypes;
 import com.intellij.json.psi.JsonArray;
 import com.intellij.json.psi.JsonFile;
+import com.intellij.json.psi.JsonLiteral;
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.json.psi.JsonValue;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
+import org.zalando.intellij.swagger.completion.StringUtils;
 import org.zalando.intellij.swagger.completion.field.model.Field;
+import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 import org.zalando.intellij.swagger.completion.value.model.Value;
 import org.zalando.intellij.swagger.insert.JsonInsertFieldHandler;
-import org.zalando.intellij.swagger.completion.StringUtils;
-import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 import org.zalando.intellij.swagger.insert.JsonInsertValueHandler;
 import org.zalando.intellij.swagger.traversal.keydepth.KeyDepth;
 
@@ -92,6 +93,12 @@ public class JsonTraversal extends Traversal {
                 .map(JsonProperty::getValue)
                 .filter(nameElement -> nameElement == firstParent)
                 .isPresent() && !(psiElement instanceof JsonProperty);
+    }
+
+    @Override
+    public boolean isArrayStringElement(final PsiElement psiElement) {
+        return psiElement.getParent() instanceof JsonLiteral &&
+                psiElement.getParent().getParent() instanceof JsonArray;
     }
 
     @Override
