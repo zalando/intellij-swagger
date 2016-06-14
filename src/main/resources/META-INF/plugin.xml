@@ -86,6 +86,9 @@
 
         <annotator language="JSON" implementationClass="org.zalando.intellij.swagger.annotator.JsonValidKeyAnnotator"/>
         <annotator language="yaml" implementationClass="org.zalando.intellij.swagger.annotator.YamlValidKeyAnnotator"/>
+
+        <annotator language="JSON" implementationClass="org.zalando.intellij.swagger.annotator.JsonValidValueAnnotator"/>
+        <annotator language="yaml" implementationClass="org.zalando.intellij.swagger.annotator.YamlValidValueAnnotator"/>
     </extensions>
 
 

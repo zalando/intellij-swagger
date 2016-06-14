@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.json.psi.JsonArray;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.yaml.psi.YAMLFile;
@@ -75,7 +74,19 @@ public class YamlTraversal extends Traversal {
                 .map(YAMLKeyValue.class::cast)
                 .map(YAMLKeyValue::getName)
                 .filter(name -> name.equals("parameters"))
-                .isPresent();
+                .isPresent() && !isChildOfSchema(psiElement);
+    }
+
+    private boolean isChildOfSchema(final PsiElement psiElement) {
+        if (psiElement == null) {
+            return false;
+        }
+        if (psiElement instanceof YAMLKeyValue) {
+            if ("schema".equals(((YAMLKeyValue) psiElement).getName())) {
+                return true;
+            }
+        }
+        return isChildOfSchema(psiElement.getParent());
     }
 
     @Override
@@ -124,6 +135,15 @@ public class YamlTraversal extends Traversal {
             return true;
         }
         return elementIsInsideArray(psiElement.getParent());
+    }
+
+    @Override
+    public boolean isValue(final PsiElement psiElement) {
+        final PsiElement grandparent = psiElement.getParent().getParent();
+        return grandparent instanceof YAMLKeyValue &&
+                !(psiElement instanceof YAMLKeyValue) &&
+                ((YAMLKeyValue) grandparent).getValue() == psiElement.getParent() &&
+                !"".equals(psiElement.getText().trim());
     }
 
     public boolean elementIsDirectValueOfKey(final PsiElement psiElement, final String... keyNames) {

@@ -78,7 +78,8 @@ public class RemoveFieldIntentionAction implements IntentionAction {
         final int lineEndOffset = editor.getDocument().getLineEndOffset(lineNumber);
         final String lineContent = editor.getDocument().getText().substring(lineStartOffset, lineEndOffset);
         if ("".equals(lineContent.trim())) {
-            editor.getDocument().deleteString(lineStartOffset, lineEndOffset + 1);
+            final int endIndex = editor.getDocument().getText().length() > lineEndOffset ? lineEndOffset + 1 : lineEndOffset;
+            editor.getDocument().deleteString(lineStartOffset, endIndex);
         }
     }
 

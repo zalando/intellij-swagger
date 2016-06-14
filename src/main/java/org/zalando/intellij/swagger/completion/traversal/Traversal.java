@@ -41,7 +41,7 @@ public abstract class Traversal {
 
     abstract List<PsiElement> getChildrenOf(final String propertyName, final PsiFile psiFile);
 
-    abstract List<String> getKeyNamesOf(final String propertyName, final PsiFile containingFile);
+    public abstract List<String> getKeyNamesOf(final String propertyName, final PsiFile containingFile);
 
     abstract boolean isUniqueKey(String keyName, final PsiElement psiElement);
 
@@ -195,4 +195,6 @@ public abstract class Traversal {
     boolean isInValue(final PsiElement psiElement) {
         return elementIsDirectValueOfKey(psiElement, "in");
     }
+
+    public abstract boolean isValue(final PsiElement psiElement);
 }

@@ -8,12 +8,11 @@ import org.zalando.intellij.swagger.intention.RemoveFieldIntentionAction;
 
 import java.util.List;
 
-public class UnknownKeyValidator implements Validator {
+class UnknownKeyValidator {
 
     private static final String VENDOR_EXTENSION_PREFIX = "x-";
 
-    @Override
-    public void validate(final String key,
+    void validate(final String key,
                          final List<Field> availableKeys,
                          final PsiElement psiElement,
                          final AnnotationHolder annotationHolder) {

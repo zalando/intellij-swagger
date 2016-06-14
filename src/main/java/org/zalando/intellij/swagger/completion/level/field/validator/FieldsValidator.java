@@ -1,9 +1,10 @@
-package org.zalando.intellij.swagger.completion.level.field;
+package org.zalando.intellij.swagger.completion.level.field.validator;
 
 import com.google.common.collect.ImmutableList;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import org.zalando.intellij.swagger.completion.level.field.Fields;
 import org.zalando.intellij.swagger.completion.level.field.validator.UnknownKeyValidator;
 import org.zalando.intellij.swagger.completion.traversal.Traversal;
 

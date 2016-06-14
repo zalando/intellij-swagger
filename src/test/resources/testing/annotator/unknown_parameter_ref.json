@@ -1,0 +1,18 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/pets": {
+      "get": {
+        "parameters": [
+          {
+            "$ref": <error descr="Parameter not found">"#/parameters/Unknown"</error>
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "Pet": {
+    }
+  }
+}

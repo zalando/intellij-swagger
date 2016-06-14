@@ -81,6 +81,18 @@ public class JsonTraversal extends Traversal {
     }
 
     @Override
+    public boolean isValue(final PsiElement psiElement) {
+        final PsiElement firstParent = psiElement.getParent();
+        return Optional.ofNullable(firstParent)
+                .map(PsiElement::getParent)
+                .filter(jsonPropertyCandidate -> jsonPropertyCandidate instanceof JsonProperty)
+                .map(JsonProperty.class::cast)
+                .map(JsonProperty::getValue)
+                .filter(nameElement -> nameElement == firstParent)
+                .isPresent() && !(psiElement instanceof JsonProperty);
+    }
+
+    @Override
     public CompletionStyle.QuoteStyle getQuoteStyle() {
         return CompletionStyle.QuoteStyle.DOUBLE;
     }
@@ -96,7 +108,20 @@ public class JsonTraversal extends Traversal {
                 .map(JsonProperty.class::cast)
                 .map(JsonProperty::getName)
                 .filter(name -> name.equals("parameters"))
-                .isPresent();
+                .isPresent() && !isChildOfSchema(psiElement);
+    }
+
+    private boolean isChildOfSchema(final PsiElement psiElement) {
+        if (psiElement == null) {
+            return false;
+        }
+        if (psiElement instanceof JsonProperty) {
+            if ("schema".equals(((JsonProperty) psiElement).getName())) {
+                return true;
+            }
+        }
+        return isChildOfSchema(psiElement.getParent());
+
     }
 
     @Override
