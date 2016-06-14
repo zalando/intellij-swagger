@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/zalando/intellij-swagger.svg?branch=master)](https://travis-ci.org/zalando/intellij-swagger)
+
 # Swagger Plugin
 Swagger Plugin makes it easy to edit Swagger specification files inside IntelliJ IDEA. You can find it on JetBrains' [plugin page](https://plugins.jetbrains.com/plugin/8347).
 
