@@ -74,6 +74,10 @@ public class PositionResolver {
         return traversal.isHeader(psiElement);
     }
 
+    public boolean completeHeadersKey() {
+        return traversal.isHeaders(psiElement);
+    }
+
     public boolean completeTagKey() {
         return traversal.isTag(psiElement);
     }
@@ -141,4 +145,5 @@ public class PositionResolver {
     public boolean completeInValue() {
         return traversal.isInValue(psiElement);
     }
+
 }

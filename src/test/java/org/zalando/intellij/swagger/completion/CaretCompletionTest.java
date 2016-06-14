@@ -180,8 +180,8 @@ public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
     }
 
     @Test
-    public void thatHeadersKeysAreSuggested() {
-        getCaretCompletions("field/headers")
+    public void thatHeaderKeysAreSuggested() {
+        getCaretCompletions("field/header")
                 .assertContains("description", "type", "format", "items", "collectionFormat", "default", "maximum",
                         "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern",
                         "maxItems", "minItems", "uniqueItems", "enum", "multipleOf")
@@ -241,4 +241,10 @@ public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
                 .isOfSize(23);
     }
 
+    @Test
+    public void thatHeadersAreSuggested() {
+        getCaretCompletions("field/headers")
+                .assertContains("Accept", "Location")
+                .isOfSize(55);
+    }
 }

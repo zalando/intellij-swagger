@@ -86,4 +86,10 @@ public class InsertFieldTest extends AbstractJsonOrYamlCompletionTest {
     public void thatRefFieldValueIsQuoted() {
         completeAndCheckResultsByFile("ref");
     }
+
+    @Test
+    public void thatHeadersFieldIsPopulated() {
+        completeAndCheckResultsByFile("headers");
+    }
+
 }

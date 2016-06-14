@@ -53,8 +53,13 @@ public class YamlCompletionKeyDepth implements KeyDepth {
     }
 
     @Override
-    public int getHeadersNth() {
+    public int getHeaderNth() {
         return 2;
+    }
+
+    @Override
+    public int getHeadersNth() {
+        return 1;
     }
 
     @Override

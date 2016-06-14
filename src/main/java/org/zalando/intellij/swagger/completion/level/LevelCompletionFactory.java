@@ -45,6 +45,8 @@ public class LevelCompletionFactory {
             return Optional.of(new DefinitionsLevelCompletion(positionResolver, completionResultSet));
         } else if (positionResolver.completeParameterDefinitionKey()) {
             return Optional.of(new ParameterDefinitionLevelCompletion(positionResolver, completionResultSet));
+        } else if (positionResolver.completeHeadersKey()) {
+            return Optional.of(new HeadersLevelCompletion(positionResolver, completionResultSet));
         } else {
             return Optional.empty();
         }

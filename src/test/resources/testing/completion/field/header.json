@@ -6,7 +6,9 @@
         "responses": {
           "200": {
             "headers": {
-              "<caret>"
+              "x-next": {
+                "<caret>"
+              }
             }
           }
         }

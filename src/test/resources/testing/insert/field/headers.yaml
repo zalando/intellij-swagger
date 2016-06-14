@@ -5,4 +5,4 @@ paths:
       responses:
         200:
           headers:
-            <caret>
+            Accep<caret>

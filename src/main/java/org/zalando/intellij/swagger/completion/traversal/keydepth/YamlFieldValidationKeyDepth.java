@@ -53,8 +53,13 @@ public class YamlFieldValidationKeyDepth implements KeyDepth {
     }
 
     @Override
-    public int getHeadersNth() {
+    public int getHeaderNth() {
         return 3;
+    }
+
+    @Override
+    public int getHeadersNth() {
+        return 2;
     }
 
     @Override

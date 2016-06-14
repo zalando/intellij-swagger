@@ -28,9 +28,9 @@ public class UnknownFieldTest extends SwaggerLightCodeInsightFixtureTestCase {
         doTest("unknown_external_docs.yaml");
     }
 
-    public void testUnknownHeadersField() {
-        doTest("unknown_headers.json");
-        doTest("unknown_headers.yaml");
+    public void testUnknownHeaderField() {
+        doTest("unknown_header.json");
+        doTest("unknown_header.yaml");
     }
 
     public void testUnknownInfoField() {

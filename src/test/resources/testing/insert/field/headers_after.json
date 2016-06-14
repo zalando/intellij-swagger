@@ -6,7 +6,10 @@
         "responses": {
           "200": {
             "headers": {
-              "<caret>"
+              "Accept": {
+                "description": "<caret>",
+                "type": ""
+              }
             }
           }
         }

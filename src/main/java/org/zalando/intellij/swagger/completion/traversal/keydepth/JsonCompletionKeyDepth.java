@@ -54,6 +54,11 @@ public class JsonCompletionKeyDepth implements KeyDepth {
 
     @Override
     public int getHeadersNth() {
+        return 2;
+    }
+
+    @Override
+    public int getHeaderNth() {
         return 3;
     }
 

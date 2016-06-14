@@ -1,11 +1,9 @@
 package org.zalando.intellij.swagger.completion.level.field.validator;
 
-import com.google.common.collect.ImmutableList;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.level.field.Fields;
-import org.zalando.intellij.swagger.completion.level.field.validator.UnknownKeyValidator;
 import org.zalando.intellij.swagger.completion.traversal.Traversal;
 
 public class FieldsValidator {
@@ -29,7 +27,7 @@ public class FieldsValidator {
             } else if (traversal.isExternalDocs(psiElement)) {
                 unknownKeyValidator.validate(keyName, Fields.externalDocs(), psiElement, annotationHolder);
             } else if (traversal.isHeader(psiElement)) {
-                unknownKeyValidator.validate(keyName, Fields.headers(), psiElement, annotationHolder);
+                unknownKeyValidator.validate(keyName, Fields.header(), psiElement, annotationHolder);
             } else if (traversal.isInfo(psiElement)) {
                 unknownKeyValidator.validate(keyName, Fields.info(), psiElement, annotationHolder);
             } else if (traversal.isItems(psiElement)) {

@@ -104,6 +104,10 @@ public abstract class Traversal {
     }
 
     public final boolean isHeader(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getHeaderNth(), "headers");
+    }
+
+    public boolean isHeaders(final PsiElement psiElement) {
         return nthKeyEquals(psiElement, keyDepth.getHeadersNth(), "headers");
     }
 
@@ -197,4 +201,5 @@ public abstract class Traversal {
     }
 
     public abstract boolean isValue(final PsiElement psiElement);
+
 }

@@ -22,6 +22,8 @@ public interface KeyDepth {
 
     int getResponseNth();
 
+    int getHeaderNth();
+
     int getHeadersNth();
 
     int getTagsNth();
