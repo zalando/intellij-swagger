@@ -10,7 +10,7 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.jetbrains.yaml.psi.YAMLQuotedText;
 import org.junit.Test;
-import org.zalando.intellij.swagger.completion.traversal.YamlTraversal;
+import org.zalando.intellij.swagger.traversal.YamlTraversal;
 
 import java.util.List;
 

@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.completion.level.string.StringUtils;
+import org.zalando.intellij.swagger.completion.StringUtils;
 import org.zalando.intellij.swagger.file.FileDetector;
 
 public class RemoveFieldIntentionAction implements IntentionAction {

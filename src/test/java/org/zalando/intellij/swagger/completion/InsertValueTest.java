@@ -36,4 +36,18 @@ public class InsertValueTest extends AbstractJsonOrYamlCompletionTest {
         completeAndCheckResultsByFile("parameter_ref_in_quotes_with_prefix2", "parameter_ref_after");
     }
 
+    @Test
+    public void thatValueWithoutQuotesIshHandled() {
+        completeAndCheckResultsByFile("value_without_quotes", "value_without_quotes_after");
+    }
+
+    @Test
+    public void thatValueInsideQuotesIsHandled() {
+        completeAndCheckResultsByFile("value_inside_quotes", "value_inside_quotes_after");
+    }
+
+    @Test
+    public void thatBooleanValueIsNotQuoted() {
+        completeAndCheckResultsByFile("value_boolean", "value_boolean_after");
+    }
 }

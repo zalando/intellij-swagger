@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.yaml.psi.YAMLPsiElement;
 import org.jetbrains.yaml.psi.YAMLQuotedText;
-import org.zalando.intellij.swagger.completion.traversal.YamlTraversal;
+import org.zalando.intellij.swagger.traversal.YamlTraversal;
 import org.zalando.intellij.swagger.reference.element.YamlElementGenerator;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package org.zalando.intellij.swagger.completion.style;
 
-import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
+import org.zalando.intellij.swagger.traversal.PositionResolver;
 
 public class CompletionStyleFactory {
 

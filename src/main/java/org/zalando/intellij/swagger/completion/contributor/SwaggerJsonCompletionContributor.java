@@ -5,32 +5,29 @@ import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.completion.level.LevelCompletion;
-import org.zalando.intellij.swagger.completion.level.LevelCompletionFactory;
-import org.zalando.intellij.swagger.completion.level.inserthandler.JsonValueInsertHandler;
-import org.zalando.intellij.swagger.completion.level.value.ValueCompletionFactory;
-import org.zalando.intellij.swagger.completion.traversal.keydepth.JsonCompletionKeyDepth;
-import org.zalando.intellij.swagger.completion.traversal.JsonTraversal;
-import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
+import org.zalando.intellij.swagger.completion.field.FieldCompletion;
+import org.zalando.intellij.swagger.completion.field.FieldCompletionFactory;
+import org.zalando.intellij.swagger.completion.value.ValueCompletion;
+import org.zalando.intellij.swagger.completion.value.ValueCompletionFactory;
 import org.zalando.intellij.swagger.file.FileDetector;
+import org.zalando.intellij.swagger.traversal.JsonTraversal;
+import org.zalando.intellij.swagger.traversal.PositionResolver;
+import org.zalando.intellij.swagger.traversal.keydepth.JsonCompletionKeyDepth;
 
 public class SwaggerJsonCompletionContributor extends CompletionContributor {
 
     private final FileDetector fileDetector;
     private final JsonTraversal jsonTraversal;
-    private final JsonValueInsertHandler jsonValueInsertHandler;
 
     /* Constructor for IntelliJ IDEA bootstrap */
     public SwaggerJsonCompletionContributor() {
-        this(new FileDetector(), new JsonTraversal(new JsonCompletionKeyDepth()), new JsonValueInsertHandler());
+        this(new FileDetector(), new JsonTraversal(new JsonCompletionKeyDepth()));
     }
 
     private SwaggerJsonCompletionContributor(final FileDetector fileDetector,
-                                             final JsonTraversal jsonTraversal,
-                                             final JsonValueInsertHandler jsonValueInsertHandler) {
+                                             final JsonTraversal jsonTraversal) {
         this.fileDetector = fileDetector;
         this.jsonTraversal = jsonTraversal;
-        this.jsonValueInsertHandler = jsonValueInsertHandler;
     }
 
     @Override
@@ -43,18 +40,21 @@ public class SwaggerJsonCompletionContributor extends CompletionContributor {
         final PositionResolver positionResolver = new PositionResolver(psiElement, jsonTraversal);
 
         if (jsonTraversal.isKey(psiElement)) {
-            LevelCompletionFactory.from(positionResolver, result)
-                    .ifPresent(LevelCompletion::fill);
+            FieldCompletionFactory.from(positionResolver, result)
+                    .ifPresent(FieldCompletion::fill);
         } else {
-            CompletionResultSet withFixedPrefix =
-                    jsonTraversal.getCustomCompletionPrefix(parameters.getPosition(), parameters.getOffset())
-                            .map(result::withPrefixMatcher)
-                            .orElse(result);
-
-            ValueCompletionFactory.from(positionResolver)
-                    .ifPresent(valueCompletion -> valueCompletion.fill(withFixedPrefix, jsonValueInsertHandler));
+            ValueCompletionFactory.from(positionResolver, getResultSetWithPrefixMatcher(parameters, result))
+                    .ifPresent(ValueCompletion::fill);
         }
 
         result.stopHere();
     }
+
+    private CompletionResultSet getResultSetWithPrefixMatcher(final @NotNull CompletionParameters parameters,
+                                                              final @NotNull CompletionResultSet result) {
+        return jsonTraversal.getCustomCompletionPrefix(parameters.getPosition(), parameters.getOffset())
+                .map(result::withPrefixMatcher)
+                .orElse(result);
+    }
+
 }

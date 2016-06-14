@@ -10,7 +10,7 @@ import com.intellij.json.psi.JsonStringLiteral;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.junit.Test;
-import org.zalando.intellij.swagger.completion.traversal.JsonTraversal;
+import org.zalando.intellij.swagger.traversal.JsonTraversal;
 
 import java.util.List;
 

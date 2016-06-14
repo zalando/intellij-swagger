@@ -6,32 +6,33 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
-import org.zalando.intellij.swagger.completion.level.LevelCompletion;
-import org.zalando.intellij.swagger.completion.level.LevelCompletionFactory;
-import org.zalando.intellij.swagger.completion.level.inserthandler.YamlValueInsertHandler;
-import org.zalando.intellij.swagger.completion.level.value.ValueCompletionFactory;
-import org.zalando.intellij.swagger.completion.traversal.PositionResolver;
-import org.zalando.intellij.swagger.completion.traversal.keydepth.YamlCompletionKeyDepth;
-import org.zalando.intellij.swagger.completion.traversal.YamlTraversal;
+import org.zalando.intellij.swagger.completion.field.FieldCompletion;
+import org.zalando.intellij.swagger.completion.field.FieldCompletionFactory;
+import org.zalando.intellij.swagger.completion.value.ValueCompletion;
+import org.zalando.intellij.swagger.completion.value.ValueCompletionFactory;
 import org.zalando.intellij.swagger.file.FileDetector;
+import org.zalando.intellij.swagger.insert.YamlInsertValueHandler;
+import org.zalando.intellij.swagger.traversal.PositionResolver;
+import org.zalando.intellij.swagger.traversal.YamlTraversal;
+import org.zalando.intellij.swagger.traversal.keydepth.YamlCompletionKeyDepth;
 
 public class SwaggerYamlCompletionContributor extends CompletionContributor {
 
     private final FileDetector fileDetector;
     private final YamlTraversal yamlTraversal;
-    private final YamlValueInsertHandler yamlValueInsertHandler;
+    private final YamlInsertValueHandler yamlInsertValueHandler;
 
     /* Constructor for IntelliJ IDEA bootstrap */
     public SwaggerYamlCompletionContributor() {
-        this(new FileDetector(), new YamlTraversal(new YamlCompletionKeyDepth()), new YamlValueInsertHandler());
+        this(new FileDetector(), new YamlTraversal(new YamlCompletionKeyDepth()), new YamlInsertValueHandler());
     }
 
     private SwaggerYamlCompletionContributor(final FileDetector fileDetector,
                                              final YamlTraversal yamlTraversal,
-                                             final YamlValueInsertHandler yamlValueInsertHandler) {
+                                             final YamlInsertValueHandler yamlInsertValueHandler) {
         this.fileDetector = fileDetector;
         this.yamlTraversal = yamlTraversal;
-        this.yamlValueInsertHandler = yamlValueInsertHandler;
+        this.yamlInsertValueHandler = yamlInsertValueHandler;
     }
 
     @Override
@@ -47,18 +48,20 @@ public class SwaggerYamlCompletionContributor extends CompletionContributor {
 
         final PositionResolver positionResolver = new PositionResolver(psiElement, yamlTraversal);
 
-        LevelCompletionFactory.from(positionResolver, result)
-                .ifPresent(LevelCompletion::fill);
+        FieldCompletionFactory.from(positionResolver, result)
+                .ifPresent(FieldCompletion::fill);
 
-        CompletionResultSet withFixedPrefix =
-                yamlTraversal.getCustomCompletionPrefix(parameters.getPosition(), parameters.getOffset())
-                        .map(result::withPrefixMatcher)
-                        .orElse(result);
-
-        ValueCompletionFactory.from(positionResolver)
-                .ifPresent(valueCompletion -> valueCompletion.fill(withFixedPrefix, yamlValueInsertHandler));
+        ValueCompletionFactory.from(positionResolver, getResultSetWithPrefixMatcher(parameters, result))
+                .ifPresent(ValueCompletion::fill);
 
         result.stopHere();
+    }
+
+    private CompletionResultSet getResultSetWithPrefixMatcher(final @NotNull CompletionParameters parameters,
+                                                              final @NotNull CompletionResultSet result) {
+        return yamlTraversal.getCustomCompletionPrefix(parameters.getPosition(), parameters.getOffset())
+                .map(result::withPrefixMatcher)
+                .orElse(result);
     }
 
 }

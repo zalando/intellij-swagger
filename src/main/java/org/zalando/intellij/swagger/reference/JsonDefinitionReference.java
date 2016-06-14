@@ -7,7 +7,7 @@ import com.intellij.psi.PsiReferenceBase;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.zalando.intellij.swagger.completion.traversal.JsonTraversal;
+import org.zalando.intellij.swagger.traversal.JsonTraversal;
 
 import java.util.List;
 import java.util.stream.Collectors;
