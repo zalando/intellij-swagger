@@ -1,9 +1,10 @@
-package org.zalando.intellij.swagger.completion;
+package org.zalando.intellij.swagger.insert;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.zalando.intellij.swagger.completion.AbstractJsonOrYamlCompletionTest;
 import org.zalando.intellij.swagger.fixture.SwaggerFixture.JsonOrYaml;
 
 @RunWith(Parameterized.class)

@@ -25,7 +25,7 @@ public abstract class AbstractJsonOrYamlCompletionTest {
     }
 
     @NotNull
-    final SwaggerFixture.AssertableList getCaretCompletions(@NotNull String testFileNoExt) {
+    protected final SwaggerFixture.AssertableList getCaretCompletions(@NotNull String testFileNoExt) {
         return myFixture.getCompletions(testFileNoExt, myJsonOrYaml);
     }
 
@@ -37,12 +37,12 @@ public abstract class AbstractJsonOrYamlCompletionTest {
      * This helper will invoke completion based on &lt;caret&gt; in the input file and
      * will check the results against the file named "&lt;input file name&gt;_after.*"
      */
-    final void completeAndCheckResultsByFile(@NotNull String inputFileNoExt) {
+    protected final void completeAndCheckResultsByFile(@NotNull String inputFileNoExt) {
         String afterFileName = getAfterFileName(inputFileNoExt);
         completeAndCheckResultsByFile(inputFileNoExt, afterFileName);
     }
 
-    final void completeAndCheckResultsByFile(@NotNull String inputFileNoExt, @NotNull String afterFileNoExt) {
+    protected final void completeAndCheckResultsByFile(@NotNull String inputFileNoExt, @NotNull String afterFileNoExt) {
         myFixture.complete(inputFileNoExt, myJsonOrYaml);
         myFixture.checkResultByFile(afterFileNoExt, myJsonOrYaml);
     }

@@ -1,4 +1,4 @@
-package org.zalando.intellij.swagger.completion;
+package org.zalando.intellij.swagger.completion.field;
 
 import com.google.common.collect.Lists;
 import org.jetbrains.annotations.NotNull;
@@ -9,15 +9,14 @@ import org.zalando.intellij.swagger.fixture.SwaggerFixture;
 import org.zalando.intellij.swagger.fixture.SwaggerFixture.JsonOrYaml;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class JsonCaretCompletionTest {
+public class JsonFieldCompletionTest {
 
     private SwaggerFixture myFixture;
 
     @Before
     public void setUpBefore() throws Exception {
-        myFixture = SwaggerFixture.forResourceFolder("testing/completion/json");
+        myFixture = SwaggerFixture.forResourceFolder("testing/completion/field/json");
     }
 
     @After

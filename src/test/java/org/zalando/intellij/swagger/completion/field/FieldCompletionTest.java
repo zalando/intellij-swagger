@@ -1,10 +1,11 @@
-package org.zalando.intellij.swagger.completion;
+package org.zalando.intellij.swagger.completion.field;
 
 import com.intellij.util.net.HTTPMethod;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.zalando.intellij.swagger.completion.AbstractJsonOrYamlCompletionTest;
 import org.zalando.intellij.swagger.fixture.SwaggerFixture.JsonOrYaml;
 
 import java.util.Arrays;
@@ -12,8 +13,8 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @RunWith(Parameterized.class)
-public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
-    public CaretCompletionTest(JsonOrYaml jsonOrYaml) {
+public class FieldCompletionTest extends AbstractJsonOrYamlCompletionTest {
+    public FieldCompletionTest(JsonOrYaml jsonOrYaml) {
         super(jsonOrYaml);
     }
 
@@ -24,7 +25,7 @@ public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
 
     @Before
     public void setUpBefore() throws Exception {
-        useResourceFolder("testing/completion");
+        useResourceFolder("testing/completion/field");
     }
 
     @Test
@@ -38,20 +39,6 @@ public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
     @Test
     public void thatExistingKeysAreNotShown() {
         getCaretCompletions("root").assertNotContains("swagger", "host");
-    }
-
-    @Test
-    public void testGlobalConsumes() {
-        getCaretCompletions("media_type_consumes")
-                .assertContains("application/xml", "image/*", "text/plain")
-                .assertNotContains("consumes", "produces", "paths");
-    }
-
-    @Test
-    public void testGlobalProduces() {
-        getCaretCompletions("media_type_produces")
-                .assertNotContains("consumes", "produces", "paths")
-                .assertContains("application/xml", "image/*", "text/plain");
     }
 
     @Test
@@ -71,69 +58,36 @@ public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
     }
 
     @Test
-    public void testDefinitionRefValue() throws Exception {
-        getCaretCompletions("definition_ref_value")
-                .assertContains("#/definitions/Pets", "#/definitions/Error")
-                .isOfSize(2);
-    }
-
-    @Test
-    public void testParameterRefValue() throws Exception {
-        getCaretCompletions("parameter_ref_value")
-                .assertContains("#/parameters/Dog")
-                .isOfSize(1);
-    }
-
-    @Test
-    public void thatInValuesAreSuggested() {
-        getCaretCompletions("in")
-                .assertContains("path", "header", "query", "formData", "body")
-                .isOfSize(5);
-    }
-
-    @Test
-    public void thatBooleanValuesAreSuggested() {
-        getCaretCompletions("boolean_parameters_required")
-                .assertContains("true", "false");
-    }
-
-    @Test
-    public void thatBooleanValuesAreNotSuggestedForRequiredKeyInSchema() {
-        getCaretCompletions("required_key_in_schema")
-                .assertNotContains("true", "false");
-    }
-
-    @Test
     public void thatInfoKeysAreSuggested() {
-        getCaretCompletions("field/info")
+        getCaretCompletions("info")
                 .assertContains("title", "description", "termsOfService", "contact", "license", "version")
                 .isOfSize(6);
     }
 
     @Test
     public void thatContactKeysAreSuggested() {
-        getCaretCompletions("field/contact")
+        getCaretCompletions("contact")
                 .assertContains("name", "url", "email")
                 .isOfSize(3);
     }
 
     @Test
     public void thatLicenseKeysAreSuggested() {
-        getCaretCompletions("field/license")
+        getCaretCompletions("license")
                 .assertContains("name", "url")
                 .isOfSize(2);
     }
 
     @Test
     public void thatPathKeysAreSuggested() {
-        getCaretCompletions("field/path")
+        getCaretCompletions("path")
                 .assertContains("$ref", "get", "put", "post", "delete", "options", "head", "patch", "parameters")
                 .isOfSize(9);
     }
 
     @Test
     public void thatOperationKeysAreSuggested() {
-        getCaretCompletions("field/operation")
+        getCaretCompletions("operation")
                 .assertContains("tags", "summary", "description", "externalDocs", "operationId", "consumes",
                         "produces", "parameters", "responses", "schemes", "deprecated", "security")
                 .isOfSize(12);
@@ -141,14 +95,14 @@ public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
 
     @Test
     public void thatExternalDocsKeysAreSuggested() {
-        getCaretCompletions("field/external_docs")
+        getCaretCompletions("external_docs")
                 .assertContains("description", "url")
                 .isOfSize(2);
     }
 
     @Test
     public void thatParametersKeysAreSuggested() {
-        getCaretCompletions("field/parameters")
+        getCaretCompletions("parameters")
                 .assertContains("$ref", "name", "in", "description", "required", "schema", "type", "format",
                         "allowEmptyValue", "items", "collectionFormat", "default", "maximum", "exclusiveMaximum",
                         "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern", "maxItems", "minItems",
@@ -158,7 +112,7 @@ public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
 
     @Test
     public void thatItemsKeysAreSuggested() {
-        getCaretCompletions("field/items")
+        getCaretCompletions("items")
                 .assertContains("$ref", "type", "format", "items", "collectionFormat", "default", "maximum",
                         "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern",
                         "maxItems", "minItems", "uniqueItems", "multipleOf")
@@ -167,21 +121,21 @@ public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
 
     @Test
     public void thatResponsesKeysAreSuggested() {
-        getCaretCompletions("field/responses")
+        getCaretCompletions("responses")
                 .assertContains("default", "200", "201")
                 .isOfSize(59);
     }
 
     @Test
     public void thatResponseKeysAreSuggested() {
-        getCaretCompletions("field/response")
+        getCaretCompletions("response")
                 .assertContains("description", "schema", "headers", "examples")
                 .isOfSize(4);
     }
 
     @Test
     public void thatHeaderKeysAreSuggested() {
-        getCaretCompletions("field/header")
+        getCaretCompletions("header")
                 .assertContains("description", "type", "format", "items", "collectionFormat", "default", "maximum",
                         "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern",
                         "maxItems", "minItems", "uniqueItems", "enum", "multipleOf")
@@ -190,21 +144,21 @@ public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
 
     @Test
     public void thatTagsKeysAreSuggested() {
-        getCaretCompletions("field/tags")
+        getCaretCompletions("tags")
                 .assertContains("name", "description", "externalDocs")
                 .isOfSize(3);
     }
 
     @Test
     public void thatSecurityDefinitionsKeysAreSuggested() {
-        getCaretCompletions("field/security_definitions")
+        getCaretCompletions("security_definitions")
                 .assertContains("type", "description", "name", "in", "flow", "authorizationUrl", "tokenUrl", "scopes")
                 .isOfSize(8);
     }
 
     @Test
     public void thatSchemaKeysAreSuggested() {
-        getCaretCompletions("field/schema")
+        getCaretCompletions("schema")
                 .assertContains("$ref", "format", "title", "description", "default", "multipleOf", "maximum",
                         "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern",
                         "maxItems", "minItems", "uniqueItems", "maxProperties", "minProperties", "required", "enum",
@@ -215,14 +169,14 @@ public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
 
     @Test
     public void thatXmlKeysAreSuggested() {
-        getCaretCompletions("field/xml")
+        getCaretCompletions("xml")
                 .assertContains("name", "namespace", "prefix", "attribute", "wrapped")
                 .isOfSize(5);
     }
 
     @Test
     public void thatDefinitionsKeysAreSuggested() {
-        getCaretCompletions("field/definitions")
+        getCaretCompletions("definitions")
                 .assertContains("$ref", "format", "title", "description", "default", "multipleOf", "maximum",
                         "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern",
                         "maxItems", "minItems", "uniqueItems", "maxProperties", "minProperties", "required", "enum",
@@ -233,7 +187,7 @@ public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
 
     @Test
     public void thatParameterDefinitionKeysAreSuggested() {
-        getCaretCompletions("field/parameter_definition")
+        getCaretCompletions("parameter_definition")
                 .assertContains("name", "in", "description", "required", "schema", "type", "format",
                         "allowEmptyValue", "items", "collectionFormat", "default", "maximum", "exclusiveMaximum",
                         "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern", "maxItems", "minItems",
@@ -243,7 +197,7 @@ public class CaretCompletionTest extends AbstractJsonOrYamlCompletionTest {
 
     @Test
     public void thatHeadersAreSuggested() {
-        getCaretCompletions("field/headers")
+        getCaretCompletions("headers")
                 .assertContains("Accept", "Location")
                 .isOfSize(55);
     }

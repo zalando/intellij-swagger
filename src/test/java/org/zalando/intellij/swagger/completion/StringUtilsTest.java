@@ -1,4 +1,4 @@
-package org.zalando.intellij.swagger.completion.level.string;
+package org.zalando.intellij.swagger.completion;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
