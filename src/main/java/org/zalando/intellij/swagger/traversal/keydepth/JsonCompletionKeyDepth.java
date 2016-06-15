@@ -24,7 +24,7 @@ public class JsonCompletionKeyDepth implements KeyDepth {
 
     @Override
     public int getOperationNth() {
-        return 3;
+        return 4;
     }
 
     @Override

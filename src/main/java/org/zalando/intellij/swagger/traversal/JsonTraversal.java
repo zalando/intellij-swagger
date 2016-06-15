@@ -74,16 +74,6 @@ public class JsonTraversal extends Traversal {
     }
 
     @Override
-    public boolean isPath(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, 3, "paths");
-    }
-
-    @Override
-    public boolean isOperation(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, 4, "paths");
-    }
-
-    @Override
     public boolean isValue(final PsiElement psiElement) {
         final PsiElement firstParent = psiElement.getParent();
         return Optional.ofNullable(firstParent)
