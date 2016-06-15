@@ -8,7 +8,7 @@ public class ValidFileTest extends SwaggerLightCodeInsightFixtureTestCase {
         myFixture.testHighlighting(true, false, false, "validator/" + fileName);
     }
 
-    public void thatFileHasNoErrors() {
+    public void testFileHasNoErrors() {
         doTest("no_errors.json");
         doTest("no_errors.yaml");
     }
