@@ -1,0 +1,4 @@
+swagger: 2
+responses:
+  NotFound:
+    <caret>

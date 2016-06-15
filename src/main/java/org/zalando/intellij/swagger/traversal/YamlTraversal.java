@@ -77,19 +77,20 @@ public class YamlTraversal extends Traversal {
                 .map(YAMLKeyValue.class::cast)
                 .map(YAMLKeyValue::getName)
                 .filter(name -> name.equals("parameters"))
-                .isPresent() && !isChildOfSchema(psiElement);
+                .isPresent() && !isChildOfKey(psiElement, "schema");
     }
 
-    private boolean isChildOfSchema(final PsiElement psiElement) {
+    @Override
+    public boolean isChildOfKey(final PsiElement psiElement, final String keyName) {
         if (psiElement == null) {
             return false;
         }
         if (psiElement instanceof YAMLKeyValue) {
-            if ("schema".equals(((YAMLKeyValue) psiElement).getName())) {
+            if (keyName.equals(((YAMLKeyValue) psiElement).getName())) {
                 return true;
             }
         }
-        return isChildOfSchema(psiElement.getParent());
+        return isChildOfKey(psiElement.getParent(), keyName);
     }
 
     @Override

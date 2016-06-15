@@ -151,4 +151,7 @@ public class PositionResolver {
         return traversal.isInValue(psiElement);
     }
 
+    public boolean completeResponseDefinition() {
+        return traversal.isResponseDefinition(psiElement);
+    }
 }

@@ -47,6 +47,8 @@ public class FieldCompletionFactory {
             return Optional.of(new ParameterDefinitionCompletion(positionResolver, completionResultSet));
         } else if (positionResolver.completeHeadersKey()) {
             return Optional.of(new HeadersCompletion(positionResolver, completionResultSet));
+        } else if (positionResolver.completeResponseDefinition()) {
+            return Optional.of(new ResponseDefinitionCompletion(positionResolver, completionResultSet));
         } else {
             return Optional.empty();
         }

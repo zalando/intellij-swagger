@@ -32,6 +32,11 @@ public class ValuesValidator {
                     referenceValidator.validateParameterReference(getParameterRefValue(psiElement),
                             getAvailableParameters(psiElement), psiElement, annotationHolder);
                 }
+            } else if (traversal.isResponseRefValue(psiElement)) {
+                if (!isFileRef(psiElement)) {
+                    referenceValidator.validateResponseReference(getResponseRefValue(psiElement),
+                            getAvailableResponses(psiElement), psiElement, annotationHolder);
+                }
             }
         } else if (traversal.isArrayStringElement(psiElement)) {
             if (traversal.isSchemesValue(psiElement)) {
@@ -56,6 +61,12 @@ public class ValuesValidator {
                 .collect(Collectors.toSet());
     }
 
+    private Set<String> getAvailableResponses(final PsiElement psiElement) {
+        return traversal.getKeyNamesOf("responses", psiElement.getContainingFile())
+                .stream()
+                .collect(Collectors.toSet());
+    }
+
     private String getParameterRefValue(final PsiElement psiElement) {
         return StringUtils.removeAllQuotes(psiElement.getText())
                 .replace("#/parameters/", "");
@@ -64,5 +75,10 @@ public class ValuesValidator {
     private String getDefinitionRefValue(final PsiElement psiElement) {
         return StringUtils.removeAllQuotes(psiElement.getText())
                 .replace("#/definitions/", "");
+    }
+
+    private String getResponseRefValue(final PsiElement psiElement) {
+        return StringUtils.removeAllQuotes(psiElement.getText())
+                .replace("#/responses/", "");
     }
 }

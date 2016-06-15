@@ -18,6 +18,11 @@ public class UnknownValueTest extends SwaggerLightCodeInsightFixtureTestCase {
         doTest("unknown_parameter_ref.yaml");
     }
 
+    public void testUnknownResponseRef() {
+        doTest("unknown_response_ref.json");
+        doTest("unknown_response_ref.yaml");
+    }
+
     public void testUnknownFileRefDoesNotShowAsError() {
         doTest("unknown_definition_file_ref.json");
         doTest("unknown_definition_file_ref.yaml");

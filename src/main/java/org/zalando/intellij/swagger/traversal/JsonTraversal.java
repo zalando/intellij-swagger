@@ -117,20 +117,20 @@ public class JsonTraversal extends Traversal {
                 .map(JsonProperty.class::cast)
                 .map(JsonProperty::getName)
                 .filter(name -> name.equals("parameters"))
-                .isPresent() && !isChildOfSchema(psiElement);
+                .isPresent() && !isChildOfKey(psiElement, "schema");
     }
 
-    private boolean isChildOfSchema(final PsiElement psiElement) {
+    @Override
+    public boolean isChildOfKey(final PsiElement psiElement, final String keyName) {
         if (psiElement == null) {
             return false;
         }
         if (psiElement instanceof JsonProperty) {
-            if ("schema".equals(((JsonProperty) psiElement).getName())) {
+            if (keyName.equals(((JsonProperty) psiElement).getName())) {
                 return true;
             }
         }
-        return isChildOfSchema(psiElement.getParent());
-
+        return isChildOfKey(psiElement.getParent(), keyName);
     }
 
     @Override

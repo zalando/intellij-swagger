@@ -47,9 +47,12 @@ public abstract class Traversal {
     abstract boolean isUniqueKey(String keyName, final PsiElement psiElement);
 
     abstract InsertHandler<LookupElement> createInsertFieldHandler(Field field);
+
     abstract InsertHandler<LookupElement> createInsertValueHandler(final Value value);
 
     abstract boolean elementIsInsideArray(final PsiElement psiElement);
+
+    public abstract boolean isChildOfKey(final PsiElement psiElement, final String keyName);
 
     <T extends PsiElement> Optional<T> getNthOfType(final PsiElement psiElement, int nth, Class<T> targetType) {
         if (psiElement == null) {
@@ -98,11 +101,18 @@ public abstract class Traversal {
     }
 
     public final boolean isResponses(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getResponsesNth(), "responses");
+        return nthKeyEquals(psiElement, keyDepth.getResponsesNth(), "responses") &&
+                isChildOfKey(psiElement, "paths");
     }
 
     public final boolean isResponse(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getResponseNth(), "responses");
+        return nthKeyEquals(psiElement, keyDepth.getResponseNth(), "responses") &&
+                isChildOfKey(psiElement, "paths");
+    }
+
+    public final boolean isResponseDefinition(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getResponseNth(), "responses") &&
+                !isChildOfKey(psiElement, "paths");
     }
 
     public final boolean isHeader(final PsiElement psiElement) {
@@ -147,11 +157,18 @@ public abstract class Traversal {
     }
 
     public boolean isDefinitionRefValue(final PsiElement psiElement) {
-        return isRefValue(psiElement) && !elementIsInsideParametersArray(psiElement);
+        return isRefValue(psiElement) &&
+                !elementIsInsideParametersArray(psiElement) &&
+                !isResponseRefValue(psiElement);
     }
 
     public boolean isParameterRefValue(final PsiElement psiElement) {
-        return isRefValue(psiElement) && elementIsInsideParametersArray(psiElement);
+        return isRefValue(psiElement) &&
+                elementIsInsideParametersArray(psiElement);
+    }
+
+    public boolean isResponseRefValue(final PsiElement psiElement) {
+        return isRefValue(psiElement) && nthKeyEquals(psiElement, 3, "responses");
     }
 
     private boolean isRefValue(final PsiElement psiElement) {
@@ -205,4 +222,5 @@ public abstract class Traversal {
     public abstract boolean isValue(final PsiElement psiElement);
 
     public abstract boolean isArrayStringElement(final PsiElement psiElement);
+
 }

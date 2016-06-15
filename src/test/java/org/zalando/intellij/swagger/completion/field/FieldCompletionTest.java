@@ -129,8 +129,8 @@ public class FieldCompletionTest extends AbstractJsonOrYamlCompletionTest {
     @Test
     public void thatResponseKeysAreSuggested() {
         getCaretCompletions("response")
-                .assertContains("description", "schema", "headers", "examples")
-                .isOfSize(4);
+                .assertContains("$ref", "description", "schema", "headers", "examples")
+                .isOfSize(5);
     }
 
     @Test
@@ -201,4 +201,12 @@ public class FieldCompletionTest extends AbstractJsonOrYamlCompletionTest {
                 .assertContains("Accept", "Location")
                 .isOfSize(55);
     }
+
+    @Test
+    public void thatResponseDefinitionKeysAreSuggested() {
+        getCaretCompletions("response_definition")
+                .assertContains("description", "schema", "headers", "examples")
+                .isOfSize(4);
+    }
+
 }

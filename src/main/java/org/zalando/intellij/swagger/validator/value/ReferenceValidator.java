@@ -28,4 +28,15 @@ public class ReferenceValidator {
             annotationHolder.createErrorAnnotation(psiElement, "Parameter not found");
         }
     }
+
+    public void validateResponseReference(final String refValue,
+                                          final Set<String> availableResponses,
+                                          final PsiElement psiElement,
+                                          final AnnotationHolder annotationHolder) {
+        final boolean responseFound = availableResponses.contains(refValue);
+
+        if (!responseFound) {
+            annotationHolder.createErrorAnnotation(psiElement, "Response not found");
+        }
+    }
 }
