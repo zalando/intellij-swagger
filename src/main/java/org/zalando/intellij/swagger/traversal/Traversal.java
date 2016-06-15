@@ -177,6 +177,10 @@ public abstract class Traversal {
         return nthKeyEquals(psiElement, 1, "$ref");
     }
 
+    public boolean isSecurityKey(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getSecurityNth(), "security");
+    }
+
     boolean nthKeyEquals(final PsiElement psiElement, final int nth, final String targetName) {
         return getNameOfNthKey(psiElement, nth)
                 .filter(name -> name.equals(targetName))
@@ -225,4 +229,5 @@ public abstract class Traversal {
 
     public abstract boolean isArrayStringElement(final PsiElement psiElement);
 
+    public abstract Optional<String> extractSecurityNameFromSecurityItem(final PsiElement psiElement);
 }

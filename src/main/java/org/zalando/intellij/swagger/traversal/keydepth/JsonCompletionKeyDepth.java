@@ -102,4 +102,8 @@ public class JsonCompletionKeyDepth implements KeyDepth {
         return 1;
     }
 
+    @Override
+    public int getSecurityNth() {
+        return 2;
+    }
 }

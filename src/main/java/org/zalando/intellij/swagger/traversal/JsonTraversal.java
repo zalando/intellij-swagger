@@ -8,6 +8,7 @@ import com.intellij.json.JsonElementTypes;
 import com.intellij.json.psi.JsonArray;
 import com.intellij.json.psi.JsonFile;
 import com.intellij.json.psi.JsonLiteral;
+import com.intellij.json.psi.JsonObject;
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.json.psi.JsonValue;
 import com.intellij.psi.PsiElement;
@@ -89,6 +90,16 @@ public class JsonTraversal extends Traversal {
     public boolean isArrayStringElement(final PsiElement psiElement) {
         return psiElement.getParent() instanceof JsonLiteral &&
                 psiElement.getParent().getParent() instanceof JsonArray;
+    }
+
+    @Override
+    public Optional<String> extractSecurityNameFromSecurityItem(final PsiElement psiElement) {
+        return Optional.of(psiElement)
+                .map(PsiElement::getChildren)
+                .map(children -> children.length > 0 ? children[0] : null)
+                .filter(child -> child instanceof JsonProperty)
+                .map(JsonProperty.class::cast)
+                .map(JsonProperty::getName);
     }
 
     @Override

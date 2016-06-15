@@ -8,6 +8,7 @@ import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 import org.zalando.intellij.swagger.completion.value.model.Value;
 
 import java.util.List;
+import java.util.Optional;
 
 public class PositionResolver {
 
@@ -157,5 +158,13 @@ public class PositionResolver {
 
     public boolean completeResponseDefinition() {
         return traversal.isResponseDefinition(psiElement);
+    }
+
+    public boolean completeSecurityKey() {
+        return traversal.isSecurityKey(psiElement);
+    }
+
+    public Optional<String> extractSecurityNameFromSecurityObject(final PsiElement psiElement) {
+        return traversal.extractSecurityNameFromSecurityItem(psiElement);
     }
 }

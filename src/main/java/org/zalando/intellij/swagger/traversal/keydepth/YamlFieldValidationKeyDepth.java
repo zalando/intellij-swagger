@@ -101,4 +101,9 @@ public class YamlFieldValidationKeyDepth implements KeyDepth {
     public int getSchemesNth() {
         return 2;
     }
+
+    @Override
+    public int getSecurityNth() {
+        return 1;
+    }
 }

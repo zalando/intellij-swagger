@@ -1,0 +1,7 @@
+swagger: "2.0"
+security:
+  - petstoreImplicit: []
+  - <caret>
+securityDefinitions:
+  githubAccessCode: {}
+  petstoreImplicit: {}

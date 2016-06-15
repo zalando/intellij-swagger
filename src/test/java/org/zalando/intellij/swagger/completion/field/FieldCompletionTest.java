@@ -209,4 +209,10 @@ public class FieldCompletionTest extends AbstractJsonOrYamlCompletionTest {
                 .isOfSize(4);
     }
 
+    @Test
+    public void thatSecurityFieldsInRootAreSuggested() {
+        getCaretCompletions("security_in_root")
+                .assertContains("githubAccessCode")
+                .isOfSize(1);
+    }
 }

@@ -161,6 +161,18 @@ public class YamlTraversal extends Traversal {
                 psiElement.getParent().getParent() instanceof YAMLSequenceItem;
     }
 
+    @Override
+    public Optional<String> extractSecurityNameFromSecurityItem(final PsiElement psiElement) {
+        return Optional.of(psiElement)
+                .map(PsiElement::getChildren)
+                .map(children -> children.length > 0 ? children[0] : null)
+                .map(PsiElement::getChildren)
+                .map(children -> children.length > 0 ? children[0] : null)
+                .filter(el -> el instanceof YAMLKeyValue)
+                .map(YAMLKeyValue.class::cast)
+                .map(YAMLKeyValue::getName);
+    }
+
     public boolean elementIsDirectValueOfKey(final PsiElement psiElement, final String... keyNames) {
         final Set<String> targetKeyNames = Sets.newHashSet(keyNames);
         return getNthOfType(psiElement, 1, YAMLKeyValue.class)

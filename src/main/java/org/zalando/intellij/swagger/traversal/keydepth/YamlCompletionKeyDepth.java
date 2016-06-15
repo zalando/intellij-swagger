@@ -101,4 +101,9 @@ public class YamlCompletionKeyDepth implements KeyDepth {
     public int getSchemesNth() {
         return 1;
     }
+
+    @Override
+    public int getSecurityNth() {
+        return 1;
+    }
 }
