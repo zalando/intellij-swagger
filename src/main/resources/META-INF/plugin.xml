@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>org.zalando.intellij.swagger</id>
     <name>Swagger Plugin</name>
-    <version>0.0.9</version>
+    <version>0.0.10</version>
     <vendor email="sebastian.monte@zalando.de" url="https://tech.zalando.com/">Zalando SE</vendor>
 
     <depends>com.intellij.modules.lang</depends>
@@ -15,11 +15,13 @@
     ]]></description>
 
     <change-notes><![CDATA[
-           version 0.0.9
+           version 0.0.10
            <br/>
            <ul>
            <li>Field validation</li>
            <li>$ref validation</li>
+           <li>Scheme validation</li>
+           <li>Response definition support</li>
            </ul>
 
            version 0.0.8
