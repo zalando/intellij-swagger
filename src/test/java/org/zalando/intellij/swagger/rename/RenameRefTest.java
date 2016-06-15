@@ -26,4 +26,12 @@ public class RenameRefTest extends SwaggerLightCodeInsightFixtureTestCase {
         doTest("newName", "rename_parameter_ref_reference.yaml", "rename_parameter_ref_reference_after.yaml");
     }
 
+    public void testRenameResponse() {
+        doTest("newName", "rename_response_ref_declaration.json", "rename_response_ref_declaration_after.json");
+        doTest("newName", "rename_response_ref_declaration.yaml", "rename_response_ref_declaration_after.yaml");
+
+        doTest("newName", "rename_response_ref_reference.json", "rename_response_ref_reference_after.json");
+        doTest("newName", "rename_response_ref_reference.yaml", "rename_response_ref_reference_after.yaml");
+    }
+
 }

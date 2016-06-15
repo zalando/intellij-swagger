@@ -12,6 +12,10 @@ public class ValueExtractor {
         return getTextWithoutPrefix(parametersText, "#/parameters/");
     }
 
+    public String getResponseValue(final String responsesText) {
+        return getTextWithoutPrefix(responsesText, "#/responses/");
+    }
+
     private String getTextWithoutPrefix(final String text, final String prefix) {
         return StringUtils.substringAfter(text, prefix)
                 .replace("'", "")

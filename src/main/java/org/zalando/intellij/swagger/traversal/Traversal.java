@@ -168,7 +168,9 @@ public abstract class Traversal {
     }
 
     public boolean isResponseRefValue(final PsiElement psiElement) {
-        return isRefValue(psiElement) && nthKeyEquals(psiElement, 3, "responses");
+        return isRefValue(psiElement) &&
+                nthKeyEquals(psiElement, 3, "responses") &&
+                isChildOfKey(psiElement, "paths");
     }
 
     private boolean isRefValue(final PsiElement psiElement) {

@@ -114,6 +114,13 @@ public class ValueCompletionTest extends AbstractJsonOrYamlCompletionTest {
     }
 
     @Test
+    public void testResponseRefValue() throws Exception {
+        getCaretCompletions("response_ref_value")
+                .assertContains("#/responses/responseName")
+                .isOfSize(1);
+    }
+
+    @Test
     public void thatInValuesAreSuggested() {
         getCaretCompletions("in")
                 .assertContains("path", "header", "query", "formData", "body")

@@ -23,6 +23,8 @@ public class ValueCompletionFactory {
             return Optional.of(new TypeValueCompletion(positionResolver, completionResultSet));
         } else if (positionResolver.completeInValue()) {
             return Optional.of(new InValueCompletion(positionResolver, completionResultSet));
+        } else if (positionResolver.completeResponseRefValue()) {
+            return Optional.of(new ResponseRefValueCompletion(positionResolver, completionResultSet));
         } else {
             return Optional.empty();
         }

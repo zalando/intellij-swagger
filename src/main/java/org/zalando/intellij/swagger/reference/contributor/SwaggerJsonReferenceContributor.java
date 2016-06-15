@@ -12,6 +12,7 @@ import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.PsiReferenceRegistrar;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
+import org.zalando.intellij.swagger.reference.JsonResponseReference;
 import org.zalando.intellij.swagger.traversal.keydepth.JsonCompletionKeyDepth;
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
 import org.zalando.intellij.swagger.reference.JsonDefinitionReference;
@@ -67,6 +68,20 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
                                 .orElse(JsonParameterReference.EMPTY_ARRAY);
                     }
                 });
+        registrar.registerReferenceProvider(responsesPattern(),
+                new PsiReferenceProvider() {
+                    @NotNull
+                    @Override
+                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
+                                                                 @NotNull ProcessingContext context) {
+                        return Optional.ofNullable(element.getText())
+                                .map(text -> new PsiReference[]{new JsonResponseReference(
+                                        (JsonLiteral) element,
+                                        valueExtractor.getResponseValue(text),
+                                        jsonTraversal)})
+                                .orElse(JsonResponseReference.EMPTY_ARRAY);
+                    }
+                });
     }
 
     private PsiElementPattern.Capture<JsonLiteral> definitionsPattern() {
@@ -78,4 +93,10 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
         return psiElement(JsonLiteral.class).withText(StandardPatterns.string().contains("#/parameters/"))
                 .withLanguage(JsonLanguage.INSTANCE);
     }
+
+    private PsiElementPattern.Capture<JsonLiteral> responsesPattern() {
+        return psiElement(JsonLiteral.class).withText(StandardPatterns.string().contains("#/responses/"))
+                .withLanguage(JsonLanguage.INSTANCE);
+    }
+
 }

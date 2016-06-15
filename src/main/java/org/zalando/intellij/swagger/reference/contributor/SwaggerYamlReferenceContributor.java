@@ -12,6 +12,7 @@ import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.YAMLLanguage;
 import org.jetbrains.yaml.psi.YAMLQuotedText;
+import org.zalando.intellij.swagger.reference.YamlResponseReference;
 import org.zalando.intellij.swagger.traversal.keydepth.YamlCompletionKeyDepth;
 import org.zalando.intellij.swagger.traversal.YamlTraversal;
 import org.zalando.intellij.swagger.reference.YamlDefinitionReference;
@@ -66,6 +67,21 @@ public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
                                 }).orElse(YamlParameterReference.EMPTY_ARRAY);
                     }
                 });
+
+        registrar.registerReferenceProvider(responsesPattern(),
+                new PsiReferenceProvider() {
+                    @NotNull
+                    @Override
+                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
+                                                                 @NotNull ProcessingContext context) {
+                        return Optional.ofNullable(element.getText())
+                                .map(text -> new PsiReference[]{new YamlResponseReference(
+                                        (YAMLQuotedText) element,
+                                        valueExtractor.getResponseValue(text),
+                                        yamlTraversal)
+                                }).orElse(YamlResponseReference.EMPTY_ARRAY);
+                    }
+                });
     }
 
 
@@ -78,6 +94,12 @@ public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
     private PsiElementPattern.Capture<YAMLQuotedText> parametersPattern() {
         return psiElement(YAMLQuotedText.class)
                 .withText(StandardPatterns.string().contains("#/parameters/"))
+                .withLanguage(YAMLLanguage.INSTANCE);
+    }
+
+    private PsiElementPattern.Capture<YAMLQuotedText> responsesPattern() {
+        return psiElement(YAMLQuotedText.class)
+                .withText(StandardPatterns.string().contains("#/responses/"))
                 .withLanguage(YAMLLanguage.INSTANCE);
     }
 
