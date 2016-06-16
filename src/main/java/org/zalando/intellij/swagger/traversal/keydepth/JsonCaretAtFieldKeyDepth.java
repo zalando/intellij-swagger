@@ -1,95 +1,95 @@
 package org.zalando.intellij.swagger.traversal.keydepth;
 
-public class YamlCompletionKeyDepth implements KeyDepth {
+public class JsonCaretAtFieldKeyDepth implements KeyDepth {
 
     @Override
     public int getInfoNth() {
-        return 1;
-    }
-
-    @Override
-    public int getContactNth() {
-        return 1;
-    }
-
-    @Override
-    public int getLicenseNth() {
-        return 1;
-    }
-
-    @Override
-    public int getPathNth() {
         return 2;
     }
 
     @Override
-    public int getOperationNth() {
+    public int getContactNth() {
+        return 2;
+    }
+
+    @Override
+    public int getLicenseNth() {
+        return 2;
+    }
+
+    @Override
+    public int getPathNth() {
         return 3;
     }
 
     @Override
+    public int getOperationNth() {
+        return 4;
+    }
+
+    @Override
     public int getExternalDocsNth() {
-        return 1;
+        return 2;
     }
 
     @Override
     public int getParametersNth() {
-        return 1;
+        return 2;
     }
 
     @Override
     public int getItemsNth() {
-        return 1;
+        return 2;
     }
 
     @Override
     public int getResponsesNth() {
-        return 1;
+        return 2;
     }
 
     @Override
     public int getResponseNth() {
+        return 3;
+    }
+
+    @Override
+    public int getHeadersNth() {
         return 2;
     }
 
     @Override
     public int getHeaderNth() {
-        return 2;
-    }
-
-    @Override
-    public int getHeadersNth() {
-        return 1;
+        return 3;
     }
 
     @Override
     public int getTagsNth() {
-        return 1;
+        return 2;
     }
 
     @Override
     public int getSecurityDefinitionsNth() {
-        return 2;
+        return 3;
     }
 
     @Override
     public int getSchemaNth() {
-        return 1;
+        return 2;
     }
 
     @Override
     public int getXmlNth() {
-        return 1;
+        return 2;
     }
 
     @Override
     public int getDefinitionsNth() {
-        return 2;
+        return 3;
     }
 
     @Override
     public int getParameterDefinitionNth() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -104,6 +104,6 @@ public class YamlCompletionKeyDepth implements KeyDepth {
 
     @Override
     public int getSecurityNth() {
-        return 1;
+        return 2;
     }
 }

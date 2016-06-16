@@ -1,15 +1,10 @@
 package org.zalando.intellij.swagger.traversal;
 
-import static com.intellij.patterns.StandardPatterns.character;
-import com.intellij.codeInsight.completion.CompletionData;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.field.model.Field;
-import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 import org.zalando.intellij.swagger.completion.value.model.Value;
 import org.zalando.intellij.swagger.traversal.keydepth.KeyDepth;
 
@@ -20,7 +15,7 @@ public abstract class Traversal {
 
     private final KeyDepth keyDepth;
 
-    public Traversal(final KeyDepth keyDepth) {
+    Traversal(final KeyDepth keyDepth) {
         this.keyDepth = keyDepth;
     }
 
@@ -34,10 +29,6 @@ public abstract class Traversal {
 
     public abstract boolean isRoot(final PsiElement psiElement);
 
-    abstract boolean shouldQuote(final PsiElement psiElement);
-
-    abstract CompletionStyle.QuoteStyle getQuoteStyle();
-
     abstract boolean elementIsDirectValueOfKey(final PsiElement psiElement, final String... keyNames);
 
     abstract List<PsiElement> getChildrenOf(final String propertyName, final PsiFile psiFile);
@@ -46,27 +37,19 @@ public abstract class Traversal {
 
     abstract boolean isUniqueKey(String keyName, final PsiElement psiElement);
 
+    abstract boolean elementIsInsideArray(final PsiElement psiElement);
+
+    abstract boolean isChildOfKeyWithName(final PsiElement psiElement, final String keyName);
+
+    public abstract boolean isValue(final PsiElement psiElement);
+
+    public abstract boolean isArrayStringElement(final PsiElement psiElement);
+
+    abstract Optional<String> extractSecurityNameFromSecurityItem(final PsiElement psiElement);
+
     abstract InsertHandler<LookupElement> createInsertFieldHandler(Field field);
 
     abstract InsertHandler<LookupElement> createInsertValueHandler(final Value value);
-
-    abstract boolean elementIsInsideArray(final PsiElement psiElement);
-
-    public abstract boolean isChildOfKey(final PsiElement psiElement, final String keyName);
-
-    <T extends PsiElement> Optional<T> getNthOfType(final PsiElement psiElement, int nth, Class<T> targetType) {
-        if (psiElement == null) {
-            return Optional.empty();
-        } else if (targetType.isAssignableFrom(psiElement.getClass())) {
-            if (nth == 1) {
-                return Optional.of(targetType.cast(psiElement));
-            } else {
-                nth--;
-            }
-        }
-        return getNthOfType(psiElement.getParent(), nth, targetType);
-    }
-
 
     public final boolean isInfo(final PsiElement psiElement) {
         return nthKeyEquals(psiElement, keyDepth.getInfoNth(), "info");
@@ -80,11 +63,11 @@ public abstract class Traversal {
         return nthKeyEquals(psiElement, keyDepth.getLicenseNth(), "license");
     }
 
-    public boolean isPath(final PsiElement psiElement) {
+    public final boolean isPath(final PsiElement psiElement) {
         return nthKeyEquals(psiElement, keyDepth.getPathNth(), "paths");
     }
 
-    public boolean isOperation(final PsiElement psiElement) {
+    public final boolean isOperation(final PsiElement psiElement) {
         return nthKeyEquals(psiElement, keyDepth.getOperationNth(), "paths") && !elementIsInsideArray(psiElement);
     }
 
@@ -102,24 +85,24 @@ public abstract class Traversal {
 
     public final boolean isResponses(final PsiElement psiElement) {
         return nthKeyEquals(psiElement, keyDepth.getResponsesNth(), "responses") &&
-                isChildOfKey(psiElement, "paths");
+                isChildOfKeyWithName(psiElement, "paths");
     }
 
     public final boolean isResponse(final PsiElement psiElement) {
         return nthKeyEquals(psiElement, keyDepth.getResponseNth(), "responses") &&
-                isChildOfKey(psiElement, "paths");
+                isChildOfKeyWithName(psiElement, "paths");
     }
 
-    public final boolean isResponseDefinition(final PsiElement psiElement) {
+    final boolean isResponseDefinition(final PsiElement psiElement) {
         return nthKeyEquals(psiElement, keyDepth.getResponseNth(), "responses") &&
-                !isChildOfKey(psiElement, "paths");
+                !isChildOfKeyWithName(psiElement, "paths");
     }
 
     public final boolean isHeader(final PsiElement psiElement) {
         return nthKeyEquals(psiElement, keyDepth.getHeaderNth(), "headers");
     }
 
-    public boolean isHeaders(final PsiElement psiElement) {
+    final boolean isHeaders(final PsiElement psiElement) {
         return nthKeyEquals(psiElement, keyDepth.getHeadersNth(), "headers");
     }
 
@@ -139,16 +122,18 @@ public abstract class Traversal {
         return nthKeyEquals(psiElement, keyDepth.getXmlNth(), "xml");
     }
 
-    public final boolean isDefinitions(final PsiElement psiElement) {
+    final boolean isDefinitions(final PsiElement psiElement) {
         return nthKeyEquals(psiElement, keyDepth.getDefinitionsNth(), "definitions");
     }
 
-    public final boolean isParameterDefinition(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getParameterDefinitionNth(), "parameters") && !elementIsInsideParametersArray(psiElement);
+    final boolean isParameterDefinition(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getParameterDefinitionNth(), "parameters") &&
+                !elementIsInsideParametersArray(psiElement);
     }
 
-    public final boolean isMimeValue(final PsiElement psiElement) {
-        return (nthKeyEquals(psiElement, keyDepth.getMimeNth(), "consumes") || nthKeyEquals(psiElement, keyDepth.getMimeNth(), "produces")) &&
+    final boolean isMimeValue(final PsiElement psiElement) {
+        return (nthKeyEquals(psiElement, keyDepth.getMimeNth(), "consumes") ||
+                nthKeyEquals(psiElement, keyDepth.getMimeNth(), "produces")) &&
                 elementIsInsideArray(psiElement);
     }
 
@@ -156,78 +141,62 @@ public abstract class Traversal {
         return nthKeyEquals(psiElement, keyDepth.getSchemesNth(), "schemes") && elementIsInsideArray(psiElement);
     }
 
-    public boolean isDefinitionRefValue(final PsiElement psiElement) {
+    public final boolean isDefinitionRefValue(final PsiElement psiElement) {
         return isRefValue(psiElement) &&
                 !elementIsInsideParametersArray(psiElement) &&
                 !isResponseRefValue(psiElement);
     }
 
-    public boolean isParameterRefValue(final PsiElement psiElement) {
+    public final boolean isParameterRefValue(final PsiElement psiElement) {
         return isRefValue(psiElement) &&
                 elementIsInsideParametersArray(psiElement);
     }
 
-    public boolean isResponseRefValue(final PsiElement psiElement) {
+    public final boolean isResponseRefValue(final PsiElement psiElement) {
         return isRefValue(psiElement) &&
                 nthKeyEquals(psiElement, 3, "responses") &&
-                isChildOfKey(psiElement, "paths");
+                isChildOfKeyWithName(psiElement, "paths");
     }
 
     private boolean isRefValue(final PsiElement psiElement) {
         return nthKeyEquals(psiElement, 1, "$ref");
     }
 
-    public boolean isSecurityKey(final PsiElement psiElement) {
+    final boolean isSecurityKey(final PsiElement psiElement) {
         return nthKeyEquals(psiElement, keyDepth.getSecurityNth(), "security");
     }
 
-    boolean nthKeyEquals(final PsiElement psiElement, final int nth, final String targetName) {
+    private boolean nthKeyEquals(final PsiElement psiElement, final int nth, final String targetName) {
         return getNameOfNthKey(psiElement, nth)
                 .filter(name -> name.equals(targetName))
                 .isPresent();
     }
 
-    /**
-     * By default platform considers all the {@link Character#isJavaIdentifierPart(char)} characters at the left
-     * of caret as a prefix. Sometimes this has to be overridden (see #25 for the requirement to include also
-     * '/' and '#'). This method allows to override standard behavior for specific locations.
-     *
-     * @param psiElement        element which owns the caret
-     * @param caretOffsetInFile file based offset of caret
-     * @return custom prefix for given position of caret inside given {@link PsiElement}, or {@link Optional#empty()}
-     * when standard behavior is good enough.
-     */
-    @NotNull
-    public Optional<String> getCustomCompletionPrefix(PsiElement psiElement, int caretOffsetInFile) {
-        if (!isDefinitionRefValue(psiElement) && !isParameterRefValue(psiElement)) {
-            // standard platform behavior is good enough
-            return Optional.empty();
-        }
-        String result = CompletionData.findPrefixStatic(psiElement, caretOffsetInFile, NOT_REF_VALUE_CHARACTER);
-        return Optional.ofNullable(result);
-    }
-
-    private ElementPattern<Character> NOT_REF_VALUE_CHARACTER =
-            CompletionData.NOT_JAVA_ID.andNot(character().oneOf('/', '#'));
-
-
-    boolean isBooleanValue(final PsiElement psiElement) {
+    final boolean isBooleanValue(final PsiElement psiElement) {
         return elementIsDirectValueOfKey(psiElement, "deprecated", "required", "allowEmptyValue",
                 "exclusiveMaximum", "exclusiveMinimum", "uniqueItems", "readOnly", "attribute", "wrapped");
     }
 
 
-    boolean isTypeValue(final PsiElement psiElement) {
+    final boolean isTypeValue(final PsiElement psiElement) {
         return elementIsDirectValueOfKey(psiElement, "type");
     }
 
-    boolean isInValue(final PsiElement psiElement) {
+    final boolean isInValue(final PsiElement psiElement) {
         return elementIsDirectValueOfKey(psiElement, "in");
     }
 
-    public abstract boolean isValue(final PsiElement psiElement);
+    <T extends PsiElement> Optional<T> getNthOfType(final PsiElement psiElement, int nth, Class<T> targetType) {
+        if (psiElement == null) {
+            return Optional.empty();
+        } else if (targetType.isAssignableFrom(psiElement.getClass())) {
+            if (nth == 1) {
+                return Optional.of(targetType.cast(psiElement));
+            } else {
+                nth--;
+            }
+        }
+        return getNthOfType(psiElement.getParent(), nth, targetType);
+    }
 
-    public abstract boolean isArrayStringElement(final PsiElement psiElement);
-
-    public abstract Optional<String> extractSecurityNameFromSecurityItem(final PsiElement psiElement);
 }

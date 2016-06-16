@@ -4,32 +4,23 @@ import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
 import org.zalando.intellij.swagger.completion.field.model.Field;
-import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 import org.zalando.intellij.swagger.completion.value.model.Value;
 
 import java.util.List;
 import java.util.Optional;
 
-public class PositionResolver {
+public class CompletionHelper {
 
     private final PsiElement psiElement;
     private final Traversal traversal;
 
-    public PositionResolver(final PsiElement psiElement, final Traversal traversal) {
+    public CompletionHelper(final PsiElement psiElement, final Traversal traversal) {
         this.psiElement = psiElement;
         this.traversal = traversal;
     }
 
     public boolean completeRootKey() {
         return traversal.isRoot(psiElement);
-    }
-
-    public boolean shouldQuote() {
-        return traversal.shouldQuote(psiElement);
-    }
-
-    public CompletionStyle.QuoteStyle getQuoteStyle() {
-        return traversal.getQuoteStyle();
     }
 
     public boolean completeInfoKey() {

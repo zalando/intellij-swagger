@@ -2,12 +2,12 @@ package org.zalando.intellij.swagger.completion.value;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import org.zalando.intellij.swagger.completion.value.model.Values;
-import org.zalando.intellij.swagger.traversal.PositionResolver;
+import org.zalando.intellij.swagger.traversal.CompletionHelper;
 
 class SchemesValueCompletion extends ValueCompletion {
 
-    protected SchemesValueCompletion(final PositionResolver positionResolver, final CompletionResultSet completionResultSet) {
-        super(positionResolver, completionResultSet);
+    protected SchemesValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+        super(completionHelper, completionResultSet);
     }
 
     @Override

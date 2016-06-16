@@ -11,28 +11,26 @@ import org.zalando.intellij.swagger.completion.field.FieldCompletionFactory;
 import org.zalando.intellij.swagger.completion.value.ValueCompletion;
 import org.zalando.intellij.swagger.completion.value.ValueCompletionFactory;
 import org.zalando.intellij.swagger.file.FileDetector;
-import org.zalando.intellij.swagger.insert.YamlInsertValueHandler;
-import org.zalando.intellij.swagger.traversal.PositionResolver;
+import org.zalando.intellij.swagger.traversal.CompletionHelper;
+import org.zalando.intellij.swagger.traversal.CustomCompletionPrefixExtractor;
 import org.zalando.intellij.swagger.traversal.YamlTraversal;
-import org.zalando.intellij.swagger.traversal.keydepth.YamlCompletionKeyDepth;
+import org.zalando.intellij.swagger.traversal.keydepth.YamlCaretAtFieldKeyDepth;
 
 public class SwaggerYamlCompletionContributor extends CompletionContributor {
 
     private final FileDetector fileDetector;
     private final YamlTraversal yamlTraversal;
-    private final YamlInsertValueHandler yamlInsertValueHandler;
+    private final CustomCompletionPrefixExtractor customCompletionPrefixExtractor;
 
-    /* Constructor for IntelliJ IDEA bootstrap */
     public SwaggerYamlCompletionContributor() {
-        this(new FileDetector(), new YamlTraversal(new YamlCompletionKeyDepth()), new YamlInsertValueHandler());
+        this(new FileDetector(), new YamlTraversal(new YamlCaretAtFieldKeyDepth()));
     }
 
     private SwaggerYamlCompletionContributor(final FileDetector fileDetector,
-                                             final YamlTraversal yamlTraversal,
-                                             final YamlInsertValueHandler yamlInsertValueHandler) {
+                                             final YamlTraversal yamlTraversal) {
         this.fileDetector = fileDetector;
         this.yamlTraversal = yamlTraversal;
-        this.yamlInsertValueHandler = yamlInsertValueHandler;
+        this.customCompletionPrefixExtractor = new CustomCompletionPrefixExtractor(yamlTraversal);
     }
 
     @Override
@@ -46,12 +44,12 @@ public class SwaggerYamlCompletionContributor extends CompletionContributor {
             psiElement = psiElement.getParent().getParent();
         }
 
-        final PositionResolver positionResolver = new PositionResolver(psiElement, yamlTraversal);
+        final CompletionHelper completionHelper = new CompletionHelper(psiElement, yamlTraversal);
 
-        FieldCompletionFactory.from(positionResolver, result)
+        FieldCompletionFactory.from(completionHelper, result)
                 .ifPresent(FieldCompletion::fill);
 
-        ValueCompletionFactory.from(positionResolver, getResultSetWithPrefixMatcher(parameters, result))
+        ValueCompletionFactory.from(completionHelper, getResultSetWithPrefixMatcher(parameters, result))
                 .ifPresent(ValueCompletion::fill);
 
         result.stopHere();
@@ -59,7 +57,7 @@ public class SwaggerYamlCompletionContributor extends CompletionContributor {
 
     private CompletionResultSet getResultSetWithPrefixMatcher(final @NotNull CompletionParameters parameters,
                                                               final @NotNull CompletionResultSet result) {
-        return yamlTraversal.getCustomCompletionPrefix(parameters.getPosition(), parameters.getOffset())
+        return customCompletionPrefixExtractor.getPrefix(parameters.getPosition(), parameters.getOffset())
                 .map(result::withPrefixMatcher)
                 .orElse(result);
     }

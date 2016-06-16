@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.YAMLLanguage;
 import org.jetbrains.yaml.psi.YAMLQuotedText;
 import org.zalando.intellij.swagger.reference.YamlResponseReference;
-import org.zalando.intellij.swagger.traversal.keydepth.YamlCompletionKeyDepth;
+import org.zalando.intellij.swagger.traversal.keydepth.YamlCaretAtFieldKeyDepth;
 import org.zalando.intellij.swagger.traversal.YamlTraversal;
 import org.zalando.intellij.swagger.reference.YamlDefinitionReference;
 import org.zalando.intellij.swagger.reference.YamlParameterReference;
@@ -27,7 +27,7 @@ public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
     private final YamlTraversal yamlTraversal;
 
     public SwaggerYamlReferenceContributor() {
-        this(new ValueExtractor(), new YamlTraversal(new YamlCompletionKeyDepth()));
+        this(new ValueExtractor(), new YamlTraversal(new YamlCaretAtFieldKeyDepth()));
     }
 
     private SwaggerYamlReferenceContributor(final ValueExtractor valueExtractor,

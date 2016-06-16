@@ -5,22 +5,22 @@ import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import org.zalando.intellij.swagger.completion.value.model.Value;
-import org.zalando.intellij.swagger.traversal.PositionResolver;
+import org.zalando.intellij.swagger.traversal.CompletionHelper;
 
 public abstract class ValueCompletion {
 
-    final PositionResolver positionResolver;
+    final CompletionHelper completionHelper;
     final CompletionResultSet completionResultSet;
 
-    protected ValueCompletion(final PositionResolver positionResolver, final CompletionResultSet completionResultSet) {
-        this.positionResolver = positionResolver;
+    protected ValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+        this.completionHelper = completionHelper;
         this.completionResultSet = completionResultSet;
     }
 
     public abstract void fill();
 
     public void addValue(final Value value) {
-        completionResultSet.addElement(create(value, positionResolver.createInsertValueHandler(value)));
+        completionResultSet.addElement(create(value, completionHelper.createInsertValueHandler(value)));
     }
 
     private LookupElementBuilder create(final Value value,

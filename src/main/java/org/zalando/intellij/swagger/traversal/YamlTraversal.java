@@ -13,7 +13,6 @@ import org.jetbrains.yaml.psi.YAMLSequenceItem;
 import org.jetbrains.yaml.psi.YAMLValue;
 import org.jetbrains.yaml.psi.impl.YAMLPlainTextImpl;
 import org.zalando.intellij.swagger.completion.field.model.Field;
-import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 import org.zalando.intellij.swagger.completion.value.model.Value;
 import org.zalando.intellij.swagger.insert.YamlInsertFieldHandler;
 import org.zalando.intellij.swagger.insert.YamlInsertValueHandler;
@@ -44,16 +43,6 @@ public class YamlTraversal extends Traversal {
     }
 
     @Override
-    public boolean shouldQuote(final PsiElement psiElement) {
-        return false;
-    }
-
-    @Override
-    public CompletionStyle.QuoteStyle getQuoteStyle() {
-        return CompletionStyle.QuoteStyle.SINGLE;
-    }
-
-    @Override
     public boolean isKey(final PsiElement psiElement) {
         return false;
     }
@@ -77,11 +66,11 @@ public class YamlTraversal extends Traversal {
                 .map(YAMLKeyValue.class::cast)
                 .map(YAMLKeyValue::getName)
                 .filter(name -> name.equals("parameters"))
-                .isPresent() && !isChildOfKey(psiElement, "schema");
+                .isPresent() && !isChildOfKeyWithName(psiElement, "schema");
     }
 
     @Override
-    public boolean isChildOfKey(final PsiElement psiElement, final String keyName) {
+    public boolean isChildOfKeyWithName(final PsiElement psiElement, final String keyName) {
         if (psiElement == null) {
             return false;
         }
@@ -90,7 +79,7 @@ public class YamlTraversal extends Traversal {
                 return true;
             }
         }
-        return isChildOfKey(psiElement.getParent(), keyName);
+        return isChildOfKeyWithName(psiElement.getParent(), keyName);
     }
 
     @Override

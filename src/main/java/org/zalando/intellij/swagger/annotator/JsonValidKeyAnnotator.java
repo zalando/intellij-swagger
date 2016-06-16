@@ -6,12 +6,12 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
-import org.zalando.intellij.swagger.traversal.keydepth.JsonCompletionKeyDepth;
+import org.zalando.intellij.swagger.traversal.keydepth.JsonCaretAtFieldKeyDepth;
 import org.zalando.intellij.swagger.validator.field.FieldsValidator;
 
 public class JsonValidKeyAnnotator implements Annotator {
 
-    private final FieldsValidator fieldsValidator = new FieldsValidator(new JsonTraversal(new JsonCompletionKeyDepth()));
+    private final FieldsValidator fieldsValidator = new FieldsValidator(new JsonTraversal(new JsonCaretAtFieldKeyDepth()));
 
     @Override
     public void annotate(@NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {

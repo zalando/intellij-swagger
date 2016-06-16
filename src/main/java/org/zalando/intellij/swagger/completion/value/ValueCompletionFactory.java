@@ -1,30 +1,30 @@
 package org.zalando.intellij.swagger.completion.value;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
-import org.zalando.intellij.swagger.traversal.PositionResolver;
+import org.zalando.intellij.swagger.traversal.CompletionHelper;
 
 import java.util.Optional;
 
 public class ValueCompletionFactory {
 
-    public static Optional<ValueCompletion> from(final PositionResolver positionResolver,
+    public static Optional<ValueCompletion> from(final CompletionHelper completionHelper,
                                                  final CompletionResultSet completionResultSet) {
-        if (positionResolver.completeMimeValue()) {
-            return Optional.of(new MimeValueCompletion(positionResolver, completionResultSet));
-        } else if (positionResolver.completeSchemesValue()) {
-            return Optional.of(new SchemesValueCompletion(positionResolver, completionResultSet));
-        } else if (positionResolver.completeDefinitionRefValue()) {
-            return Optional.of(new DefinitionRefValueCompletion(positionResolver, completionResultSet));
-        } else if (positionResolver.completeParameterRefValue()) {
-            return Optional.of(new ParameterRefValueCompletion(positionResolver, completionResultSet));
-        } else if (positionResolver.completeBooleanValue()) {
-            return Optional.of(new BooleanValueCompletion(positionResolver, completionResultSet));
-        } else if (positionResolver.completeTypeValue()) {
-            return Optional.of(new TypeValueCompletion(positionResolver, completionResultSet));
-        } else if (positionResolver.completeInValue()) {
-            return Optional.of(new InValueCompletion(positionResolver, completionResultSet));
-        } else if (positionResolver.completeResponseRefValue()) {
-            return Optional.of(new ResponseRefValueCompletion(positionResolver, completionResultSet));
+        if (completionHelper.completeMimeValue()) {
+            return Optional.of(new MimeValueCompletion(completionHelper, completionResultSet));
+        } else if (completionHelper.completeSchemesValue()) {
+            return Optional.of(new SchemesValueCompletion(completionHelper, completionResultSet));
+        } else if (completionHelper.completeDefinitionRefValue()) {
+            return Optional.of(new DefinitionRefValueCompletion(completionHelper, completionResultSet));
+        } else if (completionHelper.completeParameterRefValue()) {
+            return Optional.of(new ParameterRefValueCompletion(completionHelper, completionResultSet));
+        } else if (completionHelper.completeBooleanValue()) {
+            return Optional.of(new BooleanValueCompletion(completionHelper, completionResultSet));
+        } else if (completionHelper.completeTypeValue()) {
+            return Optional.of(new TypeValueCompletion(completionHelper, completionResultSet));
+        } else if (completionHelper.completeInValue()) {
+            return Optional.of(new InValueCompletion(completionHelper, completionResultSet));
+        } else if (completionHelper.completeResponseRefValue()) {
+            return Optional.of(new ResponseRefValueCompletion(completionHelper, completionResultSet));
         } else {
             return Optional.empty();
         }

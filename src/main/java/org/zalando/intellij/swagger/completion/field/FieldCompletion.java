@@ -5,23 +5,23 @@ import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import org.zalando.intellij.swagger.completion.field.model.Field;
-import org.zalando.intellij.swagger.traversal.PositionResolver;
+import org.zalando.intellij.swagger.traversal.CompletionHelper;
 
 public abstract class FieldCompletion {
 
-    final PositionResolver positionResolver;
+    final CompletionHelper completionHelper;
     final CompletionResultSet completionResultSet;
 
-    protected FieldCompletion(final PositionResolver positionResolver, final CompletionResultSet completionResultSet) {
-        this.positionResolver = positionResolver;
+    protected FieldCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+        this.completionHelper = completionHelper;
         this.completionResultSet = completionResultSet;
     }
 
     public abstract void fill();
 
     public void addUnique(final Field field) {
-        if (positionResolver.isUniqueKey(field.getName())) {
-            completionResultSet.addElement(create(field, positionResolver.createInsertFieldHandler(field)));
+        if (completionHelper.isUniqueKey(field.getName())) {
+            completionResultSet.addElement(create(field, completionHelper.createInsertFieldHandler(field)));
         }
     }
 

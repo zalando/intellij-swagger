@@ -4,11 +4,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.json.JsonElementTypes;
 import com.intellij.json.psi.JsonArray;
 import com.intellij.json.psi.JsonFile;
 import com.intellij.json.psi.JsonLiteral;
-import com.intellij.json.psi.JsonObject;
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.json.psi.JsonValue;
 import com.intellij.psi.PsiElement;
@@ -16,7 +14,6 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.StringUtils;
 import org.zalando.intellij.swagger.completion.field.model.Field;
-import org.zalando.intellij.swagger.completion.style.CompletionStyle;
 import org.zalando.intellij.swagger.completion.value.model.Value;
 import org.zalando.intellij.swagger.insert.JsonInsertFieldHandler;
 import org.zalando.intellij.swagger.insert.JsonInsertValueHandler;
@@ -68,11 +65,6 @@ public class JsonTraversal extends Traversal {
                 .map(StringUtils::removeAllQuotes);
     }
 
-    @Override
-    public boolean shouldQuote(final PsiElement psiElement) {
-        return !psiElement.toString().contains(JsonElementTypes.DOUBLE_QUOTED_STRING.toString())
-                && !isBooleanValue(psiElement);
-    }
 
     @Override
     public boolean isValue(final PsiElement psiElement) {
@@ -103,11 +95,6 @@ public class JsonTraversal extends Traversal {
     }
 
     @Override
-    public CompletionStyle.QuoteStyle getQuoteStyle() {
-        return CompletionStyle.QuoteStyle.DOUBLE;
-    }
-
-    @Override
     public boolean elementIsInsideParametersArray(final PsiElement psiElement) {
         return Optional.ofNullable(psiElement.getParent())
                 .map(PsiElement::getParent)
@@ -118,11 +105,11 @@ public class JsonTraversal extends Traversal {
                 .map(JsonProperty.class::cast)
                 .map(JsonProperty::getName)
                 .filter(name -> name.equals("parameters"))
-                .isPresent() && !isChildOfKey(psiElement, "schema");
+                .isPresent() && !isChildOfKeyWithName(psiElement, "schema");
     }
 
     @Override
-    public boolean isChildOfKey(final PsiElement psiElement, final String keyName) {
+    public boolean isChildOfKeyWithName(final PsiElement psiElement, final String keyName) {
         if (psiElement == null) {
             return false;
         }
@@ -131,7 +118,7 @@ public class JsonTraversal extends Traversal {
                 return true;
             }
         }
-        return isChildOfKey(psiElement.getParent(), keyName);
+        return isChildOfKeyWithName(psiElement.getParent(), keyName);
     }
 
     @Override

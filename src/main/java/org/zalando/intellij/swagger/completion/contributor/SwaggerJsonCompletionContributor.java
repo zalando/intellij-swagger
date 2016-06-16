@@ -10,24 +10,26 @@ import org.zalando.intellij.swagger.completion.field.FieldCompletionFactory;
 import org.zalando.intellij.swagger.completion.value.ValueCompletion;
 import org.zalando.intellij.swagger.completion.value.ValueCompletionFactory;
 import org.zalando.intellij.swagger.file.FileDetector;
+import org.zalando.intellij.swagger.traversal.CompletionHelper;
+import org.zalando.intellij.swagger.traversal.CustomCompletionPrefixExtractor;
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
-import org.zalando.intellij.swagger.traversal.PositionResolver;
-import org.zalando.intellij.swagger.traversal.keydepth.JsonCompletionKeyDepth;
+import org.zalando.intellij.swagger.traversal.keydepth.JsonCaretAtFieldKeyDepth;
 
 public class SwaggerJsonCompletionContributor extends CompletionContributor {
 
     private final FileDetector fileDetector;
     private final JsonTraversal jsonTraversal;
+    private final CustomCompletionPrefixExtractor customCompletionPrefixExtractor;
 
-    /* Constructor for IntelliJ IDEA bootstrap */
     public SwaggerJsonCompletionContributor() {
-        this(new FileDetector(), new JsonTraversal(new JsonCompletionKeyDepth()));
+        this(new FileDetector(), new JsonTraversal(new JsonCaretAtFieldKeyDepth()));
     }
 
     private SwaggerJsonCompletionContributor(final FileDetector fileDetector,
                                              final JsonTraversal jsonTraversal) {
         this.fileDetector = fileDetector;
         this.jsonTraversal = jsonTraversal;
+        this.customCompletionPrefixExtractor = new CustomCompletionPrefixExtractor(jsonTraversal);
     }
 
     @Override
@@ -37,13 +39,13 @@ public class SwaggerJsonCompletionContributor extends CompletionContributor {
         }
 
         final PsiElement psiElement = parameters.getPosition();
-        final PositionResolver positionResolver = new PositionResolver(psiElement, jsonTraversal);
+        final CompletionHelper completionHelper = new CompletionHelper(psiElement, jsonTraversal);
 
         if (jsonTraversal.isKey(psiElement)) {
-            FieldCompletionFactory.from(positionResolver, result)
+            FieldCompletionFactory.from(completionHelper, result)
                     .ifPresent(FieldCompletion::fill);
         } else {
-            ValueCompletionFactory.from(positionResolver, getResultSetWithPrefixMatcher(parameters, result))
+            ValueCompletionFactory.from(completionHelper, getResultSetWithPrefixMatcher(parameters, result))
                     .ifPresent(ValueCompletion::fill);
         }
 
@@ -52,7 +54,7 @@ public class SwaggerJsonCompletionContributor extends CompletionContributor {
 
     private CompletionResultSet getResultSetWithPrefixMatcher(final @NotNull CompletionParameters parameters,
                                                               final @NotNull CompletionResultSet result) {
-        return jsonTraversal.getCustomCompletionPrefix(parameters.getPosition(), parameters.getOffset())
+        return customCompletionPrefixExtractor.getPrefix(parameters.getPosition(), parameters.getOffset())
                 .map(result::withPrefixMatcher)
                 .orElse(result);
     }

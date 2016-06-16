@@ -3,15 +3,15 @@ package org.zalando.intellij.swagger.completion.value;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import org.zalando.intellij.swagger.completion.value.model.StringValue;
 import org.zalando.intellij.swagger.completion.value.model.Value;
-import org.zalando.intellij.swagger.traversal.PositionResolver;
+import org.zalando.intellij.swagger.traversal.CompletionHelper;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 class DefinitionRefValueCompletion extends ValueCompletion {
 
-    protected DefinitionRefValueCompletion(final PositionResolver positionResolver, final CompletionResultSet completionResultSet) {
-        super(positionResolver, completionResultSet);
+    protected DefinitionRefValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+        super(completionHelper, completionResultSet);
     }
 
     @Override
@@ -20,7 +20,7 @@ class DefinitionRefValueCompletion extends ValueCompletion {
     }
 
     private List<Value> getDefinitionKeys() {
-        return positionResolver.getKeyNamesOf("definitions").stream()
+        return completionHelper.getKeyNamesOf("definitions").stream()
                 .map(keyName -> "#/definitions/" + keyName)
                 .map(StringValue::new)
                 .collect(Collectors.toList());
