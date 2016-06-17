@@ -10,16 +10,16 @@ import org.zalando.intellij.swagger.traversal.CompletionHelper;
 public abstract class ValueCompletion {
 
     final CompletionHelper completionHelper;
-    final CompletionResultSet completionResultSet;
+    private final CompletionResultSet completionResultSet;
 
-    protected ValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    ValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
         this.completionHelper = completionHelper;
         this.completionResultSet = completionResultSet;
     }
 
     public abstract void fill();
 
-    public void addValue(final Value value) {
+    void addValue(final Value value) {
         if (completionHelper.isUniqueArrayStringValue(value.getValue())) {
             completionResultSet.addElement(create(value, completionHelper.createInsertValueHandler(value)));
         }

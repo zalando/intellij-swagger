@@ -9,7 +9,7 @@ public abstract class AbstractJsonOrYamlCompletionTest {
     private SwaggerFixture myFixture;
     private final JsonOrYaml myJsonOrYaml;
 
-    public AbstractJsonOrYamlCompletionTest(@NotNull JsonOrYaml jsonOrYaml) {
+    protected AbstractJsonOrYamlCompletionTest(@NotNull JsonOrYaml jsonOrYaml) {
         myJsonOrYaml = jsonOrYaml;
     }
 

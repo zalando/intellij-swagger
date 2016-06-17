@@ -128,7 +128,7 @@ public class JsonTraversal extends Traversal {
     }
 
     @Override
-    public boolean isChildOfKeyWithName(final PsiElement psiElement, final String keyName) {
+    boolean isChildOfKeyWithName(final PsiElement psiElement, final String keyName) {
         if (psiElement == null) {
             return false;
         }

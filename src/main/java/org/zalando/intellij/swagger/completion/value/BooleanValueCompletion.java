@@ -6,7 +6,7 @@ import org.zalando.intellij.swagger.traversal.CompletionHelper;
 
 class BooleanValueCompletion extends ValueCompletion {
 
-    protected BooleanValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    BooleanValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
         super(completionHelper, completionResultSet);
     }
 

@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 class ResponseRefValueCompletion extends ValueCompletion {
 
-    protected ResponseRefValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    ResponseRefValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
         super(completionHelper, completionResultSet);
     }
 

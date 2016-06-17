@@ -2,27 +2,29 @@ package org.zalando.intellij.swagger.completion.field.model;
 
 public abstract class Field {
 
-    protected final String name;
-    protected final boolean required;
+    private final String name;
+    private final boolean required;
 
-    public Field() {
+    Field() {
         this("unknown", false);
     }
 
-    protected Field(final String name, final boolean required) {
+    Field(final String name, final boolean required) {
         this.name = name;
         this.required = required;
     }
 
-    public abstract String getName();
+    public String getName() {
+        return name;
+    }
 
     public abstract String getJsonPlaceholderSuffix(final int indentation);
 
     public abstract String getYamlPlaceholderSuffix(final int indentation);
 
-    public abstract String getCompleteJson(final int indentation);
+    protected abstract String getCompleteJson(final int indentation);
 
-    public abstract String getCompleteYaml(final int indentation);
+    protected abstract String getCompleteYaml(final int indentation);
 
     public boolean isRequired() {
         return required;

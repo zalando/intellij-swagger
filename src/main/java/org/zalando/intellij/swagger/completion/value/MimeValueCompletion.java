@@ -6,7 +6,7 @@ import org.zalando.intellij.swagger.traversal.CompletionHelper;
 
 class MimeValueCompletion extends ValueCompletion {
 
-    protected MimeValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    MimeValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
         super(completionHelper, completionResultSet);
     }
 

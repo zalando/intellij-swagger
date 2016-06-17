@@ -6,7 +6,7 @@ import org.zalando.intellij.swagger.traversal.CompletionHelper;
 
 class SchemesValueCompletion extends ValueCompletion {
 
-    protected SchemesValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    SchemesValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
         super(completionHelper, completionResultSet);
     }
 

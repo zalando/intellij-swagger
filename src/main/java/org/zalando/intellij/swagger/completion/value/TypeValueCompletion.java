@@ -7,7 +7,7 @@ import org.zalando.intellij.swagger.traversal.CompletionHelper;
 class TypeValueCompletion extends ValueCompletion {
 
 
-    protected TypeValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    TypeValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
         super(completionHelper, completionResultSet);
     }
 

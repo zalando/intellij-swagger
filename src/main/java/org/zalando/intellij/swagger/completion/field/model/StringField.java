@@ -11,11 +11,6 @@ public class StringField extends Field {
     }
 
     @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
     public String getJsonPlaceholderSuffix(final int indentation) {
         return ": \"<caret>\"";
     }
@@ -28,12 +23,12 @@ public class StringField extends Field {
     @Override
     public String getCompleteJson(final int indentation) {
         final String leftPadding = org.apache.commons.lang.StringUtils.repeat(" ", indentation);
-        return leftPadding + "\"" + name + "\": \"<caret>\"";
+        return leftPadding + "\"" + getName() + "\": \"<caret>\"";
     }
 
     @Override
     public String getCompleteYaml(final int indentation) {
         final String leftPadding = org.apache.commons.lang.StringUtils.repeat(" ", indentation);
-        return leftPadding + name + ": <caret>";
+        return leftPadding + getName() + ": <caret>";
     }
 }

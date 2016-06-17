@@ -7,11 +7,6 @@ public class RefField extends Field {
     }
 
     @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
     public String getJsonPlaceholderSuffix(final int indentation) {
         return ": \"<caret>\"";
     }

@@ -6,7 +6,7 @@ import org.jetbrains.yaml.YAMLTokenTypes;
 import org.jetbrains.yaml.lexer.YAMLFlexLexer;
 
 
-public class YamlWordScanner extends DefaultWordsScanner {
+class YamlWordScanner extends DefaultWordsScanner {
 
     public YamlWordScanner() {
         super(new YAMLFlexLexer(), TokenSet.create(YAMLTokenTypes.SCALAR_KEY),

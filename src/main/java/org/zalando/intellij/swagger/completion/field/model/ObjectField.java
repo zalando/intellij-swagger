@@ -10,11 +10,6 @@ public class ObjectField extends Field {
         super(name, false);
     }
 
-    @Override
-    public String getName() {
-        return name;
-    }
-
     public ObjectField(final String name, final boolean required) {
         super(name, required);
     }
@@ -41,13 +36,13 @@ public class ObjectField extends Field {
     @Override
     public String getCompleteJson(final int indentation) {
         final String indentationPadding = org.apache.commons.lang.StringUtils.repeat(" ", indentation);
-        return indentationPadding + "\"" + name + "\"" + getJsonPlaceholderSuffix(indentation);
+        return indentationPadding + "\"" + getName() + "\"" + getJsonPlaceholderSuffix(indentation);
     }
 
     @Override
     public String getCompleteYaml(final int indentation) {
         final String indentationPadding = org.apache.commons.lang.StringUtils.repeat(" ", indentation);
-        return indentationPadding + name + getYamlPlaceholderSuffix(indentation);
+        return indentationPadding + getName() + getYamlPlaceholderSuffix(indentation);
     }
 
     private String printJsonChildren(final int indentation) {

@@ -2,9 +2,9 @@ package org.zalando.intellij.swagger.completion.value.model;
 
 public abstract class Value {
 
-    protected final String value;
+    final String value;
 
-    public Value(final String value) {
+    Value(final String value) {
         this.value = value;
     }
 

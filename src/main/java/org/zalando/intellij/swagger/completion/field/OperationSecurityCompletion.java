@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class OperationSecurityCompletion extends FieldCompletion {
+class OperationSecurityCompletion extends FieldCompletion {
 
-    protected OperationSecurityCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    OperationSecurityCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
         super(completionHelper, completionResultSet);
     }
 

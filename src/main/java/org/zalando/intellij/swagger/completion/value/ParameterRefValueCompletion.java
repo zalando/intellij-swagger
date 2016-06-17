@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 class ParameterRefValueCompletion extends ValueCompletion {
 
-    protected ParameterRefValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    ParameterRefValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
         super(completionHelper, completionResultSet);
     }
 

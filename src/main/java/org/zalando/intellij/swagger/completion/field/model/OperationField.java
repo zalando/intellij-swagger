@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 
-public class OperationField extends ObjectField {
+class OperationField extends ObjectField {
 
     private static final List<Field> REQUIRED_FIELDS =
             ImmutableList.of(new StringField("summary"),
@@ -12,13 +12,8 @@ public class OperationField extends ObjectField {
                     new ArrayField("parameters"),
                     new ObjectField("responses"));
 
-    public OperationField(final String name) {
+    OperationField(final String name) {
         super(name);
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     @Override

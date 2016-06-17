@@ -1,8 +1,8 @@
 package org.zalando.intellij.swagger.completion.value.model;
 
-public class BooleanValue extends Value {
+class BooleanValue extends Value {
 
-    public BooleanValue(final String value) {
+    BooleanValue(final String value) {
         super(value);
     }
 

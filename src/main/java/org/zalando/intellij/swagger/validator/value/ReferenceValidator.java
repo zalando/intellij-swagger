@@ -5,12 +5,12 @@ import com.intellij.psi.PsiElement;
 
 import java.util.Set;
 
-public class ReferenceValidator {
+class ReferenceValidator {
 
-    public void validateDefinitionReference(final String refValue,
-                                            final Set<String> availableDefinitions,
-                                            final PsiElement psiElement,
-                                            final AnnotationHolder annotationHolder) {
+    void validateDefinitionReference(final String refValue,
+                                     final Set<String> availableDefinitions,
+                                     final PsiElement psiElement,
+                                     final AnnotationHolder annotationHolder) {
         final boolean definitionFound = availableDefinitions.contains(refValue);
 
         if (!definitionFound) {
@@ -18,7 +18,7 @@ public class ReferenceValidator {
         }
     }
 
-    public void validateParameterReference(final String refValue,
+    void validateParameterReference(final String refValue,
                                            final Set<String> availableParameters,
                                            final PsiElement psiElement,
                                            final AnnotationHolder annotationHolder) {
@@ -29,7 +29,7 @@ public class ReferenceValidator {
         }
     }
 
-    public void validateResponseReference(final String refValue,
+    void validateResponseReference(final String refValue,
                                           final Set<String> availableResponses,
                                           final PsiElement psiElement,
                                           final AnnotationHolder annotationHolder) {

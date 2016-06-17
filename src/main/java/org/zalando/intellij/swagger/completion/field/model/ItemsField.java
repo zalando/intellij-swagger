@@ -4,18 +4,13 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 
-public class ItemsField extends ObjectField {
+class ItemsField extends ObjectField {
 
     private static final List<Field> REQUIRED_FIELDS =
             ImmutableList.of(new StringField("type"));
 
     public ItemsField() {
         super("items");
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     @Override
