@@ -1,0 +1,8 @@
+swagger: 2
+paths:
+  /pathA:
+    get:
+      parameters:
+        - name:
+          items:
+            collectionFormat: <caret>

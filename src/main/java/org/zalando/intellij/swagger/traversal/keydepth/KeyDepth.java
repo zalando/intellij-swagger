@@ -45,4 +45,10 @@ public interface KeyDepth {
     int getSecurityNth();
 
     int getSecurityValueNth();
+
+    int itemsCollectionFormatNth();
+
+    int parametersCollectionFormatNth();
+
+    int headersCollectionFormatNth();
 }

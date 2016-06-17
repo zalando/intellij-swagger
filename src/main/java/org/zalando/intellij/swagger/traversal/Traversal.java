@@ -213,6 +213,21 @@ public abstract class Traversal {
         return elementIsDirectValueOfKey(psiElement, "in");
     }
 
+    boolean isItemsCollectionFormat(final PsiElement psiElement) {
+        return elementIsDirectValueOfKey(psiElement, "collectionFormat") &&
+                nthKeyEquals(psiElement, keyDepth.itemsCollectionFormatNth(), "items");
+    }
+
+    boolean isParametersCollectionFormat(final PsiElement psiElement) {
+        return elementIsDirectValueOfKey(psiElement, "collectionFormat") &&
+                nthKeyEquals(psiElement, keyDepth.parametersCollectionFormatNth(), "parameters");
+    }
+
+    boolean isHeadersCollectionFormat(final PsiElement psiElement) {
+        return elementIsDirectValueOfKey(psiElement, "collectionFormat") &&
+                nthKeyEquals(psiElement, keyDepth.headersCollectionFormatNth(), "headers");
+    }
+
     abstract List<String> getSecurityScopesIfOAuth2(final PsiElement securityDefinitionItem);
 
     <T extends PsiElement> Optional<T> getNthOfType(final PsiElement psiElement, int nth, Class<T> targetType) {
@@ -244,7 +259,7 @@ public abstract class Traversal {
         return getParentByName(psiElement.getParent(), parentName);
     }
 
-    public List<PsiElement> getChildrenOfArrayObject(final PsiElement psiElement) {
+    List<PsiElement> getChildrenOfArrayObject(final PsiElement psiElement) {
         return Arrays.asList(psiElement.getChildren()).stream()
                 .filter(child -> child instanceof JsonArray || child instanceof YAMLSequence)
                 .map(el -> Arrays.asList(el.getChildren()))

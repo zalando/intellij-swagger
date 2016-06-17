@@ -2,7 +2,6 @@ package org.zalando.intellij.swagger.completion.value.model;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.net.MediaType;
-import com.intellij.util.indexing.containers.SortedIdSet;
 
 import java.util.List;
 
@@ -55,6 +54,34 @@ public class Values {
                 new StringValue("date"),
                 new StringValue("date-time"),
                 new StringValue("password")
+        );
+    }
+
+    public static List<Value> itemsCollectionFormat() {
+        return ImmutableList.of(
+                new StringValue("csv"),
+                new StringValue("ssv"),
+                new StringValue("tsv"),
+                new StringValue("pipes")
+        );
+    }
+
+    public static List<Value> parametersCollectionFormat() {
+        return ImmutableList.of(
+                new StringValue("csv"),
+                new StringValue("ssv"),
+                new StringValue("tsv"),
+                new StringValue("pipes"),
+                new StringValue("multi")
+        );
+    }
+
+    public static List<Value> headersCollectionFormat() {
+        return ImmutableList.of(
+                new StringValue("csv"),
+                new StringValue("ssv"),
+                new StringValue("tsv"),
+                new StringValue("pipes")
         );
     }
 

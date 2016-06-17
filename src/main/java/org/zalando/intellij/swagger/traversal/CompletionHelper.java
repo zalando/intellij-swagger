@@ -195,4 +195,15 @@ public class CompletionHelper {
         return traversal.getParentByName(psiElement, parentName);
     }
 
+    public boolean completeItemsCollectionFormat() {
+        return traversal.isItemsCollectionFormat(psiElement);
+    }
+
+    public boolean completeParametersCollectionFormat() {
+        return traversal.isParametersCollectionFormat(psiElement);
+    }
+
+    public boolean completeHeadersCollectionFormat() {
+        return traversal.isHeadersCollectionFormat(psiElement);
+    }
 }

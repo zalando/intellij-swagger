@@ -29,6 +29,12 @@ public class ValueCompletionFactory {
             return Optional.of(new SecurityScopeNameValueCompletion(completionHelper, completionResultSet));
         } else if (completionHelper.completeFormatValue()) {
             return Optional.of(new FormatValueCompletion(completionHelper, completionResultSet));
+        } else if (completionHelper.completeItemsCollectionFormat()) {
+            return Optional.of(new ItemsCollectionFormatValueCompletion(completionHelper, completionResultSet));
+        } else if (completionHelper.completeParametersCollectionFormat()) {
+            return Optional.of(new ParametersCollectionFormatValueCompletion(completionHelper, completionResultSet));
+        } else if (completionHelper.completeHeadersCollectionFormat()) {
+            return Optional.of(new HeadersCollectionFormatValueCompletion(completionHelper, completionResultSet));
         } else {
             return Optional.empty();
         }

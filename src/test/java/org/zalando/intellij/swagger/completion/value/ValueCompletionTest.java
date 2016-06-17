@@ -108,4 +108,24 @@ public class ValueCompletionTest extends AbstractJsonOrYamlCompletionTest {
                 .isOfSize(1);
     }
 
+    @Test
+    public void thatParametersCollectionFormatValuesAreSuggested() {
+        getCaretCompletions("parameters_collection_format")
+                .assertContains("csv", "ssv", "tsv", "pipes", "multi")
+                .isOfSize(5);
+    }
+
+    @Test
+    public void thatHeadersCollectionFormatValuesAreSuggested() {
+        getCaretCompletions("headers_collection_format")
+                .assertContains("csv", "ssv", "tsv", "pipes")
+                .isOfSize(4);
+    }
+
+    @Test
+    public void thatItemsCollectionFormatValuesAreSuggested() {
+        getCaretCompletions("items_collection_format")
+                .assertContains("csv", "ssv", "tsv", "pipes")
+                .isOfSize(4);
+    }
 }
