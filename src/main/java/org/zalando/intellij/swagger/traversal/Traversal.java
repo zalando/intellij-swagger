@@ -205,6 +205,10 @@ public abstract class Traversal {
         return elementIsDirectValueOfKey(psiElement, "type");
     }
 
+    final boolean isFormatValue(final PsiElement psiElement) {
+        return elementIsDirectValueOfKey(psiElement, "format");
+    }
+
     final boolean isInValue(final PsiElement psiElement) {
         return elementIsDirectValueOfKey(psiElement, "in");
     }

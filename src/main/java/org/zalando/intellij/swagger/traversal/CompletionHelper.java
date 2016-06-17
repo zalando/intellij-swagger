@@ -147,6 +147,10 @@ public class CompletionHelper {
         return traversal.isTypeValue(psiElement);
     }
 
+    public boolean completeFormatValue() {
+        return traversal.isFormatValue(psiElement);
+    }
+
     public boolean completeInValue() {
         return traversal.isInValue(psiElement);
     }
@@ -190,4 +194,5 @@ public class CompletionHelper {
     public Optional<PsiElement> getParentByName(final String parentName) {
         return traversal.getParentByName(psiElement, parentName);
     }
+
 }

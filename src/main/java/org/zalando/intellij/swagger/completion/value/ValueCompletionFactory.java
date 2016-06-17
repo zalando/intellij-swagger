@@ -27,6 +27,8 @@ public class ValueCompletionFactory {
             return Optional.of(new ResponseRefValueCompletion(completionHelper, completionResultSet));
         } else if (completionHelper.completeSecurityScopeNameValue()) {
             return Optional.of(new SecurityScopeNameValueCompletion(completionHelper, completionResultSet));
+        } else if (completionHelper.completeFormatValue()) {
+            return Optional.of(new FormatValueCompletion(completionHelper, completionResultSet));
         } else {
             return Optional.empty();
         }

@@ -2,6 +2,7 @@ package org.zalando.intellij.swagger.completion.value.model;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.net.MediaType;
+import com.intellij.util.indexing.containers.SortedIdSet;
 
 import java.util.List;
 
@@ -40,6 +41,20 @@ public class Values {
                 new StringValue("integer"),
                 new StringValue("boolean"),
                 new StringValue("array")
+        );
+    }
+
+    public static List<Value> formats() {
+        return ImmutableList.of(
+                new StringValue("int32"),
+                new StringValue("int64"),
+                new StringValue("float"),
+                new StringValue("double"),
+                new StringValue("byte"),
+                new StringValue("binary"),
+                new StringValue("date"),
+                new StringValue("date-time"),
+                new StringValue("password")
         );
     }
 
