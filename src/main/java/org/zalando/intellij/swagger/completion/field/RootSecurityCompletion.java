@@ -9,16 +9,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class SecurityCompletion extends FieldCompletion {
+public class RootSecurityCompletion extends FieldCompletion {
 
-    protected SecurityCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    protected RootSecurityCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
         super(completionHelper, completionResultSet);
     }
 
     @Override
     public void fill() {
         getSecurityDefinitions().stream().forEach(field -> {
-            final List<PsiElement> security = completionHelper.getChildrenOf("security");
+            final List<PsiElement> security = completionHelper.getChildrenOfRoot("security");
             final List<String> existingNames = extractNames(security);
             if (!existingNames.contains(field.getName())) {
                 addUnique(field);

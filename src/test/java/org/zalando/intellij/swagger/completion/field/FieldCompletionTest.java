@@ -215,4 +215,11 @@ public class FieldCompletionTest extends AbstractJsonOrYamlCompletionTest {
                 .assertContains("githubAccessCode")
                 .isOfSize(1);
     }
+
+    @Test
+    public void thatSecurityFieldsInOperationAreSuggested() {
+        getCaretCompletions("security_in_operation")
+                .assertContains("petstoreImplicit")
+                .isOfSize(1);
+    }
 }

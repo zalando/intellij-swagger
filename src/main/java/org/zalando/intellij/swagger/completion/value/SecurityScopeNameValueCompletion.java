@@ -24,7 +24,7 @@ class SecurityScopeNameValueCompletion extends ValueCompletion {
     }
 
     private List<Value> getSecurityDefinitionByName(final String securityDefinitionName) {
-        return completionHelper.getChildrenOf("securityDefinitions").stream()
+        return completionHelper.getChildrenOfRoot("securityDefinitions").stream()
                 .filter(el -> securityDefinitionName.equals(completionHelper.getKeyNameOfObject(el).orElse(null)))
                 .map(completionHelper::getSecurityScopesIfOAuth2)
                 .flatMap(Collection::stream)

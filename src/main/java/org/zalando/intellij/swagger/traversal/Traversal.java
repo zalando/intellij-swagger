@@ -1,13 +1,12 @@
 package org.zalando.intellij.swagger.traversal;
 
-import com.google.common.collect.ImmutableList;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.json.psi.JsonProperty;
-import com.intellij.json.psi.JsonValue;
+import com.intellij.json.psi.JsonArray;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import org.zalando.intellij.swagger.completion.StringUtils;
+import com.intellij.psi.PsiNamedElement;
+import org.jetbrains.yaml.psi.YAMLSequence;
 import org.zalando.intellij.swagger.completion.field.model.Field;
 import org.zalando.intellij.swagger.completion.value.model.Value;
 import org.zalando.intellij.swagger.traversal.keydepth.KeyDepth;
@@ -43,6 +42,7 @@ public abstract class Traversal {
     abstract boolean elementIsDirectValueOfKey(final PsiElement psiElement, final String... keyNames);
 
     abstract List<PsiElement> getChildrenOf(final String propertyName, final PsiFile psiFile);
+
 
     public abstract List<String> getKeyNamesOf(final String propertyName, final PsiFile containingFile);
 
@@ -180,6 +180,11 @@ public abstract class Traversal {
                 !isChildOfKeyWithName(psiElement, "paths");
     }
 
+    final boolean isOperationSecurityKey(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getSecurityNth(), "security") &&
+                isChildOfKeyWithName(psiElement, "paths");
+    }
+
     private boolean nthKeyEquals(final PsiElement psiElement, final int nth, final String targetName) {
         return getNameOfNthKey(psiElement, nth)
                 .filter(name -> name.equals(targetName))
@@ -217,6 +222,30 @@ public abstract class Traversal {
             }
         }
         return getNthOfType(psiElement.getParent(), nth, targetType);
+    }
+
+    Optional<PsiElement> getParentByName(final PsiElement psiElement, final String parentName) {
+        if (psiElement == null) {
+            return Optional.empty();
+        }
+
+        if (psiElement instanceof PsiNamedElement) {
+            final PsiNamedElement psiNamedElement = (PsiNamedElement) psiElement;
+
+            if (parentName.equals(psiNamedElement.getName())) {
+                return Optional.of(psiElement);
+            }
+        }
+
+        return getParentByName(psiElement.getParent(), parentName);
+    }
+
+    public List<PsiElement> getChildrenOfArrayObject(final PsiElement psiElement) {
+        return Arrays.asList(psiElement.getChildren()).stream()
+                .filter(child -> child instanceof JsonArray || child instanceof YAMLSequence)
+                .map(el -> Arrays.asList(el.getChildren()))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 
 }

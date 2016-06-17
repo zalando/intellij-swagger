@@ -50,7 +50,9 @@ public class FieldCompletionFactory {
         } else if (completionHelper.completeResponseDefinition()) {
             return Optional.of(new ResponseDefinitionCompletion(completionHelper, completionResultSet));
         } else if (completionHelper.completeRootSecurityKey()) {
-            return Optional.of(new SecurityCompletion(completionHelper, completionResultSet));
+            return Optional.of(new RootSecurityCompletion(completionHelper, completionResultSet));
+        } else if (completionHelper.completeOperationSecurityKey()) {
+            return Optional.of(new OperationSecurityCompletion(completionHelper, completionResultSet));
         } else {
             return Optional.empty();
         }

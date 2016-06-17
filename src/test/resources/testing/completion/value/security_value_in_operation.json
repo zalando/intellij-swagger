@@ -1,0 +1,48 @@
+{
+  "swagger": "2.0",
+  "security": [
+    {
+      "petstoreImplicit": [
+      ]
+    }
+  ],
+  "paths": {
+    "/pets/{id}": {
+      "get": {
+        "security": [
+          {
+            "githubAccessCode": [
+              "user", <caret>
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "githubAccessCode": {
+      "type": "oauth2",
+      "scopes": {
+        "user": "Grants read/write access to profile info only. Note that this scope includes user:email and user:follow.",
+        "admin:public_key": "Fully manage public keys."
+      },
+      "flow": "accessCode",
+      "authorizationUrl": "https://github.com/login/oauth/authorize",
+      "tokenUrl": "https://github.com/login/oauth/access_token"
+    },
+    "petstoreImplicit": {
+      "type": "oauth2",
+      "scopes": {
+        "user:follow": "Grants access to follow or unfollow other users.",
+        "public_repo": "Grants read/write access to code, commit statuses, and deployment statuses for public repositories and organizations."
+      },
+      "flow": "implicit",
+      "authorizationUrl": "http://petstore.swagger.io/oauth/dialog"
+    },
+    "internalApiKey": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "api_key"
+    }
+  }
+}

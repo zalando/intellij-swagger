@@ -111,8 +111,12 @@ public class CompletionHelper {
         return traversal.isParameterRefValue(psiElement);
     }
 
-    public List<PsiElement> getChildrenOf(final String propertyName) {
+    public List<PsiElement> getChildrenOfRoot(final String propertyName) {
         return traversal.getChildrenOf(propertyName, psiElement.getContainingFile());
+    }
+
+    public List<PsiElement> getChildrenOfArrayObject(final PsiElement psiElement) {
+        return traversal.getChildrenOfArrayObject(psiElement);
     }
 
     public List<String> getKeyNamesOf(final String propertyName) {
@@ -159,6 +163,10 @@ public class CompletionHelper {
         return traversal.isRootSecurityKey(psiElement);
     }
 
+    public boolean completeOperationSecurityKey() {
+        return traversal.isOperationSecurityKey(psiElement);
+    }
+
     public Optional<String> extractSecurityNameFromSecurityObject(final PsiElement psiElement) {
         return traversal.extractSecurityNameFromSecurityItem(psiElement);
     }
@@ -179,4 +187,7 @@ public class CompletionHelper {
         return traversal.getParentKeyName(psiElement);
     }
 
+    public Optional<PsiElement> getParentByName(final String parentName) {
+        return traversal.getParentByName(psiElement, parentName);
+    }
 }

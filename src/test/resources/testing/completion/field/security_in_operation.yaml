@@ -1,0 +1,12 @@
+swagger: "2.0"
+security:
+  - petstoreImplicit: []
+paths:
+  /pets/{id}:
+    get:
+      security:
+        - githubAccessCode: []
+        - <caret>
+securityDefinitions:
+  githubAccessCode: {}
+  petstoreImplicit: {}

@@ -12,6 +12,7 @@ import com.intellij.json.psi.JsonProperty;
 import com.intellij.json.psi.JsonValue;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiNamedElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.StringUtils;
 import org.zalando.intellij.swagger.completion.field.model.Field;

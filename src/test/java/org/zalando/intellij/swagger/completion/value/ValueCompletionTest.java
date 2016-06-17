@@ -146,4 +146,11 @@ public class ValueCompletionTest extends AbstractJsonOrYamlCompletionTest {
                 .isOfSize(1);
     }
 
+    @Test
+    public void thatOperationSecurityScopeNameFieldsAreSuggested() {
+        getCaretCompletions("security_value_in_operation")
+                .assertContains("admin:public_key")
+                .isOfSize(1);
+    }
+
 }
