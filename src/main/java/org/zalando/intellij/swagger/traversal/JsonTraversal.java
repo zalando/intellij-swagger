@@ -1,5 +1,6 @@
 package org.zalando.intellij.swagger.traversal;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.intellij.codeInsight.completion.InsertHandler;
@@ -20,6 +21,7 @@ import org.zalando.intellij.swagger.insert.JsonInsertValueHandler;
 import org.zalando.intellij.swagger.traversal.keydepth.KeyDepth;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -42,6 +44,7 @@ public class JsonTraversal extends Traversal {
         return psiElement.getParent().getParent().getParent().getParent() instanceof JsonFile;
     }
 
+    @Override
     public boolean isKey(final PsiElement psiElement) {
         final PsiElement firstParent = psiElement.getParent();
         return Optional.ofNullable(firstParent)
@@ -53,7 +56,8 @@ public class JsonTraversal extends Traversal {
                 .isPresent();
     }
 
-    public Optional<String> getKeyName(final PsiElement psiElement) {
+    @Override
+    public Optional<String> getKeyNameIfKey(final PsiElement psiElement) {
         final PsiElement firstParent = psiElement.getParent();
         return Optional.ofNullable(firstParent)
                 .map(PsiElement::getParent)
@@ -65,6 +69,20 @@ public class JsonTraversal extends Traversal {
                 .map(StringUtils::removeAllQuotes);
     }
 
+    @Override
+    public Optional<String> getKeyNameOfObject(final PsiElement psiElement) {
+        return Optional.of(psiElement)
+                .filter(el -> el instanceof JsonProperty)
+                .map(JsonProperty.class::cast)
+                .map(JsonProperty::getName);
+    }
+
+    @Override
+    public Optional<String> getParentKeyName(final PsiElement psiElement) {
+        return getNthOfType(psiElement, 1, JsonProperty.class)
+                .map(JsonProperty::getName)
+                .map(StringUtils::removeAllQuotes);
+    }
 
     @Override
     public boolean isValue(final PsiElement psiElement) {
@@ -155,6 +173,19 @@ public class JsonTraversal extends Traversal {
     }
 
     @Override
+    public boolean isUniqueArrayStringValue(final String value, final PsiElement psiElement) {
+        return Optional.ofNullable(psiElement.getParent())
+                .map(PsiElement::getParent)
+                .filter(el -> el instanceof JsonArray)
+                .map(el -> Arrays.asList(el.getChildren()))
+                .map(children -> children.stream().filter(c -> c instanceof JsonLiteral))
+                .map(childrenStream -> childrenStream.map(JsonLiteral.class::cast))
+                .map(childrenStream -> childrenStream.noneMatch(jsonLiteral ->
+                        value.equals(StringUtils.removeAllQuotes(jsonLiteral.getText()))))
+                .orElse(true);
+    }
+
+    @Override
     public InsertHandler<LookupElement> createInsertFieldHandler(final Field field) {
         return new JsonInsertFieldHandler(this, field);
     }
@@ -162,6 +193,46 @@ public class JsonTraversal extends Traversal {
     @Override
     public InsertHandler<LookupElement> createInsertValueHandler(final Value value) {
         return new JsonInsertValueHandler(value);
+    }
+
+    @Override
+    List<String> getSecurityScopesIfOAuth2(final PsiElement securityDefinitionItem) {
+        final List<JsonProperty> properties = getChildProperties(securityDefinitionItem);
+
+        final boolean isOAuth2 = properties.stream()
+                .anyMatch(prop -> {
+                    final Optional<String> value = Optional.ofNullable(prop.getValue())
+                            .map(JsonValue::getText)
+                            .map(StringUtils::removeAllQuotes);
+                    return "type".equals(prop.getName()) && Optional.of("oauth2").equals(value);
+                });
+
+        if (isOAuth2) {
+            return properties.stream()
+                    .filter(prop -> "scopes".equals(prop.getName()))
+                    .map(this::getChildProperties)
+                    .flatMap(Collection::stream)
+                    .map(JsonProperty::getName)
+                    .collect(Collectors.toList());
+        }
+
+        return ImmutableList.of();
+    }
+
+    private List<JsonProperty> getChildProperties(final PsiElement element) {
+        return toJsonProperty(element)
+                .map(JsonProperty::getValue)
+                .map(JsonValue::getChildren)
+                .map(Arrays::asList)
+                .map(children -> children.stream().map(this::toJsonProperty))
+                .map(children -> children.filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .collect(Collectors.toList()))
+                .orElse(ImmutableList.of());
+    }
+
+    private Optional<JsonProperty> toJsonProperty(final PsiElement psiElement) {
+        return psiElement instanceof JsonProperty ? Optional.of((JsonProperty) psiElement) : Optional.empty();
     }
 
     @Override

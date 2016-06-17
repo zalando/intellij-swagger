@@ -49,7 +49,7 @@ public class FieldCompletionFactory {
             return Optional.of(new HeadersCompletion(completionHelper, completionResultSet));
         } else if (completionHelper.completeResponseDefinition()) {
             return Optional.of(new ResponseDefinitionCompletion(completionHelper, completionResultSet));
-        } else if (completionHelper.completeSecurityKey()) {
+        } else if (completionHelper.completeRootSecurityKey()) {
             return Optional.of(new SecurityCompletion(completionHelper, completionResultSet));
         } else {
             return Optional.empty();

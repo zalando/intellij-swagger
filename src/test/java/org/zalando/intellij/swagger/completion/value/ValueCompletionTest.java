@@ -95,8 +95,8 @@ public class ValueCompletionTest extends AbstractJsonOrYamlCompletionTest {
     @Test
     public void testGlobalProduces() {
         getCaretCompletions("media_type_produces")
-                .assertNotContains("consumes", "produces", "paths")
-                .assertContains("application/xml", "image/*", "text/plain");
+                .assertContains("application/json", "image/*", "text/plain")
+                .assertNotContains("consumes", "produces", "paths", "application/xml");
     }
 
     @Test
@@ -137,6 +137,13 @@ public class ValueCompletionTest extends AbstractJsonOrYamlCompletionTest {
     public void thatBooleanValuesAreNotSuggestedForRequiredKeyInSchema() {
         getCaretCompletions("required_key_in_schema")
                 .assertNotContains("true", "false");
+    }
+
+    @Test
+    public void thatRootSecurityScopeNameFieldsAreSuggested() {
+        getCaretCompletions("security_value_in_root")
+                .assertContains("admin:public_key")
+                .isOfSize(1);
     }
 
 }

@@ -123,6 +123,10 @@ public class CompletionHelper {
         return traversal.isUniqueKey(keyName, psiElement);
     }
 
+    public boolean isUniqueArrayStringValue(final String keyName) {
+        return traversal.isUniqueArrayStringValue(keyName, psiElement);
+    }
+
     public InsertHandler<LookupElement> createInsertFieldHandler(final Field field) {
         return traversal.createInsertFieldHandler(field);
     }
@@ -151,11 +155,28 @@ public class CompletionHelper {
         return traversal.isResponseDefinition(psiElement);
     }
 
-    public boolean completeSecurityKey() {
-        return traversal.isSecurityKey(psiElement);
+    public boolean completeRootSecurityKey() {
+        return traversal.isRootSecurityKey(psiElement);
     }
 
     public Optional<String> extractSecurityNameFromSecurityObject(final PsiElement psiElement) {
         return traversal.extractSecurityNameFromSecurityItem(psiElement);
     }
+
+    public List<String> getSecurityScopesIfOAuth2(final PsiElement securityDefinitionItem) {
+        return traversal.getSecurityScopesIfOAuth2(securityDefinitionItem);
+    }
+
+    public boolean completeSecurityScopeNameValue() {
+        return traversal.isSecurityScopeNameValue(psiElement);
+    }
+
+    public Optional<String> getKeyNameOfObject(final PsiElement psiElement) {
+        return traversal.getKeyNameOfObject(psiElement);
+    }
+
+    public Optional<String> getParentKeyName() {
+        return traversal.getParentKeyName(psiElement);
+    }
+
 }

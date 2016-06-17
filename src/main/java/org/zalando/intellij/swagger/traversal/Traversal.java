@@ -1,15 +1,22 @@
 package org.zalando.intellij.swagger.traversal;
 
+import com.google.common.collect.ImmutableList;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.json.psi.JsonProperty;
+import com.intellij.json.psi.JsonValue;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import org.zalando.intellij.swagger.completion.StringUtils;
 import org.zalando.intellij.swagger.completion.field.model.Field;
 import org.zalando.intellij.swagger.completion.value.model.Value;
 import org.zalando.intellij.swagger.traversal.keydepth.KeyDepth;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public abstract class Traversal {
 
@@ -21,7 +28,11 @@ public abstract class Traversal {
 
     public abstract boolean isKey(final PsiElement psiElement);
 
-    public abstract Optional<String> getKeyName(final PsiElement psiElement);
+    public abstract Optional<String> getKeyNameIfKey(final PsiElement psiElement);
+
+    public abstract Optional<String> getKeyNameOfObject(final PsiElement psiElement);
+
+    public abstract Optional<String> getParentKeyName(final PsiElement psiElement);
 
     abstract boolean elementIsInsideParametersArray(final PsiElement psiElement);
 
@@ -36,6 +47,8 @@ public abstract class Traversal {
     public abstract List<String> getKeyNamesOf(final String propertyName, final PsiFile containingFile);
 
     abstract boolean isUniqueKey(String keyName, final PsiElement psiElement);
+
+    abstract boolean isUniqueArrayStringValue(String value, final PsiElement psiElement);
 
     abstract boolean elementIsInsideArray(final PsiElement psiElement);
 
@@ -162,8 +175,9 @@ public abstract class Traversal {
         return nthKeyEquals(psiElement, 1, "$ref");
     }
 
-    final boolean isSecurityKey(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getSecurityNth(), "security");
+    final boolean isRootSecurityKey(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getSecurityNth(), "security") &&
+                !isChildOfKeyWithName(psiElement, "paths");
     }
 
     private boolean nthKeyEquals(final PsiElement psiElement, final int nth, final String targetName) {
@@ -177,6 +191,10 @@ public abstract class Traversal {
                 "exclusiveMaximum", "exclusiveMinimum", "uniqueItems", "readOnly", "attribute", "wrapped");
     }
 
+    boolean isSecurityScopeNameValue(final PsiElement psiElement) {
+        return nthKeyEquals(psiElement, keyDepth.getSecurityValueNth(), "security") &&
+                elementIsInsideArray(psiElement);
+    }
 
     final boolean isTypeValue(final PsiElement psiElement) {
         return elementIsDirectValueOfKey(psiElement, "type");
@@ -185,6 +203,8 @@ public abstract class Traversal {
     final boolean isInValue(final PsiElement psiElement) {
         return elementIsDirectValueOfKey(psiElement, "in");
     }
+
+    abstract List<String> getSecurityScopesIfOAuth2(final PsiElement securityDefinitionItem);
 
     <T extends PsiElement> Optional<T> getNthOfType(final PsiElement psiElement, int nth, Class<T> targetType) {
         if (psiElement == null) {

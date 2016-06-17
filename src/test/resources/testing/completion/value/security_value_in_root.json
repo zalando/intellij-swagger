@@ -1,0 +1,62 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.9-abcd",
+    "title": "Swagger Sample API",
+    "description": "A sample API that uses a petstore as an example to demonstrate features in the swagger-2.0 specification",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "name": "Swagger API Team",
+      "url": "http://swagger.io"
+    },
+    "license": {
+      "name": "Creative Commons 4.0 International",
+      "url": "http://creativecommons.org/licenses/by/4.0/"
+    }
+  },
+  "basePath": "/v1",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json",
+    "application/xml"
+  ],
+  "security": [
+    {
+      "githubAccessCode": [
+        "user", <caret>
+      ]
+    }
+  ],
+  "securityDefinitions": {
+    "githubAccessCode": {
+      "type": "oauth2",
+      "scopes": {
+        "user": "Grants read/write access to profile info only. Note that this scope includes user:email and user:follow.",
+        "admin:public_key": "Fully manage public keys."
+      },
+      "flow": "accessCode",
+      "authorizationUrl": "https://github.com/login/oauth/authorize",
+      "tokenUrl": "https://github.com/login/oauth/access_token"
+    },
+    "petstoreImplicit": {
+      "type": "oauth2",
+      "scopes": {
+        "user:follow": "Grants access to follow or unfollow other users.",
+        "public_repo": "Grants read/write access to code, commit statuses, and deployment statuses for public repositories and organizations."
+      },
+      "flow": "implicit",
+      "authorizationUrl": "http://petstore.swagger.io/oauth/dialog"
+    },
+    "internalApiKey": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "api_key"
+    }
+  }
+}

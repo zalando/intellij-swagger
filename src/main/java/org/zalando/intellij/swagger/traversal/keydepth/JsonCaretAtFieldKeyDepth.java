@@ -106,4 +106,9 @@ public class JsonCaretAtFieldKeyDepth implements KeyDepth {
     public int getSecurityNth() {
         return 2;
     }
+
+    @Override
+    public int getSecurityValueNth() {
+        return 2;
+    }
 }

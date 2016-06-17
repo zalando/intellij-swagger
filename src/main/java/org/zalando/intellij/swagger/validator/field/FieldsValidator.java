@@ -17,7 +17,7 @@ public class FieldsValidator {
     }
 
     public void validate(@NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
-        traversal.getKeyName(psiElement).ifPresent(keyName -> {
+        traversal.getKeyNameIfKey(psiElement).ifPresent(keyName -> {
             if (traversal.isRoot(psiElement)) {
                 unknownKeyValidator.validate(keyName, Fields.root(), psiElement, annotationHolder);
             } else if (traversal.isContact(psiElement)) {

@@ -20,7 +20,9 @@ public abstract class ValueCompletion {
     public abstract void fill();
 
     public void addValue(final Value value) {
-        completionResultSet.addElement(create(value, completionHelper.createInsertValueHandler(value)));
+        if (completionHelper.isUniqueArrayStringValue(value.getValue())) {
+            completionResultSet.addElement(create(value, completionHelper.createInsertValueHandler(value)));
+        }
     }
 
     private LookupElementBuilder create(final Value value,

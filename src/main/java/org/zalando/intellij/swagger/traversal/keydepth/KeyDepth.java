@@ -43,4 +43,6 @@ public interface KeyDepth {
     int getSchemesNth();
 
     int getSecurityNth();
+
+    int getSecurityValueNth();
 }

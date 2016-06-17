@@ -1,5 +1,6 @@
 package org.zalando.intellij.swagger.traversal;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.intellij.codeInsight.completion.InsertHandler;
@@ -12,6 +13,7 @@ import org.jetbrains.yaml.psi.YAMLSequence;
 import org.jetbrains.yaml.psi.YAMLSequenceItem;
 import org.jetbrains.yaml.psi.YAMLValue;
 import org.jetbrains.yaml.psi.impl.YAMLPlainTextImpl;
+import org.zalando.intellij.swagger.completion.StringUtils;
 import org.zalando.intellij.swagger.completion.field.model.Field;
 import org.zalando.intellij.swagger.completion.value.model.Value;
 import org.zalando.intellij.swagger.insert.YamlInsertFieldHandler;
@@ -19,6 +21,7 @@ import org.zalando.intellij.swagger.insert.YamlInsertValueHandler;
 import org.zalando.intellij.swagger.traversal.keydepth.KeyDepth;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -48,14 +51,28 @@ public class YamlTraversal extends Traversal {
     }
 
     @Override
-    public Optional<String> getKeyName(final PsiElement psiElement) {
+    public Optional<String> getKeyNameIfKey(final PsiElement psiElement) {
         return Optional.of(psiElement.getParent())
                 .filter(el -> el instanceof YAMLKeyValue)
                 .map(YAMLKeyValue.class::cast)
                 .map(YAMLKeyValue::getKey)
                 .filter(key -> key == psiElement)
                 .isPresent() ? Optional.of(((YAMLKeyValue) psiElement.getParent()).getKeyText()) : Optional.empty();
+    }
 
+    @Override
+    public Optional<String> getKeyNameOfObject(final PsiElement psiElement) {
+        return Optional.of(psiElement)
+                .filter(el -> el instanceof YAMLKeyValue)
+                .map(YAMLKeyValue.class::cast)
+                .map(YAMLKeyValue::getName);
+    }
+
+    @Override
+    public Optional<String> getParentKeyName(final PsiElement psiElement) {
+        return getNthOfType(psiElement, 1, YAMLKeyValue.class)
+                .map(YAMLKeyValue::getName)
+                .map(StringUtils::removeAllQuotes);
     }
 
     @Override
@@ -116,6 +133,22 @@ public class YamlTraversal extends Traversal {
     }
 
     @Override
+    boolean isUniqueArrayStringValue(final String value, final PsiElement psiElement) {
+        return Optional.ofNullable(psiElement.getParent())
+                .map(PsiElement::getParent)
+                .map(PsiElement::getParent)
+                .filter(el -> el instanceof YAMLSequence)
+                .map(el -> Arrays.asList(el.getChildren()))
+                .map(children -> children.stream().filter(c -> c instanceof YAMLSequenceItem))
+                .map(childrenStream -> childrenStream.map(YAMLSequenceItem.class::cast))
+                .map(childrenStream -> childrenStream.noneMatch(item ->
+                        item.getValue() != null &&
+                                value.equals(StringUtils.removeAllQuotes(item.getValue().getText()))))
+                .orElse(true);
+
+    }
+
+    @Override
     public InsertHandler<LookupElement> createInsertFieldHandler(final Field field) {
         return new YamlInsertFieldHandler(field);
     }
@@ -123,6 +156,46 @@ public class YamlTraversal extends Traversal {
     @Override
     public InsertHandler<LookupElement> createInsertValueHandler(final Value value) {
         return new YamlInsertValueHandler();
+    }
+
+    @Override
+    List<String> getSecurityScopesIfOAuth2(final PsiElement securityDefinitionItem) {
+        final List<YAMLKeyValue> properties = getChildProperties(securityDefinitionItem);
+
+        final boolean isOAuth2 = properties.stream()
+                .anyMatch(prop -> {
+                    final Optional<String> value = Optional.ofNullable(prop.getValue())
+                            .map(YAMLValue::getText)
+                            .map(StringUtils::removeAllQuotes);
+                    return "type".equals(prop.getName()) && Optional.of("oauth2").equals(value);
+                });
+
+        if (isOAuth2) {
+            return properties.stream()
+                    .filter(prop -> "scopes".equals(prop.getName()))
+                    .map(this::getChildProperties)
+                    .flatMap(Collection::stream)
+                    .map(YAMLKeyValue::getName)
+                    .collect(Collectors.toList());
+        }
+
+        return ImmutableList.of();
+    }
+
+    private List<YAMLKeyValue> getChildProperties(final PsiElement element) {
+        return toYamlKeyValue(element)
+                .map(YAMLKeyValue::getValue)
+                .map(YAMLValue::getChildren)
+                .map(Arrays::asList)
+                .map(children -> children.stream().map(this::toYamlKeyValue))
+                .map(children -> children.filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .collect(Collectors.toList()))
+                .orElse(ImmutableList.of());
+    }
+
+    private Optional<YAMLKeyValue> toYamlKeyValue(final PsiElement psiElement) {
+        return psiElement instanceof YAMLKeyValue ? Optional.of((YAMLKeyValue) psiElement) : Optional.empty();
     }
 
     @Override
@@ -162,6 +235,7 @@ public class YamlTraversal extends Traversal {
                 .map(YAMLKeyValue::getName);
     }
 
+    @Override
     public boolean elementIsDirectValueOfKey(final PsiElement psiElement, final String... keyNames) {
         final Set<String> targetKeyNames = Sets.newHashSet(keyNames);
         return getNthOfType(psiElement, 1, YAMLKeyValue.class)
