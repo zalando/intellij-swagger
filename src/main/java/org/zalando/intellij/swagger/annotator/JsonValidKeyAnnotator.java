@@ -11,7 +11,7 @@ import org.zalando.intellij.swagger.validator.field.FieldsValidator;
 
 public class JsonValidKeyAnnotator implements Annotator {
 
-    private final FieldsValidator fieldsValidator = new FieldsValidator(new JsonTraversal(new JsonCaretAtFieldKeyDepth()));
+    private final FieldsValidator fieldsValidator = new FieldsValidator(new JsonTraversal());
 
     @Override
     public void annotate(@NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {

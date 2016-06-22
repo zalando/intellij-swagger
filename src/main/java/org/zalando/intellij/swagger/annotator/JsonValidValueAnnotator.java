@@ -11,7 +11,7 @@ import org.zalando.intellij.swagger.traversal.keydepth.JsonCaretAtFieldKeyDepth;
 
 public class JsonValidValueAnnotator implements Annotator {
 
-    private final ValuesValidator valuesValidator = new ValuesValidator(new JsonTraversal(new JsonCaretAtFieldKeyDepth()));
+    private final ValuesValidator valuesValidator = new ValuesValidator(new JsonTraversal());
 
     @Override
     public void annotate(@NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {

@@ -20,79 +20,79 @@ public class CompletionHelper {
     }
 
     public boolean completeRootKey() {
-        return traversal.isRoot(psiElement);
+        return traversal.childOfRoot(psiElement);
     }
 
     public boolean completeInfoKey() {
-        return traversal.isInfo(psiElement);
+        return traversal.childOfInfo(psiElement);
     }
 
     public boolean completeContactKey() {
-        return traversal.isContact(psiElement);
+        return traversal.childOfContact(psiElement);
     }
 
     public boolean completeLicenseKey() {
-        return traversal.isLicense(psiElement);
+        return traversal.childOfLicense(psiElement);
     }
 
     public boolean completePathKey() {
-        return traversal.isPath(psiElement);
+        return traversal.childOfPath(psiElement);
     }
 
     public boolean completeOperationKey() {
-        return traversal.isOperation(psiElement);
+        return traversal.childOfOperation(psiElement);
     }
 
     public boolean completeExternalDocsKey() {
-        return traversal.isExternalDocs(psiElement);
+        return traversal.childOfExternalDocs(psiElement);
     }
 
     public boolean completeParametersKey() {
-        return traversal.isParameters(psiElement);
+        return traversal.childOfParameters(psiElement);
     }
 
     public boolean completeItemsKey() {
-        return traversal.isItems(psiElement);
+        return traversal.childOfItems(psiElement);
     }
 
     public boolean completeResponsesKey() {
-        return traversal.isResponses(psiElement);
+        return traversal.childOfResponses(psiElement);
     }
 
     public boolean completeResponseKey() {
-        return traversal.isResponse(psiElement);
+        return traversal.childOfResponse(psiElement);
     }
 
     public boolean completeHeaderKey() {
-        return traversal.isHeader(psiElement);
+        return traversal.childOfHeader(psiElement);
     }
 
     public boolean completeHeadersKey() {
-        return traversal.isHeaders(psiElement);
+        return traversal.childOfHeaders(psiElement);
     }
 
     public boolean completeTagKey() {
-        return traversal.isTag(psiElement);
+        return traversal.childOfTag(psiElement);
     }
 
     public boolean completeSecurityDefinitionKey() {
-        return traversal.isSecurityDefinition(psiElement);
+        return traversal.childOfSecurityDefinition(psiElement);
     }
 
     public boolean completeSchemaKey() {
-        return traversal.isSchema(psiElement);
+        return traversal.childOfSchema(psiElement);
     }
 
     public boolean completeXmlKey() {
-        return traversal.isXml(psiElement);
+        return traversal.childOfXml(psiElement);
     }
 
     public boolean completeDefinitionsKey() {
-        return traversal.isDefinitions(psiElement);
+        return traversal.childOfDefinitions(psiElement);
     }
 
     public boolean completeParameterDefinitionKey() {
-        return traversal.isParameterDefinition(psiElement);
+        return traversal.childOfParameterDefinition(psiElement);
     }
 
     public boolean completeMimeValue() {
@@ -160,15 +160,15 @@ public class CompletionHelper {
     }
 
     public boolean completeResponseDefinition() {
-        return traversal.isResponseDefinition(psiElement);
+        return traversal.childOfResponseDefinition(psiElement);
     }
 
     public boolean completeRootSecurityKey() {
-        return traversal.isRootSecurityKey(psiElement);
+        return traversal.childOfRootSecurityKey(psiElement);
     }
 
     public boolean completeOperationSecurityKey() {
-        return traversal.isOperationSecurityKey(psiElement);
+        return traversal.childOfOperationSecurityKey(psiElement);
     }
 
     public Optional<String> extractSecurityNameFromSecurityObject(final PsiElement psiElement) {
@@ -196,14 +196,14 @@ public class CompletionHelper {
     }
 
     public boolean completeItemsCollectionFormat() {
-        return traversal.isItemsCollectionFormat(psiElement);
+        return traversal.childOfItemsCollectionFormat(psiElement);
     }
 
     public boolean completeParametersCollectionFormat() {
-        return traversal.isParametersCollectionFormat(psiElement);
+        return traversal.childOfParametersCollectionFormat(psiElement);
     }
 
     public boolean completeHeadersCollectionFormat() {
-        return traversal.isHeadersCollectionFormat(psiElement);
+        return traversal.childOfHeadersCollectionFormat(psiElement);
     }
 }

@@ -9,7 +9,6 @@ import com.intellij.psi.PsiNamedElement;
 import org.jetbrains.yaml.psi.YAMLSequence;
 import org.zalando.intellij.swagger.completion.field.model.Field;
 import org.zalando.intellij.swagger.completion.value.model.Value;
-import org.zalando.intellij.swagger.traversal.keydepth.KeyDepth;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,12 +18,6 @@ import java.util.stream.Collectors;
 
 public abstract class Traversal {
 
-    private final KeyDepth keyDepth;
-
-    Traversal(final KeyDepth keyDepth) {
-        this.keyDepth = keyDepth;
-    }
-
     public abstract boolean isKey(final PsiElement psiElement);
 
     public abstract Optional<String> getKeyNameIfKey(final PsiElement psiElement);
@@ -33,16 +26,11 @@ public abstract class Traversal {
 
     public abstract Optional<String> getParentKeyName(final PsiElement psiElement);
 
-    abstract boolean elementIsInsideParametersArray(final PsiElement psiElement);
-
-    abstract Optional<String> getNameOfNthKey(final PsiElement psiElement, int nthKey);
-
-    public abstract boolean isRoot(final PsiElement psiElement);
+    public abstract boolean childOfRoot(final PsiElement psiElement);
 
     abstract boolean elementIsDirectValueOfKey(final PsiElement psiElement, final String... keyNames);
 
     abstract List<PsiElement> getChildrenOf(final String propertyName, final PsiFile psiFile);
-
 
     public abstract List<String> getKeyNamesOf(final String propertyName, final PsiFile containingFile);
 
@@ -52,7 +40,7 @@ public abstract class Traversal {
 
     abstract boolean elementIsInsideArray(final PsiElement psiElement);
 
-    abstract boolean isChildOfKeyWithName(final PsiElement psiElement, final String keyName);
+    abstract boolean childOfKeyWithName(final PsiElement psiElement, final String keyName);
 
     public abstract boolean isValue(final PsiElement psiElement);
 
@@ -64,131 +52,115 @@ public abstract class Traversal {
 
     abstract InsertHandler<LookupElement> createInsertValueHandler(final Value value);
 
-    public final boolean isInfo(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getInfoNth(), "info");
+    public final boolean childOfInfo(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.info");
     }
 
-    public final boolean isContact(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getContactNth(), "contact");
+    public final boolean childOfContact(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.info.contact");
     }
 
-    public final boolean isLicense(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getLicenseNth(), "license");
+    public final boolean childOfLicense(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.info.license");
     }
 
-    public final boolean isPath(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getPathNth(), "paths");
+    public final boolean childOfPath(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.paths.*");
     }
 
-    public final boolean isOperation(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getOperationNth(), "paths") && !elementIsInsideArray(psiElement);
+    public final boolean childOfOperation(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.paths.*.*") && !childOfParameters(psiElement);
     }
 
-    public final boolean isExternalDocs(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getExternalDocsNth(), "externalDocs");
+    public final boolean childOfExternalDocs(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.externalDocs") ||
+                hasPath(psiElement, "$.paths.*.*.externalDocs") ||
+                hasPath(psiElement, "$.**.schema.externalDocs");
     }
 
-    public final boolean isParameters(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getParametersNth(), "parameters") && elementIsInsideArray(psiElement);
+    public final boolean childOfParameters(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.paths.*.*.parameters") ||
+                hasPath(psiElement, "$.paths.*.parameters");
     }
 
-    public final boolean isItems(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getItemsNth(), "items");
+    public final boolean childOfItems(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.paths.*.*.parameters.items");
     }
 
-    public final boolean isResponses(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getResponsesNth(), "responses") &&
-                isChildOfKeyWithName(psiElement, "paths");
+    public final boolean childOfResponses(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.paths.*.*.responses");
     }
 
-    public final boolean isResponse(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getResponseNth(), "responses") &&
-                isChildOfKeyWithName(psiElement, "paths");
+    public final boolean childOfResponse(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.paths.*.*.responses.*");
     }
 
-    final boolean isResponseDefinition(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getResponseNth(), "responses") &&
-                !isChildOfKeyWithName(psiElement, "paths");
+    final boolean childOfResponseDefinition(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.responses.*");
     }
 
-    public final boolean isHeader(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getHeaderNth(), "headers");
+    public final boolean childOfHeader(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.paths.*.*.responses.*.headers.*");
     }
 
-    final boolean isHeaders(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getHeadersNth(), "headers");
+    final boolean childOfHeaders(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.paths.*.*.responses.*.headers");
     }
 
-    public final boolean isTag(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getTagsNth(), "tags");
+    public final boolean childOfTag(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.tags");
     }
 
-    public final boolean isSecurityDefinition(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getSecurityDefinitionsNth(), "securityDefinitions");
+    public final boolean childOfSecurityDefinition(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.securityDefinitions.*");
     }
 
-    public final boolean isSchema(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getSchemaNth(), "schema");
+    public final boolean childOfSchema(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.schema");
     }
 
-    public final boolean isXml(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getXmlNth(), "xml");
+    public final boolean childOfXml(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.schema.xml");
     }
 
-    final boolean isDefinitions(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getDefinitionsNth(), "definitions");
+    final boolean childOfDefinitions(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.definitions.*");
     }
 
-    final boolean isParameterDefinition(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getParameterDefinitionNth(), "parameters") &&
-                !elementIsInsideParametersArray(psiElement);
+    final boolean childOfParameterDefinition(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.parameters.*");
     }
 
     final boolean isMimeValue(final PsiElement psiElement) {
-        return (nthKeyEquals(psiElement, keyDepth.getMimeNth(), "consumes") ||
-                nthKeyEquals(psiElement, keyDepth.getMimeNth(), "produces")) &&
-                elementIsInsideArray(psiElement);
+        return hasPath(psiElement, "$.consumes") ||
+                hasPath(psiElement, "$.produces") ||
+                hasPath(psiElement, "$.paths.*.*.consumes") ||
+                hasPath(psiElement, "$.paths.*.*.produces");
+
     }
 
     public final boolean isSchemesValue(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getSchemesNth(), "schemes") && elementIsInsideArray(psiElement);
+        return hasPath(psiElement, "$.schemes");
     }
 
     public final boolean isDefinitionRefValue(final PsiElement psiElement) {
-        return isRefValue(psiElement) &&
-                !elementIsInsideParametersArray(psiElement) &&
-                !isResponseRefValue(psiElement);
+        return hasPath(psiElement, "$.paths.*.*.responses.*.schema.$ref");
     }
 
     public final boolean isParameterRefValue(final PsiElement psiElement) {
-        return isRefValue(psiElement) &&
-                elementIsInsideParametersArray(psiElement);
+        return hasPath(psiElement, "$.paths.*.*.parameters.$ref");
     }
 
     public final boolean isResponseRefValue(final PsiElement psiElement) {
-        return isRefValue(psiElement) &&
-                nthKeyEquals(psiElement, 3, "responses") &&
-                isChildOfKeyWithName(psiElement, "paths");
+        return hasPath(psiElement, "$.paths.*.*.responses.*.$ref");
     }
 
-    private boolean isRefValue(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, 1, "$ref");
+    final boolean childOfRootSecurityKey(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.security");
     }
 
-    final boolean isRootSecurityKey(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getSecurityNth(), "security") &&
-                !isChildOfKeyWithName(psiElement, "paths");
-    }
-
-    final boolean isOperationSecurityKey(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getSecurityNth(), "security") &&
-                isChildOfKeyWithName(psiElement, "paths");
-    }
-
-    private boolean nthKeyEquals(final PsiElement psiElement, final int nth, final String targetName) {
-        return getNameOfNthKey(psiElement, nth)
-                .filter(name -> name.equals(targetName))
-                .isPresent();
+    final boolean childOfOperationSecurityKey(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.paths.*.*.security");
     }
 
     final boolean isBooleanValue(final PsiElement psiElement) {
@@ -197,8 +169,8 @@ public abstract class Traversal {
     }
 
     boolean isSecurityScopeNameValue(final PsiElement psiElement) {
-        return nthKeyEquals(psiElement, keyDepth.getSecurityValueNth(), "security") &&
-                elementIsInsideArray(psiElement);
+        return hasPath(psiElement, "$.security.*") ||
+                hasPath(psiElement, "$.paths.*.*.security.*");
     }
 
     final boolean isTypeValue(final PsiElement psiElement) {
@@ -213,19 +185,20 @@ public abstract class Traversal {
         return elementIsDirectValueOfKey(psiElement, "in");
     }
 
-    boolean isItemsCollectionFormat(final PsiElement psiElement) {
-        return elementIsDirectValueOfKey(psiElement, "collectionFormat") &&
-                nthKeyEquals(psiElement, keyDepth.itemsCollectionFormatNth(), "items");
+    boolean childOfItemsCollectionFormat(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.paths.*.*.parameters.items.collectionFormat");
     }
 
-    boolean isParametersCollectionFormat(final PsiElement psiElement) {
-        return elementIsDirectValueOfKey(psiElement, "collectionFormat") &&
-                nthKeyEquals(psiElement, keyDepth.parametersCollectionFormatNth(), "parameters");
+    boolean childOfParametersCollectionFormat(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.paths.*.*.parameters.collectionFormat");
     }
 
-    boolean isHeadersCollectionFormat(final PsiElement psiElement) {
-        return elementIsDirectValueOfKey(psiElement, "collectionFormat") &&
-                nthKeyEquals(psiElement, keyDepth.headersCollectionFormatNth(), "headers");
+    boolean childOfHeadersCollectionFormat(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.paths.*.*.responses.*.headers.*.collectionFormat");
+    }
+
+    private boolean hasPath(final PsiElement psiElement, final String pathExpression) {
+        return new Path(psiElement, this, pathExpression).exists();
     }
 
     abstract List<String> getSecurityScopesIfOAuth2(final PsiElement securityDefinitionItem);
@@ -267,4 +240,5 @@ public abstract class Traversal {
                 .collect(Collectors.toList());
     }
 
+    public abstract PsiElement extractObjectForValidation(final PsiElement psiElement);
 }

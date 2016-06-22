@@ -11,7 +11,7 @@ import org.zalando.intellij.swagger.validator.value.ValuesValidator;
 
 public class YamlValidValueAnnotator implements Annotator {
 
-    private final ValuesValidator valuesValidator = new ValuesValidator(new YamlTraversal(new YamlCaretAtFieldKeyDepth()));
+    private final ValuesValidator valuesValidator = new ValuesValidator(new YamlTraversal());
 
     @Override
     public void annotate(@NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {

@@ -18,7 +18,6 @@ import org.zalando.intellij.swagger.completion.field.model.Field;
 import org.zalando.intellij.swagger.completion.value.model.Value;
 import org.zalando.intellij.swagger.insert.YamlInsertFieldHandler;
 import org.zalando.intellij.swagger.insert.YamlInsertValueHandler;
-import org.zalando.intellij.swagger.traversal.keydepth.KeyDepth;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -29,19 +28,10 @@ import java.util.stream.Collectors;
 
 public class YamlTraversal extends Traversal {
 
-    public YamlTraversal(final KeyDepth keyDepth) {
-        super(keyDepth);
-    }
-
     @Override
-    Optional<String> getNameOfNthKey(final PsiElement psiElement, final int nth) {
-        return getNthOfType(psiElement, nth, YAMLKeyValue.class)
-                .map(YAMLKeyValue::getName);
-    }
-
-    @Override
-    public boolean isRoot(final PsiElement psiElement) {
+    public boolean childOfRoot(final PsiElement psiElement) {
         return psiElement.getParent().getParent() instanceof YAMLFile ||
+                psiElement.getParent().getParent().getParent() instanceof YAMLFile ||
                 psiElement.getParent().getParent().getParent().getParent() instanceof YAMLFile;
     }
 
@@ -76,18 +66,7 @@ public class YamlTraversal extends Traversal {
     }
 
     @Override
-    public boolean elementIsInsideParametersArray(final PsiElement psiElement) {
-        return getNthOfType(psiElement, 1, YAMLSequence.class)
-                .map(YAMLSequence::getParent)
-                .filter(el -> el instanceof YAMLKeyValue)
-                .map(YAMLKeyValue.class::cast)
-                .map(YAMLKeyValue::getName)
-                .filter(name -> name.equals("parameters"))
-                .isPresent() && !isChildOfKeyWithName(psiElement, "schema");
-    }
-
-    @Override
-    boolean isChildOfKeyWithName(final PsiElement psiElement, final String keyName) {
+    boolean childOfKeyWithName(final PsiElement psiElement, final String keyName) {
         if (psiElement == null) {
             return false;
         }
@@ -96,7 +75,7 @@ public class YamlTraversal extends Traversal {
                 return true;
             }
         }
-        return isChildOfKeyWithName(psiElement.getParent(), keyName);
+        return childOfKeyWithName(psiElement.getParent(), keyName);
     }
 
     @Override
@@ -180,6 +159,17 @@ public class YamlTraversal extends Traversal {
         }
 
         return ImmutableList.of();
+    }
+
+    @Override
+    public PsiElement extractObjectForValidation(final PsiElement psiElement) {
+        if (psiElement.getParent().getParent().getParent() instanceof YAMLKeyValue) {
+            return ((YAMLKeyValue) psiElement.getParent().getParent().getParent()).getKey();
+        } else if (psiElement.getParent().getParent().getParent() instanceof YAMLSequenceItem) {
+            return ((YAMLSequenceItem) psiElement.getParent().getParent().getParent()).getValue();
+        } else {
+            return psiElement.getParent();
+        }
     }
 
     private List<YAMLKeyValue> getChildProperties(final PsiElement element) {

@@ -101,6 +101,20 @@ public class FieldCompletionTest extends AbstractJsonOrYamlCompletionTest {
     }
 
     @Test
+    public void thatExternalDocsKeysInSchemaAreSuggested() {
+        getCaretCompletions("external_docs_in_schema")
+                .assertContains("description", "url")
+                .isOfSize(2);
+    }
+
+    @Test
+    public void thatExternalDocsKeysInRootAreSuggested() {
+        getCaretCompletions("external_docs_in_root")
+                .assertContains("description", "url")
+                .isOfSize(2);
+    }
+
+    @Test
     public void thatParametersKeysAreSuggested() {
         getCaretCompletions("parameters")
                 .assertContains("$ref", "name", "in", "description", "required", "schema", "type", "format",

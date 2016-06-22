@@ -128,4 +128,11 @@ public class ValueCompletionTest extends AbstractJsonOrYamlCompletionTest {
                 .assertContains("csv", "ssv", "tsv", "pipes")
                 .isOfSize(4);
     }
+
+    @Test
+    public void thatSchemesAreSuggested() {
+        getCaretCompletions("schemes")
+                .assertContains("http", "https", "ws", "wss")
+                .isOfSize(4);
+    }
 }

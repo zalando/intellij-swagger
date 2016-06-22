@@ -14,7 +14,6 @@ import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.traversal.CompletionHelper;
 import org.zalando.intellij.swagger.traversal.CustomCompletionPrefixExtractor;
 import org.zalando.intellij.swagger.traversal.YamlTraversal;
-import org.zalando.intellij.swagger.traversal.keydepth.YamlCaretAtFieldKeyDepth;
 
 public class SwaggerYamlCompletionContributor extends CompletionContributor {
 
@@ -23,7 +22,7 @@ public class SwaggerYamlCompletionContributor extends CompletionContributor {
     private final CustomCompletionPrefixExtractor customCompletionPrefixExtractor;
 
     public SwaggerYamlCompletionContributor() {
-        this(new FileDetector(), new YamlTraversal(new YamlCaretAtFieldKeyDepth()));
+        this(new FileDetector(), new YamlTraversal());
     }
 
     private SwaggerYamlCompletionContributor(final FileDetector fileDetector,

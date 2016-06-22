@@ -16,39 +16,45 @@ public class FieldsValidator {
         this.traversal = traversal;
     }
 
-    public void validate(@NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
+    public void validate(@NotNull PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
         traversal.getKeyNameIfKey(psiElement).ifPresent(keyName -> {
-            if (traversal.isRoot(psiElement)) {
+
+            if (traversal.childOfRoot(psiElement)) {
                 unknownKeyValidator.validate(keyName, Fields.root(), psiElement, annotationHolder);
-            } else if (traversal.isContact(psiElement)) {
+                return;
+            }
+
+            final PsiElement keyObject = traversal.extractObjectForValidation(psiElement);
+            
+            if (traversal.childOfContact(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.contact(), psiElement, annotationHolder);
-            } else if (traversal.isSchema(psiElement)) {
+            } else if (traversal.childOfSchema(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.schema(), psiElement, annotationHolder);
-            } else if (traversal.isExternalDocs(psiElement)) {
+            } else if (traversal.childOfExternalDocs(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.externalDocs(), psiElement, annotationHolder);
-            } else if (traversal.isHeader(psiElement)) {
+            } else if (traversal.childOfHeader(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.header(), psiElement, annotationHolder);
-            } else if (traversal.isInfo(psiElement)) {
+            } else if (traversal.childOfInfo(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.info(), psiElement, annotationHolder);
-            } else if (traversal.isItems(psiElement)) {
+            } else if (traversal.childOfItems(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.items(), psiElement, annotationHolder);
-            } else if (traversal.isLicense(psiElement)) {
+            } else if (traversal.childOfLicense(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.license(), psiElement, annotationHolder);
-            } else if (traversal.isOperation(psiElement)) {
+            } else if (traversal.childOfOperation(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.operation(), psiElement, annotationHolder);
-            } else if (traversal.isParameters(psiElement)) {
+            } else if (traversal.childOfParameters(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.parametersWithRef(), psiElement, annotationHolder);
-            } else if (traversal.isPath(psiElement)) {
+            } else if (traversal.childOfPath(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.path(), psiElement, annotationHolder);
-            } else if (traversal.isResponse(psiElement)) {
+            } else if (traversal.childOfResponse(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.response(), psiElement, annotationHolder);
-            } else if (traversal.isResponses(psiElement)) {
+            } else if (traversal.childOfResponses(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.responses(), psiElement, annotationHolder);
-            } else if (traversal.isSecurityDefinition(psiElement)) {
+            } else if (traversal.childOfSecurityDefinition(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.securityDefinitions(), psiElement, annotationHolder);
-            } else if (traversal.isTag(psiElement)) {
+            } else if (traversal.childOfTag(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.tags(), psiElement, annotationHolder);
-            } else if (traversal.isXml(psiElement)) {
+            } else if (traversal.childOfXml(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.xml(), psiElement, annotationHolder);
             }
         });

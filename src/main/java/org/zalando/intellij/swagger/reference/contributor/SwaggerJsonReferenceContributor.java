@@ -28,7 +28,7 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
     private final JsonTraversal jsonTraversal;
 
     public SwaggerJsonReferenceContributor() {
-        this(new ValueExtractor(), new JsonTraversal(new JsonCaretAtFieldKeyDepth()));
+        this(new ValueExtractor(), new JsonTraversal());
     }
 
     private SwaggerJsonReferenceContributor(final ValueExtractor valueExtractor,

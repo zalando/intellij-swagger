@@ -22,7 +22,7 @@ public class SwaggerJsonCompletionContributor extends CompletionContributor {
     private final CustomCompletionPrefixExtractor customCompletionPrefixExtractor;
 
     public SwaggerJsonCompletionContributor() {
-        this(new FileDetector(), new JsonTraversal(new JsonCaretAtFieldKeyDepth()));
+        this(new FileDetector(), new JsonTraversal());
     }
 
     private SwaggerJsonCompletionContributor(final FileDetector fileDetector,

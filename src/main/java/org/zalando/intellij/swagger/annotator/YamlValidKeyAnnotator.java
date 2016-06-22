@@ -11,7 +11,7 @@ import org.zalando.intellij.swagger.traversal.keydepth.YamlFieldValidationKeyDep
 
 public class YamlValidKeyAnnotator implements Annotator {
 
-    private final FieldsValidator fieldsValidator = new FieldsValidator(new YamlTraversal(new YamlFieldValidationKeyDepth()));
+    private final FieldsValidator fieldsValidator = new FieldsValidator(new YamlTraversal());
 
     @Override
     public void annotate(@NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
