@@ -13,7 +13,6 @@ import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.traversal.CompletionHelper;
 import org.zalando.intellij.swagger.traversal.CustomCompletionPrefixExtractor;
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
-import org.zalando.intellij.swagger.traversal.keydepth.JsonCaretAtFieldKeyDepth;
 
 public class SwaggerJsonCompletionContributor extends CompletionContributor {
 

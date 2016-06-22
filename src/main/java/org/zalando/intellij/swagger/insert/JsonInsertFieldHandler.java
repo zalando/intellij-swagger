@@ -7,8 +7,8 @@ import com.intellij.openapi.editor.EditorModificationUtil;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.text.CharArrayUtil;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.completion.field.model.Field;
 import org.zalando.intellij.swagger.completion.StringUtils;
+import org.zalando.intellij.swagger.completion.field.model.Field;
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
 
 import java.util.Optional;

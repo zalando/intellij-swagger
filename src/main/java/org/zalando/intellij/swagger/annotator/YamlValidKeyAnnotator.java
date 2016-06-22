@@ -5,9 +5,8 @@ import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.file.FileDetector;
-import org.zalando.intellij.swagger.validator.field.FieldsValidator;
 import org.zalando.intellij.swagger.traversal.YamlTraversal;
-import org.zalando.intellij.swagger.traversal.keydepth.YamlFieldValidationKeyDepth;
+import org.zalando.intellij.swagger.validator.field.FieldsValidator;
 
 public class YamlValidKeyAnnotator implements Annotator {
 

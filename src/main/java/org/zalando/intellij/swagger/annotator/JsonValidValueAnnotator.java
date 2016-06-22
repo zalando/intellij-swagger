@@ -5,9 +5,8 @@ import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.file.FileDetector;
-import org.zalando.intellij.swagger.validator.value.ValuesValidator;
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
-import org.zalando.intellij.swagger.traversal.keydepth.JsonCaretAtFieldKeyDepth;
+import org.zalando.intellij.swagger.validator.value.ValuesValidator;
 
 public class JsonValidValueAnnotator implements Annotator {
 

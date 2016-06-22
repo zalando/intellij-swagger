@@ -12,13 +12,12 @@ import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.PsiReferenceRegistrar;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.reference.JsonResponseReference;
-import org.zalando.intellij.swagger.traversal.keydepth.JsonCaretAtFieldKeyDepth;
-import org.zalando.intellij.swagger.traversal.JsonTraversal;
 import org.zalando.intellij.swagger.reference.JsonDefinitionReference;
 import org.zalando.intellij.swagger.reference.JsonParameterReference;
+import org.zalando.intellij.swagger.reference.JsonResponseReference;
 import org.zalando.intellij.swagger.reference.YamlDefinitionReference;
 import org.zalando.intellij.swagger.reference.extractor.ValueExtractor;
+import org.zalando.intellij.swagger.traversal.JsonTraversal;
 
 import java.util.Optional;
 
