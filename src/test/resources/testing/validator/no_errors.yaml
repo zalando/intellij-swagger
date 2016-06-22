@@ -118,6 +118,12 @@ securityDefinitions:
     in: "header"
     name: "api_key"
 definitions:
+  User:
+    type: "object"
+    description: "User"
+    properties:
+      contact:
+        $ref: '#/definitions/Pet'
   Pet:
     required:
       - "name"
