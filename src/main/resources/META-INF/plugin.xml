@@ -1,20 +1,27 @@
 <idea-plugin version="2">
     <id>org.zalando.intellij.swagger</id>
     <name>Swagger Plugin</name>
-    <version>0.0.11</version>
+    <version>0.0.12</version>
     <vendor email="sebastian.monte@zalando.de" url="https://tech.zalando.com/">Zalando SE</vendor>
 
     <depends>com.intellij.modules.lang</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
 
     <description><![CDATA[
-     <p>Swagger plugin for IntelliJ IDEA.</p>
-
      <p>The plugin expects that the Swagger specification file is named "swagger.yaml" or "swagger.yml" or "swagger.json".
      Alternatively, if a swagger key exists, the plugin is activated.</p>
+
+     <p>Source code can be found at https://github.com/zalando/intellij-swagger</p>
     ]]></description>
 
     <change-notes><![CDATA[
+           version 0.0.12
+           <br/>
+           <ul>
+           <li>More fields and values with auto completion</li>
+           <li>Validation fixes</li>
+           </ul>
+
            version 0.0.11
            <br/>
            <ul>
@@ -34,55 +41,6 @@
            <br/>
            <ul>
            <li>Populate certain fields (for example, "info") when auto completing</li>
-           </ul>
-
-           version 0.0.7
-           <br/>
-           <ul>
-           <li>Completion for boolean values</li>
-           <li>Fixed YAML sequence indentation</li>
-           <li>Do not mix parameter and definition reference completion</li>
-           </ul>
-
-           version 0.0.6
-           <br/>
-           <ul>
-           <li>Auto completion for $ref values</li>
-           <li>Filter out existing keys when auto completing</li>
-           <li>Insert comma if auto completed key has next sibling</li>
-           <li>Support $ref rename</li>
-           </ul>
-
-           version 0.0.5
-           <br/>
-           <ul>
-           <li>Better auto completion code generation based on key type</li>
-           </ul>
-
-           version 0.0.4
-           <br/>
-           <ul>
-           <li>Support navigation from $ref to declaration</li>
-           </ul>
-
-           version 0.0.3
-           <br/>
-           <ul>
-           <li>MIME value auto completion for produces and consumes fields</li>
-           <li>Scheme value auto completion</li>
-           <li>Support for RubyMine and PyCharm</li>
-           </ul>
-
-           version 0.0.2
-           <br/>
-           <ul>
-           <li>Added <b>YAML</b> support</li>
-           </ul>
-
-           version 0.0.1
-           <br/>
-           <ul>
-           <li>Field auto completion (<b>JSON only</b>)</li>
            </ul>
     ]]>
     </change-notes>
