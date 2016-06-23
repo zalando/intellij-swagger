@@ -84,7 +84,9 @@ public abstract class Traversal {
     }
 
     public final boolean childOfItems(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.parameters.items");
+        return hasPath(psiElement, "$.paths.*.*.parameters.items") ||
+                hasPath(psiElement, "$.**.schema.items") ||
+                hasPath(psiElement, "$.paths.*.*.responses.*.headers.*.items");
     }
 
     public final boolean childOfResponses(final PsiElement psiElement) {
@@ -186,7 +188,7 @@ public abstract class Traversal {
     }
 
     boolean childOfItemsCollectionFormat(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.parameters.items.collectionFormat");
+        return hasPath(psiElement, "$.**.items.collectionFormat");
     }
 
     boolean childOfParametersCollectionFormat(final PsiElement psiElement) {
