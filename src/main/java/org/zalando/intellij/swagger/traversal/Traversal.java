@@ -86,7 +86,8 @@ public abstract class Traversal {
     public final boolean childOfItems(final PsiElement psiElement) {
         return hasPath(psiElement, "$.paths.*.*.parameters.items") ||
                 hasPath(psiElement, "$.**.schema.items") ||
-                hasPath(psiElement, "$.paths.*.*.responses.*.headers.*.items");
+                hasPath(psiElement, "$.paths.*.*.responses.*.headers.*.items") ||
+                hasPath(psiElement, "$.paths.*.parameters.items");
     }
 
     public final boolean childOfResponses(final PsiElement psiElement) {

@@ -1,0 +1,14 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/pathA": {
+      "parameters": [
+        {
+          "items": {
+            "<caret>"
+          }
+        }
+      ]
+    }
+  }
+}

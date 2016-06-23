@@ -125,8 +125,17 @@ public class FieldCompletionTest extends AbstractJsonOrYamlCompletionTest {
     }
 
     @Test
-    public void thatItemsKeysInParametersAreSuggested() {
-        getCaretCompletions("items_in_parameters")
+    public void thatItemsKeysInOperationParametersAreSuggested() {
+        getCaretCompletions("items_in_operation_parameters")
+                .assertContains("$ref", "type", "format", "items", "collectionFormat", "default", "maximum",
+                        "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern",
+                        "maxItems", "minItems", "uniqueItems", "multipleOf")
+                .isOfSize(18);
+    }
+
+    @Test
+    public void thatItemsKeysInPathParametersAreSuggested() {
+        getCaretCompletions("items_in_path_parameters")
                 .assertContains("$ref", "type", "format", "items", "collectionFormat", "default", "maximum",
                         "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern",
                         "maxItems", "minItems", "uniqueItems", "multipleOf")

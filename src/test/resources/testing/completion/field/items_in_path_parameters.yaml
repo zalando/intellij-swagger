@@ -1,0 +1,7 @@
+swagger: 2
+paths:
+  /pathA:
+    parameters:
+      - name:
+        items:
+          <caret>
