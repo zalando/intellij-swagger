@@ -147,7 +147,7 @@ public abstract class Traversal {
     }
 
     public final boolean isDefinitionRefValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.responses.*.schema.$ref");
+        return hasPath(psiElement, "$.**.schema.$ref") || hasPath(psiElement, "$.**.items.$ref");
     }
 
     public final boolean isParameterRefValue(final PsiElement psiElement) {

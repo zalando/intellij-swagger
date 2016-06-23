@@ -54,8 +54,15 @@ public class ValueCompletionTest extends AbstractJsonOrYamlCompletionTest {
     }
 
     @Test
-    public void testDefinitionRefValue() throws Exception {
-        getCaretCompletions("definition_ref_value")
+    public void testDefinitionRefValueInSchema() throws Exception {
+        getCaretCompletions("definition_ref_value_in_schema")
+                .assertContains("#/definitions/Pets", "#/definitions/Error")
+                .isOfSize(2);
+    }
+
+    @Test
+    public void testDefinitionRefValueInItems() throws Exception {
+        getCaretCompletions("definition_ref_value_in_items")
                 .assertContains("#/definitions/Pets", "#/definitions/Error")
                 .isOfSize(2);
     }

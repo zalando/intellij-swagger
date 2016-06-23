@@ -1,0 +1,14 @@
+swagger: 2.0
+paths:
+  /pets:
+    get:
+      responses:
+        200:
+          schema:
+            items:
+              $ref: <caret>
+definitions:
+  Pets:
+  Error:
+parameters:
+  Dog:
