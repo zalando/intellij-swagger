@@ -54,4 +54,8 @@ public class FileDetector {
                 .anyMatch(psiElement -> psiElement instanceof JsonProperty
                         && ((JsonProperty) psiElement).getName().equals("swagger"));
     }
+
+    public boolean isSwaggerFile(final PsiFile file) {
+        return isSwaggerJsonFile(file) || isSwaggerYamlFile(file);
+    }
 }

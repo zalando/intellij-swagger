@@ -62,7 +62,14 @@
 
         <annotator language="JSON" implementationClass="org.zalando.intellij.swagger.annotator.JsonValidValueAnnotator"/>
         <annotator language="yaml" implementationClass="org.zalando.intellij.swagger.annotator.YamlValidValueAnnotator"/>
+
+        <webBrowserUrlProvider implementation="org.zalando.intellij.swagger.ui.SwaggerUiUrlProvider" order="last"/>
+
     </extensions>
 
+    <actions>
+        <group id="SwaggerOpenInBrowserEditorContextBarGroupAction" class="org.zalando.intellij.swagger.ui.SwaggerOpenInBrowserBaseGroupAction">
+        </group>
+    </actions>
 
 </idea-plugin>
