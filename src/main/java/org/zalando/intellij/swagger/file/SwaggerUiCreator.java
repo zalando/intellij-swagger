@@ -1,17 +1,22 @@
 package org.zalando.intellij.swagger.file;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.Url;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Optional;
 
 public class SwaggerUiCreator {
 
+    private static final Logger LOG = Logger.getInstance("#org.zalando.intellij.swagger.file.SwaggerUiCreator");
+
     private static final String SWAGGER_UI_FOLDER_NAME = "swagger-ui";
-    private static final String SPECIFICATION_URL_PLACEHOLDER = "${specificationUrl}";
+    private static final String SPECIFICATION_PLACEHOLDER = "${swaggerSpecification}";
 
     private final FileContentManipulator fileContentManipulator;
 
@@ -19,27 +24,28 @@ public class SwaggerUiCreator {
         this.fileContentManipulator = fileContentManipulator;
     }
 
-    public Optional<String> createSwaggerUiFiles(final Url specificationUrl) {
+    public Optional<String> createSwaggerUiFiles(final String specificationContent) {
         try {
-            return tryToCreateSwaggerUiFiles(specificationUrl);
-        } catch (IOException e) {
-            e.printStackTrace();
+            return tryToCreateSwaggerUiFiles(specificationContent);
+        } catch (final Exception e) {
+            LOG.error(e);
             return Optional.empty();
         }
     }
 
-    private Optional<String> tryToCreateSwaggerUiFiles(final Url specificationUrl) throws IOException {
+    public Optional<String> tryToCreateSwaggerUiFiles(final String specificationContent)
+            throws IOException, URISyntaxException {
         final File tempSwaggerUiDir = copySwaggerUiToTempDir();
 
-        setSwaggerConfigurationValues(tempSwaggerUiDir, specificationUrl);
+        setSwaggerConfigurationValues(tempSwaggerUiDir, specificationContent);
 
         return Optional.of(tempSwaggerUiDir.getAbsolutePath());
     }
 
     @NotNull
-    private File copySwaggerUiToTempDir() throws IOException {
+    private File copySwaggerUiToTempDir() throws IOException, URISyntaxException {
         final ClassLoader classLoader = getClass().getClassLoader();
-        final File file = new File(classLoader.getResource(SWAGGER_UI_FOLDER_NAME).getFile());
+        final File file = new File(classLoader.getResource(SWAGGER_UI_FOLDER_NAME).toURI());
         final File tempSwaggerUiDir = FileUtil.createTempDirectory(SWAGGER_UI_FOLDER_NAME, "", true);
 
         FileUtil.copyDirContent(file, tempSwaggerUiDir);
@@ -47,8 +53,10 @@ public class SwaggerUiCreator {
         return tempSwaggerUiDir;
     }
 
-    private void setSwaggerConfigurationValues(final File swaggerDir, final Url specificationUrl) {
-        fileContentManipulator.setPlaceholderValue(SPECIFICATION_URL_PLACEHOLDER, specificationUrl.toString(),
+    private void setSwaggerConfigurationValues(final File swaggerDir, final String specificationContent)
+            throws IOException {
+        fileContentManipulator.setPlaceholderValue(SPECIFICATION_PLACEHOLDER,
+                specificationContent,
                 new File(swaggerDir, "index.html"));
     }
 

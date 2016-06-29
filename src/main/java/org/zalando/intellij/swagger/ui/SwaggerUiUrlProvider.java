@@ -1,22 +1,26 @@
 package org.zalando.intellij.swagger.ui;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.intellij.ide.browsers.OpenInBrowserRequest;
-import com.intellij.ide.browsers.WebBrowserUrlProvider;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.DumbAware;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.Url;
 import com.intellij.util.Urls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.builtInWebServer.BuiltInServerOptions;
+import org.jetbrains.builtInWebServer.BuiltInWebBrowserUrlProvider;
 import org.zalando.intellij.swagger.file.FileContentManipulator;
 import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.file.SwaggerUiCreator;
 
-import java.util.Optional;
+import java.io.IOException;
 
-public class SwaggerUiUrlProvider extends WebBrowserUrlProvider implements DumbAware {
+public class SwaggerUiUrlProvider extends BuiltInWebBrowserUrlProvider implements DumbAware {
+
+    private static final Logger LOG = Logger.getInstance("#org.zalando.intellij.swagger.ui.SwaggerUiUrlProvider");
 
     private final FileDetector fileDetector;
     private final SwaggerUiCreator swaggerUiCreator;
@@ -39,28 +43,27 @@ public class SwaggerUiUrlProvider extends WebBrowserUrlProvider implements DumbA
     @Nullable
     @Override
     protected Url getUrl(@NotNull OpenInBrowserRequest request, @NotNull VirtualFile file) throws BrowserException {
-        final Url specificationUrl = getUrl(file, request.getProject());
-
-        return swaggerUiCreator.createSwaggerUiFiles(specificationUrl)
+        return swaggerUiCreator.createSwaggerUiFiles(getSpecificationContentAsJson(request))
                 .map(swaggerUiFolderPath ->
                         Urls.parseEncoded("file://" + swaggerUiFolderPath + "/index.html"))
                 .orElse(null);
     }
 
-    @NotNull
-    private Url getUrl(@NotNull VirtualFile file, @NotNull Project project) {
-        final int port = BuiltInServerOptions.getInstance().getEffectiveBuiltInServerPort();
-        final String path = getSpecificationPath(file, project);
-        final String authority = "localhost:" + port;
+    private String getSpecificationContentAsJson(final @NotNull OpenInBrowserRequest request) {
+        final String content = request.getFile().getText();
 
-        return Urls.newHttpUrl(authority, '/' + project.getName() + path);
+        return fileDetector.isSwaggerJsonFile(request.getFile()) ? content : jsonToYaml(content);
     }
 
-    @NotNull
-    private String getSpecificationPath(final @NotNull VirtualFile file, @NotNull Project project) {
-        return Optional.ofNullable(project.getBasePath())
-                .map(projectBasePath -> file.getPath().replace(projectBasePath, ""))
-                .orElse("");
+    private String jsonToYaml(final String content) {
+        try {
+            final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+            final JsonNode jsonNode = mapper.readTree(content);
+            return new ObjectMapper().writeValueAsString(jsonNode);
+        } catch (final IOException e) {
+            LOG.error(e);
+            return "{}";
+        }
     }
 
 }
