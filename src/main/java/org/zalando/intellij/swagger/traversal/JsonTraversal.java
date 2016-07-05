@@ -6,9 +6,12 @@ import com.google.common.collect.Sets;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.json.psi.JsonArray;
+import com.intellij.json.psi.JsonElementGenerator;
 import com.intellij.json.psi.JsonFile;
 import com.intellij.json.psi.JsonLiteral;
+import com.intellij.json.psi.JsonObject;
 import com.intellij.json.psi.JsonProperty;
+import com.intellij.json.psi.JsonPsiUtil;
 import com.intellij.json.psi.JsonValue;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -117,14 +120,33 @@ public class JsonTraversal extends Traversal {
 
     @Override
     public List<PsiElement> getChildrenOf(final String propertyName, final PsiFile psiFile) {
-        return getRootChildren(psiFile).stream()
-                .filter(child -> child instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
+        return getRootChildrenOfType(psiFile, JsonProperty.class).stream()
                 .filter(jsonProperty -> propertyName.equals(jsonProperty.getName()))
                 .findAny()
                 .map(JsonProperty::getValue)
                 .map(jsonValue -> Arrays.asList(jsonValue.getChildren()))
                 .orElse(Lists.newArrayList());
+    }
+
+    private boolean hasRootKey(final String propertyName, final PsiFile psiFile) {
+        return getRootChildrenOfType(psiFile, JsonProperty.class).stream()
+                .anyMatch(jsonProperty -> propertyName.equals(jsonProperty.getName()));
+    }
+
+    @Override
+    public Optional<? extends PsiElement> getRootChildByName(final String propertyName, final PsiFile psiFile) {
+        return getRootChildrenOfType(psiFile, JsonProperty.class).stream()
+                .filter(jsonProperty -> propertyName.equals(jsonProperty.getName()))
+                .findFirst();
+    }
+
+    private <T extends PsiElement> List<T> getRootChildrenOfType(final PsiFile psiFile, final Class<T> type) {
+        final PsiElement[] children = getRootObject(psiFile).map(PsiElement::getChildren).orElse(new PsiElement[0]);
+
+        return Arrays.stream(children)
+                .filter(child -> type.isAssignableFrom(child.getClass()))
+                .map(type::cast)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -255,8 +277,33 @@ public class JsonTraversal extends Traversal {
         return lastChildOfParent.equals(child);
     }
 
-    private List<PsiElement> getRootChildren(final PsiFile psiFile) {
-        return Arrays.asList(psiFile.getChildren()[0].getChildren());
+    private Optional<JsonObject> getRootObject(final PsiFile psiFile) {
+        return Arrays.stream(psiFile.getChildren())
+                .filter(el -> el instanceof JsonObject)
+                .map(JsonObject.class::cast)
+                .findFirst();
+    }
+
+    @Override
+    public void addReferenceDefinition(final String referenceType,
+                                       final String referenceValueWithoutPrefix,
+                                       final PsiFile psiFile) {
+        if (hasRootKey(referenceType, psiFile)) {
+            getRootChildByName(referenceType, psiFile)
+                    .map(el -> el.getChildren()[1])
+                    .filter(el -> el instanceof JsonObject)
+                    .map(JsonObject.class::cast)
+                    .ifPresent(jsonObject -> JsonPsiUtil.addProperty(jsonObject,
+                            new JsonElementGenerator(psiFile.getProject())
+                                    .createProperty(referenceValueWithoutPrefix, "{}"),
+                            false));
+        } else {
+            getRootObject(psiFile).ifPresent(jsonObject ->
+                    JsonPsiUtil.addProperty(jsonObject,
+                            new JsonElementGenerator(psiFile.getProject())
+                                    .createProperty(referenceType, "{\"" + referenceValueWithoutPrefix + "\": {}}"),
+                            false));
+        }
     }
 
 }

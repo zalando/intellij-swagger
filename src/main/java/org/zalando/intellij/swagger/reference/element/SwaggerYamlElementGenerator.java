@@ -8,7 +8,7 @@ import org.jetbrains.yaml.psi.YAMLDocument;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.jetbrains.yaml.psi.YAMLPsiElement;
 
-public class YamlElementGenerator {
+public class SwaggerYamlElementGenerator {
 
     public static PsiElement createSingleQuotedValue(final Project project, final String value) {
         final PsiFile file = new YAMLElementGenerator(project).createDummyYamlWithText("key: '" + value + "'");

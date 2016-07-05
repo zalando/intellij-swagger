@@ -1,4 +1,4 @@
-package org.zalando.intellij.swagger.intention;
+package org.zalando.intellij.swagger.intention.field;
 
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
@@ -9,13 +9,12 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.StringUtils;
-import org.zalando.intellij.swagger.file.FileDetector;
 
-public class RemoveFieldIntentionAction implements IntentionAction {
+public class RemoveJsonFieldIntentionAction implements IntentionAction {
 
     private final PsiElement psiElement;
 
-    public RemoveFieldIntentionAction(final PsiElement psiElement) {
+    public RemoveJsonFieldIntentionAction(final PsiElement psiElement) {
         this.psiElement = psiElement;
     }
 
@@ -40,20 +39,7 @@ public class RemoveFieldIntentionAction implements IntentionAction {
 
     @Override
     public void invoke(@NotNull final Project project, final Editor editor, final PsiFile psiFile) {
-        if (new FileDetector().isSwaggerJsonFile(psiFile)) {
-            handleJson(editor);
-        } else {
-            handleYaml(editor);
-        }
-    }
-
-    private void handleYaml(final Editor editor) {
-        deleteYamlField(editor);
-        removeEmptyLineIfNecessary(editor);
-    }
-
-    private void handleJson(final Editor editor) {
-        deleteJsonField(editor);
+        deleteField(editor);
         removeCommaIfNecessary(editor);
         removeEmptyLineIfNecessary(editor);
         removeSiblingFieldCommaIfNecessary(editor);
@@ -83,15 +69,8 @@ public class RemoveFieldIntentionAction implements IntentionAction {
         }
     }
 
-    private void deleteJsonField(final Editor editor) {
+    private void deleteField(final Editor editor) {
         psiElement.getParent().getParent().delete();
-        //noinspection ConstantConditions
-        PsiDocumentManager.getInstance(editor.getProject()).doPostponedOperationsAndUnblockDocument(editor.getDocument());
-    }
-
-    private void deleteYamlField(final Editor editor) {
-        psiElement.getParent().delete();
-
         //noinspection ConstantConditions
         PsiDocumentManager.getInstance(editor.getProject()).doPostponedOperationsAndUnblockDocument(editor.getDocument());
     }

@@ -9,11 +9,11 @@ import org.zalando.intellij.swagger.traversal.Traversal;
 public class FieldsValidator {
 
     private final Traversal traversal;
+    private final UnknownKeyValidator unknownKeyValidator;
 
-    private final UnknownKeyValidator unknownKeyValidator = new UnknownKeyValidator();
-
-    public FieldsValidator(final Traversal traversal) {
+    public FieldsValidator(final Traversal traversal, final UnknownKeyValidator unknownKeyValidator) {
         this.traversal = traversal;
+        this.unknownKeyValidator = unknownKeyValidator;
     }
 
     public void validate(@NotNull PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
@@ -25,7 +25,7 @@ public class FieldsValidator {
             }
 
             final PsiElement keyObject = traversal.extractObjectForValidation(psiElement);
-            
+
             if (traversal.childOfContact(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.contact(), psiElement, annotationHolder);
             } else if (traversal.childOfSchema(keyObject)) {

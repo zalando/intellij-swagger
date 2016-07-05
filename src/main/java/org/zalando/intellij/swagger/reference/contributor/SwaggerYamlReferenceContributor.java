@@ -15,23 +15,23 @@ import org.jetbrains.yaml.psi.YAMLQuotedText;
 import org.zalando.intellij.swagger.reference.YamlDefinitionReference;
 import org.zalando.intellij.swagger.reference.YamlParameterReference;
 import org.zalando.intellij.swagger.reference.YamlResponseReference;
-import org.zalando.intellij.swagger.reference.extractor.ValueExtractor;
+import org.zalando.intellij.swagger.reference.extractor.ReferenceValueExtractor;
 import org.zalando.intellij.swagger.traversal.YamlTraversal;
 
 import java.util.Optional;
 
 public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
 
-    private final ValueExtractor valueExtractor;
+    private final ReferenceValueExtractor referenceValueExtractor;
     private final YamlTraversal yamlTraversal;
 
     public SwaggerYamlReferenceContributor() {
-        this(new ValueExtractor(), new YamlTraversal());
+        this(new ReferenceValueExtractor(), new YamlTraversal());
     }
 
-    private SwaggerYamlReferenceContributor(final ValueExtractor valueExtractor,
+    private SwaggerYamlReferenceContributor(final ReferenceValueExtractor referenceValueExtractor,
                                             final YamlTraversal yamlTraversal) {
-        this.valueExtractor = valueExtractor;
+        this.referenceValueExtractor = referenceValueExtractor;
         this.yamlTraversal = yamlTraversal;
     }
 
@@ -46,7 +46,7 @@ public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
                         return Optional.ofNullable(element.getText())
                                 .map(text -> new PsiReference[]{new YamlDefinitionReference(
                                         (YAMLQuotedText) element,
-                                        valueExtractor.getDefinitionValue(text),
+                                        referenceValueExtractor.getValue(text),
                                         yamlTraversal)
                                 }).orElse(YamlDefinitionReference.EMPTY_ARRAY);
                     }
@@ -61,7 +61,7 @@ public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
                         return Optional.ofNullable(element.getText())
                                 .map(text -> new PsiReference[]{new YamlParameterReference(
                                         (YAMLQuotedText) element,
-                                        valueExtractor.getParameterValue(text),
+                                        referenceValueExtractor.getValue(text),
                                         yamlTraversal)
                                 }).orElse(YamlParameterReference.EMPTY_ARRAY);
                     }
@@ -76,7 +76,7 @@ public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
                         return Optional.ofNullable(element.getText())
                                 .map(text -> new PsiReference[]{new YamlResponseReference(
                                         (YAMLQuotedText) element,
-                                        valueExtractor.getResponseValue(text),
+                                        referenceValueExtractor.getValue(text),
                                         yamlTraversal)
                                 }).orElse(YamlResponseReference.EMPTY_ARRAY);
                     }

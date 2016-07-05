@@ -7,8 +7,12 @@ import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.util.containers.ContainerUtil;
+import org.jetbrains.yaml.YAMLElementGenerator;
+import org.jetbrains.yaml.psi.YAMLDocument;
 import org.jetbrains.yaml.psi.YAMLFile;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
+import org.jetbrains.yaml.psi.YAMLMapping;
 import org.jetbrains.yaml.psi.YAMLSequence;
 import org.jetbrains.yaml.psi.YAMLSequenceItem;
 import org.jetbrains.yaml.psi.YAMLValue;
@@ -80,15 +84,81 @@ public class YamlTraversal extends Traversal {
 
     @Override
     public List<PsiElement> getChildrenOf(final String propertyName, final PsiFile psiFile) {
-        return getRootChildren(psiFile).stream()
-                .filter(child -> child instanceof YAMLKeyValue)
-                .map(YAMLKeyValue.class::cast)
+        return getRootChildrenOfType(psiFile, YAMLKeyValue.class).stream()
                 .filter(yamlKeyValue -> propertyName.equals(yamlKeyValue.getName()))
                 .findAny()
                 .map(YAMLKeyValue::getValue)
                 .map(YAMLValue::getYAMLElements)
                 .map(c -> c.stream().map(PsiElement.class::cast).collect(Collectors.toList()))
                 .orElse(Lists.newArrayList());
+    }
+
+    private boolean hasRootKey(final String keyName, final PsiFile psiFile) {
+        return getRootChildrenOfType(psiFile, YAMLKeyValue.class).stream()
+                .anyMatch(yamlKeyValue -> keyName.equals(yamlKeyValue.getName()));
+    }
+
+    @Override
+    public Optional<? extends PsiElement> getRootChildByName(final String keyName, final PsiFile psiFile) {
+        return getRootChildrenOfType(psiFile, YAMLKeyValue.class).stream()
+                .filter(yamlKeyValue -> keyName.equals(yamlKeyValue.getName()))
+                .findFirst();
+    }
+
+    private <T extends PsiElement> List<T> getRootChildrenOfType(final PsiFile psiFile, final Class<T> type) {
+        final PsiElement[] children = getRootMapping(psiFile).map(PsiElement::getChildren).orElse(new PsiElement[0]);
+
+        return Arrays.stream(children)
+                .filter(child -> type.isAssignableFrom(child.getClass()))
+                .map(type::cast)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void addReferenceDefinition(final String referenceType,
+                                       final String referenceValueWithoutPrefix,
+                                       final PsiFile psiFile) {
+        if (hasRootKey(referenceType, psiFile)) {
+            getRootChildByName(referenceType, psiFile).ifPresent(referenceElement -> {
+                referenceElement.add(new YAMLElementGenerator(psiFile.getProject()).createEol());
+                referenceElement.add(new YAMLElementGenerator(psiFile.getProject()).createIndent(2));
+                referenceElement.add(new YAMLElementGenerator(psiFile.getProject()).createYamlKeyValue(referenceValueWithoutPrefix, ""));
+            });
+        } else {
+            getRootMapping(psiFile).ifPresent(yamlMapping -> {
+                addProperty(yamlMapping,
+                        new YAMLElementGenerator(psiFile.getProject()).createYamlKeyValue(referenceType, ""))
+                        .ifPresent(addedKeyValue -> {
+                            addedKeyValue.add(new YAMLElementGenerator(psiFile.getProject()).createEol());
+                            addedKeyValue.add(new YAMLElementGenerator(psiFile.getProject()).createIndent(2));
+                            addedKeyValue.add(new YAMLElementGenerator(psiFile.getProject()).createYamlKeyValue(referenceValueWithoutPrefix, ""));
+                        });
+            });
+        }
+    }
+
+    private Optional<YAMLMapping> getRootMapping(final PsiFile psiFile) {
+        return Arrays.stream(psiFile.getChildren())
+                .filter(el -> el instanceof YAMLDocument)
+                .findFirst()
+                .map(PsiElement::getChildren)
+                .map(children -> Arrays.stream(children)
+                        .filter(el -> el instanceof YAMLMapping)
+                        .map(YAMLMapping.class::cast)
+                        .findFirst()
+                        .orElse(null)
+                );
+    }
+
+    private Optional<PsiElement> addProperty(YAMLMapping yamlMapping, YAMLKeyValue yamlKeyValue) {
+        final List<YAMLKeyValue> keyValues = Lists.newArrayList(yamlMapping.getKeyValues());
+
+        return Optional.ofNullable(ContainerUtil.getLastItem(keyValues))
+                .map(lastKeyValue -> {
+                    final PsiElement addedKeyValue = yamlMapping.addAfter(yamlKeyValue, lastKeyValue);
+                    yamlMapping.addBefore(new YAMLElementGenerator(yamlMapping.getProject()).createEol(), addedKeyValue);
+                    return addedKeyValue;
+                });
     }
 
     @Override
@@ -236,16 +306,6 @@ public class YamlTraversal extends Traversal {
                         .map(PsiElement::getParent)
                         .filter(el -> el instanceof YAMLSequenceItem)
                         .isPresent();
-    }
-
-    private List<PsiElement> getRootChildren(final PsiFile psiFile) {
-        return Optional.of(psiFile)
-                .filter(file -> file instanceof YAMLFile)
-                .map(YAMLFile.class::cast)
-                .map(yamlFile -> yamlFile.getDocuments().get(0))
-                .map(yamlDocument -> yamlDocument.getYAMLElements().get(0))
-                .map(psiElement -> Arrays.asList(psiElement.getChildren()))
-                .orElse(Lists.newArrayList());
     }
 
 }

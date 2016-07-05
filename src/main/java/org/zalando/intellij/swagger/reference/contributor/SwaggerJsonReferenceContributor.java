@@ -16,23 +16,23 @@ import org.zalando.intellij.swagger.reference.JsonDefinitionReference;
 import org.zalando.intellij.swagger.reference.JsonParameterReference;
 import org.zalando.intellij.swagger.reference.JsonResponseReference;
 import org.zalando.intellij.swagger.reference.YamlDefinitionReference;
-import org.zalando.intellij.swagger.reference.extractor.ValueExtractor;
+import org.zalando.intellij.swagger.reference.extractor.ReferenceValueExtractor;
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
 
 import java.util.Optional;
 
 public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
 
-    private final ValueExtractor valueExtractor;
+    private final ReferenceValueExtractor referenceValueExtractor;
     private final JsonTraversal jsonTraversal;
 
     public SwaggerJsonReferenceContributor() {
-        this(new ValueExtractor(), new JsonTraversal());
+        this(new ReferenceValueExtractor(), new JsonTraversal());
     }
 
-    private SwaggerJsonReferenceContributor(final ValueExtractor valueExtractor,
+    private SwaggerJsonReferenceContributor(final ReferenceValueExtractor referenceValueExtractor,
                                             final JsonTraversal jsonTraversal) {
-        this.valueExtractor = valueExtractor;
+        this.referenceValueExtractor = referenceValueExtractor;
         this.jsonTraversal = jsonTraversal;
     }
 
@@ -48,7 +48,7 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
                                 .map(text -> new PsiReference[]{
                                         new JsonDefinitionReference(
                                                 (JsonLiteral) element,
-                                                valueExtractor.getDefinitionValue(text),
+                                                referenceValueExtractor.getValue(text),
                                                 jsonTraversal)
                                 }).orElse(YamlDefinitionReference.EMPTY_ARRAY);
                     }
@@ -62,7 +62,7 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
                         return Optional.ofNullable(element.getText())
                                 .map(text -> new PsiReference[]{new JsonParameterReference(
                                         (JsonLiteral) element,
-                                        valueExtractor.getParameterValue(text),
+                                        referenceValueExtractor.getValue(text),
                                         jsonTraversal)})
                                 .orElse(JsonParameterReference.EMPTY_ARRAY);
                     }
@@ -76,7 +76,7 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
                         return Optional.ofNullable(element.getText())
                                 .map(text -> new PsiReference[]{new JsonResponseReference(
                                         (JsonLiteral) element,
-                                        valueExtractor.getResponseValue(text),
+                                        referenceValueExtractor.getValue(text),
                                         jsonTraversal)})
                                 .orElse(JsonResponseReference.EMPTY_ARRAY);
                     }

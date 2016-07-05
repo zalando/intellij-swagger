@@ -1,0 +1,14 @@
+# "Create" "true"
+
+swagger: "2.0"
+paths:
+  /pets/{id}:
+    responses:
+      200:
+        description: "pet response"
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/Pet<caret>"
+definitions:
+  Pet:

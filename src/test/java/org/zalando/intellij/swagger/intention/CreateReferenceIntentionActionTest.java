@@ -1,6 +1,6 @@
 package org.zalando.intellij.swagger.intention;
 
-public class RemoveFieldIntentionActionTest extends IntentionActionTest {
+public class CreateReferenceIntentionActionTest extends IntentionActionTest {
 
     public void test() throws Exception {
         doAllTests();
@@ -8,7 +8,7 @@ public class RemoveFieldIntentionActionTest extends IntentionActionTest {
 
     @Override
     protected String getBasePath() {
-        return "/intention/removefield";
+        return "/intention/createreference";
     }
 
 }

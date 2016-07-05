@@ -1,42 +1,94 @@
 package org.zalando.intellij.swagger.validator.value;
 
+import com.intellij.codeInsight.intention.IntentionAction;
+import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.psi.PsiElement;
+import org.zalando.intellij.swagger.completion.StringUtils;
+import org.zalando.intellij.swagger.reference.extractor.ReferenceValueExtractor;
+import org.zalando.intellij.swagger.traversal.Traversal;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
-class ReferenceValidator {
+public class ReferenceValidator {
 
-    void validateDefinitionReference(final String refValue,
-                                     final Set<String> availableDefinitions,
-                                     final PsiElement psiElement,
+    private final IntentionAction intentionAction;
+    private final ReferenceValueExtractor referenceValueExtractor;
+    private final Traversal traversal;
+
+    public ReferenceValidator(final IntentionAction intentionAction,
+                              final ReferenceValueExtractor referenceValueExtractor,
+                              final Traversal traversal) {
+        this.intentionAction = intentionAction;
+        this.referenceValueExtractor = referenceValueExtractor;
+        this.traversal = traversal;
+    }
+
+    void validateDefinitionReference(final PsiElement psiElement,
                                      final AnnotationHolder annotationHolder) {
-        final boolean definitionFound = availableDefinitions.contains(refValue);
+        if (!isFileRef(psiElement)) {
+            final boolean definitionFound =
+                    getAvailableDefinitions(psiElement)
+                            .contains(referenceValueExtractor.getValue(psiElement.getText()));
 
-        if (!definitionFound) {
-            annotationHolder.createErrorAnnotation(psiElement, "Definition not found");
+            if (!definitionFound) {
+                final Annotation errorAnnotation =
+                        annotationHolder.createErrorAnnotation(psiElement, "Definition not found");
+                errorAnnotation.registerFix(intentionAction);
+            }
         }
     }
 
-    void validateParameterReference(final String refValue,
-                                           final Set<String> availableParameters,
-                                           final PsiElement psiElement,
-                                           final AnnotationHolder annotationHolder) {
-        final boolean parameterFound = availableParameters.contains(refValue);
+    void validateParameterReference(final PsiElement psiElement,
+                                    final AnnotationHolder annotationHolder) {
+        if (!isFileRef(psiElement)) {
+            final boolean parameterFound =
+                    getAvailableParameters(psiElement)
+                            .contains(referenceValueExtractor.getValue(psiElement.getText()));
 
-        if (!parameterFound) {
-            annotationHolder.createErrorAnnotation(psiElement, "Parameter not found");
+            if (!parameterFound) {
+                final Annotation errorAnnotation =
+                        annotationHolder.createErrorAnnotation(psiElement, "Parameter not found");
+                errorAnnotation.registerFix(intentionAction);
+            }
         }
     }
 
-    void validateResponseReference(final String refValue,
-                                          final Set<String> availableResponses,
-                                          final PsiElement psiElement,
-                                          final AnnotationHolder annotationHolder) {
-        final boolean responseFound = availableResponses.contains(refValue);
+    void validateResponseReference(final PsiElement psiElement,
+                                   final AnnotationHolder annotationHolder) {
+        if (!isFileRef(psiElement)) {
+            final boolean responseFound =
+                    getAvailableResponses(psiElement)
+                            .contains(referenceValueExtractor.getValue(psiElement.getText()));
 
-        if (!responseFound) {
-            annotationHolder.createErrorAnnotation(psiElement, "Response not found");
+            if (!responseFound) {
+                final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(psiElement, "Response not found");
+                errorAnnotation.registerFix(intentionAction);
+            }
         }
     }
+
+    private boolean isFileRef(final PsiElement psiElement) {
+        return !StringUtils.removeAllQuotes(psiElement.getText()).startsWith("#/");
+    }
+
+    private Set<String> getAvailableDefinitions(final PsiElement psiElement) {
+        return traversal.getKeyNamesOf("definitions", psiElement.getContainingFile())
+                .stream()
+                .collect(Collectors.toSet());
+    }
+
+    private Set<String> getAvailableParameters(final PsiElement psiElement) {
+        return traversal.getKeyNamesOf("parameters", psiElement.getContainingFile())
+                .stream()
+                .collect(Collectors.toSet());
+    }
+
+    private Set<String> getAvailableResponses(final PsiElement psiElement) {
+        return traversal.getKeyNamesOf("responses", psiElement.getContainingFile())
+                .stream()
+                .collect(Collectors.toSet());
+    }
+
 }

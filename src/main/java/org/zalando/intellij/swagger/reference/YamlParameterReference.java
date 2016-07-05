@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.yaml.psi.YAMLPsiElement;
 import org.jetbrains.yaml.psi.YAMLQuotedText;
-import org.zalando.intellij.swagger.reference.element.YamlElementGenerator;
+import org.zalando.intellij.swagger.reference.element.SwaggerYamlElementGenerator;
 import org.zalando.intellij.swagger.traversal.YamlTraversal;
 
 import java.util.List;
@@ -51,7 +51,7 @@ public class YamlParameterReference extends PsiReferenceBase<PsiElement> {
 
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-        final PsiElement newValue = YamlElementGenerator.createSingleQuotedValue(getElement().getProject(), "#/parameters/" + newElementName);
+        final PsiElement newValue = SwaggerYamlElementGenerator.createSingleQuotedValue(getElement().getProject(), "#/parameters/" + newElementName);
         return getElement().replace(newValue);
     }
 }

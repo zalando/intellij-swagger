@@ -30,7 +30,7 @@ public abstract class Traversal {
 
     abstract boolean elementIsDirectValueOfKey(final PsiElement psiElement, final String... keyNames);
 
-    abstract List<PsiElement> getChildrenOf(final String propertyName, final PsiFile psiFile);
+    public abstract List<PsiElement> getChildrenOf(final String propertyName, final PsiFile psiFile);
 
     public abstract List<String> getKeyNamesOf(final String propertyName, final PsiFile containingFile);
 
@@ -236,7 +236,7 @@ public abstract class Traversal {
     }
 
     List<PsiElement> getChildrenOfArrayObject(final PsiElement psiElement) {
-        return Arrays.asList(psiElement.getChildren()).stream()
+        return Arrays.stream(psiElement.getChildren())
                 .filter(child -> child instanceof JsonArray || child instanceof YAMLSequence)
                 .map(el -> Arrays.asList(el.getChildren()))
                 .flatMap(Collection::stream)
@@ -244,4 +244,8 @@ public abstract class Traversal {
     }
 
     public abstract PsiElement extractObjectForValidation(final PsiElement psiElement);
+
+    public abstract Optional<? extends PsiElement> getRootChildByName(final String keyName, final PsiFile psiFile);
+
+    public abstract void addReferenceDefinition(final String definitions, final String referenceValue, final PsiFile psiFile);
 }

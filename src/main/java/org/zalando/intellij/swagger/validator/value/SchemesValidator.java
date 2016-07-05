@@ -8,7 +8,7 @@ import org.zalando.intellij.swagger.completion.value.model.Values;
 
 import java.util.stream.Collectors;
 
-class SchemesValidator {
+public class SchemesValidator {
 
     public void validate(final PsiElement psiElement,
                          final AnnotationHolder annotationHolder) {
