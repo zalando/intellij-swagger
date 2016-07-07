@@ -9,32 +9,32 @@ public class StringUtilsTest {
 
     @Test
     public void thatReturnsTrueWhenNextCharIsColon() throws Exception {
-        assertTrue(StringUtils.nextCharAfterSpacesIsColonOrQuote(":"));
+        assertTrue(StringUtils.nextCharAfterSpacesAndQuotesIsColon(":"));
     }
 
     @Test
-    public void thatReturnsTrueWhenNextCharIsQuote() throws Exception {
-        assertTrue(StringUtils.nextCharAfterSpacesIsColonOrQuote("\""));
+    public void thatReturnsTrueWhenQuoteIsFollowedByColon() throws Exception {
+        assertTrue(StringUtils.nextCharAfterSpacesAndQuotesIsColon("\":"));
     }
 
     @Test
-    public void thatReturnsTrueWhenNextCharIsColonPrefixedBySpace() throws Exception {
-        assertTrue(StringUtils.nextCharAfterSpacesIsColonOrQuote(" :"));
+    public void thatReturnsTrueWhenSpaceIsFollowedByColon() throws Exception {
+        assertTrue(StringUtils.nextCharAfterSpacesAndQuotesIsColon(" :"));
     }
 
     @Test
-    public void thatReturnsTrueWhenNextCharIsQuotePrefixedBySpace() throws Exception {
-        assertTrue(StringUtils.nextCharAfterSpacesIsColonOrQuote(" \""));
+    public void thatReturnsTrueWhenSpaceAndQuoteIsFollowedByColon() throws Exception {
+        assertTrue(StringUtils.nextCharAfterSpacesAndQuotesIsColon(" \":"));
     }
 
     @Test
-    public void thatReturnsFalseWhenNextCharIsNotColon() throws Exception {
-        assertFalse(StringUtils.nextCharAfterSpacesIsColonOrQuote("a:"));
+    public void thatReturnsFalseWhenQuotesNorSpacesBeforeColon() throws Exception {
+        assertFalse(StringUtils.nextCharAfterSpacesAndQuotesIsColon("a:"));
     }
 
     @Test
     public void thatReturnsFalseWhenOnlySpace() throws Exception {
-        assertFalse(StringUtils.nextCharAfterSpacesIsColonOrQuote(" "));
+        assertFalse(StringUtils.nextCharAfterSpacesAndQuotesIsColon(" "));
     }
 
     @Test

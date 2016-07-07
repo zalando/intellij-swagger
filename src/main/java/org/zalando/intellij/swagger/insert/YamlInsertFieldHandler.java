@@ -18,7 +18,7 @@ public class YamlInsertFieldHandler implements InsertHandler<LookupElement> {
 
     @Override
     public void handleInsert(final InsertionContext context, final LookupElement item) {
-        if (!StringUtils.nextCharAfterSpacesIsColonOrQuote(getStringAfterAutoCompletedValue(context))) {
+        if (!StringUtils.nextCharAfterSpacesAndQuotesIsColon(getStringAfterAutoCompletedValue(context))) {
             final String suffixWithCaret = field.getYamlPlaceholderSuffix(getIndentation(context, item));
             final String suffixWithoutCaret = suffixWithCaret.replace("<caret>", "");
             EditorModificationUtil.insertStringAtCaret(context.getEditor(), suffixWithoutCaret, false, true, getCaretIndex(suffixWithCaret));

@@ -28,7 +28,7 @@ public class JsonInsertFieldHandler implements InsertHandler<LookupElement> {
         handleStartingQuote(insertionContext, lookupElement);
         handleEndingQuote(insertionContext);
 
-        if (!StringUtils.nextCharAfterSpacesIsColonOrQuote(getStringAfterAutoCompletedValue(insertionContext))) {
+        if (!StringUtils.nextCharAfterSpacesAndQuotesIsColon(getStringAfterAutoCompletedValue(insertionContext))) {
             final String suffixWithCaret = field.getJsonPlaceholderSuffix(getIndentation(insertionContext, lookupElement));
             final String suffixWithoutCaret = suffixWithCaret.replace("<caret>", "");
             EditorModificationUtil.insertStringAtCaret(
@@ -54,8 +54,8 @@ public class JsonInsertFieldHandler implements InsertHandler<LookupElement> {
         final boolean hasEndingQuote = CharArrayUtil.regionMatches(chars, caretOffset, "\"");
         if (!hasEndingQuote) {
             insertionContext.getDocument().insertString(caretOffset, "\"");
-            EditorModificationUtil.moveCaretRelatively(insertionContext.getEditor(), 1);
         }
+        EditorModificationUtil.moveCaretRelatively(insertionContext.getEditor(), 1);
     }
 
     private String withOptionalComma(final String suffix, final InsertionContext context) {
@@ -78,7 +78,12 @@ public class JsonInsertFieldHandler implements InsertHandler<LookupElement> {
 
     @NotNull
     private String getStringBeforeAutoCompletedValue(final InsertionContext context, final LookupElement item) {
-        return context.getDocument().getText().substring(0, context.getTailOffset() - item.getLookupString().length() - 2);
+        final int tailOffset = context.getDocument().getText().substring(0, context.getTailOffset()).endsWith("\"")
+                ? context.getTailOffset()
+                : context.getTailOffset() + 1;
+
+        return context.getDocument().getText().substring(0, tailOffset)
+                .replace("\"" + item.getLookupString() + "\"", "");
     }
 
     private boolean shouldAddComma(final @NotNull InsertionContext context) {
