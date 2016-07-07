@@ -112,15 +112,19 @@ public class CompletionHelper {
     }
 
     public List<PsiElement> getChildrenOfRoot(final String propertyName) {
-        return traversal.getChildrenOf(propertyName, psiElement.getContainingFile());
+        return traversal.getChildrenOfDefinition(propertyName, psiElement.getContainingFile());
     }
 
     public List<PsiElement> getChildrenOfArrayObject(final PsiElement psiElement) {
         return traversal.getChildrenOfArrayObject(psiElement);
     }
 
-    public List<String> getKeyNamesOf(final String propertyName) {
-        return traversal.getKeyNamesOf(propertyName, psiElement.getContainingFile());
+    public List<String> getKeyNamesOfDefinition(final String propertyName) {
+        return traversal.getKeyNamesOfDefinition(propertyName, psiElement.getContainingFile());
+    }
+
+    public List<String> getTagNames() {
+        return traversal.getTagNames(psiElement.getContainingFile());
     }
 
     public boolean isUniqueKey(final String keyName) {
@@ -205,5 +209,9 @@ public class CompletionHelper {
 
     public boolean completeHeadersCollectionFormat() {
         return traversal.childOfHeadersCollectionFormat(psiElement);
+    }
+
+    public boolean completeTagsValue() {
+        return traversal.isTagsValue(psiElement);
     }
 }

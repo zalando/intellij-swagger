@@ -25,7 +25,7 @@ public class YamlDefinitionReferenceTest {
         final List<PsiElement> allDefinitions = Lists.newArrayList(definitionKeyValue);
 
         when(selectedElement.getContainingFile()).thenReturn(psiFile);
-        when(yamlTraversal.getChildrenOf("definitions", psiFile)).thenReturn(allDefinitions);
+        when(yamlTraversal.getChildrenOfDefinition("definitions", psiFile)).thenReturn(allDefinitions);
         when(definitionKeyValue.getName()).thenReturn("definitionName");
 
         final YamlDefinitionReference yamlDefinitionReference =
@@ -40,7 +40,7 @@ public class YamlDefinitionReferenceTest {
         final YamlTraversal yamlTraversal = mock(YamlTraversal.class);
         final YAMLQuotedText selectedElement = mock(YAMLQuotedText.class);
 
-        when(yamlTraversal.getChildrenOf("definitions", psiFile)).thenReturn(Lists.newArrayList());
+        when(yamlTraversal.getChildrenOfDefinition("definitions", psiFile)).thenReturn(Lists.newArrayList());
 
         YamlDefinitionReference yamlDefinitionReference =
                 new YamlDefinitionReference(selectedElement, "definitionName", yamlTraversal);

@@ -35,7 +35,7 @@ public class JsonDefinitionReference extends PsiReferenceBase<PsiElement> {
     }
 
     private List<JsonProperty> getDefinitionsChildren() {
-        return jsonTraversal.getChildrenOf("definitions", getElement().getContainingFile()).stream()
+        return jsonTraversal.getChildrenOfDefinition("definitions", getElement().getContainingFile()).stream()
                 .filter(psiElement -> psiElement instanceof JsonProperty)
                 .map(JsonProperty.class::cast)
                 .collect(Collectors.toList());

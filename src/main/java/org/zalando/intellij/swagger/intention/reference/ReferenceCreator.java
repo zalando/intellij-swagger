@@ -1,7 +1,5 @@
 package org.zalando.intellij.swagger.intention.reference;
 
-import com.intellij.codeInsight.documentation.DocumentationManager;
-import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import org.zalando.intellij.swagger.traversal.Traversal;
 

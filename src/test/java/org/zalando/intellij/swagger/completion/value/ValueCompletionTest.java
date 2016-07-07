@@ -141,4 +141,18 @@ public class ValueCompletionTest extends AbstractJsonOrYamlCompletionTest {
                 .assertContains("http", "https", "ws", "wss")
                 .isOfSize(4);
     }
+
+    @Test
+    public void thatOnlyUniqueArrayStringValuesAreSuggested() {
+        getCaretCompletions("unique_strings_in_array")
+                .assertContains("https", "ws", "wss")
+                .isOfSize(3);
+    }
+
+    @Test
+    public void thatTagValuesAreSuggested() {
+        getCaretCompletions("tags")
+                .assertContains("tag1", "tag2")
+                .isOfSize(2);
+    }
 }

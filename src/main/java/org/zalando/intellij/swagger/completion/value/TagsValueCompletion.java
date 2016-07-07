@@ -8,20 +8,19 @@ import org.zalando.intellij.swagger.traversal.CompletionHelper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class ResponseRefValueCompletion extends ValueCompletion {
+class TagsValueCompletion extends ValueCompletion {
 
-    ResponseRefValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    TagsValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
         super(completionHelper, completionResultSet);
     }
 
     @Override
     public void fill() {
-        getResponseKeys().stream().forEach(this::addValue);
+        getTags().stream().forEach(this::addValue);
     }
 
-    private List<Value> getResponseKeys() {
-        return completionHelper.getKeyNamesOfDefinition("responses").stream()
-                .map(keyName -> "#/responses/" + keyName)
+    private List<Value> getTags() {
+        return completionHelper.getTagNames().stream()
                 .map(StringValue::new)
                 .collect(Collectors.toList());
     }

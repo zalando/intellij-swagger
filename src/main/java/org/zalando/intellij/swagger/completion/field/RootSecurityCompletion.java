@@ -35,7 +35,7 @@ class RootSecurityCompletion extends FieldCompletion {
     }
 
     private List<ArrayField> getSecurityDefinitions() {
-        return completionHelper.getKeyNamesOf("securityDefinitions").stream()
+        return completionHelper.getKeyNamesOfDefinition("securityDefinitions").stream()
                 .map(ArrayField::new)
                 .collect(Collectors.toList());
     }

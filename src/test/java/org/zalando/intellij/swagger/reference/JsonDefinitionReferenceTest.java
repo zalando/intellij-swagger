@@ -26,7 +26,7 @@ public class JsonDefinitionReferenceTest {
 
         when(jsonStringLiteral.getContainingFile()).thenReturn(psiFile);
         when(definitionProperty.getName()).thenReturn("definitionName");
-        when(jsonTraversal.getChildrenOf("definitions", psiFile)).thenReturn(allDefinitions);
+        when(jsonTraversal.getChildrenOfDefinition("definitions", psiFile)).thenReturn(allDefinitions);
 
         final JsonDefinitionReference jsonDefinitionReference =
                 new JsonDefinitionReference(jsonStringLiteral, "definitionName", jsonTraversal);
@@ -41,7 +41,7 @@ public class JsonDefinitionReferenceTest {
         final JsonTraversal jsonTraversal = mock(JsonTraversal.class);
 
         when(jsonStringLiteral.getContainingFile()).thenReturn(psiFile);
-        when(jsonTraversal.getChildrenOf("definitions", psiFile)).thenReturn(Lists.newArrayList());
+        when(jsonTraversal.getChildrenOfDefinition("definitions", psiFile)).thenReturn(Lists.newArrayList());
 
         final JsonDefinitionReference jsonDefinitionReference =
                 new JsonDefinitionReference(jsonStringLiteral, "definitionName", jsonTraversal);

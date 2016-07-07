@@ -8,17 +8,14 @@ import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
 import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.TestFixtureBuilder;
 import com.intellij.testFramework.fixtures.impl.LightTempDirTestFixtureImpl;
-import org.hamcrest.core.Is;
-import org.hamcrest.core.IsCollectionContaining;
-import org.hamcrest.core.IsNot;
 import org.hamcrest.core.IsNull;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
+import org.zalando.intellij.swagger.assertion.AssertableList;
 
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SwaggerFixture {
@@ -88,52 +85,6 @@ public class SwaggerFixture {
         @NotNull
         public String getFileName(@NotNull String base) {
             return base + "." + myFileExtension;
-        }
-    }
-
-    public static class AssertableList {
-        private final List<String> myActualList;
-
-        public AssertableList(List<String> list) {
-            myActualList = new ArrayList<>(list);
-        }
-
-        public AssertableList assertContains(Iterable<String> elements) {
-            for (String next : elements) {
-                assertContainsOne(next);
-            }
-            return this;
-        }
-
-        public AssertableList assertContains(String... elements) {
-            for (String next : elements) {
-                assertContainsOne(next);
-            }
-            return this;
-        }
-
-        public AssertableList assertContainsOne(String element) {
-            Assert.assertThat(myActualList, IsCollectionContaining.hasItem(element));
-            return this;
-        }
-
-        public AssertableList assertNotContains(Iterable<String> badElements) {
-            for (String nextBad : badElements) {
-                Assert.assertThat(myActualList, IsNot.not(IsCollectionContaining.hasItem(nextBad)));
-            }
-            return this;
-        }
-
-        public AssertableList assertNotContains(String... badElements) {
-            for (String nextBad : badElements) {
-                Assert.assertThat(myActualList, IsNot.not(IsCollectionContaining.hasItem(nextBad)));
-            }
-            return this;
-        }
-
-        public AssertableList isOfSize(final int size) {
-            Assert.assertThat(myActualList.size(), Is.is(size));
-            return this;
         }
     }
 

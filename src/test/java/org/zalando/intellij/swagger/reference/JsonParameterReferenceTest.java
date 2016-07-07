@@ -26,7 +26,7 @@ public class JsonParameterReferenceTest {
 
         when(jsonStringLiteral.getContainingFile()).thenReturn(psiFile);
         when(parameterProperty.getName()).thenReturn("parameterName");
-        when(jsonTraversal.getChildrenOf("parameters", psiFile)).thenReturn(allParameters);
+        when(jsonTraversal.getChildrenOfDefinition("parameters", psiFile)).thenReturn(allParameters);
 
         final JsonParameterReference jsonParameterReference =
                 new JsonParameterReference(jsonStringLiteral, "parameterName", jsonTraversal);
@@ -41,7 +41,7 @@ public class JsonParameterReferenceTest {
         final JsonTraversal jsonTraversal = mock(JsonTraversal.class);
 
         when(jsonStringLiteral.getContainingFile()).thenReturn(psiFile);
-        when(jsonTraversal.getChildrenOf("parameters", psiFile)).thenReturn(Lists.newArrayList());
+        when(jsonTraversal.getChildrenOfDefinition("parameters", psiFile)).thenReturn(Lists.newArrayList());
 
         final JsonParameterReference jsonParameterReference =
                 new JsonParameterReference(jsonStringLiteral, "parameterName", jsonTraversal);

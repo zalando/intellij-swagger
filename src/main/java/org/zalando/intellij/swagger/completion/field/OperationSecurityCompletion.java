@@ -17,15 +17,14 @@ class OperationSecurityCompletion extends FieldCompletion {
 
     @Override
     public void fill() {
-        getSecurityDefinitions().stream().forEach(field -> {
-            completionHelper.getParentByName("security").ifPresent(securityParent -> {
-                final List<PsiElement> security = completionHelper.getChildrenOfArrayObject(securityParent);
-                final List<String> existingNames = extractNames(security);
-                if (!existingNames.contains(field.getName())) {
-                    addUnique(field);
-                }
-            });
-        });
+        getSecurityDefinitions().stream().forEach(field ->
+                completionHelper.getParentByName("security").ifPresent(securityParent -> {
+                    final List<PsiElement> security = completionHelper.getChildrenOfArrayObject(securityParent);
+                    final List<String> existingNames = extractNames(security);
+                    if (!existingNames.contains(field.getName())) {
+                        addUnique(field);
+                    }
+                }));
     }
 
     private List<String> extractNames(final List<PsiElement> securityObjects) {
@@ -37,7 +36,7 @@ class OperationSecurityCompletion extends FieldCompletion {
     }
 
     private List<ArrayField> getSecurityDefinitions() {
-        return completionHelper.getKeyNamesOf("securityDefinitions").stream()
+        return completionHelper.getKeyNamesOfDefinition("securityDefinitions").stream()
                 .map(ArrayField::new)
                 .collect(Collectors.toList());
     }

@@ -35,7 +35,9 @@ public class ValueCompletionFactory {
             return Optional.of(new ParametersCollectionFormatValueCompletion(completionHelper, completionResultSet));
         } else if (completionHelper.completeHeadersCollectionFormat()) {
             return Optional.of(new HeadersCollectionFormatValueCompletion(completionHelper, completionResultSet));
-        } else {
+        } else if (completionHelper.completeTagsValue()) {
+            return Optional.of(new TagsValueCompletion(completionHelper, completionResultSet));
+        }else {
             return Optional.empty();
         }
     }

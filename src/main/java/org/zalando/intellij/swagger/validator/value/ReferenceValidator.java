@@ -74,19 +74,19 @@ public class ReferenceValidator {
     }
 
     private Set<String> getAvailableDefinitions(final PsiElement psiElement) {
-        return traversal.getKeyNamesOf("definitions", psiElement.getContainingFile())
+        return traversal.getKeyNamesOfDefinition("definitions", psiElement.getContainingFile())
                 .stream()
                 .collect(Collectors.toSet());
     }
 
     private Set<String> getAvailableParameters(final PsiElement psiElement) {
-        return traversal.getKeyNamesOf("parameters", psiElement.getContainingFile())
+        return traversal.getKeyNamesOfDefinition("parameters", psiElement.getContainingFile())
                 .stream()
                 .collect(Collectors.toSet());
     }
 
     private Set<String> getAvailableResponses(final PsiElement psiElement) {
-        return traversal.getKeyNamesOf("responses", psiElement.getContainingFile())
+        return traversal.getKeyNamesOfDefinition("responses", psiElement.getContainingFile())
                 .stream()
                 .collect(Collectors.toSet());
     }

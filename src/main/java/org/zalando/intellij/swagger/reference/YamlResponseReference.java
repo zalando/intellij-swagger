@@ -43,7 +43,7 @@ public class YamlResponseReference extends PsiReferenceBase<PsiElement> {
     }
 
     private List<YAMLPsiElement> getResponsesChildren() {
-        return yamlTraversal.getChildrenOf("responses", getElement().getContainingFile()).stream()
+        return yamlTraversal.getChildrenOfDefinition("responses", getElement().getContainingFile()).stream()
                 .filter(psiElement -> psiElement instanceof YAMLPsiElement)
                 .map(YAMLPsiElement.class::cast)
                 .collect(Collectors.toList());

@@ -13,6 +13,7 @@ import org.jetbrains.yaml.psi.YAMLDocument;
 import org.jetbrains.yaml.psi.YAMLFile;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.jetbrains.yaml.psi.YAMLMapping;
+import org.jetbrains.yaml.psi.YAMLPsiElement;
 import org.jetbrains.yaml.psi.YAMLSequence;
 import org.jetbrains.yaml.psi.YAMLSequenceItem;
 import org.jetbrains.yaml.psi.YAMLValue;
@@ -83,7 +84,7 @@ public class YamlTraversal extends Traversal {
     }
 
     @Override
-    public List<PsiElement> getChildrenOf(final String propertyName, final PsiFile psiFile) {
+    public List<PsiElement> getChildrenOfDefinition(final String propertyName, final PsiFile psiFile) {
         return getRootChildrenOfType(psiFile, YAMLKeyValue.class).stream()
                 .filter(yamlKeyValue -> propertyName.equals(yamlKeyValue.getName()))
                 .findAny()
@@ -91,6 +92,24 @@ public class YamlTraversal extends Traversal {
                 .map(YAMLValue::getYAMLElements)
                 .map(c -> c.stream().map(PsiElement.class::cast).collect(Collectors.toList()))
                 .orElse(Lists.newArrayList());
+    }
+
+    @Override
+    public List<String> getTagNames(final PsiFile psiFile) {
+        return getRootChildrenOfType(psiFile, YAMLKeyValue.class).stream()
+                .filter(yamlKeyValue -> "tags".equals(yamlKeyValue.getName()))
+                .map(YAMLKeyValue::getValue)
+                .map(YAMLPsiElement::getYAMLElements)
+                .flatMap(Collection::stream)
+                .filter(el -> el instanceof YAMLSequenceItem)
+                .map(YAMLSequenceItem.class::cast)
+                .map(YAMLSequenceItem::getYAMLElements)
+                .flatMap(Collection::stream)
+                .filter(el -> el instanceof YAMLMapping)
+                .map(YAMLMapping.class::cast)
+                .map(yamlMapping -> yamlMapping.getKeyValueByKey("name"))
+                .map(YAMLKeyValue::getValueText)
+                .collect(Collectors.toList());
     }
 
     private boolean hasRootKey(final String keyName, final PsiFile psiFile) {
@@ -125,15 +144,13 @@ public class YamlTraversal extends Traversal {
                 referenceElement.add(new YAMLElementGenerator(psiFile.getProject()).createYamlKeyValue(referenceValueWithoutPrefix, ""));
             });
         } else {
-            getRootMapping(psiFile).ifPresent(yamlMapping -> {
-                addProperty(yamlMapping,
-                        new YAMLElementGenerator(psiFile.getProject()).createYamlKeyValue(referenceType, ""))
-                        .ifPresent(addedKeyValue -> {
-                            addedKeyValue.add(new YAMLElementGenerator(psiFile.getProject()).createEol());
-                            addedKeyValue.add(new YAMLElementGenerator(psiFile.getProject()).createIndent(2));
-                            addedKeyValue.add(new YAMLElementGenerator(psiFile.getProject()).createYamlKeyValue(referenceValueWithoutPrefix, ""));
-                        });
-            });
+            getRootMapping(psiFile).ifPresent(yamlMapping -> addProperty(yamlMapping,
+                    new YAMLElementGenerator(psiFile.getProject()).createYamlKeyValue(referenceType, ""))
+                    .ifPresent(addedKeyValue -> {
+                        addedKeyValue.add(new YAMLElementGenerator(psiFile.getProject()).createEol());
+                        addedKeyValue.add(new YAMLElementGenerator(psiFile.getProject()).createIndent(2));
+                        addedKeyValue.add(new YAMLElementGenerator(psiFile.getProject()).createYamlKeyValue(referenceValueWithoutPrefix, ""));
+                    }));
         }
     }
 
@@ -162,8 +179,8 @@ public class YamlTraversal extends Traversal {
     }
 
     @Override
-    public List<String> getKeyNamesOf(final String propertyName, final PsiFile containingFile) {
-        return getChildrenOf(propertyName, containingFile).stream()
+    public List<String> getKeyNamesOfDefinition(final String propertyName, final PsiFile containingFile) {
+        return getChildrenOfDefinition(propertyName, containingFile).stream()
                 .filter(el -> el instanceof YAMLKeyValue)
                 .map(YAMLKeyValue.class::cast)
                 .map(YAMLKeyValue::getName)

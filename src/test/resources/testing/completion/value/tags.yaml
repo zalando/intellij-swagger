@@ -1,0 +1,9 @@
+swagger: 2.0
+paths:
+  /pathA:
+    get:
+      tags:
+        - <caret>
+tags:
+  - name: tag1
+  - name: tag2

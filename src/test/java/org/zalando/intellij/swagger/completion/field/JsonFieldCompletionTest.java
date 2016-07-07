@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.zalando.intellij.swagger.assertion.AssertableList;
 import org.zalando.intellij.swagger.fixture.SwaggerFixture;
 import org.zalando.intellij.swagger.fixture.SwaggerFixture.JsonOrYaml;
 
@@ -55,7 +56,7 @@ public class JsonFieldCompletionTest {
     }
 
     @NotNull
-    private SwaggerFixture.AssertableList getCaretCompletions(@NotNull String testFileNoExt) {
+    private AssertableList getCaretCompletions(@NotNull String testFileNoExt) {
         return myFixture.getCompletions(testFileNoExt, JsonOrYaml.JSON);
     }
 

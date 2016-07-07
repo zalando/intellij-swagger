@@ -20,7 +20,7 @@ class DefinitionRefValueCompletion extends ValueCompletion {
     }
 
     private List<Value> getDefinitionKeys() {
-        return completionHelper.getKeyNamesOf("definitions").stream()
+        return completionHelper.getKeyNamesOfDefinition("definitions").stream()
                 .map(keyName -> "#/definitions/" + keyName)
                 .map(StringValue::new)
                 .collect(Collectors.toList());

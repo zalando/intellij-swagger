@@ -25,7 +25,7 @@ public class YamlParameterReferenceTest {
         final List<PsiElement> allParameters = Lists.newArrayList(parameterKeyValue);
 
         when(selectedElement.getContainingFile()).thenReturn(psiFile);
-        when(yamlTraversal.getChildrenOf("parameters", psiFile)).thenReturn(allParameters);
+        when(yamlTraversal.getChildrenOfDefinition("parameters", psiFile)).thenReturn(allParameters);
         when(parameterKeyValue.getName()).thenReturn("parameterName");
 
         final YamlParameterReference yamlParameterReference =
@@ -40,7 +40,7 @@ public class YamlParameterReferenceTest {
         final YamlTraversal yamlTraversal = mock(YamlTraversal.class);
         final YAMLQuotedText selectedElement = mock(YAMLQuotedText.class);
 
-        when(yamlTraversal.getChildrenOf("parameters", psiFile)).thenReturn(Lists.newArrayList());
+        when(yamlTraversal.getChildrenOfDefinition("parameters", psiFile)).thenReturn(Lists.newArrayList());
 
         final YamlParameterReference yamlParameterReference =
                 new YamlParameterReference(selectedElement, "parameterName", yamlTraversal);

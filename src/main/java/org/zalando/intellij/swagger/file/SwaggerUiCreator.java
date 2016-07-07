@@ -2,8 +2,6 @@ package org.zalando.intellij.swagger.file;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.Url;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

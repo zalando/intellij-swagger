@@ -30,9 +30,11 @@ public abstract class Traversal {
 
     abstract boolean elementIsDirectValueOfKey(final PsiElement psiElement, final String... keyNames);
 
-    public abstract List<PsiElement> getChildrenOf(final String propertyName, final PsiFile psiFile);
+    public abstract List<PsiElement> getChildrenOfDefinition(final String propertyName, final PsiFile psiFile);
 
-    public abstract List<String> getKeyNamesOf(final String propertyName, final PsiFile containingFile);
+    public abstract List<String> getTagNames(final PsiFile psiFile);
+
+    public abstract List<String> getKeyNamesOfDefinition(final String propertyName, final PsiFile containingFile);
 
     abstract boolean isUniqueKey(String keyName, final PsiElement psiElement);
 
@@ -146,6 +148,10 @@ public abstract class Traversal {
         return hasPath(psiElement, "$.schemes");
     }
 
+    final boolean isTagsValue(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.paths.*.*.tags");
+    }
+
     public final boolean isDefinitionRefValue(final PsiElement psiElement) {
         return hasPath(psiElement, "$.**.schema.$ref") || hasPath(psiElement, "$.**.items.$ref");
     }
@@ -248,4 +254,5 @@ public abstract class Traversal {
     public abstract Optional<? extends PsiElement> getRootChildByName(final String keyName, final PsiFile psiFile);
 
     public abstract void addReferenceDefinition(final String definitions, final String referenceValue, final PsiFile psiFile);
+
 }

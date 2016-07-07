@@ -20,7 +20,7 @@ class ParameterRefValueCompletion extends ValueCompletion {
     }
 
     private List<Value> getParameterKeys() {
-        return completionHelper.getKeyNamesOf("parameters").stream()
+        return completionHelper.getKeyNamesOfDefinition("parameters").stream()
                 .map(keyName -> "#/parameters/" + keyName)
                 .map(StringValue::new)
                 .collect(Collectors.toList());
