@@ -7,7 +7,6 @@ import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.json.psi.JsonArray;
 import com.intellij.json.psi.JsonElementGenerator;
-import com.intellij.json.psi.JsonFile;
 import com.intellij.json.psi.JsonLiteral;
 import com.intellij.json.psi.JsonObject;
 import com.intellij.json.psi.JsonProperty;
@@ -31,35 +30,15 @@ import java.util.stream.Collectors;
 
 public class JsonTraversal extends Traversal {
 
-    @Override
-    public boolean childOfRoot(@NotNull final PsiElement psiElement) {
-        return psiElement.getParent() instanceof JsonFile ||
-                psiElement.getParent().getParent().getParent().getParent() instanceof JsonFile;
-    }
-
-    @Override
     public boolean isKey(final PsiElement psiElement) {
-        final PsiElement firstParent = psiElement.getParent();
-        return Optional.ofNullable(firstParent)
-                .map(PsiElement::getParent)
-                .filter(jsonPropertyCandidate -> jsonPropertyCandidate instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getNameElement)
-                .filter(nameElement -> nameElement == firstParent)
-                .isPresent();
+        return JsonPsiUtil.isPropertyKey(psiElement.getParent());
     }
 
     @Override
     public Optional<String> getKeyNameIfKey(final PsiElement psiElement) {
-        final PsiElement firstParent = psiElement.getParent();
-        return Optional.ofNullable(firstParent)
-                .map(PsiElement::getParent)
-                .filter(jsonPropertyCandidate -> jsonPropertyCandidate instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getNameElement)
-                .filter(nameElement -> nameElement == firstParent)
-                .map(JsonValue::getText)
-                .map(StringUtils::removeAllQuotes);
+        return isKey(psiElement)
+                ? Optional.of(StringUtils.removeAllQuotes(psiElement.getParent().getText()))
+                : Optional.empty();
     }
 
     @Override
@@ -103,19 +82,6 @@ public class JsonTraversal extends Traversal {
                 .filter(child -> child instanceof JsonProperty)
                 .map(JsonProperty.class::cast)
                 .map(JsonProperty::getName);
-    }
-
-    @Override
-    boolean childOfKeyWithName(final PsiElement psiElement, final String keyName) {
-        if (psiElement == null) {
-            return false;
-        }
-        if (psiElement instanceof JsonProperty) {
-            if (keyName.equals(((JsonProperty) psiElement).getName())) {
-                return true;
-            }
-        }
-        return childOfKeyWithName(psiElement.getParent(), keyName);
     }
 
     @Override
@@ -210,7 +176,7 @@ public class JsonTraversal extends Traversal {
     }
 
     @Override
-    List<String> getSecurityScopesIfOAuth2(final PsiElement securityDefinitionItem) {
+    public List<String> getSecurityScopesIfOAuth2(final PsiElement securityDefinitionItem) {
         final List<JsonProperty> properties = getChildProperties(securityDefinitionItem);
 
         final boolean isOAuth2 = properties.stream()
@@ -256,16 +222,6 @@ public class JsonTraversal extends Traversal {
 
     private Optional<JsonProperty> toJsonProperty(final PsiElement psiElement) {
         return psiElement instanceof JsonProperty ? Optional.of((JsonProperty) psiElement) : Optional.empty();
-    }
-
-    @Override
-    boolean elementIsInsideArray(final PsiElement psiElement) {
-        if (psiElement == null) {
-            return false;
-        } else if (psiElement instanceof JsonArray) {
-            return true;
-        }
-        return elementIsInsideArray(psiElement.getParent());
     }
 
     @Override

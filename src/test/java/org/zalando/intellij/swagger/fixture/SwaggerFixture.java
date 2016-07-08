@@ -68,10 +68,6 @@ public class SwaggerFixture {
         myCodeInsightFixture.checkResultByFile(fileKind.getFileName(testFileNoExt), true);
     }
 
-    public void testHighlighting(@NotNull final String testFileNoExt, @NotNull final JsonOrYaml fileKind) {
-        myCodeInsightFixture.testHighlighting(true, true, true, fileKind.getFileName(testFileNoExt));
-    }
-
     public enum JsonOrYaml {
         JSON("json"),
         YAML("yaml");

@@ -2,7 +2,7 @@ package org.zalando.intellij.swagger.completion.value;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import org.zalando.intellij.swagger.completion.value.model.Values;
-import org.zalando.intellij.swagger.traversal.CompletionHelper;
+import org.zalando.intellij.swagger.completion.CompletionHelper;
 
 class MimeValueCompletion extends ValueCompletion {
 

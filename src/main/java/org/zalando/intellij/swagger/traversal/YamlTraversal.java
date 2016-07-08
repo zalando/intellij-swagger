@@ -10,7 +10,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.yaml.YAMLElementGenerator;
 import org.jetbrains.yaml.psi.YAMLDocument;
-import org.jetbrains.yaml.psi.YAMLFile;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.jetbrains.yaml.psi.YAMLMapping;
 import org.jetbrains.yaml.psi.YAMLPsiElement;
@@ -32,18 +31,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class YamlTraversal extends Traversal {
-
-    @Override
-    public boolean childOfRoot(final PsiElement psiElement) {
-        return psiElement.getParent().getParent() instanceof YAMLFile ||
-                psiElement.getParent().getParent().getParent() instanceof YAMLFile ||
-                psiElement.getParent().getParent().getParent().getParent() instanceof YAMLFile;
-    }
-
-    @Override
-    public boolean isKey(final PsiElement psiElement) {
-        return false;
-    }
 
     @Override
     public Optional<String> getKeyNameIfKey(final PsiElement psiElement) {
@@ -68,19 +55,6 @@ public class YamlTraversal extends Traversal {
         return getNthOfType(psiElement, 1, YAMLKeyValue.class)
                 .map(YAMLKeyValue::getName)
                 .map(StringUtils::removeAllQuotes);
-    }
-
-    @Override
-    boolean childOfKeyWithName(final PsiElement psiElement, final String keyName) {
-        if (psiElement == null) {
-            return false;
-        }
-        if (psiElement instanceof YAMLKeyValue) {
-            if (keyName.equals(((YAMLKeyValue) psiElement).getName())) {
-                return true;
-            }
-        }
-        return childOfKeyWithName(psiElement.getParent(), keyName);
     }
 
     @Override
@@ -199,7 +173,7 @@ public class YamlTraversal extends Traversal {
     }
 
     @Override
-    boolean isUniqueArrayStringValue(final String value, final PsiElement psiElement) {
+    public boolean isUniqueArrayStringValue(final String value, final PsiElement psiElement) {
         return Optional.ofNullable(psiElement.getParent())
                 .map(PsiElement::getParent)
                 .map(PsiElement::getParent)
@@ -225,7 +199,7 @@ public class YamlTraversal extends Traversal {
     }
 
     @Override
-    List<String> getSecurityScopesIfOAuth2(final PsiElement securityDefinitionItem) {
+    public List<String> getSecurityScopesIfOAuth2(final PsiElement securityDefinitionItem) {
         final List<YAMLKeyValue> properties = getChildProperties(securityDefinitionItem);
 
         final boolean isOAuth2 = properties.stream()
@@ -273,16 +247,6 @@ public class YamlTraversal extends Traversal {
 
     private Optional<YAMLKeyValue> toYamlKeyValue(final PsiElement psiElement) {
         return psiElement instanceof YAMLKeyValue ? Optional.of((YAMLKeyValue) psiElement) : Optional.empty();
-    }
-
-    @Override
-    boolean elementIsInsideArray(final PsiElement psiElement) {
-        if (psiElement == null) {
-            return false;
-        } else if (psiElement instanceof YAMLSequence) {
-            return true;
-        }
-        return elementIsInsideArray(psiElement.getParent());
     }
 
     @Override

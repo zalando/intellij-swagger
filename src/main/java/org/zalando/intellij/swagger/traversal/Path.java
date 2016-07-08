@@ -1,6 +1,7 @@
 package org.zalando.intellij.swagger.traversal;
 
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiNamedElement;
 import org.apache.commons.lang.StringUtils;
 
@@ -12,12 +13,10 @@ class Path {
     private static final String ANY_KEYS = "**";
 
     private final PsiElement psiElement;
-    private final Traversal traversal;
     private final String pathExpression;
 
-    Path(final PsiElement psiElement, final Traversal traversal, final String pathExpression) {
+    Path(final PsiElement psiElement, final String pathExpression) {
         this.psiElement = psiElement;
-        this.traversal = traversal;
         this.pathExpression = pathExpression;
     }
 
@@ -25,13 +24,13 @@ class Path {
         String parentKeyName = getNthPathItem(1);
 
         if (parentKeyName.equals("$")) {
-            return traversal.childOfRoot(psiElement);
+            return childOfRoot(psiElement);
         }
 
         if (parentKeyName.equals(ANY_KEY)) {
             final Optional<PsiNamedElement> immediateNamedParent = getNextNamedParent(psiElement);
             return immediateNamedParent.isPresent() &&
-                    new Path(immediateNamedParent.get().getParent(), traversal, reducePath(pathExpression)).exists();
+                    new Path(immediateNamedParent.get().getParent(), reducePath(pathExpression)).exists();
         }
 
         final Optional<PsiNamedElement> immediateParentElement = getNextNamedParent(psiElement);
@@ -42,15 +41,22 @@ class Path {
         if (getNthPathItem(2).equals(ANY_KEYS)) {
             if (parentKeyName.equals(immediateParentName)) {
                 return goUpToElementWithParentName(psiElement, getNthPathItem(3))
-                        .map(parent -> new Path(parent, traversal, reducePath(reducePath(pathExpression))).exists())
+                        .map(parent -> new Path(parent, reducePath(reducePath(pathExpression))).exists())
                         .orElse(false);
             }
         }
 
         return parentKeyName.equals(immediateParentName) &&
                 (getPathLength() == 1 || immediateParentElement
-                        .map(parent -> new Path(parent.getParent(), traversal, reducePath(pathExpression)).exists())
+                        .map(parent -> new Path(parent.getParent(), reducePath(pathExpression)).exists())
                         .orElse(false));
+    }
+
+    private boolean childOfRoot(final PsiElement psiElement) {
+        return psiElement.getParent() instanceof PsiFile ||
+                psiElement.getParent().getParent() instanceof PsiFile ||
+                psiElement.getParent().getParent().getParent() instanceof PsiFile ||
+                psiElement.getParent().getParent().getParent().getParent() instanceof PsiFile;
     }
 
     private String getNthPathItem(final int nth) {
@@ -77,7 +83,7 @@ class Path {
             if (keyName.equals(psiNamedElement.getName())) {
                 return Optional.of(psiElement);
             } else if (keyName.equals("$")) {
-                return traversal.childOfRoot(psiElement) ?
+                return childOfRoot(psiElement) ?
                         Optional.of(psiElement) :
                         goUpToElementWithParentName(psiElement.getParent(), keyName);
             }

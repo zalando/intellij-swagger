@@ -3,7 +3,7 @@ package org.zalando.intellij.swagger.completion.field;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
 import org.zalando.intellij.swagger.completion.field.model.ArrayField;
-import org.zalando.intellij.swagger.traversal.CompletionHelper;
+import org.zalando.intellij.swagger.completion.CompletionHelper;
 
 import java.util.List;
 import java.util.Optional;

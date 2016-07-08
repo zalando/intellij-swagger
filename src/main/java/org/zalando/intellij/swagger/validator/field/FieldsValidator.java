@@ -4,57 +4,62 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.field.model.Fields;
+import org.zalando.intellij.swagger.traversal.PathResolver;
 import org.zalando.intellij.swagger.traversal.Traversal;
 
 public class FieldsValidator {
 
     private final Traversal traversal;
+    private final PathResolver pathResolver;
     private final UnknownKeyValidator unknownKeyValidator;
 
-    public FieldsValidator(final Traversal traversal, final UnknownKeyValidator unknownKeyValidator) {
+    public FieldsValidator(final Traversal traversal,
+                           final PathResolver pathResolver,
+                           final UnknownKeyValidator unknownKeyValidator) {
         this.traversal = traversal;
+        this.pathResolver = pathResolver;
         this.unknownKeyValidator = unknownKeyValidator;
     }
 
     public void validate(@NotNull PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
         traversal.getKeyNameIfKey(psiElement).ifPresent(keyName -> {
 
-            if (traversal.childOfRoot(psiElement)) {
+            if (pathResolver.childOfRoot(psiElement)) {
                 unknownKeyValidator.validate(keyName, Fields.root(), psiElement, annotationHolder);
                 return;
             }
 
             final PsiElement keyObject = traversal.extractObjectForValidation(psiElement);
 
-            if (traversal.childOfContact(keyObject)) {
+            if (pathResolver.childOfContact(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.contact(), psiElement, annotationHolder);
-            } else if (traversal.childOfSchema(keyObject)) {
+            } else if (pathResolver.childOfSchema(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.schema(), psiElement, annotationHolder);
-            } else if (traversal.childOfExternalDocs(keyObject)) {
+            } else if (pathResolver.childOfExternalDocs(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.externalDocs(), psiElement, annotationHolder);
-            } else if (traversal.childOfHeader(keyObject)) {
+            } else if (pathResolver.childOfHeader(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.header(), psiElement, annotationHolder);
-            } else if (traversal.childOfInfo(keyObject)) {
+            } else if (pathResolver.childOfInfo(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.info(), psiElement, annotationHolder);
-            } else if (traversal.childOfItems(keyObject)) {
+            } else if (pathResolver.childOfItems(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.items(), psiElement, annotationHolder);
-            } else if (traversal.childOfLicense(keyObject)) {
+            } else if (pathResolver.childOfLicense(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.license(), psiElement, annotationHolder);
-            } else if (traversal.childOfOperation(keyObject)) {
+            } else if (pathResolver.childOfOperation(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.operation(), psiElement, annotationHolder);
-            } else if (traversal.childOfParameters(keyObject)) {
+            } else if (pathResolver.childOfParameters(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.parametersWithRef(), psiElement, annotationHolder);
-            } else if (traversal.childOfPath(keyObject)) {
+            } else if (pathResolver.childOfPath(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.path(), psiElement, annotationHolder);
-            } else if (traversal.childOfResponse(keyObject)) {
+            } else if (pathResolver.childOfResponse(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.response(), psiElement, annotationHolder);
-            } else if (traversal.childOfResponses(keyObject)) {
+            } else if (pathResolver.childOfResponses(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.responses(), psiElement, annotationHolder);
-            } else if (traversal.childOfSecurityDefinition(keyObject)) {
+            } else if (pathResolver.childOfSecurityDefinition(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.securityDefinitions(), psiElement, annotationHolder);
-            } else if (traversal.childOfTag(keyObject)) {
+            } else if (pathResolver.childOfTag(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.tags(), psiElement, annotationHolder);
-            } else if (traversal.childOfXml(keyObject)) {
+            } else if (pathResolver.childOfXml(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.xml(), psiElement, annotationHolder);
             }
         });

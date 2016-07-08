@@ -1,10 +1,12 @@
-package org.zalando.intellij.swagger.traversal;
+package org.zalando.intellij.swagger.completion;
 
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
 import org.zalando.intellij.swagger.completion.field.model.Field;
 import org.zalando.intellij.swagger.completion.value.model.Value;
+import org.zalando.intellij.swagger.traversal.PathResolver;
+import org.zalando.intellij.swagger.traversal.Traversal;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,102 +15,106 @@ public class CompletionHelper {
 
     private final PsiElement psiElement;
     private final Traversal traversal;
+    private final PathResolver pathResolver;
 
-    public CompletionHelper(final PsiElement psiElement, final Traversal traversal) {
+    public CompletionHelper(final PsiElement psiElement,
+                            final Traversal traversal,
+                            final PathResolver pathResolver) {
         this.psiElement = psiElement;
         this.traversal = traversal;
+        this.pathResolver = pathResolver;
     }
 
     public boolean completeRootKey() {
-        return traversal.childOfRoot(psiElement);
+        return pathResolver.childOfRoot(psiElement);
     }
 
     public boolean completeInfoKey() {
-        return traversal.childOfInfo(psiElement);
+        return pathResolver.childOfInfo(psiElement);
     }
 
     public boolean completeContactKey() {
-        return traversal.childOfContact(psiElement);
+        return pathResolver.childOfContact(psiElement);
     }
 
     public boolean completeLicenseKey() {
-        return traversal.childOfLicense(psiElement);
+        return pathResolver.childOfLicense(psiElement);
     }
 
     public boolean completePathKey() {
-        return traversal.childOfPath(psiElement);
+        return pathResolver.childOfPath(psiElement);
     }
 
     public boolean completeOperationKey() {
-        return traversal.childOfOperation(psiElement);
+        return pathResolver.childOfOperation(psiElement);
     }
 
     public boolean completeExternalDocsKey() {
-        return traversal.childOfExternalDocs(psiElement);
+        return pathResolver.childOfExternalDocs(psiElement);
     }
 
     public boolean completeParametersKey() {
-        return traversal.childOfParameters(psiElement);
+        return pathResolver.childOfParameters(psiElement);
     }
 
     public boolean completeItemsKey() {
-        return traversal.childOfItems(psiElement);
+        return pathResolver.childOfItems(psiElement);
     }
 
     public boolean completeResponsesKey() {
-        return traversal.childOfResponses(psiElement);
+        return pathResolver.childOfResponses(psiElement);
     }
 
     public boolean completeResponseKey() {
-        return traversal.childOfResponse(psiElement);
+        return pathResolver.childOfResponse(psiElement);
     }
 
     public boolean completeHeaderKey() {
-        return traversal.childOfHeader(psiElement);
+        return pathResolver.childOfHeader(psiElement);
     }
 
     public boolean completeHeadersKey() {
-        return traversal.childOfHeaders(psiElement);
+        return pathResolver.childOfHeaders(psiElement);
     }
 
     public boolean completeTagKey() {
-        return traversal.childOfTag(psiElement);
+        return pathResolver.childOfTag(psiElement);
     }
 
     public boolean completeSecurityDefinitionKey() {
-        return traversal.childOfSecurityDefinition(psiElement);
+        return pathResolver.childOfSecurityDefinition(psiElement);
     }
 
     public boolean completeSchemaKey() {
-        return traversal.childOfSchema(psiElement);
+        return pathResolver.childOfSchema(psiElement);
     }
 
     public boolean completeXmlKey() {
-        return traversal.childOfXml(psiElement);
+        return pathResolver.childOfXml(psiElement);
     }
 
     public boolean completeDefinitionsKey() {
-        return traversal.childOfDefinitions(psiElement);
+        return pathResolver.childOfDefinitions(psiElement);
     }
 
     public boolean completeParameterDefinitionKey() {
-        return traversal.childOfParameterDefinition(psiElement);
+        return pathResolver.childOfParameterDefinition(psiElement);
     }
 
     public boolean completeMimeValue() {
-        return traversal.isMimeValue(psiElement);
+        return pathResolver.isMimeValue(psiElement);
     }
 
     public boolean completeSchemesValue() {
-        return traversal.isSchemesValue(psiElement);
+        return pathResolver.isSchemesValue(psiElement);
     }
 
     public boolean completeDefinitionRefValue() {
-        return traversal.isDefinitionRefValue(psiElement);
+        return pathResolver.isDefinitionRefValue(psiElement);
     }
 
     public boolean completeParameterRefValue() {
-        return traversal.isParameterRefValue(psiElement);
+        return pathResolver.isParameterRefValue(psiElement);
     }
 
     public List<PsiElement> getChildrenOfRoot(final String propertyName) {
@@ -148,31 +154,31 @@ public class CompletionHelper {
     }
 
     public boolean completeTypeValue() {
-        return traversal.isTypeValue(psiElement);
+        return traversal.elementIsDirectValueOfKey(psiElement, "type");
     }
 
     public boolean completeFormatValue() {
-        return traversal.isFormatValue(psiElement);
+        return traversal.elementIsDirectValueOfKey(psiElement, "format");
     }
 
     public boolean completeInValue() {
-        return traversal.isInValue(psiElement);
+        return traversal.elementIsDirectValueOfKey(psiElement, "in");
     }
 
     public boolean completeResponseRefValue() {
-        return traversal.isResponseRefValue(psiElement);
+        return pathResolver.isResponseRefValue(psiElement);
     }
 
     public boolean completeResponseDefinition() {
-        return traversal.childOfResponseDefinition(psiElement);
+        return pathResolver.childOfResponseDefinition(psiElement);
     }
 
     public boolean completeRootSecurityKey() {
-        return traversal.childOfRootSecurityKey(psiElement);
+        return pathResolver.childOfRootSecurityKey(psiElement);
     }
 
     public boolean completeOperationSecurityKey() {
-        return traversal.childOfOperationSecurityKey(psiElement);
+        return pathResolver.childOfOperationSecurityKey(psiElement);
     }
 
     public Optional<String> extractSecurityNameFromSecurityObject(final PsiElement psiElement) {
@@ -184,7 +190,7 @@ public class CompletionHelper {
     }
 
     public boolean completeSecurityScopeNameValue() {
-        return traversal.isSecurityScopeNameValue(psiElement);
+        return pathResolver.isSecurityScopeNameValue(psiElement);
     }
 
     public Optional<String> getKeyNameOfObject(final PsiElement psiElement) {
@@ -200,18 +206,18 @@ public class CompletionHelper {
     }
 
     public boolean completeItemsCollectionFormat() {
-        return traversal.childOfItemsCollectionFormat(psiElement);
+        return pathResolver.childOfItemsCollectionFormat(psiElement);
     }
 
     public boolean completeParametersCollectionFormat() {
-        return traversal.childOfParametersCollectionFormat(psiElement);
+        return pathResolver.childOfParametersCollectionFormat(psiElement);
     }
 
     public boolean completeHeadersCollectionFormat() {
-        return traversal.childOfHeadersCollectionFormat(psiElement);
+        return pathResolver.childOfHeadersCollectionFormat(psiElement);
     }
 
     public boolean completeTagsValue() {
-        return traversal.isTagsValue(psiElement);
+        return pathResolver.isTagsValue(psiElement);
     }
 }

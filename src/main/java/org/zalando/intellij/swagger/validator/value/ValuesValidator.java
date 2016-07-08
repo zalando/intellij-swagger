@@ -3,18 +3,22 @@ package org.zalando.intellij.swagger.validator.value;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import org.zalando.intellij.swagger.traversal.PathResolver;
 import org.zalando.intellij.swagger.traversal.Traversal;
 
 public class ValuesValidator {
 
     private final Traversal traversal;
+    private final PathResolver pathResolver;
     private final ReferenceValidator referenceValidator;
     private final SchemesValidator schemesValidator;
 
     public ValuesValidator(final Traversal traversal,
+                           final PathResolver pathResolver,
                            final ReferenceValidator referenceValidator,
                            final SchemesValidator schemesValidator) {
         this.traversal = traversal;
+        this.pathResolver = pathResolver;
         this.referenceValidator = referenceValidator;
         this.schemesValidator = schemesValidator;
     }
@@ -28,17 +32,17 @@ public class ValuesValidator {
     }
 
     private void handleKeyValue(final @NotNull PsiElement psiElement, final @NotNull AnnotationHolder annotationHolder) {
-        if (traversal.isDefinitionRefValue(psiElement)) {
+        if (pathResolver.isDefinitionRefValue(psiElement)) {
             referenceValidator.validateDefinitionReference(psiElement, annotationHolder);
-        } else if (traversal.isParameterRefValue(psiElement)) {
+        } else if (pathResolver.isParameterRefValue(psiElement)) {
             referenceValidator.validateParameterReference(psiElement, annotationHolder);
-        } else if (traversal.isResponseRefValue(psiElement)) {
+        } else if (pathResolver.isResponseRefValue(psiElement)) {
             referenceValidator.validateResponseReference(psiElement, annotationHolder);
         }
     }
 
     private void handleArrayStringValue(final @NotNull PsiElement psiElement, final @NotNull AnnotationHolder annotationHolder) {
-        if (traversal.isSchemesValue(psiElement)) {
+        if (pathResolver.isSchemesValue(psiElement)) {
             schemesValidator.validate(psiElement, annotationHolder);
         }
     }

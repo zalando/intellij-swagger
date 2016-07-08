@@ -1,7 +1,7 @@
 package org.zalando.intellij.swagger.completion.field;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
-import org.zalando.intellij.swagger.traversal.CompletionHelper;
+import org.zalando.intellij.swagger.completion.CompletionHelper;
 
 class DefinitionsCompletion extends FieldCompletion {
 
