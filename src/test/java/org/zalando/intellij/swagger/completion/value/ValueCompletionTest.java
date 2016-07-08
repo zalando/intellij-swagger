@@ -1,27 +1,21 @@
 package org.zalando.intellij.swagger.completion.value;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.zalando.intellij.swagger.completion.AbstractJsonOrYamlCompletionTest;
-import org.zalando.intellij.swagger.fixture.SwaggerFixture.JsonOrYaml;
+import org.zalando.intellij.swagger.completion.CompletionTest;
+import org.zalando.intellij.swagger.fixture.Format;
 
 @RunWith(Parameterized.class)
-public class ValueCompletionTest extends AbstractJsonOrYamlCompletionTest {
+public class ValueCompletionTest extends CompletionTest {
+
+    public ValueCompletionTest(Format format) {
+        super(format, "testing/completion/value");
+    }
 
     @Parameterized.Parameters(name = "inputKind: {0}")
     public static Object[] parameters() {
-        return JsonOrYaml.values();
-    }
-
-    public ValueCompletionTest(JsonOrYaml jsonOrYaml) {
-        super(jsonOrYaml);
-    }
-
-    @Before
-    public void setUpBefore() throws Exception {
-        useResourceFolder("testing/completion/value");
+        return Format.values();
     }
 
     @Test

@@ -2,27 +2,24 @@ package org.zalando.intellij.swagger.completion.field;
 
 import com.google.common.collect.Lists;
 import org.jetbrains.annotations.NotNull;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.zalando.intellij.swagger.assertion.AssertableList;
-import org.zalando.intellij.swagger.fixture.SwaggerFixture;
-import org.zalando.intellij.swagger.fixture.SwaggerFixture.JsonOrYaml;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.zalando.intellij.swagger.completion.CompletionTest;
+import org.zalando.intellij.swagger.fixture.Format;
 
 import java.util.List;
 
-public class JsonFieldCompletionTest {
+@RunWith(Parameterized.class)
+public class JsonFieldCompletionTest extends CompletionTest {
 
-    private SwaggerFixture myFixture;
-
-    @Before
-    public void setUpBefore() throws Exception {
-        myFixture = SwaggerFixture.forResourceFolder("testing/completion/field/json");
+    public JsonFieldCompletionTest(@NotNull final Format format) {
+        super(format, "testing/completion/field/json");
     }
 
-    @After
-    public void tearDownAfter() throws Exception {
-        myFixture.tearDown();
+    @Parameterized.Parameters(name = "inputKind: {0}")
+    public static Object[] parameters() {
+        return new Object[]{Format.JSON};
     }
 
     @Test
@@ -53,11 +50,6 @@ public class JsonFieldCompletionTest {
     private List<String> getExpectedElements() {
         return Lists.newArrayList("basePath", "produces", "consumes", "schemes",
                 "paths", "tags", "parameters", "responses");
-    }
-
-    @NotNull
-    private AssertableList getCaretCompletions(@NotNull String testFileNoExt) {
-        return myFixture.getCompletions(testFileNoExt, JsonOrYaml.JSON);
     }
 
 }

@@ -1,26 +1,21 @@
 package org.zalando.intellij.swagger.insert;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.zalando.intellij.swagger.completion.AbstractJsonOrYamlCompletionTest;
-import org.zalando.intellij.swagger.fixture.SwaggerFixture.JsonOrYaml;
+import org.zalando.intellij.swagger.completion.CompletionTest;
+import org.zalando.intellij.swagger.fixture.Format;
 
 @RunWith(Parameterized.class)
-public class InsertFieldTest extends AbstractJsonOrYamlCompletionTest {
-    public InsertFieldTest(JsonOrYaml jsonOrYaml) {
-        super(jsonOrYaml);
+public class InsertFieldTest extends CompletionTest {
+
+    public InsertFieldTest(Format format) {
+        super(format, "testing/insert/field");
     }
 
     @Parameterized.Parameters(name = "inputKind: {0}")
     public static Object[] parameters() {
-        return JsonOrYaml.values();
-    }
-
-    @Before
-    public void setUpBefore() throws Exception {
-        useResourceFolder("testing/insert/field");
+        return Format.values();
     }
 
     @Test

@@ -1,31 +1,26 @@
 package org.zalando.intellij.swagger.completion.field;
 
 import com.intellij.util.net.HTTPMethod;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.zalando.intellij.swagger.completion.AbstractJsonOrYamlCompletionTest;
-import org.zalando.intellij.swagger.fixture.SwaggerFixture.JsonOrYaml;
+import org.zalando.intellij.swagger.completion.CompletionTest;
+import org.zalando.intellij.swagger.fixture.Format;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 @RunWith(Parameterized.class)
-public class FieldCompletionTest extends AbstractJsonOrYamlCompletionTest {
-    public FieldCompletionTest(JsonOrYaml jsonOrYaml) {
-        super(jsonOrYaml);
+public class FieldCompletionTest extends CompletionTest {
+
+    public FieldCompletionTest(Format format) {
+        super(format, "testing/completion/field");
     }
 
     @Parameterized.Parameters(name = "inputKind: {0}")
     public static Object[] parameters() {
-        return JsonOrYaml.values();
-    }
-
-    @Before
-    public void setUpBefore() throws Exception {
-        useResourceFolder("testing/completion/field");
+        return Format.values();
     }
 
     @Test

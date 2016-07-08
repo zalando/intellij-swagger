@@ -23,9 +23,13 @@ public class SwaggerFixture {
     private final CodeInsightTestFixture myCodeInsightFixture;
 
     @NotNull
-    public static SwaggerFixture forResourceFolder(@NotNull String resourceBasedPath) throws Exception {
-        String absolutePath = toAbsolutePath(resourceBasedPath);
-        return new SwaggerFixture(absolutePath);
+    public static SwaggerFixture forResourceFolder(@NotNull String resourceBasedPath) {
+        try {
+            String absolutePath = toAbsolutePath(resourceBasedPath);
+            return new SwaggerFixture(absolutePath);
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private SwaggerFixture(@NotNull String folderAbsolutePath) throws Exception {
@@ -51,37 +55,21 @@ public class SwaggerFixture {
     }
 
     @NotNull
-    public AssertableList getCompletions(@NotNull String caretFileNoExt, @NotNull JsonOrYaml fileKind) {
-        String fullName = fileKind.getFileName(caretFileNoExt);
+    public AssertableList getCompletions(@NotNull String caretFileNoExt, @NotNull Format fileKind) {
+        String fullName = fileKind.getFileNameWithExtension(caretFileNoExt);
         return getCompletions(fullName);
     }
 
-    public void complete(@NotNull final String testFileNoExt, @NotNull final JsonOrYaml fileKind) {
-        myCodeInsightFixture.configureByFile(fileKind.getFileName(testFileNoExt));
+    public void complete(@NotNull final String testFileNoExt, @NotNull final Format fileKind) {
+        myCodeInsightFixture.configureByFile(fileKind.getFileNameWithExtension(testFileNoExt));
         myCodeInsightFixture.complete(CompletionType.BASIC, 2);
         if (LookupManager.getActiveLookup(myCodeInsightFixture.getEditor()) != null) {
             myCodeInsightFixture.type('\n');
         }
     }
 
-    public void checkResultByFile(@NotNull final String testFileNoExt, @NotNull final JsonOrYaml fileKind) {
-        myCodeInsightFixture.checkResultByFile(fileKind.getFileName(testFileNoExt), true);
-    }
-
-    public enum JsonOrYaml {
-        JSON("json"),
-        YAML("yaml");
-
-        private final String myFileExtension;
-
-        JsonOrYaml(String fileExtension) {
-            myFileExtension = fileExtension;
-        }
-
-        @NotNull
-        public String getFileName(@NotNull String base) {
-            return base + "." + myFileExtension;
-        }
+    public void checkResultByFile(@NotNull final String testFileNoExt, @NotNull final Format fileKind) {
+        myCodeInsightFixture.checkResultByFile(fileKind.getFileNameWithExtension(testFileNoExt), true);
     }
 
     @NotNull
