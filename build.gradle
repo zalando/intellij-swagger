@@ -17,17 +17,35 @@ task wrapper(type: Wrapper) {
 }
 
 intellij {
-    version '2016.1'
     plugins 'yaml' //Bundled plugin dependencies
     pluginName 'intellij-swagger'
+    updateSinceUntilBuild false
 }
 
 group 'org.zalando.intellij'
-version '0.0.17'
+version = project.hasProperty('version') ? project['version'] : '0.0.1'
 
 apply plugin: 'java'
-
 sourceCompatibility = 1.8
+
+task updateVersion(type: UpdateVersionTask)
+
+class UpdateVersionTask extends DefaultTask {
+
+    @TaskAction
+    def updateVersion() {
+        def String version = project.getProperty('version')
+        updateVersionInPluginXml(version)
+    }
+
+    private static void updateVersionInPluginXml(String version) {
+        def pluginXmlFile = new File('src/main/resources/META-INF/plugin.xml')
+        def pluginXmlContent = pluginXmlFile.getText('UTF-8')
+
+        pluginXmlContent = pluginXmlContent.replaceFirst("<version>(.)*</version>", "<version>" + version + "</version>")
+        pluginXmlFile.write(pluginXmlContent)
+    }
+}
 
 repositories {
     mavenCentral()
