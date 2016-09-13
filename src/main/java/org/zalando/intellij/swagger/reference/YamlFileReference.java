@@ -9,21 +9,17 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.yaml.psi.YAMLValue;
-import org.zalando.intellij.swagger.traversal.YamlTraversal;
 
 import java.util.Optional;
 
 public class YamlFileReference extends PsiReferenceBase<PsiElement> {
 
     private final String filePath;
-    private final YamlTraversal yamlTraversal;
 
     public YamlFileReference(@NotNull final YAMLValue selectedElement,
-                             @NotNull final String filePath,
-                             @NotNull final YamlTraversal yamlTraversal) {
+                             @NotNull final String filePath) {
         super(selectedElement);
         this.filePath = filePath;
-        this.yamlTraversal = yamlTraversal;
     }
 
     @Nullable

@@ -9,21 +9,17 @@ import com.intellij.psi.PsiReferenceBase;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.zalando.intellij.swagger.traversal.JsonTraversal;
 
 import java.util.Optional;
 
 public class JsonFileReference extends PsiReferenceBase<PsiElement> {
 
     private final String filePath;
-    private final JsonTraversal jsonTraversal;
 
     public JsonFileReference(@NotNull final JsonLiteral selectedElement,
-                             @NotNull final String filePath,
-                             @NotNull final JsonTraversal jsonTraversal) {
+                             @NotNull final String filePath) {
         super(selectedElement);
         this.filePath = filePath;
-        this.jsonTraversal = jsonTraversal;
     }
 
     @Nullable

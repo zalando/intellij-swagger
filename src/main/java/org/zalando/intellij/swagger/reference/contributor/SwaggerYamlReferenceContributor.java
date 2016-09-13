@@ -108,8 +108,7 @@ public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
                         .map(text -> new PsiReference[]{
                                 new YamlFileReference(
                                         (YAMLValue) element,
-                                        StringUtils.removeAllQuotes(text),
-                                        yamlTraversal)
+                                        StringUtils.removeAllQuotes(text))
                         }).orElse(YamlFileReference.EMPTY_ARRAY);
             }
         };

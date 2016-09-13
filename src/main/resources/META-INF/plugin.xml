@@ -14,35 +14,6 @@
      <p>Source code can be found at https://github.com/zalando/intellij-swagger</p>
     ]]></description>
 
-    <change-notes><![CDATA[
-           version 0.0.17
-           <br/>
-           <ul>
-           <li>Quick fix option for unknown $ref values</li>
-           <li>Tags auto completion</li>
-           </ul>
-
-           version 0.0.14
-           <br/>
-           <ul>
-           <li>Swagger UI</li>
-           </ul>
-
-           version 0.0.13
-           <br/>
-           <ul>
-           <li>Improved items auto completion</li>
-           </ul>
-
-           version 0.0.12
-           <br/>
-           <ul>
-           <li>More fields and values with auto completion</li>
-           <li>Validation fixes</li>
-           </ul>
-    ]]>
-    </change-notes>
-
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="145"/>
 

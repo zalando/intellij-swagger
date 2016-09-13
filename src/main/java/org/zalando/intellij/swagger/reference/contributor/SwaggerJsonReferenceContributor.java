@@ -17,7 +17,6 @@ import org.zalando.intellij.swagger.reference.JsonDefinitionReference;
 import org.zalando.intellij.swagger.reference.JsonFileReference;
 import org.zalando.intellij.swagger.reference.JsonParameterReference;
 import org.zalando.intellij.swagger.reference.JsonResponseReference;
-import org.zalando.intellij.swagger.reference.YamlDefinitionReference;
 import org.zalando.intellij.swagger.reference.extractor.ReferenceValueExtractor;
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
 
@@ -109,8 +108,7 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
                         .map(text -> new PsiReference[]{
                                 new JsonFileReference(
                                         (JsonLiteral) element,
-                                        StringUtils.removeAllQuotes(text),
-                                        jsonTraversal)
+                                        StringUtils.removeAllQuotes(text))
                         }).orElse(JsonFileReference.EMPTY_ARRAY);
             }
         };
