@@ -12,7 +12,9 @@ import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.PsiReferenceRegistrar;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
+import org.zalando.intellij.swagger.completion.StringUtils;
 import org.zalando.intellij.swagger.reference.JsonDefinitionReference;
+import org.zalando.intellij.swagger.reference.JsonFileReference;
 import org.zalando.intellij.swagger.reference.JsonParameterReference;
 import org.zalando.intellij.swagger.reference.JsonResponseReference;
 import org.zalando.intellij.swagger.reference.YamlDefinitionReference;
@@ -38,49 +40,80 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
 
     @Override
     public void registerReferenceProviders(@NotNull final PsiReferenceRegistrar registrar) {
-        registrar.registerReferenceProvider(definitionsPattern(),
-                new PsiReferenceProvider() {
-                    @NotNull
-                    @Override
-                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
-                                                                 @NotNull ProcessingContext context) {
-                        return Optional.ofNullable(element.getText())
-                                .map(text -> new PsiReference[]{
-                                        new JsonDefinitionReference(
-                                                (JsonLiteral) element,
-                                                referenceValueExtractor.getValue(text),
-                                                jsonTraversal)
-                                }).orElse(YamlDefinitionReference.EMPTY_ARRAY);
-                    }
-                });
-        registrar.registerReferenceProvider(parametersPattern(),
-                new PsiReferenceProvider() {
-                    @NotNull
-                    @Override
-                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
-                                                                 @NotNull ProcessingContext context) {
-                        return Optional.ofNullable(element.getText())
-                                .map(text -> new PsiReference[]{new JsonParameterReference(
+        registrar.registerReferenceProvider(definitionsPattern(), getDefinitionReferenceProvider());
+        registrar.registerReferenceProvider(parametersPattern(), getParameterReferenceProvider());
+        registrar.registerReferenceProvider(responsesPattern(), getResponseReferenceProvider());
+        registrar.registerReferenceProvider(filePattern(), getFileReferenceProvider());
+    }
+
+    @NotNull
+    private PsiReferenceProvider getResponseReferenceProvider() {
+        return new PsiReferenceProvider() {
+            @NotNull
+            @Override
+            public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
+                                                         @NotNull ProcessingContext context) {
+                return Optional.ofNullable(element.getText())
+                        .map(text -> new PsiReference[]{new JsonResponseReference(
+                                (JsonLiteral) element,
+                                referenceValueExtractor.getValue(text),
+                                jsonTraversal)})
+                        .orElse(JsonResponseReference.EMPTY_ARRAY);
+            }
+        };
+    }
+
+    @NotNull
+    private PsiReferenceProvider getParameterReferenceProvider() {
+        return new PsiReferenceProvider() {
+            @NotNull
+            @Override
+            public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
+                                                         @NotNull ProcessingContext context) {
+                return Optional.ofNullable(element.getText())
+                        .map(text -> new PsiReference[]{new JsonParameterReference(
+                                (JsonLiteral) element,
+                                referenceValueExtractor.getValue(text),
+                                jsonTraversal)})
+                        .orElse(JsonParameterReference.EMPTY_ARRAY);
+            }
+        };
+    }
+
+    @NotNull
+    private PsiReferenceProvider getDefinitionReferenceProvider() {
+        return new PsiReferenceProvider() {
+            @NotNull
+            @Override
+            public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
+                                                         @NotNull ProcessingContext context) {
+                return Optional.ofNullable(element.getText())
+                        .map(text -> new PsiReference[]{
+                                new JsonDefinitionReference(
                                         (JsonLiteral) element,
                                         referenceValueExtractor.getValue(text),
-                                        jsonTraversal)})
-                                .orElse(JsonParameterReference.EMPTY_ARRAY);
-                    }
-                });
-        registrar.registerReferenceProvider(responsesPattern(),
-                new PsiReferenceProvider() {
-                    @NotNull
-                    @Override
-                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
-                                                                 @NotNull ProcessingContext context) {
-                        return Optional.ofNullable(element.getText())
-                                .map(text -> new PsiReference[]{new JsonResponseReference(
+                                        jsonTraversal)
+                        }).orElse(JsonDefinitionReference.EMPTY_ARRAY);
+            }
+        };
+    }
+
+    @NotNull
+    private PsiReferenceProvider getFileReferenceProvider() {
+        return new PsiReferenceProvider() {
+            @NotNull
+            @Override
+            public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
+                                                         @NotNull ProcessingContext context) {
+                return Optional.ofNullable(element.getText())
+                        .map(text -> new PsiReference[]{
+                                new JsonFileReference(
                                         (JsonLiteral) element,
-                                        referenceValueExtractor.getValue(text),
-                                        jsonTraversal)})
-                                .orElse(JsonResponseReference.EMPTY_ARRAY);
-                    }
-                });
+                                        StringUtils.removeAllQuotes(text),
+                                        jsonTraversal)
+                        }).orElse(JsonFileReference.EMPTY_ARRAY);
+            }
+        };
     }
 
     private PsiElementPattern.Capture<JsonLiteral> definitionsPattern() {
@@ -98,4 +131,8 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
                 .withLanguage(JsonLanguage.INSTANCE);
     }
 
+    private PsiElementPattern.Capture<JsonLiteral> filePattern() {
+        return psiElement(JsonLiteral.class).withText(StandardPatterns.string().endsWith(".json\""))
+                .withLanguage(JsonLanguage.INSTANCE);
+    }
 }
