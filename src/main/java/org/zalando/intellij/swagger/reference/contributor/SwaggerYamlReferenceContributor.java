@@ -12,7 +12,10 @@ import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.YAMLLanguage;
 import org.jetbrains.yaml.psi.YAMLQuotedText;
+import org.jetbrains.yaml.psi.YAMLValue;
+import org.zalando.intellij.swagger.completion.StringUtils;
 import org.zalando.intellij.swagger.reference.YamlDefinitionReference;
+import org.zalando.intellij.swagger.reference.YamlFileReference;
 import org.zalando.intellij.swagger.reference.YamlParameterReference;
 import org.zalando.intellij.swagger.reference.YamlResponseReference;
 import org.zalando.intellij.swagger.reference.extractor.ReferenceValueExtractor;
@@ -37,52 +40,79 @@ public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
 
     @Override
     public void registerReferenceProviders(@NotNull final PsiReferenceRegistrar registrar) {
-        registrar.registerReferenceProvider(definitionsPattern(),
-                new PsiReferenceProvider() {
-                    @NotNull
-                    @Override
-                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
-                                                                 @NotNull ProcessingContext context) {
-                        return Optional.ofNullable(element.getText())
-                                .map(text -> new PsiReference[]{new YamlDefinitionReference(
-                                        (YAMLQuotedText) element,
-                                        referenceValueExtractor.getValue(text),
-                                        yamlTraversal)
-                                }).orElse(YamlDefinitionReference.EMPTY_ARRAY);
-                    }
-                });
-
-        registrar.registerReferenceProvider(parametersPattern(),
-                new PsiReferenceProvider() {
-                    @NotNull
-                    @Override
-                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
-                                                                 @NotNull ProcessingContext context) {
-                        return Optional.ofNullable(element.getText())
-                                .map(text -> new PsiReference[]{new YamlParameterReference(
-                                        (YAMLQuotedText) element,
-                                        referenceValueExtractor.getValue(text),
-                                        yamlTraversal)
-                                }).orElse(YamlParameterReference.EMPTY_ARRAY);
-                    }
-                });
-
-        registrar.registerReferenceProvider(responsesPattern(),
-                new PsiReferenceProvider() {
-                    @NotNull
-                    @Override
-                    public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
-                                                                 @NotNull ProcessingContext context) {
-                        return Optional.ofNullable(element.getText())
-                                .map(text -> new PsiReference[]{new YamlResponseReference(
-                                        (YAMLQuotedText) element,
-                                        referenceValueExtractor.getValue(text),
-                                        yamlTraversal)
-                                }).orElse(YamlResponseReference.EMPTY_ARRAY);
-                    }
-                });
+        registrar.registerReferenceProvider(definitionsPattern(), getDefinitionReferenceProvider());
+        registrar.registerReferenceProvider(parametersPattern(), getParameterReferenceProvider());
+        registrar.registerReferenceProvider(responsesPattern(), getResponseReferenceProvider());
+        registrar.registerReferenceProvider(filePattern(), getFileReferenceProvider());
     }
 
+    @NotNull
+    private PsiReferenceProvider getResponseReferenceProvider() {
+        return new PsiReferenceProvider() {
+            @NotNull
+            @Override
+            public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
+                                                         @NotNull ProcessingContext context) {
+                return Optional.ofNullable(element.getText())
+                        .map(text -> new PsiReference[]{new YamlResponseReference(
+                                (YAMLQuotedText) element,
+                                referenceValueExtractor.getValue(text),
+                                yamlTraversal)
+                        }).orElse(YamlResponseReference.EMPTY_ARRAY);
+            }
+        };
+    }
+
+    @NotNull
+    private PsiReferenceProvider getParameterReferenceProvider() {
+        return new PsiReferenceProvider() {
+            @NotNull
+            @Override
+            public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
+                                                         @NotNull ProcessingContext context) {
+                return Optional.ofNullable(element.getText())
+                        .map(text -> new PsiReference[]{new YamlParameterReference(
+                                (YAMLQuotedText) element,
+                                referenceValueExtractor.getValue(text),
+                                yamlTraversal)
+                        }).orElse(YamlParameterReference.EMPTY_ARRAY);
+            }
+        };
+    }
+
+    @NotNull
+    private PsiReferenceProvider getDefinitionReferenceProvider() {
+        return new PsiReferenceProvider() {
+            @NotNull
+            @Override
+            public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
+                                                         @NotNull ProcessingContext context) {
+                return Optional.ofNullable(element.getText())
+                        .map(text -> new PsiReference[]{new YamlDefinitionReference(
+                                (YAMLQuotedText) element,
+                                referenceValueExtractor.getValue(text),
+                                yamlTraversal)
+                        }).orElse(YamlDefinitionReference.EMPTY_ARRAY);
+            }
+        };
+    }
+
+    @NotNull
+    private PsiReferenceProvider getFileReferenceProvider() {
+        return new PsiReferenceProvider() {
+            @NotNull
+            @Override
+            public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
+                                                         @NotNull ProcessingContext context) {
+                return Optional.ofNullable(element.getText())
+                        .map(text -> new PsiReference[]{
+                                new YamlFileReference(
+                                        (YAMLValue) element,
+                                        StringUtils.removeAllQuotes(text))
+                        }).orElse(YamlFileReference.EMPTY_ARRAY);
+            }
+        };
+    }
 
     private PsiElementPattern.Capture<YAMLQuotedText> definitionsPattern() {
         return psiElement(YAMLQuotedText.class)
@@ -102,4 +132,9 @@ public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
                 .withLanguage(YAMLLanguage.INSTANCE);
     }
 
+    private PsiElementPattern.Capture<YAMLValue> filePattern() {
+        return psiElement(YAMLValue.class)
+                .withText(StandardPatterns.string().contains(".yaml"))
+                .withLanguage(YAMLLanguage.INSTANCE);
+    }
 }
