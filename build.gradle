@@ -20,6 +20,7 @@ intellij {
     plugins 'yaml' //Bundled plugin dependencies
     pluginName 'intellij-swagger'
     updateSinceUntilBuild false
+    version '2016.2'
 }
 
 group 'org.zalando.intellij'
