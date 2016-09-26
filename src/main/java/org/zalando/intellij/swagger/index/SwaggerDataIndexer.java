@@ -79,7 +79,7 @@ class SwaggerDataIndexer implements DataIndexer<String, Set<String>, FileContent
                                 final YAMLKeyValue yamlKeyValue = (YAMLKeyValue) element;
                                 if ("$ref".equals(yamlKeyValue.getKeyText())) {
                                     final String refValue = StringUtils.removeAllQuotes(yamlKeyValue.getValueText());
-                                    if (refValue.endsWith(".yaml")) {
+                                    if (refValue.endsWith(".yaml") || refValue.endsWith(".yml")) {
                                         result.add(refValue + "-" + getSwaggerFileType(yamlKeyValue.getValue()));
                                     }
                                 }

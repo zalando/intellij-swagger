@@ -68,4 +68,19 @@ public class PartialSwaggerFileFieldCompletionTest extends SwaggerLightCodeInsig
                 "uniqueItems", "enum", "multipleOf")
                 .isOfSize(23);
     }
+
+    public void testThatDefinitionFieldsAreCompletedForPartialYamlSwaggerFileWithYmlExtension() {
+        myFixture.copyFileToProject(PARTIAL_FILES_PATH + "/pet.yaml", "pet.yml");
+        final VirtualFile swaggerFile = myFixture.copyFileToProject(PARTIAL_FILES_PATH + "/swagger.yml", "swagger.yml");
+        myFixture.configureFromExistingVirtualFile(swaggerFile);
+
+        final AssertableList completions = new AssertableList(myFixture.getCompletionVariants("pet.yml"));
+
+        completions.assertContains("$ref", "format", "title", "description", "default", "multipleOf", "maximum",
+                "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern",
+                "maxItems", "minItems", "uniqueItems", "maxProperties", "minProperties", "required", "enum",
+                "type", "items", "allOf", "properties", "additionalProperties", "discriminator", "readOnly",
+                "xml", "externalDocs", "example")
+                .isOfSize(30);
+    }
 }

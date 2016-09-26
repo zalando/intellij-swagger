@@ -1,6 +1,7 @@
 package org.zalando.intellij.swagger.reference.contributor;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static com.intellij.patterns.StandardPatterns.or;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.StandardPatterns;
 import com.intellij.psi.PsiElement;
@@ -134,7 +135,7 @@ public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
 
     private PsiElementPattern.Capture<YAMLValue> filePattern() {
         return psiElement(YAMLValue.class)
-                .withText(StandardPatterns.string().contains(".yaml"))
+                .withText(or(StandardPatterns.string().contains(".yaml"), StandardPatterns.string().contains(".yml")))
                 .withLanguage(YAMLLanguage.INSTANCE);
     }
 }
