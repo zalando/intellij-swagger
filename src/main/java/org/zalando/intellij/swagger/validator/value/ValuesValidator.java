@@ -3,18 +3,18 @@ package org.zalando.intellij.swagger.validator.value;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.traversal.PathResolver;
+import org.zalando.intellij.swagger.traversal.MainPathResolver;
 import org.zalando.intellij.swagger.traversal.Traversal;
 
 public class ValuesValidator {
 
     private final Traversal traversal;
-    private final PathResolver pathResolver;
+    private final MainPathResolver pathResolver;
     private final ReferenceValidator referenceValidator;
     private final SchemesValidator schemesValidator;
 
     public ValuesValidator(final Traversal traversal,
-                           final PathResolver pathResolver,
+                           final MainPathResolver pathResolver,
                            final ReferenceValidator referenceValidator,
                            final SchemesValidator schemesValidator) {
         this.traversal = traversal;

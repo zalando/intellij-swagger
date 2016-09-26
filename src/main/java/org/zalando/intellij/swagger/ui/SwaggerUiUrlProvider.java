@@ -52,7 +52,7 @@ public class SwaggerUiUrlProvider extends BuiltInWebBrowserUrlProvider implement
     private String getSpecificationContentAsJson(final @NotNull OpenInBrowserRequest request) {
         final String content = request.getFile().getText();
 
-        return fileDetector.isSwaggerJsonFile(request.getFile()) ? content : jsonToYaml(content);
+        return fileDetector.isMainSwaggerJsonFile(request.getFile()) ? content : jsonToYaml(content);
     }
 
     private String jsonToYaml(final String content) {

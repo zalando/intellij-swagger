@@ -34,6 +34,8 @@
 
         <webBrowserUrlProvider implementation="org.zalando.intellij.swagger.ui.SwaggerUiUrlProvider" order="last"/>
 
+        <fileBasedIndex implementation="org.zalando.intellij.swagger.index.SwaggerFileIndex" />
+
     </extensions>
 
     <actions>

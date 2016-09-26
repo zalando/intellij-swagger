@@ -35,6 +35,7 @@ public class Values {
 
     public static List<Value> types() {
         return ImmutableList.of(
+                new StringValue("object"),
                 new StringValue("string"),
                 new StringValue("number"),
                 new StringValue("integer"),
