@@ -85,7 +85,8 @@ public class SwaggerFileIndex extends FileBasedIndexExtension<String, Set<String
     @Override
     public FileBasedIndex.InputFilter getInputFilter() {
         return file -> file.getName().endsWith("json")
-                || file.getName().endsWith("yaml");
+                || file.getName().endsWith("yaml")
+                || file.getName().endsWith("yml");
     }
 
     @Override
