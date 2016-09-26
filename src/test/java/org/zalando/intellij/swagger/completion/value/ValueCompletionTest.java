@@ -21,8 +21,8 @@ public class ValueCompletionTest extends CompletionTest {
     @Test
     public void thatTypesAreSuggested() {
         getCaretCompletions("types_all")
-                .assertContains("integer", "number", "string", "boolean", "array")
-                .isOfSize(5);
+                .assertContains("object", "integer", "number", "string", "boolean", "array")
+                .isOfSize(6);
     }
 
     @Test

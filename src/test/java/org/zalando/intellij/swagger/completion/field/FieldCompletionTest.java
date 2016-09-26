@@ -258,4 +258,5 @@ public class FieldCompletionTest extends CompletionTest {
                 .assertContains("petstoreImplicit")
                 .isOfSize(1);
     }
+
 }

@@ -31,7 +31,7 @@ public class FileDetectorTest {
         final PsiFile jsonFile = mock(PsiFile.class);
         when(jsonFile.getName()).thenReturn("swagger.json");
 
-        assertTrue(fileDetector.isSwaggerJsonFile(jsonFile));
+        assertTrue(fileDetector.isMainSwaggerJsonFile(jsonFile));
     }
 
     @Test
@@ -39,7 +39,7 @@ public class FileDetectorTest {
         final PsiFile jsonFile = mock(PsiFile.class);
         when(jsonFile.getName()).thenReturn("swagger.yaml");
 
-        assertTrue(fileDetector.isSwaggerYamlFile(jsonFile));
+        assertTrue(fileDetector.isMainSwaggerYamlFile(jsonFile));
     }
 
     @Test
@@ -53,7 +53,7 @@ public class FileDetectorTest {
         when(jsonValue.getChildren()).thenReturn(new PsiElement[]{jsonProperty});
         when(jsonProperty.getName()).thenReturn("swagger");
 
-        assertTrue(fileDetector.isSwaggerJsonFile(jsonFile));
+        assertTrue(fileDetector.isMainSwaggerJsonFile(jsonFile));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class FileDetectorTest {
         when(yamlValue.getYAMLElements()).thenReturn(Lists.newArrayList(yamlKeyValue));
         when(yamlKeyValue.getName()).thenReturn("swagger");
 
-        assertTrue(fileDetector.isSwaggerYamlFile(yamlFile));
+        assertTrue(fileDetector.isMainSwaggerYamlFile(yamlFile));
     }
 
 }

@@ -1,154 +1,74 @@
 package org.zalando.intellij.swagger.traversal;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 
-public class PathResolver {
+public interface PathResolver {
 
-    public boolean childOfRoot(final PsiElement psiElement) {
-        return psiElement.getParent() instanceof PsiFile ||
-                psiElement.getParent().getParent() instanceof PsiFile ||
-                psiElement.getParent().getParent().getParent() instanceof PsiFile ||
-                psiElement.getParent().getParent().getParent().getParent() instanceof PsiFile;
-    }
+    boolean childOfRoot(PsiElement psiElement);
 
-    public final boolean childOfInfo(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.info");
-    }
+    boolean childOfInfo(PsiElement psiElement);
 
-    public final boolean childOfContact(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.info.contact");
-    }
+    boolean childOfContact(PsiElement psiElement);
 
-    public final boolean childOfLicense(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.info.license");
-    }
+    boolean childOfLicense(PsiElement psiElement);
 
-    public final boolean childOfPath(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*");
-    }
+    boolean childOfPath(PsiElement psiElement);
 
-    public final boolean childOfOperation(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*") && !childOfParameters(psiElement);
-    }
+    boolean childOfOperation(PsiElement psiElement);
 
-    public final boolean childOfExternalDocs(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.externalDocs") ||
-                hasPath(psiElement, "$.paths.*.*.externalDocs") ||
-                hasPath(psiElement, "$.**.schema.externalDocs");
-    }
+    boolean childOfExternalDocs(PsiElement psiElement);
 
-    public final boolean childOfParameters(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.parameters") ||
-                hasPath(psiElement, "$.paths.*.parameters");
-    }
+    boolean childOfParameters(PsiElement psiElement);
 
-    public final boolean childOfItems(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.parameters.items") ||
-                hasPath(psiElement, "$.**.schema.items") ||
-                hasPath(psiElement, "$.paths.*.*.responses.*.headers.*.items") ||
-                hasPath(psiElement, "$.paths.*.parameters.items");
-    }
+    boolean childOfItems(PsiElement psiElement);
 
-    public final boolean childOfResponses(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.responses");
-    }
+    boolean childOfResponses(PsiElement psiElement);
 
-    public final boolean childOfResponse(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.responses.*");
-    }
+    boolean childOfResponse(PsiElement psiElement);
 
-    public final boolean childOfResponseDefinition(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.responses.*");
-    }
+    boolean childOfResponseDefinition(PsiElement psiElement);
 
-    public final boolean childOfHeader(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.responses.*.headers.*");
-    }
+    boolean childOfHeader(PsiElement psiElement);
 
-    public final boolean childOfHeaders(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.responses.*.headers");
-    }
+    boolean childOfHeaders(PsiElement psiElement);
 
-    public final boolean childOfTag(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.tags");
-    }
+    boolean childOfTag(PsiElement psiElement);
 
-    public final boolean childOfSecurityDefinition(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.securityDefinitions.*");
-    }
+    boolean childOfSecurityDefinition(PsiElement psiElement);
 
-    public final boolean childOfSchema(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.schema");
-    }
+    boolean childOfSchema(PsiElement psiElement);
 
-    public final boolean childOfXml(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.schema.xml");
-    }
+    boolean childOfXml(PsiElement psiElement);
 
-    public final boolean childOfDefinitions(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.definitions.*");
-    }
+    boolean childOfDefinitions(PsiElement psiElement);
 
-    public final boolean childOfParameterDefinition(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.parameters.*");
-    }
+    boolean childOfParameterDefinition(PsiElement psiElement);
 
-    public final boolean isMimeValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.consumes") ||
-                hasPath(psiElement, "$.produces") ||
-                hasPath(psiElement, "$.paths.*.*.consumes") ||
-                hasPath(psiElement, "$.paths.*.*.produces");
+    boolean isMimeValue(PsiElement psiElement);
 
-    }
+    boolean isSchemesValue(PsiElement psiElement);
 
-    public final boolean isSchemesValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.schemes");
-    }
+    boolean isTagsValue(PsiElement psiElement);
 
-    public final boolean isTagsValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.tags");
-    }
+    boolean isDefinitionRefValue(PsiElement psiElement);
 
-    public final boolean isDefinitionRefValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.schema.$ref") || hasPath(psiElement, "$.**.items.$ref");
-    }
+    boolean isParameterRefValue(PsiElement psiElement);
 
-    public final boolean isParameterRefValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.parameters.$ref");
-    }
+    boolean isResponseRefValue(PsiElement psiElement);
 
-    public final boolean isResponseRefValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.responses.*.$ref");
-    }
+    boolean childOfRootSecurityKey(PsiElement psiElement);
 
-    public final boolean childOfRootSecurityKey(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.security");
-    }
+    boolean childOfOperationSecurityKey(PsiElement psiElement);
 
-    public final boolean childOfOperationSecurityKey(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.security");
-    }
+    boolean isSecurityScopeNameValue(PsiElement psiElement);
 
-    public boolean isSecurityScopeNameValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.security.*") ||
-                hasPath(psiElement, "$.paths.*.*.security.*");
-    }
+    boolean childOfItemsCollectionFormat(PsiElement psiElement);
 
-    public boolean childOfItemsCollectionFormat(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.items.collectionFormat");
-    }
+    boolean childOfParametersCollectionFormat(PsiElement psiElement);
 
-    public boolean childOfParametersCollectionFormat(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.parameters.collectionFormat");
-    }
+    boolean childOfHeadersCollectionFormat(PsiElement psiElement);
 
-    public boolean childOfHeadersCollectionFormat(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.responses.*.headers.*.collectionFormat");
-    }
-
-    private boolean hasPath(final PsiElement psiElement, final String pathExpression) {
+    default boolean hasPath(final PsiElement psiElement, final String pathExpression) {
         return new Path(psiElement, pathExpression).exists();
     }
-
 }

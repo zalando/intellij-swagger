@@ -17,11 +17,11 @@ import java.util.Optional;
 
 public class FileDetector {
 
-    public boolean isSwaggerJsonFile(final PsiFile psiFile) {
+    public boolean isMainSwaggerJsonFile(final PsiFile psiFile) {
         return psiFile.getName().equals("swagger.json") || hasSwaggerJsonKey(psiFile);
     }
 
-    public boolean isSwaggerYamlFile(final PsiFile psiFile) {
+    public boolean isMainSwaggerYamlFile(final PsiFile psiFile) {
         return psiFile.getName().equals("swagger.yaml") ||
                 psiFile.getName().equals("swagger.yml") ||
                 hasSwaggerYamlKey(psiFile);
@@ -56,6 +56,6 @@ public class FileDetector {
     }
 
     public boolean isSwaggerFile(final PsiFile file) {
-        return isSwaggerJsonFile(file) || isSwaggerYamlFile(file);
+        return isMainSwaggerJsonFile(file) || isMainSwaggerYamlFile(file);
     }
 }
