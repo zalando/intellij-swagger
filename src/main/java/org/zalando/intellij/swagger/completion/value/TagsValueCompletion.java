@@ -16,7 +16,7 @@ class TagsValueCompletion extends ValueCompletion {
 
     @Override
     public void fill() {
-        getTags().stream().forEach(this::addValue);
+        getTags().forEach(this::addValue);
     }
 
     private List<Value> getTags() {

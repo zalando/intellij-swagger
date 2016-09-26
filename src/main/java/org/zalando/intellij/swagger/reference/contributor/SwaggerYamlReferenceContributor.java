@@ -12,6 +12,7 @@ import com.intellij.psi.PsiReferenceRegistrar;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.YAMLLanguage;
+import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.jetbrains.yaml.psi.YAMLQuotedText;
 import org.jetbrains.yaml.psi.YAMLValue;
 import org.zalando.intellij.swagger.completion.StringUtils;
@@ -19,6 +20,7 @@ import org.zalando.intellij.swagger.reference.YamlDefinitionReference;
 import org.zalando.intellij.swagger.reference.YamlFileReference;
 import org.zalando.intellij.swagger.reference.YamlParameterReference;
 import org.zalando.intellij.swagger.reference.YamlResponseReference;
+import org.zalando.intellij.swagger.reference.YamlTagReference;
 import org.zalando.intellij.swagger.reference.extractor.ReferenceValueExtractor;
 import org.zalando.intellij.swagger.traversal.YamlTraversal;
 
@@ -45,6 +47,7 @@ public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
         registrar.registerReferenceProvider(parametersPattern(), getParameterReferenceProvider());
         registrar.registerReferenceProvider(responsesPattern(), getResponseReferenceProvider());
         registrar.registerReferenceProvider(filePattern(), getFileReferenceProvider());
+        registrar.registerReferenceProvider(tagsPattern(), getTagsReferenceProvider());
     }
 
     @NotNull
@@ -115,6 +118,23 @@ public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
         };
     }
 
+    @NotNull
+    private PsiReferenceProvider getTagsReferenceProvider() {
+        return new PsiReferenceProvider() {
+            @NotNull
+            @Override
+            public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
+                                                         @NotNull ProcessingContext context) {
+                return Optional.ofNullable(element.getText())
+                        .map(text -> new PsiReference[]{new YamlTagReference(
+                                (YAMLValue) element,
+                                element.getText(),
+                                yamlTraversal)})
+                        .orElse(YamlTagReference.EMPTY_ARRAY);
+            }
+        };
+    }
+
     private PsiElementPattern.Capture<YAMLQuotedText> definitionsPattern() {
         return psiElement(YAMLQuotedText.class)
                 .withText(StandardPatterns.string().contains("#/definitions/"))
@@ -136,6 +156,11 @@ public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
     private PsiElementPattern.Capture<YAMLValue> filePattern() {
         return psiElement(YAMLValue.class)
                 .withText(or(StandardPatterns.string().contains(".yaml"), StandardPatterns.string().contains(".yml")))
+                .withLanguage(YAMLLanguage.INSTANCE);
+    }
+
+    private PsiElementPattern.Capture<YAMLValue> tagsPattern() {
+        return psiElement(YAMLValue.class).inside(psiElement(YAMLKeyValue.class).withName("tags"))
                 .withLanguage(YAMLLanguage.INSTANCE);
     }
 }
