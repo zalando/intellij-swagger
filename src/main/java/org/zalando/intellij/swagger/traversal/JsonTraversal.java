@@ -24,6 +24,7 @@ import org.zalando.intellij.swagger.insert.JsonInsertValueHandler;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -130,6 +131,7 @@ public class JsonTraversal extends Traversal {
                 .filter(el -> el instanceof JsonProperty)
                 .map(JsonProperty.class::cast)
                 .map(JsonProperty::getValue)
+                .filter(Objects::nonNull)
                 .map(JsonValue::getText)
                 .map(StringUtils::removeAllQuotes)
                 .collect(Collectors.toList());
