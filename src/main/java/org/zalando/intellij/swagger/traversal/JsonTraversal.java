@@ -126,6 +126,17 @@ public class JsonTraversal extends Traversal {
 
     @Override
     public List<String> getTagNames(final PsiFile psiFile) {
+        return getTags(psiFile).stream()
+                .filter(el -> el instanceof JsonProperty)
+                .map(JsonProperty.class::cast)
+                .map(JsonProperty::getValue)
+                .map(JsonValue::getText)
+                .map(StringUtils::removeAllQuotes)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PsiElement> getTags(final PsiFile psiFile) {
         return getRootChildrenOfType(psiFile, JsonProperty.class).stream()
                 .filter(jsonProperty -> "tags".equals(jsonProperty.getName()))
                 .map(JsonProperty::getValue)
@@ -134,9 +145,6 @@ public class JsonTraversal extends Traversal {
                 .filter(el -> el instanceof JsonObject)
                 .map(JsonObject.class::cast)
                 .map(jsonObject -> jsonObject.findProperty("name"))
-                .map(JsonProperty::getValue)
-                .map(JsonValue::getText)
-                .map(StringUtils::removeAllQuotes)
                 .collect(Collectors.toList());
     }
 

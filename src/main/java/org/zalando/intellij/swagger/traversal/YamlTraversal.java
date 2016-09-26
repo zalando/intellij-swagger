@@ -70,6 +70,15 @@ public class YamlTraversal extends Traversal {
 
     @Override
     public List<String> getTagNames(final PsiFile psiFile) {
+        return getTags(psiFile).stream()
+                .filter(el -> el instanceof YAMLKeyValue)
+                .map(YAMLKeyValue.class::cast)
+                .map(YAMLKeyValue::getValueText)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PsiElement> getTags(final PsiFile psiFile) {
         return getRootChildrenOfType(psiFile, YAMLKeyValue.class).stream()
                 .filter(yamlKeyValue -> "tags".equals(yamlKeyValue.getName()))
                 .map(YAMLKeyValue::getValue)
@@ -82,7 +91,6 @@ public class YamlTraversal extends Traversal {
                 .filter(el -> el instanceof YAMLMapping)
                 .map(YAMLMapping.class::cast)
                 .map(yamlMapping -> yamlMapping.getKeyValueByKey("name"))
-                .map(YAMLKeyValue::getValueText)
                 .collect(Collectors.toList());
     }
 

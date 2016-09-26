@@ -3,6 +3,8 @@ package org.zalando.intellij.swagger.reference.contributor;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import com.intellij.json.JsonLanguage;
 import com.intellij.json.psi.JsonLiteral;
+import com.intellij.json.psi.JsonProperty;
+import com.intellij.json.psi.JsonValue;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.StandardPatterns;
 import com.intellij.psi.PsiElement;
@@ -17,6 +19,7 @@ import org.zalando.intellij.swagger.reference.JsonDefinitionReference;
 import org.zalando.intellij.swagger.reference.JsonFileReference;
 import org.zalando.intellij.swagger.reference.JsonParameterReference;
 import org.zalando.intellij.swagger.reference.JsonResponseReference;
+import org.zalando.intellij.swagger.reference.JsonTagReference;
 import org.zalando.intellij.swagger.reference.extractor.ReferenceValueExtractor;
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
 
@@ -43,6 +46,7 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
         registrar.registerReferenceProvider(parametersPattern(), getParameterReferenceProvider());
         registrar.registerReferenceProvider(responsesPattern(), getResponseReferenceProvider());
         registrar.registerReferenceProvider(filePattern(), getFileReferenceProvider());
+        registrar.registerReferenceProvider(tagsPattern(), getTagsReferenceProvider());
     }
 
     @NotNull
@@ -114,6 +118,23 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
         };
     }
 
+    @NotNull
+    private PsiReferenceProvider getTagsReferenceProvider() {
+        return new PsiReferenceProvider() {
+            @NotNull
+            @Override
+            public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
+                                                         @NotNull ProcessingContext context) {
+                return Optional.ofNullable(element.getText())
+                        .map(text -> new PsiReference[]{new JsonTagReference(
+                                (JsonValue) element,
+                                element.getText(),
+                                jsonTraversal)})
+                        .orElse(JsonTagReference.EMPTY_ARRAY);
+            }
+        };
+    }
+
     private PsiElementPattern.Capture<JsonLiteral> definitionsPattern() {
         return psiElement(JsonLiteral.class).withText(StandardPatterns.string().contains("#/definitions/"))
                 .withLanguage(JsonLanguage.INSTANCE);
@@ -131,6 +152,11 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
 
     private PsiElementPattern.Capture<JsonLiteral> filePattern() {
         return psiElement(JsonLiteral.class).withText(StandardPatterns.string().endsWith(".json\""))
+                .withLanguage(JsonLanguage.INSTANCE);
+    }
+
+    private PsiElementPattern.Capture<JsonValue> tagsPattern() {
+        return psiElement(JsonValue.class).inside(psiElement(JsonProperty.class).withName("tags"))
                 .withLanguage(JsonLanguage.INSTANCE);
     }
 }

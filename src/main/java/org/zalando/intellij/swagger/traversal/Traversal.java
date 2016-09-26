@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public abstract class Traversal {
 
@@ -96,4 +97,5 @@ public abstract class Traversal {
                 .collect(Collectors.toList());
     }
 
+    public abstract List<PsiElement> getTags(final PsiFile containingFile);
 }
