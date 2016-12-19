@@ -6,6 +6,8 @@ buildscript {
 
 plugins {
     id "org.jetbrains.intellij" version "0.1.10"
+    id 'jacoco'
+    id 'com.github.kt3k.coveralls' version '2.7.1'
 }
 
 apply plugin: 'idea'
@@ -29,25 +31,6 @@ version = project.hasProperty('version') ? project['version'] : '0.0.1'
 apply plugin: 'java'
 sourceCompatibility = 1.8
 
-task updateVersion(type: UpdateVersionTask)
-
-class UpdateVersionTask extends DefaultTask {
-
-    @TaskAction
-    def updateVersion() {
-        def String version = project.getProperty('version')
-        updateVersionInPluginXml(version)
-    }
-
-    private static void updateVersionInPluginXml(String version) {
-        def pluginXmlFile = new File('src/main/resources/META-INF/plugin.xml')
-        def pluginXmlContent = pluginXmlFile.getText('UTF-8')
-
-        pluginXmlContent = pluginXmlContent.replaceFirst("<version>(.)*</version>", "<version>" + version + "</version>")
-        pluginXmlFile.write(pluginXmlContent)
-    }
-}
-
 repositories {
     mavenCentral()
 }
@@ -61,4 +44,11 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.5'
     testCompile group: 'junit', name: 'junit', version: '4.11'
     testCompile 'org.mockito:mockito-all:1.10.19'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
 }
