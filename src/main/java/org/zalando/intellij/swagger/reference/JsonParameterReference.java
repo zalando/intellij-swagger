@@ -35,7 +35,7 @@ public class JsonParameterReference extends PsiReferenceBase<PsiElement> {
     }
 
     private List<JsonProperty> getParametersChildren() {
-        return jsonTraversal.getChildrenOfDefinition("parameters", getElement().getContainingFile()).stream()
+        return jsonTraversal.getChildrenOfRootProperty("parameters", getElement().getContainingFile()).stream()
                 .filter(psiElement -> psiElement instanceof JsonProperty)
                 .map(JsonProperty.class::cast)
                 .collect(Collectors.toList());

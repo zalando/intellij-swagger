@@ -43,7 +43,7 @@ public class YamlParameterReference extends PsiReferenceBase<PsiElement> {
     }
 
     private List<YAMLPsiElement> getParametersChildren() {
-        return yamlTraversal.getChildrenOfDefinition("parameters", getElement().getContainingFile()).stream()
+        return yamlTraversal.getChildrenOfRootProperty("parameters", getElement().getContainingFile()).stream()
                 .filter(psiElement -> psiElement instanceof YAMLPsiElement)
                 .map(YAMLPsiElement.class::cast)
                 .collect(Collectors.toList());

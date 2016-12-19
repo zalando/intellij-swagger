@@ -13,8 +13,10 @@ import com.intellij.util.indexing.FileContent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.zalando.intellij.swagger.completion.StringUtils;
+import org.zalando.intellij.swagger.file.FileConstants;
 import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.file.SwaggerFileType;
+import org.zalando.intellij.swagger.reference.SwaggerConstants;
 import org.zalando.intellij.swagger.traversal.MainPathResolver;
 import org.zalando.intellij.swagger.traversal.PathResolver;
 
@@ -23,6 +25,8 @@ import java.util.Map;
 import java.util.Set;
 
 class SwaggerDataIndexer implements DataIndexer<String, Set<String>, FileContent> {
+
+    public static final String DELIMITER = "-";
 
     private final FileDetector fileDetector = new FileDetector();
     private final PathResolver pathResolver = new MainPathResolver();
@@ -43,7 +47,7 @@ class SwaggerDataIndexer implements DataIndexer<String, Set<String>, FileContent
             }
 
             indexMap.put(SwaggerFileIndex.PARTIAL_SWAGGER_FILES, partialSwaggerFileNames);
-            indexMap.put(SwaggerFileIndex.MAIN_SWAGGER_FILE, ImmutableSet.of(file.getName() + "-" + SwaggerFileType.MAIN));
+            indexMap.put(SwaggerFileIndex.MAIN_SWAGGER_FILE, ImmutableSet.of(file.getName() + DELIMITER + SwaggerFileType.MAIN));
         }
         return indexMap;
     }
@@ -54,11 +58,12 @@ class SwaggerDataIndexer implements DataIndexer<String, Set<String>, FileContent
         file.accept(new JsonRecursiveElementVisitor() {
             @Override
             public void visitProperty(@NotNull JsonProperty property) {
-                if ("$ref".equals(property.getName())) {
+                if (SwaggerConstants.REF_KEY.equals(property.getName())) {
                     if (property.getValue() != null) {
                         final String refValue = StringUtils.removeAllQuotes(property.getValue().getText());
-                        if (refValue.endsWith(".json")) {
-                            result.add(refValue + "-" + getSwaggerFileType(property.getValue()));
+                        if (refValue.contains(FileConstants.JSON_FILE_NAME_SUFFIX)) {
+                            result.add(extractFileNameFromFileRefValue(refValue) + DELIMITER +
+                                    getSwaggerFileType(property.getValue(), refValue));
                         }
                     }
                 }
@@ -77,10 +82,12 @@ class SwaggerDataIndexer implements DataIndexer<String, Set<String>, FileContent
                         public void visitElement(final PsiElement element) {
                             if (element instanceof YAMLKeyValue) {
                                 final YAMLKeyValue yamlKeyValue = (YAMLKeyValue) element;
-                                if ("$ref".equals(yamlKeyValue.getKeyText())) {
+                                if (SwaggerConstants.REF_KEY.equals(yamlKeyValue.getKeyText())) {
                                     final String refValue = StringUtils.removeAllQuotes(yamlKeyValue.getValueText());
-                                    if (refValue.endsWith(".yaml") || refValue.endsWith(".yml")) {
-                                        result.add(refValue + "-" + getSwaggerFileType(yamlKeyValue.getValue()));
+                                    if (refValue.contains(FileConstants.YAML_FILE_NAME_SUFFIX) ||
+                                            refValue.contains(FileConstants.YML_FILE_NAME_SUFFIX)) {
+                                        result.add(extractFileNameFromFileRefValue(refValue) + DELIMITER +
+                                                getSwaggerFileType(yamlKeyValue.getValue(), refValue));
                                     }
                                 }
                             }
@@ -92,9 +99,47 @@ class SwaggerDataIndexer implements DataIndexer<String, Set<String>, FileContent
         return result;
     }
 
+    private String extractFileNameFromFileRefValue(final String fileRefValue) {
+        return org.apache.commons.lang.StringUtils.substringBefore(fileRefValue, SwaggerConstants.REFERENCE_PREFIX);
+    }
+
     @NotNull
-    private SwaggerFileType getSwaggerFileType(final PsiElement psiElement) {
+    private SwaggerFileType getSwaggerFileType(final PsiElement psiElement, final String refValue) {
         if (pathResolver.isDefinitionRefValue(psiElement)) {
+            if (refValue.contains(SwaggerConstants.REFERENCE_PREFIX)) {
+                final String definitionPath =
+                        org.apache.commons.lang.StringUtils.substringAfterLast(refValue, SwaggerConstants.HASH);
+                int slashCount = org.apache.commons.lang.StringUtils.countMatches(definitionPath, SwaggerConstants.SLASH);
+
+                /*
+                * If slash count is one, the referenced file contains definitions in root. For example:
+                * $ref: "definitions.json#/Security" would point to file "definitions.json" with content:
+                *
+                * {
+                *   "Security": {}
+                * }
+                *
+                */
+                if (slashCount == 1) {
+                    return SwaggerFileType.DEFINITIONS_MULTIPLE_IN_ROOT;
+                }
+                /*
+                * If slash count is other than one, the referenced file contains definitions wrapped in root object.
+                * For example:
+                *
+                * $ref: "definitions.json#/models/Security" would point to file "definitions.json" with content:
+                *
+                * {
+                *   "models" {
+                *       "Security": {}
+                *   }
+                * }
+                *
+                */
+                else {
+                    return SwaggerFileType.DEFINITIONS_MULTIPLE_NOT_IN_ROOT;
+                }
+            }
             return SwaggerFileType.DEFINITIONS;
         } else if (pathResolver.isParameterRefValue(psiElement)) {
             return SwaggerFileType.PARAMETERS;

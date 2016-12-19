@@ -86,7 +86,7 @@ public class JsonTraversal extends Traversal {
     }
 
     @Override
-    public List<PsiElement> getChildrenOfDefinition(final String propertyName, final PsiFile psiFile) {
+    public List<PsiElement> getChildrenOfRootProperty(final String propertyName, final PsiFile psiFile) {
         return getRootChildrenOfType(psiFile, JsonProperty.class).stream()
                 .filter(jsonProperty -> propertyName.equals(jsonProperty.getName()))
                 .findAny()
@@ -118,7 +118,7 @@ public class JsonTraversal extends Traversal {
 
     @Override
     public List<String> getKeyNamesOfDefinition(final String propertyName, final PsiFile containingFile) {
-        return getChildrenOfDefinition(propertyName, containingFile).stream()
+        return getChildrenOfRootProperty(propertyName, containingFile).stream()
                 .filter(el -> el instanceof JsonProperty)
                 .map(JsonProperty.class::cast)
                 .map(JsonProperty::getName)

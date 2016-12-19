@@ -1,0 +1,16 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/pets": {
+      "get": {
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "definitions.json#/models/<caret>Pets"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -5,7 +5,6 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
 import org.zalando.intellij.swagger.completion.field.model.Field;
 import org.zalando.intellij.swagger.completion.value.model.Value;
-import org.zalando.intellij.swagger.traversal.MainPathResolver;
 import org.zalando.intellij.swagger.traversal.PathResolver;
 import org.zalando.intellij.swagger.traversal.Traversal;
 
@@ -119,7 +118,7 @@ public class CompletionHelper {
     }
 
     public List<PsiElement> getChildrenOfRoot(final String propertyName) {
-        return traversal.getChildrenOfDefinition(propertyName, psiElement.getContainingFile());
+        return traversal.getChildrenOfRootProperty(propertyName, psiElement.getContainingFile());
     }
 
     public List<PsiElement> getChildrenOfArrayObject(final PsiElement psiElement) {

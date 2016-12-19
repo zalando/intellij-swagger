@@ -11,7 +11,7 @@ public class RenameRefTest extends SwaggerLightCodeInsightFixtureTestCase {
         myFixture.checkResultByFile("rename/" + afterFileName);
     }
 
-    public void testRenameDefinition() {
+    public void testRenameLocalDefinition() {
         testRename("NewPets", "rename_definition_ref_declaration.json", "rename_definition_ref_declaration_after.json");
         testRename("NewPets", "rename_definition_ref_declaration.yaml", "rename_definition_ref_declaration_after.yaml");
 
@@ -53,5 +53,41 @@ public class RenameRefTest extends SwaggerLightCodeInsightFixtureTestCase {
         myFixture.checkResultByFile("swagger.yaml", "rename/rename_file_reference_after.yaml", true);
         assertNotNull(myFixture.findFileInTempDir("definitions/newName.yaml"));
         assertNull(myFixture.findFileInTempDir("definitions/pet.yaml"));
+    }
+
+    public void testRenameExternalDefinitionWhereDefinitionsAreInRoot() {
+        myFixture.copyFileToProject("rename/definitions_in_root.json", "definitions.json");
+        final VirtualFile swaggerFile = myFixture.copyFileToProject("rename/external_definition_definitions_in_root_with_caret.json", "swagger.json");
+        myFixture.configureFromExistingVirtualFile(swaggerFile);
+        myFixture.renameElementAtCaret("newName");
+        myFixture.checkResultByFile("swagger.json", "rename/external_definition_definitions_in_root_with_caret_after.json", true);
+        myFixture.checkResultByFile("definitions.json", "rename/definitions_in_root_after.json", true);
+    }
+
+    public void testRenameExternalDefinitionDeclarationWhereDefinitionsAreInRoot() {
+        final VirtualFile definitionsFile = myFixture.copyFileToProject("rename/definitions_in_root_with_caret.json", "definitions.json");
+        myFixture.copyFileToProject("rename/external_definition_definitions_in_root.json", "swagger.json");
+        myFixture.configureFromExistingVirtualFile(definitionsFile);
+        myFixture.renameElementAtCaret("newName");
+        myFixture.checkResultByFile("swagger.json", "rename/external_definition_definitions_in_root_after.json", true);
+        myFixture.checkResultByFile("definitions.json", "rename/definitions_in_root_with_caret_after.json", true);
+    }
+
+    public void testRenameExternalDefinitionWhereDefinitionsAreNotInRoot() {
+        myFixture.copyFileToProject("rename/definitions_not_in_root.json", "definitions.json");
+        final VirtualFile swaggerFile = myFixture.copyFileToProject("rename/external_definition_definitions_not_in_root_with_caret.json", "swagger.json");
+        myFixture.configureFromExistingVirtualFile(swaggerFile);
+        myFixture.renameElementAtCaret("newName");
+        myFixture.checkResultByFile("swagger.json", "rename/external_definition_definitions_not_in_root_with_caret_after.json", true);
+        myFixture.checkResultByFile("definitions.json", "rename/definitions_not_in_root_after.json", true);
+    }
+
+    public void testRenameExternalDefinitionDeclarationWhereDefinitionsAreNotInRoot() {
+        final VirtualFile definitionsFile = myFixture.copyFileToProject("rename/definitions_not_in_root_with_caret.json", "definitions.json");
+        myFixture.copyFileToProject("rename/external_definition_definitions_not_in_root.json", "swagger.json");
+        myFixture.configureFromExistingVirtualFile(definitionsFile);
+        myFixture.renameElementAtCaret("newName");
+        myFixture.checkResultByFile("swagger.json", "rename/external_definition_definitions_not_in_root_after.json", true);
+        myFixture.checkResultByFile("definitions.json", "rename/definitions_not_in_root_with_caret_after.json", true);
     }
 }

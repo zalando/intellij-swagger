@@ -1,7 +1,5 @@
 package org.zalando.intellij.swagger.index;
 
-import static org.apache.commons.lang.StringUtils.substringAfterLast;
-import static org.apache.commons.lang.StringUtils.substringBeforeLast;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -10,8 +8,12 @@ import com.intellij.util.indexing.FileBasedIndex;
 import org.zalando.intellij.swagger.file.SwaggerFileType;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static org.apache.commons.lang.StringUtils.substringAfterLast;
+import static org.apache.commons.lang.StringUtils.substringBeforeLast;
 
 public class SwaggerIndexService {
 
@@ -45,16 +47,16 @@ public class SwaggerIndexService {
         return partialSwaggerFilesWithTypeInfo.stream()
                 .filter(nameWithTypeInfo -> {
                     final VirtualFile foundFile =
-                            mainSwaggerFileFolder.findFileByRelativePath(substringBeforeLast(nameWithTypeInfo, "-"));
+                            mainSwaggerFileFolder.findFileByRelativePath(substringBeforeLast(nameWithTypeInfo, SwaggerDataIndexer.DELIMITER));
                     return virtualFile.equals(foundFile);
                 })
                 .findFirst()
-                .map(nameWithTypeInfo -> substringAfterLast(nameWithTypeInfo, "-"))
+                .map(nameWithTypeInfo -> substringAfterLast(nameWithTypeInfo, SwaggerDataIndexer.DELIMITER))
                 .map(SwaggerFileType::valueOf)
                 .orElse(SwaggerFileType.UNDEFINED);
     }
 
-    private Set<VirtualFile> getPartialSwaggerFiles(final Project project) {
+    public Set<VirtualFile> getPartialSwaggerFiles(final Project project) {
         final Set<String> partialSwaggerFilesWithTypeInfo = getPartialSwaggerFilesWithTypeInfo(project);
 
         final Collection<VirtualFile> mainSwaggerFiles =
@@ -69,9 +71,9 @@ public class SwaggerIndexService {
         final VirtualFile mainSwaggerFileFolder = mainSwaggerFiles.iterator().next().getParent();
 
         return partialSwaggerFilesWithTypeInfo.stream()
-                .map(v -> substringBeforeLast(v, "-"))
+                .map(v -> substringBeforeLast(v, SwaggerDataIndexer.DELIMITER))
                 .map(mainSwaggerFileFolder::findFileByRelativePath)
-                .filter(f -> f != null)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
     }
 

@@ -27,7 +27,7 @@ public abstract class Traversal {
 
     public abstract boolean elementIsDirectValueOfKey(final PsiElement psiElement, final String... keyNames);
 
-    public abstract List<PsiElement> getChildrenOfDefinition(final String propertyName, final PsiFile psiFile);
+    public abstract List<PsiElement> getChildrenOfRootProperty(final String propertyName, final PsiFile psiFile);
 
     public abstract List<String> getTagNames(final PsiFile psiFile);
 
@@ -98,4 +98,5 @@ public abstract class Traversal {
     }
 
     public abstract List<PsiElement> getTags(final PsiFile containingFile);
+
 }

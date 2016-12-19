@@ -58,7 +58,7 @@ public class YamlTraversal extends Traversal {
     }
 
     @Override
-    public List<PsiElement> getChildrenOfDefinition(final String propertyName, final PsiFile psiFile) {
+    public List<PsiElement> getChildrenOfRootProperty(final String propertyName, final PsiFile psiFile) {
         return getRootChildrenOfType(psiFile, YAMLKeyValue.class).stream()
                 .filter(yamlKeyValue -> propertyName.equals(yamlKeyValue.getName()))
                 .findAny()
@@ -162,7 +162,7 @@ public class YamlTraversal extends Traversal {
 
     @Override
     public List<String> getKeyNamesOfDefinition(final String propertyName, final PsiFile containingFile) {
-        return getChildrenOfDefinition(propertyName, containingFile).stream()
+        return getChildrenOfRootProperty(propertyName, containingFile).stream()
                 .filter(el -> el instanceof YAMLKeyValue)
                 .map(YAMLKeyValue.class::cast)
                 .map(YAMLKeyValue::getName)

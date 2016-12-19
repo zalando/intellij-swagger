@@ -49,7 +49,7 @@
           "default": {
             "description": "unexpected error",
             "schema": {
-              "$ref": "../common/Error.json"
+              "$ref": "/common.json#/Error"
             }
           }
         }
@@ -78,7 +78,7 @@
           "default": {
             "description": "unexpected error",
             "schema": {
-              "$ref": "../common/Error.json"
+              "$ref": "common2.json#/definitions/Error"
             }
           }
         }

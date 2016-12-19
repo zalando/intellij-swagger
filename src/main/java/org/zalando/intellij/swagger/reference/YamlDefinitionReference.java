@@ -43,7 +43,7 @@ public class YamlDefinitionReference extends PsiReferenceBase<PsiElement> {
     }
 
     private List<YAMLPsiElement> getDefinitionsChildren() {
-        return yamlTraversal.getChildrenOfDefinition("definitions", getElement().getContainingFile()).stream()
+        return yamlTraversal.getChildrenOfRootProperty("definitions", getElement().getContainingFile()).stream()
                 .filter(psiElement -> psiElement instanceof YAMLPsiElement)
                 .map(YAMLPsiElement.class::cast)
                 .collect(Collectors.toList());

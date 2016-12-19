@@ -27,7 +27,7 @@ public class ReferenceValidator {
 
     void validateDefinitionReference(final PsiElement psiElement,
                                      final AnnotationHolder annotationHolder) {
-        if (!isFileRef(psiElement)) {
+        if (isLocalReference(psiElement)) {
             final boolean definitionFound =
                     getAvailableDefinitions(psiElement)
                             .contains(referenceValueExtractor.getValue(psiElement.getText()));
@@ -42,7 +42,7 @@ public class ReferenceValidator {
 
     void validateParameterReference(final PsiElement psiElement,
                                     final AnnotationHolder annotationHolder) {
-        if (!isFileRef(psiElement)) {
+        if (isLocalReference(psiElement)) {
             final boolean parameterFound =
                     getAvailableParameters(psiElement)
                             .contains(referenceValueExtractor.getValue(psiElement.getText()));
@@ -57,7 +57,7 @@ public class ReferenceValidator {
 
     void validateResponseReference(final PsiElement psiElement,
                                    final AnnotationHolder annotationHolder) {
-        if (!isFileRef(psiElement)) {
+        if (isLocalReference(psiElement)) {
             final boolean responseFound =
                     getAvailableResponses(psiElement)
                             .contains(referenceValueExtractor.getValue(psiElement.getText()));
@@ -69,8 +69,8 @@ public class ReferenceValidator {
         }
     }
 
-    private boolean isFileRef(final PsiElement psiElement) {
-        return !StringUtils.removeAllQuotes(psiElement.getText()).startsWith("#/");
+    private boolean isLocalReference(final PsiElement psiElement) {
+        return StringUtils.removeAllQuotes(psiElement.getText()).startsWith("#/");
     }
 
     private Set<String> getAvailableDefinitions(final PsiElement psiElement) {
