@@ -34,12 +34,11 @@ public class YamlTraversal extends Traversal {
 
     @Override
     public Optional<String> getKeyNameIfKey(final PsiElement psiElement) {
-        return Optional.of(psiElement.getParent())
+        return Optional.ofNullable(psiElement.getParent())
                 .filter(el -> el instanceof YAMLKeyValue)
                 .map(YAMLKeyValue.class::cast)
-                .map(YAMLKeyValue::getKey)
-                .filter(key -> key == psiElement)
-                .isPresent() ? Optional.of(((YAMLKeyValue) psiElement.getParent()).getKeyText()) : Optional.empty();
+                .filter(value -> value.getKey() == psiElement)
+                .map(YAMLKeyValue::getKeyText);
     }
 
     @Override
