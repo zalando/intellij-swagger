@@ -25,11 +25,11 @@ public class ReferencedDefinitionsFileFieldCompletionTest extends SwaggerLightCo
     }
 
     public void testThatDefinitionFieldsAreCompletedForPartialJsonSwaggerFileWithDefinitionsInRoot() {
-        myFixture.copyFileToProject(PARTIAL_FILES_PATH + "/common.json", "common.json");
+        myFixture.copyFileToProject(PARTIAL_FILES_PATH + "/definitions_in_root.json", "definitions_in_root.json");
         final VirtualFile swaggerFile = myFixture.copyFileToProject(PARTIAL_FILES_PATH + "/swagger.json", "swagger.json");
         myFixture.configureFromExistingVirtualFile(swaggerFile);
 
-        final AssertableList completions = new AssertableList(myFixture.getCompletionVariants("common.json"));
+        final AssertableList completions = new AssertableList(myFixture.getCompletionVariants("definitions_in_root.json"));
 
         completions.assertContains("$ref", "format", "title", "description", "default", "multipleOf", "maximum",
                 "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern",
@@ -41,11 +41,11 @@ public class ReferencedDefinitionsFileFieldCompletionTest extends SwaggerLightCo
     }
 
     public void testThatDefinitionFieldsAreCompletedForPartialJsonSwaggerFileWithDefinitionsNotInRoot() {
-        myFixture.copyFileToProject(PARTIAL_FILES_PATH + "/common2.json", "common2.json");
+        myFixture.copyFileToProject(PARTIAL_FILES_PATH + "/definitions_not_in_root.json", "definitions_not_in_root.json");
         final VirtualFile swaggerFile = myFixture.copyFileToProject(PARTIAL_FILES_PATH + "/swagger.json", "swagger.json");
         myFixture.configureFromExistingVirtualFile(swaggerFile);
 
-        final AssertableList completions = new AssertableList(myFixture.getCompletionVariants("common2.json"));
+        final AssertableList completions = new AssertableList(myFixture.getCompletionVariants("definitions_not_in_root.json"));
 
         completions.assertContains("$ref", "format", "title", "description", "default", "multipleOf", "maximum",
                 "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern",

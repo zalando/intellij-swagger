@@ -1,5 +1,5 @@
 {
-  "definitions": {
+  "models": {
     "Error": {
       <caret>
     }

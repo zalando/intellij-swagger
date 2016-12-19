@@ -99,7 +99,7 @@ public class DefinitionMultipleNotInRootPathResolver implements PathResolver {
 
     @Override
     public final boolean childOfDefinitions(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.definitions.*");
+        return hasPath(psiElement, "$.*.*");
     }
 
     @Override
