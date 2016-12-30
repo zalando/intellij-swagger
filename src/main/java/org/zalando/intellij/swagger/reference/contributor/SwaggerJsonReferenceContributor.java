@@ -37,6 +37,8 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
         registrar.registerReferenceProvider(externalDefinitionsInRootPattern(), getExternalDefinitionsInRootProvider());
         registrar.registerReferenceProvider(externalDefinitionsNotInRootPattern(), getExternalDefinitionsNotInRootProvider());
         registrar.registerReferenceProvider(localParametersPattern(), getLocalParameterReferenceProvider());
+        registrar.registerReferenceProvider(externalParameterDefinitionsInRootPattern(), getExternalDefinitionsInRootProvider());
+        registrar.registerReferenceProvider(externalParameterDefinitionsNotInRootPattern(), getExternalDefinitionsNotInRootProvider());
         registrar.registerReferenceProvider(localResponsesPattern(), getLocalResponseReferenceProvider());
         registrar.registerReferenceProvider(filePattern(), getFileReferenceProvider());
         registrar.registerReferenceProvider(tagsPattern(), getTagsReferenceProvider());
@@ -162,10 +164,26 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
                 .withLanguage(JsonLanguage.INSTANCE);
     }
 
+    private PsiElementPattern.Capture<JsonLiteral> externalParameterDefinitionsInRootPattern() {
+        return psiElement(JsonLiteral.class)
+                .withParent(psiElement(JsonProperty.class).withName(SwaggerConstants.REF_KEY))
+                .inside(psiElement(JsonProperty.class).withName(SwaggerConstants.PARAMETERS_KEY))
+                .withText(StandardPatterns.string().matches("(.*).json#/([^/])*$"))
+                .withLanguage(JsonLanguage.INSTANCE);
+    }
+
     private PsiElementPattern.Capture<JsonLiteral> externalDefinitionsNotInRootPattern() {
         return psiElement(JsonLiteral.class)
                 .withParent(psiElement(JsonProperty.class).withName(SwaggerConstants.REF_KEY))
                 .inside(psiElement(JsonProperty.class).withName(SwaggerConstants.SCHEMA_KEY))
+                .withText(StandardPatterns.string().matches("(.*).json#/(.*)[/]+(.*)"))
+                .withLanguage(JsonLanguage.INSTANCE);
+    }
+
+    private PsiElementPattern.Capture<JsonLiteral> externalParameterDefinitionsNotInRootPattern() {
+        return psiElement(JsonLiteral.class)
+                .withParent(psiElement(JsonProperty.class).withName(SwaggerConstants.REF_KEY))
+                .inside(psiElement(JsonProperty.class).withName(SwaggerConstants.PARAMETERS_KEY))
                 .withText(StandardPatterns.string().matches("(.*).json#/(.*)[/]+(.*)"))
                 .withLanguage(JsonLanguage.INSTANCE);
     }
