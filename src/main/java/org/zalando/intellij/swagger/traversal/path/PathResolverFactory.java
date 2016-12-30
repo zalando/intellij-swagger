@@ -1,4 +1,4 @@
-package org.zalando.intellij.swagger.traversal;
+package org.zalando.intellij.swagger.traversal.path;
 
 import org.zalando.intellij.swagger.file.SwaggerFileType;
 

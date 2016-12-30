@@ -1,12 +1,8 @@
-package org.zalando.intellij.swagger.traversal;
+package org.zalando.intellij.swagger.traversal.path;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 
-/*
- * This class is used for partial Swagger specification files (referenced via $ref)
- */
-public class ParameterPathResolver implements PathResolver {
+public class ParameterDefinitionsInRootPathResolver implements PathResolver {
 
     @Override
     public boolean childOfRoot(final PsiElement psiElement) {
@@ -50,7 +46,7 @@ public class ParameterPathResolver implements PathResolver {
 
     @Override
     public final boolean childOfItems(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.items");
+        return false;
     }
 
     @Override
@@ -105,10 +101,7 @@ public class ParameterPathResolver implements PathResolver {
 
     @Override
     public final boolean childOfParameterDefinition(final PsiElement psiElement) {
-        return psiElement.getParent() instanceof PsiFile ||
-                psiElement.getParent().getParent() instanceof PsiFile ||
-                psiElement.getParent().getParent().getParent() instanceof PsiFile ||
-                psiElement.getParent().getParent().getParent().getParent() instanceof PsiFile;
+        return hasPath(psiElement, "$.*");
     }
 
     @Override

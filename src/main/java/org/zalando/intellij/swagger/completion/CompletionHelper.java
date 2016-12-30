@@ -5,7 +5,7 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
 import org.zalando.intellij.swagger.completion.field.model.Field;
 import org.zalando.intellij.swagger.completion.value.model.Value;
-import org.zalando.intellij.swagger.traversal.PathResolver;
+import org.zalando.intellij.swagger.traversal.path.PathResolver;
 import org.zalando.intellij.swagger.traversal.Traversal;
 
 import java.util.List;

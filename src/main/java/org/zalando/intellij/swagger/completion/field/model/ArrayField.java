@@ -1,5 +1,7 @@
 package org.zalando.intellij.swagger.completion.field.model;
 
+import static org.zalando.intellij.swagger.file.FileConstants.CARET;
+
 public class ArrayField extends Field {
 
     public ArrayField(final String name) {
@@ -10,13 +12,13 @@ public class ArrayField extends Field {
     public String getJsonPlaceholderSuffix(final int indentation) {
         final String indentationPadding = org.apache.commons.lang.StringUtils.repeat(" ", indentation);
         final String nextLineIndentationPadding = org.apache.commons.lang.StringUtils.repeat(" ", indentation + 2);
-        return ": [\n" + nextLineIndentationPadding + "<caret>" + "\n" + indentationPadding + "]";
+        return ": [\n" + nextLineIndentationPadding + CARET + "\n" + indentationPadding + "]";
     }
 
     @Override
     public String getYamlPlaceholderSuffix(final int indentation) {
         final String nextLineIndentationPadding = org.apache.commons.lang.StringUtils.repeat(" ", indentation + 2);
-        return ":\n" + nextLineIndentationPadding + "- <caret>";
+        return ":\n" + nextLineIndentationPadding + "- " + CARET;
     }
 
     @Override

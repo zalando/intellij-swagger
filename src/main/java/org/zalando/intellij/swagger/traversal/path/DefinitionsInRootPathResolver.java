@@ -1,9 +1,8 @@
-package org.zalando.intellij.swagger.traversal;
+package org.zalando.intellij.swagger.traversal.path;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 
-public class DefinitionPathResolver implements PathResolver {
+public class DefinitionsInRootPathResolver implements PathResolver {
 
     @Override
     public boolean childOfRoot(final PsiElement psiElement) {
@@ -97,10 +96,7 @@ public class DefinitionPathResolver implements PathResolver {
 
     @Override
     public final boolean childOfDefinitions(final PsiElement psiElement) {
-        return psiElement.getParent() instanceof PsiFile ||
-                psiElement.getParent().getParent() instanceof PsiFile ||
-                psiElement.getParent().getParent().getParent() instanceof PsiFile ||
-                psiElement.getParent().getParent().getParent().getParent() instanceof PsiFile;
+        return hasPath(psiElement, "$.*");
     }
 
     @Override

@@ -1,8 +1,11 @@
 package org.zalando.intellij.swagger.completion.field.model;
 
 import com.google.common.collect.ImmutableList;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
+
+import static org.zalando.intellij.swagger.file.FileConstants.CARET;
 
 public class ObjectField extends Field {
 
@@ -17,7 +20,7 @@ public class ObjectField extends Field {
     @Override
     public String getJsonPlaceholderSuffix(final int indentation) {
         final StringBuilder sb = new StringBuilder();
-        final String indentationPadding = org.apache.commons.lang.StringUtils.repeat(" ", indentation);
+        final String indentationPadding = StringUtils.repeat(" ", indentation);
 
         sb.append(": {\n")
                 .append(printJsonChildren(indentation + 2))
@@ -35,19 +38,19 @@ public class ObjectField extends Field {
 
     @Override
     public String getCompleteJson(final int indentation) {
-        final String indentationPadding = org.apache.commons.lang.StringUtils.repeat(" ", indentation);
+        final String indentationPadding = StringUtils.repeat(" ", indentation);
         return indentationPadding + "\"" + getName() + "\"" + getJsonPlaceholderSuffix(indentation);
     }
 
     @Override
     public String getCompleteYaml(final int indentation) {
-        final String indentationPadding = org.apache.commons.lang.StringUtils.repeat(" ", indentation);
+        final String indentationPadding = StringUtils.repeat(" ", indentation);
         return indentationPadding + getName() + getYamlPlaceholderSuffix(indentation);
     }
 
     private String printJsonChildren(final int indentation) {
         if (getChildren().isEmpty()) {
-            return org.apache.commons.lang.StringUtils.repeat(" ", indentation) + "<caret>";
+            return StringUtils.repeat(" ", indentation) + CARET;
         }
 
         final StringBuilder sb = new StringBuilder();
@@ -66,7 +69,7 @@ public class ObjectField extends Field {
 
     private String printYamlChildren(final int indentation) {
         if (getChildren().isEmpty()) {
-            return org.apache.commons.lang.StringUtils.repeat(" ", indentation) + "<caret>";
+            return StringUtils.repeat(" ", indentation) + CARET;
         }
 
         final StringBuilder sb = new StringBuilder();

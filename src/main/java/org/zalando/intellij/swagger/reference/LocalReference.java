@@ -14,16 +14,13 @@ import static org.zalando.intellij.swagger.reference.SwaggerConstants.SLASH;
 
 public class LocalReference extends PsiReferenceBase<PsiElement> {
 
-    private final String referenceType;
     private final String originalRefValue;
     private final Traversal traversal;
 
-    public LocalReference(@NotNull final String referenceType,
-                          @NotNull final PsiElement element,
+    public LocalReference(@NotNull final PsiElement element,
                           @NotNull final String originalRefValue,
                           @NotNull final Traversal traversal) {
         super(element);
-        this.referenceType = referenceType;
         this.originalRefValue = originalRefValue;
         this.traversal = traversal;
     }
@@ -31,7 +28,8 @@ public class LocalReference extends PsiReferenceBase<PsiElement> {
     @Nullable
     @Override
     public PsiElement resolve() {
-        final String referencedValue = extractReferenceValue();
+        final String referenceType = extractReferenceType();
+        final String referencedValue = extractReferencedValue();
 
         return traversal
                 .getChildrenOfRootProperty(referenceType, getElement().getContainingFile()).stream()
@@ -42,8 +40,12 @@ public class LocalReference extends PsiReferenceBase<PsiElement> {
                 .orElse(null);
     }
 
-    private String extractReferenceValue() {
+    private String extractReferencedValue() {
         return StringUtils.substringAfterLast(originalRefValue, SLASH);
+    }
+
+    private String extractReferenceType() {
+        return StringUtils.substringBetween(originalRefValue, REFERENCE_PREFIX, SLASH);
     }
 
     @NotNull
@@ -54,6 +56,7 @@ public class LocalReference extends PsiReferenceBase<PsiElement> {
 
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
+        final String referenceType = extractReferenceType();
         return super.handleElementRename(REFERENCE_PREFIX + referenceType + SLASH + newElementName);
     }
 

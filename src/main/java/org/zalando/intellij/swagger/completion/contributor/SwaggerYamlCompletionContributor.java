@@ -12,8 +12,8 @@ import org.zalando.intellij.swagger.completion.value.ValueCompletion;
 import org.zalando.intellij.swagger.completion.value.ValueCompletionFactory;
 import org.zalando.intellij.swagger.file.SwaggerFileType;
 import org.zalando.intellij.swagger.index.SwaggerIndexService;
-import org.zalando.intellij.swagger.traversal.PathResolver;
-import org.zalando.intellij.swagger.traversal.PathResolverFactory;
+import org.zalando.intellij.swagger.traversal.path.PathResolver;
+import org.zalando.intellij.swagger.traversal.path.PathResolverFactory;
 import org.zalando.intellij.swagger.traversal.ReferencePrefixExtractor;
 import org.zalando.intellij.swagger.traversal.YamlTraversal;
 

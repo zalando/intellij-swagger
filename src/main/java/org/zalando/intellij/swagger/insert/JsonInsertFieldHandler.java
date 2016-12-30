@@ -13,6 +13,8 @@ import org.zalando.intellij.swagger.traversal.JsonTraversal;
 
 import java.util.Optional;
 
+import static org.zalando.intellij.swagger.file.FileConstants.CARET;
+
 public class JsonInsertFieldHandler implements InsertHandler<LookupElement> {
 
     private final JsonTraversal jsonTraversal;
@@ -30,7 +32,7 @@ public class JsonInsertFieldHandler implements InsertHandler<LookupElement> {
 
         if (!StringUtils.nextCharAfterSpacesAndQuotesIsColon(getStringAfterAutoCompletedValue(insertionContext))) {
             final String suffixWithCaret = field.getJsonPlaceholderSuffix(getIndentation(insertionContext, lookupElement));
-            final String suffixWithoutCaret = suffixWithCaret.replace("<caret>", "");
+            final String suffixWithoutCaret = suffixWithCaret.replace(CARET, "");
             EditorModificationUtil.insertStringAtCaret(
                     insertionContext.getEditor(),
                     withOptionalComma(suffixWithoutCaret, insertionContext), false, true,
@@ -63,7 +65,7 @@ public class JsonInsertFieldHandler implements InsertHandler<LookupElement> {
     }
 
     private int getCaretIndex(final String suffix) {
-        return suffix.indexOf("<caret>");
+        return suffix.indexOf(CARET);
     }
 
     private int getIndentation(final InsertionContext context, final LookupElement item) {
@@ -89,8 +91,7 @@ public class JsonInsertFieldHandler implements InsertHandler<LookupElement> {
     private boolean shouldAddComma(final @NotNull InsertionContext context) {
         PsiFile psiFile = context.getFile();
         return Optional.ofNullable(psiFile.findElementAt(context.getStartOffset()))
-                .map(jsonTraversal::isLastChild)
-                .map(b -> !b)
+                .map(el -> !jsonTraversal.isLastChild(el))
                 .orElse(false);
     }
 

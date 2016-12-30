@@ -7,144 +7,33 @@ import com.intellij.json.psi.JsonValue;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.StandardPatterns;
 import com.intellij.patterns.StringPattern;
-import com.intellij.psi.*;
-import com.intellij.util.ProcessingContext;
+import com.intellij.psi.PsiReferenceRegistrar;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.completion.StringUtils;
 import org.zalando.intellij.swagger.file.FileConstants;
-import org.zalando.intellij.swagger.reference.*;
+import org.zalando.intellij.swagger.reference.SwaggerConstants;
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
-
-import java.util.Optional;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
-public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
-
-    private final JsonTraversal jsonTraversal;
+public class SwaggerJsonReferenceContributor extends ReferenceContributor {
 
     public SwaggerJsonReferenceContributor() {
-        this(new JsonTraversal());
-    }
-
-    private SwaggerJsonReferenceContributor(final JsonTraversal jsonTraversal) {
-        this.jsonTraversal = jsonTraversal;
+        super(new JsonTraversal());
     }
 
     @Override
     public void registerReferenceProviders(@NotNull final PsiReferenceRegistrar registrar) {
-        registrar.registerReferenceProvider(localDefinitionsPattern(), getLocalDefinitionReferenceProvider());
-        registrar.registerReferenceProvider(externalDefinitionsInRootPattern(), getExternalDefinitionsInRootProvider());
-        registrar.registerReferenceProvider(externalDefinitionsNotInRootPattern(), getExternalDefinitionsNotInRootProvider());
-        registrar.registerReferenceProvider(localParametersPattern(), getLocalParameterReferenceProvider());
-        registrar.registerReferenceProvider(externalParameterDefinitionsInRootPattern(), getExternalDefinitionsInRootProvider());
-        registrar.registerReferenceProvider(externalParameterDefinitionsNotInRootPattern(), getExternalDefinitionsNotInRootProvider());
-        registrar.registerReferenceProvider(localResponsesPattern(), getLocalResponseReferenceProvider());
-        registrar.registerReferenceProvider(filePattern(), getFileReferenceProvider());
-        registrar.registerReferenceProvider(tagsPattern(), getTagsReferenceProvider());
-    }
+        registrar.registerReferenceProvider(localDefinitionsPattern(), createLocalReferenceProvider());
+        registrar.registerReferenceProvider(externalDefinitionsInRootPattern(), createExternalDefinitionsInRootReferenceProvider());
+        registrar.registerReferenceProvider(externalDefinitionsNotInRootPattern(), createExternalDefinitionsNotInRootReferenceProvider());
 
-    @NotNull
-    private PsiReferenceProvider getLocalResponseReferenceProvider() {
-        return createLocalReferenceProviderFromKey(SwaggerConstants.RESPONSES_KEY);
-    }
+        registrar.registerReferenceProvider(localParametersPattern(), createLocalReferenceProvider());
+        registrar.registerReferenceProvider(externalParameterDefinitionsInRootPattern(), createExternalDefinitionsInRootReferenceProvider());
+        registrar.registerReferenceProvider(externalParameterDefinitionsNotInRootPattern(), createExternalDefinitionsNotInRootReferenceProvider());
 
-    @NotNull
-    private PsiReferenceProvider getLocalParameterReferenceProvider() {
-        return createLocalReferenceProviderFromKey(SwaggerConstants.PARAMETERS_KEY);
-    }
-
-    @NotNull
-    private PsiReferenceProvider getLocalDefinitionReferenceProvider() {
-        return createLocalReferenceProviderFromKey(SwaggerConstants.DEFINITIONS_KEY);
-    }
-
-    @NotNull
-    private PsiReferenceProvider createLocalReferenceProviderFromKey(final String key) {
-        return new PsiReferenceProvider() {
-            @NotNull
-            @Override
-            public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
-                                                         @NotNull ProcessingContext context) {
-                return Optional.ofNullable(element.getText())
-                        .map(text -> new PsiReference[]{new LocalReference(
-                                key,
-                                element,
-                                StringUtils.removeAllQuotes(text),
-                                jsonTraversal)
-                        }).orElse(LocalReference.EMPTY_ARRAY);
-            }
-        };
-    }
-
-    @NotNull
-    private PsiReferenceProvider getExternalDefinitionsInRootProvider() {
-        return new PsiReferenceProvider() {
-            @NotNull
-            @Override
-            public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
-                                                         @NotNull ProcessingContext context) {
-                return Optional.ofNullable(element.getText())
-                        .map(text -> new PsiReference[]{
-                                new DefinitionsInRootReference(
-                                        element,
-                                        StringUtils.removeAllQuotes(text),
-                                        jsonTraversal)
-                        }).orElse(DefinitionsInRootReference.EMPTY_ARRAY);
-            }
-        };
-    }
-
-    @NotNull
-    private PsiReferenceProvider getExternalDefinitionsNotInRootProvider() {
-        return new PsiReferenceProvider() {
-            @NotNull
-            @Override
-            public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
-                                                         @NotNull ProcessingContext context) {
-                return Optional.ofNullable(element.getText())
-                        .map(text -> new PsiReference[]{
-                                new DefinitionsNotInRootReference(
-                                        element,
-                                        StringUtils.removeAllQuotes(text),
-                                        jsonTraversal)
-                        }).orElse(DefinitionsNotInRootReference.EMPTY_ARRAY);
-            }
-        };
-    }
-
-    @NotNull
-    private PsiReferenceProvider getFileReferenceProvider() {
-        return new PsiReferenceProvider() {
-            @NotNull
-            @Override
-            public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
-                                                         @NotNull ProcessingContext context) {
-                return Optional.ofNullable(element.getText())
-                        .map(text -> new PsiReference[]{
-                                new FileReference(
-                                        element,
-                                        StringUtils.removeAllQuotes(text))
-                        }).orElse(FileReference.EMPTY_ARRAY);
-            }
-        };
-    }
-
-    @NotNull
-    private PsiReferenceProvider getTagsReferenceProvider() {
-        return new PsiReferenceProvider() {
-            @NotNull
-            @Override
-            public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
-                                                         @NotNull ProcessingContext context) {
-                return Optional.ofNullable(element.getText())
-                        .map(text -> new PsiReference[]{new TagReference(
-                                element,
-                                element.getText(),
-                                jsonTraversal)})
-                        .orElse(TagReference.EMPTY_ARRAY);
-            }
-        };
+        registrar.registerReferenceProvider(localResponsesPattern(), createLocalReferenceProvider());
+        registrar.registerReferenceProvider(filePattern(), createFileReferenceProvider());
+        registrar.registerReferenceProvider(tagsPattern(), createTagsReferenceProvider());
     }
 
     private PsiElementPattern.Capture<JsonLiteral> localDefinitionsPattern() {
