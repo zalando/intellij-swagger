@@ -3,9 +3,6 @@ package org.zalando.intellij.swagger.traversal;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 
-/*
- * This class is used for main Swagger specification file
- */
 public class MainPathResolver implements PathResolver {
 
     public boolean childOfRoot(final PsiElement psiElement) {

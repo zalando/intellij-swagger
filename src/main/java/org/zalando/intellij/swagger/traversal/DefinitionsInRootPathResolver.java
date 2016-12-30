@@ -2,9 +2,6 @@ package org.zalando.intellij.swagger.traversal;
 
 import com.intellij.psi.PsiElement;
 
-/*
- * This class is used for partial Swagger specification files (referenced via $ref)
- */
 public class DefinitionsInRootPathResolver implements PathResolver {
 
     @Override
