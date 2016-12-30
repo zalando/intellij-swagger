@@ -142,6 +142,16 @@ class SwaggerDataIndexer implements DataIndexer<String, Set<String>, FileContent
             }
             return SwaggerFileType.DEFINITIONS;
         } else if (pathResolver.isParameterRefValue(psiElement)) {
+            if (refValue.contains(SwaggerConstants.REFERENCE_PREFIX)) {
+                final String definitionPath =
+                        org.apache.commons.lang.StringUtils.substringAfterLast(refValue, SwaggerConstants.HASH);
+                int slashCount = org.apache.commons.lang.StringUtils.countMatches(definitionPath, SwaggerConstants.SLASH);
+                if (slashCount == 1) {
+                    return SwaggerFileType.PARAMETERS_MULTIPLE_IN_ROOT;
+                } else {
+                    return SwaggerFileType.PARAMETERS_MULTIPLE_NOT_IN_ROOT;
+                }
+            }
             return SwaggerFileType.PARAMETERS;
         }
         return SwaggerFileType.UNDEFINED;

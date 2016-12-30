@@ -34,7 +34,11 @@ public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
         registrar.registerReferenceProvider(localDefinitionsPattern(), getLocalDefinitionReferenceProvider());
         registrar.registerReferenceProvider(externalDefinitionsInRootPattern(), getExternalDefinitionsInRootProvider());
         registrar.registerReferenceProvider(externalDefinitionsNotInRootPattern(), getExternalDefinitionsNotInRootProvider());
+
         registrar.registerReferenceProvider(localParametersPattern(), getLocalParameterReferenceProvider());
+        registrar.registerReferenceProvider(externalParameterDefinitionsInRootPattern(), getExternalDefinitionsInRootProvider());
+        registrar.registerReferenceProvider(externalParameterDefinitionsNotInRootPattern(), getExternalDefinitionsNotInRootProvider());
+
         registrar.registerReferenceProvider(localResponsesPattern(), getLocalResponseReferenceProvider());
         registrar.registerReferenceProvider(filePattern(), getFileReferenceProvider());
         registrar.registerReferenceProvider(tagsPattern(), getTagsReferenceProvider());
@@ -162,10 +166,26 @@ public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
                 .withLanguage(YAMLLanguage.INSTANCE);
     }
 
+    private PsiElementPattern.Capture<YAMLQuotedText> externalParameterDefinitionsInRootPattern() {
+        return psiElement(YAMLQuotedText.class)
+                .withParent(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.REF_KEY))
+                .inside(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.PARAMETERS_KEY))
+                .withText(StandardPatterns.string().matches("(.*).ya?ml#/([^/])*$"))
+                .withLanguage(YAMLLanguage.INSTANCE);
+    }
+
     private PsiElementPattern.Capture<YAMLQuotedText> externalDefinitionsNotInRootPattern() {
         return psiElement(YAMLQuotedText.class)
                 .withParent(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.REF_KEY))
                 .inside(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.SCHEMA_KEY))
+                .withText(StandardPatterns.string().matches("(.*).ya?ml#/(.*)[/]+(.*)"))
+                .withLanguage(YAMLLanguage.INSTANCE);
+    }
+
+    private PsiElementPattern.Capture<YAMLQuotedText> externalParameterDefinitionsNotInRootPattern() {
+        return psiElement(YAMLQuotedText.class)
+                .withParent(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.REF_KEY))
+                .inside(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.PARAMETERS_KEY))
                 .withText(StandardPatterns.string().matches("(.*).ya?ml#/(.*)[/]+(.*)"))
                 .withLanguage(YAMLLanguage.INSTANCE);
     }

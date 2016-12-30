@@ -82,4 +82,40 @@ public class RenameRefTest extends SwaggerLightCodeInsightFixtureTestCase {
         myFixture.checkResultByFile("swagger.yaml", FILES_PATH + "external_definition_definitions_not_in_root_after.yaml", true);
         myFixture.checkResultByFile("definitions.yaml", FILES_PATH + "definitions_not_in_root_with_caret_after.yaml", true);
     }
+
+    public void testRenameExternalParameterDefinitionWhereDefinitionsAreInRoot() {
+        myFixture.copyFileToProject(FILES_PATH + "parameter_definitions_in_root.yaml", "parameters.yaml");
+        final VirtualFile swaggerFile = myFixture.copyFileToProject(FILES_PATH + "external_definition_parameter_definitions_in_root_with_caret.yaml", "swagger.yaml");
+        myFixture.configureFromExistingVirtualFile(swaggerFile);
+        myFixture.renameElementAtCaret("newName");
+        myFixture.checkResultByFile("swagger.yaml", FILES_PATH + "external_definition_parameter_definitions_in_root_with_caret_after.yaml", true);
+        myFixture.checkResultByFile("parameters.yaml", FILES_PATH + "parameter_definitions_in_root_after.yaml", true);
+    }
+
+    public void testRenameExternalParameterDefinitionDeclarationWhereParameterDefinitionsAreInRoot() {
+        final VirtualFile definitionsFile = myFixture.copyFileToProject(FILES_PATH + "parameter_definitions_in_root_with_caret.yaml", "parameters.yaml");
+        myFixture.copyFileToProject(FILES_PATH + "external_definition_parameter_definitions_in_root.yaml", "swagger.yaml");
+        myFixture.configureFromExistingVirtualFile(definitionsFile);
+        myFixture.renameElementAtCaret("newName");
+        myFixture.checkResultByFile("swagger.yaml", FILES_PATH + "external_definition_parameter_definitions_in_root_after.yaml", true);
+        myFixture.checkResultByFile("parameters.yaml", FILES_PATH + "parameter_definitions_in_root_with_caret_after.yaml", true);
+    }
+
+    public void testRenameExternalParameterDefinitionWhereDefinitionsAreNotInRoot() {
+        myFixture.copyFileToProject(FILES_PATH + "parameter_definitions_not_in_root.yaml", "parameters.yaml");
+        final VirtualFile swaggerFile = myFixture.copyFileToProject(FILES_PATH + "external_definition_parameter_definitions_not_in_root_with_caret.yaml", "swagger.yaml");
+        myFixture.configureFromExistingVirtualFile(swaggerFile);
+        myFixture.renameElementAtCaret("newName");
+        myFixture.checkResultByFile("swagger.yaml", FILES_PATH + "external_definition_parameter_definitions_not_in_root_with_caret_after.yaml", true);
+        myFixture.checkResultByFile("parameters.yaml", FILES_PATH + "parameter_definitions_not_in_root_after.yaml", true);
+    }
+
+    public void testRenameExternalParameterDefinitionDeclarationWhereParameterDefinitionsAreNotInRoot() {
+        final VirtualFile definitionsFile = myFixture.copyFileToProject(FILES_PATH + "parameter_definitions_not_in_root_with_caret.yaml", "parameters.yaml");
+        myFixture.copyFileToProject(FILES_PATH + "external_definition_parameter_definitions_not_in_root.yaml", "swagger.yaml");
+        myFixture.configureFromExistingVirtualFile(definitionsFile);
+        myFixture.renameElementAtCaret("newName");
+        myFixture.checkResultByFile("swagger.yaml", FILES_PATH + "external_definition_parameter_definitions_not_in_root_after.yaml", true);
+        myFixture.checkResultByFile("parameters.yaml", FILES_PATH + "parameter_definitions_not_in_root_with_caret_after.yaml", true);
+    }
 }

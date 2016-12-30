@@ -30,7 +30,9 @@ paths:
         Sed tempus felis lobortis leo pulvinar rutrum. Nam mattis velit nisl, eu condimentum ligula luctus nec. Phasellus semper velit eget aliquet faucibus. In a mattis elit. Phasellus vel urna viverra, condimentum lorem id, rhoncus nibh. Ut pellentesque posuere elementum. Sed a varius odio. Morbi rhoncus ligula libero, vel eleifend nunc tristique vitae. Fusce et sem dui. Aenean nec scelerisque tortor. Fusce malesuada accumsan magna vel tempus. Quisque mollis felis eu dolor tristique, sit amet auctor felis gravida. Sed libero lorem, molestie sed nisl in, accumsan tempor nisi. Fusce sollicitudin massa ut lacinia mattis. Sed vel eleifend lorem. Pellentesque vitae felis pretium, pulvinar elit eu, euismod sapien.
       operationId: findPets
       parameters:
-      - "$ref": parameter.yml
+        - "$ref": parameter.yaml
+        - "$ref": 'parameter_definitions_in_root.yml#/myParam'
+        - "$ref": 'parameter_definitions_not_in_root.yml#/params/myParam'
       responses:
         '200':
           description: pet response
@@ -41,7 +43,7 @@ paths:
         default:
           description: unexpected error
           schema:
-            "$ref": "../common/Error.yml"
+            "$ref": "definitions_not_in_root.yml#/models/Error"
     post:
       description: Creates a new pet in the store.  Duplicates are allowed
       operationId: addPet
@@ -60,7 +62,7 @@ paths:
         default:
           description: unexpected error
           schema:
-            "$ref": "../common/Error.yml"
+            "$ref": "definitions_in_root.yml#/Error"
   "/pets/{id}":
     get:
       description: Returns a user based on a single ID, if the user does not have

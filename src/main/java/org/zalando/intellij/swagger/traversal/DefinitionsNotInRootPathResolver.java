@@ -5,7 +5,7 @@ import com.intellij.psi.PsiElement;
 /*
  * This class is used for partial Swagger specification files (referenced via $ref)
  */
-public class DefinitionMultipleNotInRootPathResolver implements PathResolver {
+public class DefinitionsNotInRootPathResolver implements PathResolver {
 
     @Override
     public boolean childOfRoot(final PsiElement psiElement) {

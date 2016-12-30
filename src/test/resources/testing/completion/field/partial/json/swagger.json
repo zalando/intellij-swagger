@@ -34,6 +34,12 @@
         "parameters": [
           {
             "$ref": "parameter.json"
+          },
+          {
+            "$ref": "parameter_definitions_in_root.json#/myParam"
+          },
+          {
+            "$ref": "parameter_definitions_not_in_root.json#/params/myParam"
           }
         ],
         "responses": {

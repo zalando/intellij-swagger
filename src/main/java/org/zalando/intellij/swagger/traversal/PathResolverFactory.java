@@ -8,12 +8,16 @@ public class PathResolverFactory {
         switch (swaggerFileType) {
             case DEFINITIONS:
                 return new DefinitionPathResolver();
-            case DEFINITIONS_MULTIPLE_IN_ROOT:
-                return new DefinitionMultipleInRootPathResolver();
+            case DEFINITIONS_MULTIPLE_IN_ROOT :
+                return new DefinitionsInRootPathResolver();
             case DEFINITIONS_MULTIPLE_NOT_IN_ROOT:
-                return new DefinitionMultipleNotInRootPathResolver();
+                return new DefinitionsNotInRootPathResolver();
             case PARAMETERS:
                 return new ParameterPathResolver();
+            case PARAMETERS_MULTIPLE_IN_ROOT:
+                return new ParameterDefinitionsInRootPathResolver();
+            case PARAMETERS_MULTIPLE_NOT_IN_ROOT:
+                return new ParameterDefinitionsNotInRootPathResolver();
             default:
                 return new MainPathResolver();
         }
