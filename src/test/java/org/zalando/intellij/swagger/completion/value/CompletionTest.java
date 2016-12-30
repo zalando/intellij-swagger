@@ -3,13 +3,13 @@ package org.zalando.intellij.swagger.completion.value;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.zalando.intellij.swagger.completion.CompletionTest;
+import org.zalando.intellij.swagger.completion.JsonAndYamlCompletionTest;
 import org.zalando.intellij.swagger.fixture.Format;
 
 @RunWith(Parameterized.class)
-public class ValueCompletionTest extends CompletionTest {
+public class CompletionTest extends JsonAndYamlCompletionTest {
 
-    public ValueCompletionTest(Format format) {
+    public CompletionTest(Format format) {
         super(format, "testing/completion/value");
     }
 

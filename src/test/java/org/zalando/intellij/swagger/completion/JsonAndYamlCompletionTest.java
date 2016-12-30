@@ -6,12 +6,12 @@ import org.zalando.intellij.swagger.assertion.AssertableList;
 import org.zalando.intellij.swagger.fixture.Format;
 import org.zalando.intellij.swagger.fixture.SwaggerFixture;
 
-public abstract class CompletionTest {
+public abstract class JsonAndYamlCompletionTest {
 
     private final SwaggerFixture myFixture;
     private final Format myFormat;
 
-    protected CompletionTest(@NotNull Format format, @NotNull String testDataFolder) {
+    protected JsonAndYamlCompletionTest(@NotNull Format format, @NotNull String testDataFolder) {
         myFormat = format;
         myFixture = SwaggerFixture.forResourceFolder(testDataFolder);
     }

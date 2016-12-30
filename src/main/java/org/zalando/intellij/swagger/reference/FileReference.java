@@ -1,6 +1,5 @@
 package org.zalando.intellij.swagger.reference;
 
-import com.intellij.json.psi.JsonLiteral;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -12,13 +11,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class JsonFileReference extends PsiReferenceBase<PsiElement> {
+public class FileReference extends PsiReferenceBase<PsiElement> {
 
     private final String filePath;
 
-    public JsonFileReference(@NotNull final JsonLiteral selectedElement,
-                             @NotNull final String filePath) {
-        super(selectedElement);
+    public FileReference(@NotNull final PsiElement element,
+                         @NotNull final String filePath) {
+        super(element);
         this.filePath = filePath;
     }
 

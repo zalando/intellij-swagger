@@ -1,6 +1,5 @@
 package org.zalando.intellij.swagger.reference;
 
-import com.intellij.json.psi.JsonLiteral;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -10,23 +9,23 @@ import com.intellij.util.IncorrectOperationException;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.zalando.intellij.swagger.traversal.JsonTraversal;
+import org.zalando.intellij.swagger.traversal.Traversal;
 
 import java.util.Optional;
 
 import static org.zalando.intellij.swagger.reference.SwaggerConstants.REFERENCE_PREFIX;
 
-public class JsonDefinitionsInRootReference extends PsiReferenceBase<PsiElement> {
+public class DefinitionsInRootReference extends PsiReferenceBase<PsiElement> {
 
     private final String originalRefValue;
-    private final JsonTraversal jsonTraversal;
+    private final Traversal traversal;
 
-    public JsonDefinitionsInRootReference(@NotNull final JsonLiteral selectedElement,
-                                          @NotNull final String originalRefValue,
-                                          @NotNull final JsonTraversal jsonTraversal) {
-        super(selectedElement);
+    public DefinitionsInRootReference(@NotNull final PsiElement element,
+                                      @NotNull final String originalRefValue,
+                                      @NotNull final Traversal traversal) {
+        super(element);
         this.originalRefValue = originalRefValue;
-        this.jsonTraversal = jsonTraversal;
+        this.traversal = traversal;
     }
 
     @Nullable
@@ -38,7 +37,7 @@ public class JsonDefinitionsInRootReference extends PsiReferenceBase<PsiElement>
             return null;
         }
 
-        return jsonTraversal.getRootChildByName(extractDefinitionName(), referencedFile).orElse(null);
+        return traversal.getRootChildByName(extractDefinitionName(), referencedFile).orElse(null);
     }
 
     private PsiFile getReferencedFile() {

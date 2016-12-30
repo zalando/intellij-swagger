@@ -9,13 +9,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.yaml.YAMLElementGenerator;
-import org.jetbrains.yaml.psi.YAMLDocument;
-import org.jetbrains.yaml.psi.YAMLKeyValue;
-import org.jetbrains.yaml.psi.YAMLMapping;
-import org.jetbrains.yaml.psi.YAMLPsiElement;
-import org.jetbrains.yaml.psi.YAMLSequence;
-import org.jetbrains.yaml.psi.YAMLSequenceItem;
-import org.jetbrains.yaml.psi.YAMLValue;
+import org.jetbrains.yaml.psi.*;
 import org.jetbrains.yaml.psi.impl.YAMLPlainTextImpl;
 import org.zalando.intellij.swagger.completion.StringUtils;
 import org.zalando.intellij.swagger.completion.field.model.Field;
@@ -23,11 +17,7 @@ import org.zalando.intellij.swagger.completion.value.model.Value;
 import org.zalando.intellij.swagger.insert.YamlInsertFieldHandler;
 import org.zalando.intellij.swagger.insert.YamlInsertValueHandler;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class YamlTraversal extends Traversal {
@@ -70,9 +60,7 @@ public class YamlTraversal extends Traversal {
     @Override
     public List<String> getTagNames(final PsiFile psiFile) {
         return getTags(psiFile).stream()
-                .filter(el -> el instanceof YAMLKeyValue)
-                .map(YAMLKeyValue.class::cast)
-                .map(YAMLKeyValue::getValueText)
+                .map(PsiElement::getText)
                 .collect(Collectors.toList());
     }
 
@@ -90,6 +78,8 @@ public class YamlTraversal extends Traversal {
                 .filter(el -> el instanceof YAMLMapping)
                 .map(YAMLMapping.class::cast)
                 .map(yamlMapping -> yamlMapping.getKeyValueByKey("name"))
+                .map(YAMLKeyValue::getValue)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 

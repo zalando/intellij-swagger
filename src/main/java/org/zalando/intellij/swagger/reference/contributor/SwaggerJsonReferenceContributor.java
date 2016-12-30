@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.StringUtils;
 import org.zalando.intellij.swagger.file.FileConstants;
 import org.zalando.intellij.swagger.reference.*;
-import org.zalando.intellij.swagger.reference.extractor.ReferenceValueExtractor;
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
 
 import java.util.Optional;
@@ -22,16 +21,13 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
 
-    private final ReferenceValueExtractor referenceValueExtractor;
     private final JsonTraversal jsonTraversal;
 
     public SwaggerJsonReferenceContributor() {
-        this(new ReferenceValueExtractor(), new JsonTraversal());
+        this(new JsonTraversal());
     }
 
-    private SwaggerJsonReferenceContributor(final ReferenceValueExtractor referenceValueExtractor,
-                                            final JsonTraversal jsonTraversal) {
-        this.referenceValueExtractor = referenceValueExtractor;
+    private SwaggerJsonReferenceContributor(final JsonTraversal jsonTraversal) {
         this.jsonTraversal = jsonTraversal;
     }
 
@@ -40,60 +36,41 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
         registrar.registerReferenceProvider(localDefinitionsPattern(), getLocalDefinitionReferenceProvider());
         registrar.registerReferenceProvider(externalDefinitionsInRootPattern(), getExternalDefinitionsInRootProvider());
         registrar.registerReferenceProvider(externalDefinitionsNotInRootPattern(), getExternalDefinitionsNotInRootProvider());
-        registrar.registerReferenceProvider(parametersPattern(), getParameterReferenceProvider());
-        registrar.registerReferenceProvider(responsesPattern(), getResponseReferenceProvider());
+        registrar.registerReferenceProvider(localParametersPattern(), getLocalParameterReferenceProvider());
+        registrar.registerReferenceProvider(localResponsesPattern(), getLocalResponseReferenceProvider());
         registrar.registerReferenceProvider(filePattern(), getFileReferenceProvider());
         registrar.registerReferenceProvider(tagsPattern(), getTagsReferenceProvider());
     }
 
     @NotNull
-    private PsiReferenceProvider getResponseReferenceProvider() {
-        return new PsiReferenceProvider() {
-            @NotNull
-            @Override
-            public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
-                                                         @NotNull ProcessingContext context) {
-                return Optional.ofNullable(element.getText())
-                        .map(text -> new PsiReference[]{new JsonResponseReference(
-                                (JsonLiteral) element,
-                                referenceValueExtractor.getValue(text),
-                                jsonTraversal)})
-                        .orElse(JsonResponseReference.EMPTY_ARRAY);
-            }
-        };
+    private PsiReferenceProvider getLocalResponseReferenceProvider() {
+        return createLocalReferenceProviderFromKey(SwaggerConstants.RESPONSES_KEY);
     }
 
     @NotNull
-    private PsiReferenceProvider getParameterReferenceProvider() {
-        return new PsiReferenceProvider() {
-            @NotNull
-            @Override
-            public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
-                                                         @NotNull ProcessingContext context) {
-                return Optional.ofNullable(element.getText())
-                        .map(text -> new PsiReference[]{new JsonParameterReference(
-                                (JsonLiteral) element,
-                                referenceValueExtractor.getValue(text),
-                                jsonTraversal)})
-                        .orElse(JsonParameterReference.EMPTY_ARRAY);
-            }
-        };
+    private PsiReferenceProvider getLocalParameterReferenceProvider() {
+        return createLocalReferenceProviderFromKey(SwaggerConstants.PARAMETERS_KEY);
     }
 
     @NotNull
     private PsiReferenceProvider getLocalDefinitionReferenceProvider() {
+        return createLocalReferenceProviderFromKey(SwaggerConstants.DEFINITIONS_KEY);
+    }
+
+    @NotNull
+    private PsiReferenceProvider createLocalReferenceProviderFromKey(final String key) {
         return new PsiReferenceProvider() {
             @NotNull
             @Override
             public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
                                                          @NotNull ProcessingContext context) {
                 return Optional.ofNullable(element.getText())
-                        .map(text -> new PsiReference[]{
-                                new JsonLocalDefinitionReference(
-                                        (JsonLiteral) element,
-                                        StringUtils.removeAllQuotes(text),
-                                        jsonTraversal)
-                        }).orElse(JsonLocalDefinitionReference.EMPTY_ARRAY);
+                        .map(text -> new PsiReference[]{new LocalReference(
+                                key,
+                                element,
+                                StringUtils.removeAllQuotes(text),
+                                jsonTraversal)
+                        }).orElse(LocalReference.EMPTY_ARRAY);
             }
         };
     }
@@ -107,11 +84,11 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
                                                          @NotNull ProcessingContext context) {
                 return Optional.ofNullable(element.getText())
                         .map(text -> new PsiReference[]{
-                                new JsonDefinitionsInRootReference(
-                                        (JsonLiteral) element,
+                                new DefinitionsInRootReference(
+                                        element,
                                         StringUtils.removeAllQuotes(text),
                                         jsonTraversal)
-                        }).orElse(JsonDefinitionsInRootReference.EMPTY_ARRAY);
+                        }).orElse(DefinitionsInRootReference.EMPTY_ARRAY);
             }
         };
     }
@@ -125,11 +102,11 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
                                                          @NotNull ProcessingContext context) {
                 return Optional.ofNullable(element.getText())
                         .map(text -> new PsiReference[]{
-                                new JsonDefinitionsNotInRootReference(
-                                        (JsonLiteral) element,
+                                new DefinitionsNotInRootReference(
+                                        element,
                                         StringUtils.removeAllQuotes(text),
                                         jsonTraversal)
-                        }).orElse(JsonDefinitionsNotInRootReference.EMPTY_ARRAY);
+                        }).orElse(DefinitionsNotInRootReference.EMPTY_ARRAY);
             }
         };
     }
@@ -143,10 +120,10 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
                                                          @NotNull ProcessingContext context) {
                 return Optional.ofNullable(element.getText())
                         .map(text -> new PsiReference[]{
-                                new JsonFileReference(
-                                        (JsonLiteral) element,
+                                new FileReference(
+                                        element,
                                         StringUtils.removeAllQuotes(text))
-                        }).orElse(JsonFileReference.EMPTY_ARRAY);
+                        }).orElse(FileReference.EMPTY_ARRAY);
             }
         };
     }
@@ -159,11 +136,11 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
             public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
                                                          @NotNull ProcessingContext context) {
                 return Optional.ofNullable(element.getText())
-                        .map(text -> new PsiReference[]{new JsonTagReference(
-                                (JsonValue) element,
+                        .map(text -> new PsiReference[]{new TagReference(
+                                element,
                                 element.getText(),
                                 jsonTraversal)})
-                        .orElse(JsonTagReference.EMPTY_ARRAY);
+                        .orElse(TagReference.EMPTY_ARRAY);
             }
         };
     }
@@ -193,12 +170,12 @@ public class SwaggerJsonReferenceContributor extends PsiReferenceContributor {
                 .withLanguage(JsonLanguage.INSTANCE);
     }
 
-    private PsiElementPattern.Capture<JsonLiteral> parametersPattern() {
+    private PsiElementPattern.Capture<JsonLiteral> localParametersPattern() {
         return psiElement(JsonLiteral.class).withText(StandardPatterns.string().contains(SwaggerConstants.LOCAL_PARAMETERS_PREFIX))
                 .withLanguage(JsonLanguage.INSTANCE);
     }
 
-    private PsiElementPattern.Capture<JsonLiteral> responsesPattern() {
+    private PsiElementPattern.Capture<JsonLiteral> localResponsesPattern() {
         return psiElement(JsonLiteral.class).withText(StandardPatterns.string().contains(SwaggerConstants.LOCAL_RESPONSES_PREFIX))
                 .withLanguage(JsonLanguage.INSTANCE);
     }

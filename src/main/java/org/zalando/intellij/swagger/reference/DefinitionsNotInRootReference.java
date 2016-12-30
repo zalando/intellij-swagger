@@ -1,30 +1,29 @@
 package org.zalando.intellij.swagger.reference;
 
-import com.intellij.json.psi.JsonLiteral;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.zalando.intellij.swagger.traversal.JsonTraversal;
+import org.zalando.intellij.swagger.traversal.Traversal;
 
 import java.util.Optional;
 
 import static org.zalando.intellij.swagger.reference.SwaggerConstants.REFERENCE_PREFIX;
 import static org.zalando.intellij.swagger.reference.SwaggerConstants.SLASH;
 
-public class JsonDefinitionsNotInRootReference extends PsiReferenceBase<PsiElement> {
+public class DefinitionsNotInRootReference extends PsiReferenceBase<PsiElement> {
 
     private final String originalRefValue;
-    private final JsonTraversal jsonTraversal;
+    private final Traversal traversal;
 
-    public JsonDefinitionsNotInRootReference(@NotNull final JsonLiteral selectedElement,
-                                             @NotNull final String originalRefValue,
-                                             @NotNull final JsonTraversal jsonTraversal) {
-        super(selectedElement);
+    public DefinitionsNotInRootReference(@NotNull final PsiElement element,
+                                         @NotNull final String originalRefValue,
+                                         @NotNull final Traversal traversal) {
+        super(element);
         this.originalRefValue = originalRefValue;
-        this.jsonTraversal = jsonTraversal;
+        this.traversal = traversal;
     }
 
     @Nullable
@@ -39,7 +38,7 @@ public class JsonDefinitionsNotInRootReference extends PsiReferenceBase<PsiEleme
         final String rootElementName = getRootElementName();
         final String definitionName = getDefinitionName();
 
-        return jsonTraversal.getChildrenOfRootProperty(rootElementName, referencedFile).stream()
+        return traversal.getChildrenOfRootProperty(rootElementName, referencedFile).stream()
                 .filter(el -> el instanceof PsiNamedElement)
                 .map(PsiNamedElement.class::cast)
                 .filter(namedElement -> definitionName.equals(namedElement.getName()))

@@ -5,13 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.json.psi.JsonArray;
-import com.intellij.json.psi.JsonElementGenerator;
-import com.intellij.json.psi.JsonLiteral;
-import com.intellij.json.psi.JsonObject;
-import com.intellij.json.psi.JsonProperty;
-import com.intellij.json.psi.JsonPsiUtil;
-import com.intellij.json.psi.JsonValue;
+import com.intellij.json.psi.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
@@ -21,12 +15,7 @@ import org.zalando.intellij.swagger.completion.value.model.Value;
 import org.zalando.intellij.swagger.insert.JsonInsertFieldHandler;
 import org.zalando.intellij.swagger.insert.JsonInsertValueHandler;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class JsonTraversal extends Traversal {
@@ -128,11 +117,7 @@ public class JsonTraversal extends Traversal {
     @Override
     public List<String> getTagNames(final PsiFile psiFile) {
         return getTags(psiFile).stream()
-                .filter(el -> el instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getValue)
-                .filter(Objects::nonNull)
-                .map(JsonValue::getText)
+                .map(PsiElement::getText)
                 .map(StringUtils::removeAllQuotes)
                 .collect(Collectors.toList());
     }
@@ -147,6 +132,8 @@ public class JsonTraversal extends Traversal {
                 .filter(el -> el instanceof JsonObject)
                 .map(JsonObject.class::cast)
                 .map(jsonObject -> jsonObject.findProperty("name"))
+                .map(JsonProperty::getValue)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 

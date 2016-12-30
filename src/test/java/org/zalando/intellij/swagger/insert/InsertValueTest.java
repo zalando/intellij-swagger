@@ -3,11 +3,11 @@ package org.zalando.intellij.swagger.insert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.zalando.intellij.swagger.completion.CompletionTest;
+import org.zalando.intellij.swagger.completion.JsonAndYamlCompletionTest;
 import org.zalando.intellij.swagger.fixture.Format;
 
 @RunWith(Parameterized.class)
-public class InsertValueTest extends CompletionTest {
+public class InsertValueTest extends JsonAndYamlCompletionTest {
 
     public InsertValueTest(Format format) {
         super(format, "testing/insert/value");

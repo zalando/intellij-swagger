@@ -8,8 +8,7 @@
     <depends>org.jetbrains.plugins.yaml</depends>
 
     <description><![CDATA[
-     <p>The plugin expects that the Swagger specification file is named "swagger.yaml" or "swagger.yml" or "swagger.json".
-     Alternatively, if a swagger key exists, the plugin is activated.</p>
+     <p>A plugin to help you easily edit Swagger specification files.</p>
 
      <p>Source code can be found at https://github.com/zalando/intellij-swagger</p>
     ]]></description>

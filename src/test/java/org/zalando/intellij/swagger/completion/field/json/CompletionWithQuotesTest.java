@@ -1,19 +1,19 @@
-package org.zalando.intellij.swagger.completion.field;
+package org.zalando.intellij.swagger.completion.field.json;
 
 import com.google.common.collect.Lists;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.zalando.intellij.swagger.completion.CompletionTest;
+import org.zalando.intellij.swagger.completion.JsonAndYamlCompletionTest;
 import org.zalando.intellij.swagger.fixture.Format;
 
 import java.util.List;
 
 @RunWith(Parameterized.class)
-public class JsonFieldCompletionTest extends CompletionTest {
+public class CompletionWithQuotesTest extends JsonAndYamlCompletionTest {
 
-    public JsonFieldCompletionTest(@NotNull final Format format) {
+    public CompletionWithQuotesTest(@NotNull final Format format) {
         super(format, "testing/completion/field/json");
     }
 

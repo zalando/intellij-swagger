@@ -1,14 +1,8 @@
 package org.zalando.intellij.swagger.reference.contributor;
 
-import static com.intellij.patterns.PlatformPatterns.psiElement;
-import static com.intellij.patterns.StandardPatterns.or;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.StandardPatterns;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.PsiReferenceContributor;
-import com.intellij.psi.PsiReferenceProvider;
-import com.intellij.psi.PsiReferenceRegistrar;
+import com.intellij.psi.*;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.YAMLLanguage;
@@ -16,90 +10,105 @@ import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.jetbrains.yaml.psi.YAMLQuotedText;
 import org.jetbrains.yaml.psi.YAMLValue;
 import org.zalando.intellij.swagger.completion.StringUtils;
-import org.zalando.intellij.swagger.reference.YamlDefinitionReference;
-import org.zalando.intellij.swagger.reference.YamlFileReference;
-import org.zalando.intellij.swagger.reference.YamlParameterReference;
-import org.zalando.intellij.swagger.reference.YamlResponseReference;
-import org.zalando.intellij.swagger.reference.YamlTagReference;
-import org.zalando.intellij.swagger.reference.extractor.ReferenceValueExtractor;
+import org.zalando.intellij.swagger.reference.*;
 import org.zalando.intellij.swagger.traversal.YamlTraversal;
 
 import java.util.Optional;
 
+import static com.intellij.patterns.PlatformPatterns.psiElement;
+
 public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
 
-    private final ReferenceValueExtractor referenceValueExtractor;
     private final YamlTraversal yamlTraversal;
 
     public SwaggerYamlReferenceContributor() {
-        this(new ReferenceValueExtractor(), new YamlTraversal());
+        this(new YamlTraversal());
     }
 
-    private SwaggerYamlReferenceContributor(final ReferenceValueExtractor referenceValueExtractor,
-                                            final YamlTraversal yamlTraversal) {
-        this.referenceValueExtractor = referenceValueExtractor;
+    private SwaggerYamlReferenceContributor(final YamlTraversal yamlTraversal) {
         this.yamlTraversal = yamlTraversal;
     }
 
     @Override
     public void registerReferenceProviders(@NotNull final PsiReferenceRegistrar registrar) {
-        registrar.registerReferenceProvider(definitionsPattern(), getDefinitionReferenceProvider());
-        registrar.registerReferenceProvider(parametersPattern(), getParameterReferenceProvider());
-        registrar.registerReferenceProvider(responsesPattern(), getResponseReferenceProvider());
+        registrar.registerReferenceProvider(localDefinitionsPattern(), getLocalDefinitionReferenceProvider());
+        registrar.registerReferenceProvider(externalDefinitionsInRootPattern(), getExternalDefinitionsInRootProvider());
+        registrar.registerReferenceProvider(externalDefinitionsNotInRootPattern(), getExternalDefinitionsNotInRootProvider());
+        registrar.registerReferenceProvider(localParametersPattern(), getLocalParameterReferenceProvider());
+        registrar.registerReferenceProvider(localResponsesPattern(), getLocalResponseReferenceProvider());
         registrar.registerReferenceProvider(filePattern(), getFileReferenceProvider());
         registrar.registerReferenceProvider(tagsPattern(), getTagsReferenceProvider());
     }
 
     @NotNull
-    private PsiReferenceProvider getResponseReferenceProvider() {
+    private PsiReferenceProvider getLocalResponseReferenceProvider() {
+        return createLocalReferenceProviderFromReferenceType(SwaggerConstants.RESPONSES_KEY);
+    }
+
+    @NotNull
+    private PsiReferenceProvider getLocalParameterReferenceProvider() {
+        return createLocalReferenceProviderFromReferenceType(SwaggerConstants.PARAMETERS_KEY);
+    }
+
+    @NotNull
+    private PsiReferenceProvider getLocalDefinitionReferenceProvider() {
+        return createLocalReferenceProviderFromReferenceType(SwaggerConstants.DEFINITIONS_KEY);
+    }
+
+    @NotNull
+    private PsiReferenceProvider createLocalReferenceProviderFromReferenceType(final String referenceType) {
         return new PsiReferenceProvider() {
             @NotNull
             @Override
             public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
                                                          @NotNull ProcessingContext context) {
                 return Optional.ofNullable(element.getText())
-                        .map(text -> new PsiReference[]{new YamlResponseReference(
-                                (YAMLQuotedText) element,
-                                referenceValueExtractor.getValue(text),
+                        .map(text -> new PsiReference[]{new LocalReference(
+                                referenceType,
+                                element,
+                                StringUtils.removeAllQuotes(text),
                                 yamlTraversal)
-                        }).orElse(YamlResponseReference.EMPTY_ARRAY);
+                        }).orElse(LocalReference.EMPTY_ARRAY);
             }
         };
     }
 
     @NotNull
-    private PsiReferenceProvider getParameterReferenceProvider() {
+    private PsiReferenceProvider getExternalDefinitionsInRootProvider() {
         return new PsiReferenceProvider() {
             @NotNull
             @Override
             public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
                                                          @NotNull ProcessingContext context) {
                 return Optional.ofNullable(element.getText())
-                        .map(text -> new PsiReference[]{new YamlParameterReference(
-                                (YAMLQuotedText) element,
-                                referenceValueExtractor.getValue(text),
-                                yamlTraversal)
-                        }).orElse(YamlParameterReference.EMPTY_ARRAY);
+                        .map(text -> new PsiReference[]{
+                                new DefinitionsInRootReference(
+                                        element,
+                                        StringUtils.removeAllQuotes(text),
+                                        yamlTraversal)
+                        }).orElse(DefinitionsInRootReference.EMPTY_ARRAY);
             }
         };
     }
 
     @NotNull
-    private PsiReferenceProvider getDefinitionReferenceProvider() {
+    private PsiReferenceProvider getExternalDefinitionsNotInRootProvider() {
         return new PsiReferenceProvider() {
             @NotNull
             @Override
             public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
                                                          @NotNull ProcessingContext context) {
                 return Optional.ofNullable(element.getText())
-                        .map(text -> new PsiReference[]{new YamlDefinitionReference(
-                                (YAMLQuotedText) element,
-                                referenceValueExtractor.getValue(text),
-                                yamlTraversal)
-                        }).orElse(YamlDefinitionReference.EMPTY_ARRAY);
+                        .map(text -> new PsiReference[]{
+                                new DefinitionsNotInRootReference(
+                                        element,
+                                        StringUtils.removeAllQuotes(text),
+                                        yamlTraversal)
+                        }).orElse(DefinitionsNotInRootReference.EMPTY_ARRAY);
             }
         };
     }
+
 
     @NotNull
     private PsiReferenceProvider getFileReferenceProvider() {
@@ -110,10 +119,10 @@ public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
                                                          @NotNull ProcessingContext context) {
                 return Optional.ofNullable(element.getText())
                         .map(text -> new PsiReference[]{
-                                new YamlFileReference(
-                                        (YAMLValue) element,
+                                new FileReference(
+                                        element,
                                         StringUtils.removeAllQuotes(text))
-                        }).orElse(YamlFileReference.EMPTY_ARRAY);
+                        }).orElse(FileReference.EMPTY_ARRAY);
             }
         };
     }
@@ -126,41 +135,61 @@ public class SwaggerYamlReferenceContributor extends PsiReferenceContributor {
             public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
                                                          @NotNull ProcessingContext context) {
                 return Optional.ofNullable(element.getText())
-                        .map(text -> new PsiReference[]{new YamlTagReference(
-                                (YAMLValue) element,
-                                element.getText(),
-                                yamlTraversal)})
-                        .orElse(YamlTagReference.EMPTY_ARRAY);
+                        .map(text -> new PsiReference[]{
+                                new TagReference(
+                                        element,
+                                        element.getText(),
+                                        yamlTraversal)})
+                        .orElse(TagReference.EMPTY_ARRAY);
             }
         };
     }
 
-    private PsiElementPattern.Capture<YAMLQuotedText> definitionsPattern() {
+    private PsiElementPattern.Capture<YAMLQuotedText> localDefinitionsPattern() {
         return psiElement(YAMLQuotedText.class)
-                .withText(StandardPatterns.string().contains("#/definitions/"))
+                .withParent(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.REF_KEY))
+                .inside(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.SCHEMA_KEY))
+                .withText(StandardPatterns.string().contains(SwaggerConstants.LOCAL_DEFINITIONS_PREFIX))
+                .andNot(StandardPatterns.string().matches(".ya?ml"))
                 .withLanguage(YAMLLanguage.INSTANCE);
     }
 
-    private PsiElementPattern.Capture<YAMLQuotedText> parametersPattern() {
+    private PsiElementPattern.Capture<YAMLQuotedText> externalDefinitionsInRootPattern() {
         return psiElement(YAMLQuotedText.class)
-                .withText(StandardPatterns.string().contains("#/parameters/"))
+                .withParent(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.REF_KEY))
+                .inside(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.SCHEMA_KEY))
+                .withText(StandardPatterns.string().matches("(.*).ya?ml#/([^/])*$"))
                 .withLanguage(YAMLLanguage.INSTANCE);
     }
 
-    private PsiElementPattern.Capture<YAMLQuotedText> responsesPattern() {
+    private PsiElementPattern.Capture<YAMLQuotedText> externalDefinitionsNotInRootPattern() {
         return psiElement(YAMLQuotedText.class)
-                .withText(StandardPatterns.string().contains("#/responses/"))
+                .withParent(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.REF_KEY))
+                .inside(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.SCHEMA_KEY))
+                .withText(StandardPatterns.string().matches("(.*).ya?ml#/(.*)[/]+(.*)"))
+                .withLanguage(YAMLLanguage.INSTANCE);
+    }
+
+    private PsiElementPattern.Capture<YAMLQuotedText> localParametersPattern() {
+        return psiElement(YAMLQuotedText.class)
+                .withText(StandardPatterns.string().contains(SwaggerConstants.LOCAL_PARAMETERS_PREFIX))
+                .withLanguage(YAMLLanguage.INSTANCE);
+    }
+
+    private PsiElementPattern.Capture<YAMLQuotedText> localResponsesPattern() {
+        return psiElement(YAMLQuotedText.class)
+                .withText(StandardPatterns.string().contains(SwaggerConstants.LOCAL_RESPONSES_PREFIX))
                 .withLanguage(YAMLLanguage.INSTANCE);
     }
 
     private PsiElementPattern.Capture<YAMLValue> filePattern() {
         return psiElement(YAMLValue.class)
-                .withText(or(StandardPatterns.string().contains(".yaml"), StandardPatterns.string().contains(".yml")))
+                .withText(StandardPatterns.string().matches("(.)*.ya?ml(.)*"))
                 .withLanguage(YAMLLanguage.INSTANCE);
     }
 
     private PsiElementPattern.Capture<YAMLValue> tagsPattern() {
-        return psiElement(YAMLValue.class).inside(psiElement(YAMLKeyValue.class).withName("tags"))
+        return psiElement(YAMLValue.class).inside(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.TAGS_KEY))
                 .withLanguage(YAMLLanguage.INSTANCE);
     }
 }
