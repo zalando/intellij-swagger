@@ -20,15 +20,18 @@ import java.util.stream.Collectors;
 
 public class JsonTraversal extends Traversal {
 
-    public boolean isKey(final PsiElement psiElement) {
-        return JsonPsiUtil.isPropertyKey(psiElement.getParent());
+    public Boolean isKey(final PsiElement psiElement) {
+        return Optional.ofNullable(psiElement.getParent())
+                .filter(JsonPsiUtil::isPropertyKey)
+                .isPresent();
     }
 
     @Override
     public Optional<String> getKeyNameIfKey(final PsiElement psiElement) {
-        return isKey(psiElement)
-                ? Optional.of(StringUtils.removeAllQuotes(psiElement.getParent().getText()))
-                : Optional.empty();
+        return Optional.ofNullable(psiElement.getParent())
+                .filter(JsonPsiUtil::isPropertyKey)
+                .map(PsiElement::getText)
+                .map(StringUtils::removeAllQuotes);
     }
 
     @Override
