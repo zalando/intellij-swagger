@@ -1,5 +1,9 @@
 package org.zalando.intellij.swagger.completion.field.model;
 
+import org.apache.commons.lang.StringUtils;
+
+import static org.zalando.intellij.swagger.file.FileConstants.CARET;
+
 public class StringField extends Field {
 
     public StringField(final String name, final boolean required) {
@@ -12,23 +16,23 @@ public class StringField extends Field {
 
     @Override
     public String getJsonPlaceholderSuffix(final int indentation) {
-        return ": \"<caret>\"";
+        return ": \"" + CARET + "\"";
     }
 
     @Override
     public String getYamlPlaceholderSuffix(final int indentation) {
-        return ": <caret>";
+        return ": " + CARET;
     }
 
     @Override
     public String getCompleteJson(final int indentation) {
-        final String leftPadding = org.apache.commons.lang.StringUtils.repeat(" ", indentation);
-        return leftPadding + "\"" + getName() + "\": \"<caret>\"";
+        final String leftPadding = StringUtils.repeat(" ", indentation);
+        return leftPadding + "\"" + getName() + "\": \"" + CARET + "\"";
     }
 
     @Override
     public String getCompleteYaml(final int indentation) {
-        final String leftPadding = org.apache.commons.lang.StringUtils.repeat(" ", indentation);
-        return leftPadding + getName() + ": <caret>";
+        final String leftPadding = StringUtils.repeat(" ", indentation);
+        return leftPadding + getName() + ": " + CARET;
     }
 }

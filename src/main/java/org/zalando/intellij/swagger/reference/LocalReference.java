@@ -7,6 +7,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.zalando.intellij.swagger.reference.extractor.ReferenceValueExtractor;
 import org.zalando.intellij.swagger.traversal.Traversal;
 
 import static org.zalando.intellij.swagger.reference.SwaggerConstants.REFERENCE_PREFIX;
@@ -28,8 +29,8 @@ public class LocalReference extends PsiReferenceBase<PsiElement> {
     @Nullable
     @Override
     public PsiElement resolve() {
-        final String referenceType = extractReferenceType();
-        final String referencedValue = extractReferencedValue();
+        final String referenceType = ReferenceValueExtractor.extractType(originalRefValue);
+        final String referencedValue = ReferenceValueExtractor.extractValue(originalRefValue);
 
         return traversal
                 .getChildrenOfRootProperty(referenceType, getElement().getContainingFile()).stream()
@@ -40,9 +41,6 @@ public class LocalReference extends PsiReferenceBase<PsiElement> {
                 .orElse(null);
     }
 
-    private String extractReferencedValue() {
-        return StringUtils.substringAfterLast(originalRefValue, SLASH);
-    }
 
     private String extractReferenceType() {
         return StringUtils.substringBetween(originalRefValue, REFERENCE_PREFIX, SLASH);

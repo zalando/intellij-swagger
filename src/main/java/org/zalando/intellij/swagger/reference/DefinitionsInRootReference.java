@@ -9,6 +9,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.zalando.intellij.swagger.reference.extractor.ReferenceValueExtractor;
 import org.zalando.intellij.swagger.traversal.Traversal;
 
 import java.util.Optional;
@@ -37,23 +38,17 @@ public class DefinitionsInRootReference extends PsiReferenceBase<PsiElement> {
             return null;
         }
 
-        return traversal.getRootChildByName(extractDefinitionName(), referencedFile).orElse(null);
+        final String referenceValue = ReferenceValueExtractor.extractValue(originalRefValue);
+        return traversal.getRootChildByName(referenceValue, referencedFile)
+                .orElse(null);
     }
 
     private PsiFile getReferencedFile() {
-        final String filePath = getFilePath();
+        final String filePath = ReferenceValueExtractor.extractFilePath(originalRefValue);
         final VirtualFile baseDir = getElement().getContainingFile().getVirtualFile().getParent();
         return Optional.ofNullable(baseDir.findFileByRelativePath(filePath))
                 .map(f -> PsiManager.getInstance(getElement().getProject()).findFile(f))
                 .orElse(null);
-    }
-
-    private String getFilePath() {
-        return StringUtils.substringBefore(originalRefValue, REFERENCE_PREFIX);
-    }
-
-    private String extractDefinitionName() {
-        return StringUtils.substringAfterLast(originalRefValue, REFERENCE_PREFIX);
     }
 
     @NotNull
@@ -64,7 +59,7 @@ public class DefinitionsInRootReference extends PsiReferenceBase<PsiElement> {
 
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-        final String filePath = getFilePath();
+        final String filePath = ReferenceValueExtractor.extractFilePath(originalRefValue);
         return super.handleElementRename(filePath + REFERENCE_PREFIX + newElementName);
     }
 

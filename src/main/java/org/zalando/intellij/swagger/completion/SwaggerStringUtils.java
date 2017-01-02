@@ -1,6 +1,6 @@
 package org.zalando.intellij.swagger.completion;
 
-public class StringUtils {
+public class SwaggerStringUtils {
 
     public static boolean nextCharAfterSpacesAndQuotesIsColon(final String string) {
         for (int i = 0; i < string.length(); i++) {

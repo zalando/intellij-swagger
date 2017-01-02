@@ -6,6 +6,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.zalando.intellij.swagger.reference.extractor.ReferenceValueExtractor;
 import org.zalando.intellij.swagger.traversal.Traversal;
 
 import java.util.Optional;
@@ -35,36 +36,23 @@ public class DefinitionsNotInRootReference extends PsiReferenceBase<PsiElement> 
             return null;
         }
 
-        final String rootElementName = getRootElementName();
-        final String definitionName = getDefinitionName();
+        final String referenceType = ReferenceValueExtractor.extractType(originalRefValue);
+        final String referenceValue = ReferenceValueExtractor.extractValue(originalRefValue);
 
-        return traversal.getChildrenOfRootProperty(rootElementName, referencedFile).stream()
+        return traversal.getChildrenOfRootProperty(referenceType, referencedFile).stream()
                 .filter(el -> el instanceof PsiNamedElement)
                 .map(PsiNamedElement.class::cast)
-                .filter(namedElement -> definitionName.equals(namedElement.getName()))
+                .filter(namedElement -> referenceValue.equals(namedElement.getName()))
                 .findFirst()
                 .orElse(null);
     }
 
     private PsiFile getReferencedFile() {
-        final String filePath = getFilePath();
+        final String filePath = ReferenceValueExtractor.extractFilePath(originalRefValue);
         final VirtualFile baseDir = getElement().getContainingFile().getVirtualFile().getParent();
         return Optional.ofNullable(baseDir.findFileByRelativePath(filePath))
                 .map(f -> PsiManager.getInstance(getElement().getProject()).findFile(f))
                 .orElse(null);
-    }
-
-    private String getRootElementName() {
-        final String definitionPath = StringUtils.substringAfter(originalRefValue, REFERENCE_PREFIX);
-        return StringUtils.substringBefore(definitionPath, SLASH);
-    }
-
-    private String getDefinitionName() {
-        return StringUtils.substringAfterLast(originalRefValue, SLASH);
-    }
-
-    private String getFilePath() {
-        return StringUtils.substringBefore(originalRefValue, REFERENCE_PREFIX);
     }
 
     @NotNull
@@ -75,10 +63,10 @@ public class DefinitionsNotInRootReference extends PsiReferenceBase<PsiElement> 
 
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-        final String filePath = getFilePath();
-        final String rootElementName = getRootElementName();
+        final String filePath = ReferenceValueExtractor.extractFilePath(originalRefValue);
+        final String referenceType = ReferenceValueExtractor.extractType(originalRefValue);
 
-        return super.handleElementRename(filePath + REFERENCE_PREFIX + rootElementName + SLASH + newElementName);
+        return super.handleElementRename(filePath + REFERENCE_PREFIX + referenceType + SLASH + newElementName);
     }
 
 }

@@ -42,8 +42,8 @@ public class CreateYamlReferenceIntentionAction implements IntentionAction {
 
     @Override
     public void invoke(@NotNull final Project project, final Editor editor, final PsiFile psiFile) {
-        final String referenceType = referenceValueExtractor.getReferenceType(referenceValueWithPrefix);
-        final String referenceValueWithoutPrefix = referenceValueExtractor.getValue(referenceValueWithPrefix);
+        final String referenceType = referenceValueExtractor.extractType(referenceValueWithPrefix);
+        final String referenceValueWithoutPrefix = referenceValueExtractor.extractValue(referenceValueWithPrefix);
 
         new ReferenceCreator(referenceValueWithoutPrefix, referenceType, psiFile, new YamlTraversal()).create();
         PsiDocumentManager.getInstance(psiFile.getProject()).doPostponedOperationsAndUnblockDocument(editor.getDocument());

@@ -1,7 +1,6 @@
 package org.zalando.intellij.swagger.traversal.path;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 
 public class ParameterPathResolver implements PathResolver {
 

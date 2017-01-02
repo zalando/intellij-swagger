@@ -11,7 +11,7 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.yaml.YAMLElementGenerator;
 import org.jetbrains.yaml.psi.*;
 import org.jetbrains.yaml.psi.impl.YAMLPlainTextImpl;
-import org.zalando.intellij.swagger.completion.StringUtils;
+import org.zalando.intellij.swagger.completion.SwaggerStringUtils;
 import org.zalando.intellij.swagger.completion.field.model.Field;
 import org.zalando.intellij.swagger.completion.value.model.Value;
 import org.zalando.intellij.swagger.insert.YamlInsertFieldHandler;
@@ -43,7 +43,7 @@ public class YamlTraversal extends Traversal {
     public Optional<String> getParentKeyName(final PsiElement psiElement) {
         return getNthOfType(psiElement, 1, YAMLKeyValue.class)
                 .map(YAMLKeyValue::getName)
-                .map(StringUtils::removeAllQuotes);
+                .map(SwaggerStringUtils::removeAllQuotes);
     }
 
     @Override
@@ -180,7 +180,7 @@ public class YamlTraversal extends Traversal {
                 .map(childrenStream -> childrenStream.map(YAMLSequenceItem.class::cast))
                 .map(childrenStream -> childrenStream.noneMatch(item ->
                         item.getValue() != null &&
-                                value.equals(StringUtils.removeAllQuotes(item.getValue().getText()))))
+                                value.equals(SwaggerStringUtils.removeAllQuotes(item.getValue().getText()))))
                 .orElse(true);
 
     }
@@ -203,7 +203,7 @@ public class YamlTraversal extends Traversal {
                 .anyMatch(prop -> {
                     final Optional<String> value = Optional.ofNullable(prop.getValue())
                             .map(YAMLValue::getText)
-                            .map(StringUtils::removeAllQuotes);
+                            .map(SwaggerStringUtils::removeAllQuotes);
                     return "type".equals(prop.getName()) && Optional.of("oauth2").equals(value);
                 });
 

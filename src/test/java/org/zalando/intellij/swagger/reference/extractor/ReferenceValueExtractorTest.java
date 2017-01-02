@@ -9,14 +9,14 @@ public class ReferenceValueExtractorTest {
 
     @Test
     public void thatDefinitionValueWithSingleQuotesIsExtracted() throws Exception {
-        final String definitionValue = referenceValueExtractor.getValue("'#/definitions/Value'");
+        final String definitionValue = referenceValueExtractor.extractValue("'#/definitions/Value'");
 
         assertEquals("Value", definitionValue);
     }
 
     @Test
     public void thatDefinitionValueWithDoubleQuotesIsExtracted() throws Exception {
-        final String definitionValue = referenceValueExtractor.getValue("\"#/definitions/Value\"");
+        final String definitionValue = referenceValueExtractor.extractValue("\"#/definitions/Value\"");
 
         assertEquals("Value", definitionValue);
     }

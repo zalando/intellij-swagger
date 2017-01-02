@@ -4,7 +4,7 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.psi.PsiElement;
-import org.zalando.intellij.swagger.completion.StringUtils;
+import org.zalando.intellij.swagger.completion.SwaggerStringUtils;
 import org.zalando.intellij.swagger.reference.extractor.ReferenceValueExtractor;
 import org.zalando.intellij.swagger.traversal.Traversal;
 
@@ -30,7 +30,7 @@ public class ReferenceValidator {
         if (isLocalReference(psiElement)) {
             final boolean definitionFound =
                     getAvailableDefinitions(psiElement)
-                            .contains(referenceValueExtractor.getValue(psiElement.getText()));
+                            .contains(referenceValueExtractor.extractValue(psiElement.getText()));
 
             if (!definitionFound) {
                 final Annotation errorAnnotation =
@@ -45,7 +45,7 @@ public class ReferenceValidator {
         if (isLocalReference(psiElement)) {
             final boolean parameterFound =
                     getAvailableParameters(psiElement)
-                            .contains(referenceValueExtractor.getValue(psiElement.getText()));
+                            .contains(referenceValueExtractor.extractValue(psiElement.getText()));
 
             if (!parameterFound) {
                 final Annotation errorAnnotation =
@@ -60,7 +60,7 @@ public class ReferenceValidator {
         if (isLocalReference(psiElement)) {
             final boolean responseFound =
                     getAvailableResponses(psiElement)
-                            .contains(referenceValueExtractor.getValue(psiElement.getText()));
+                            .contains(referenceValueExtractor.extractValue(psiElement.getText()));
 
             if (!responseFound) {
                 final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(psiElement, "Response not found");
@@ -70,7 +70,7 @@ public class ReferenceValidator {
     }
 
     private boolean isLocalReference(final PsiElement psiElement) {
-        return StringUtils.removeAllQuotes(psiElement.getText()).startsWith("#/");
+        return SwaggerStringUtils.removeAllQuotes(psiElement.getText()).startsWith("#/");
     }
 
     private Set<String> getAvailableDefinitions(final PsiElement psiElement) {

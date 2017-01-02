@@ -5,63 +5,61 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
-import java.util.regex.Pattern;
-
-public class StringUtilsTest {
+public class SwaggerStringUtilsTest {
 
     @Test
     public void thatReturnsTrueWhenNextCharIsColon() throws Exception {
-        assertTrue(StringUtils.nextCharAfterSpacesAndQuotesIsColon(":"));
+        assertTrue(SwaggerStringUtils.nextCharAfterSpacesAndQuotesIsColon(":"));
     }
 
     @Test
     public void thatReturnsTrueWhenQuoteIsFollowedByColon() throws Exception {
-        assertTrue(StringUtils.nextCharAfterSpacesAndQuotesIsColon("\":"));
+        assertTrue(SwaggerStringUtils.nextCharAfterSpacesAndQuotesIsColon("\":"));
     }
 
     @Test
     public void thatReturnsTrueWhenSpaceIsFollowedByColon() throws Exception {
-        assertTrue(StringUtils.nextCharAfterSpacesAndQuotesIsColon(" :"));
+        assertTrue(SwaggerStringUtils.nextCharAfterSpacesAndQuotesIsColon(" :"));
     }
 
     @Test
     public void thatReturnsTrueWhenSpaceAndQuoteIsFollowedByColon() throws Exception {
-        assertTrue(StringUtils.nextCharAfterSpacesAndQuotesIsColon(" \":"));
+        assertTrue(SwaggerStringUtils.nextCharAfterSpacesAndQuotesIsColon(" \":"));
     }
 
     @Test
     public void thatReturnsFalseWhenQuotesNorSpacesBeforeColon() throws Exception {
-        assertFalse(StringUtils.nextCharAfterSpacesAndQuotesIsColon("a:"));
+        assertFalse(SwaggerStringUtils.nextCharAfterSpacesAndQuotesIsColon("a:"));
     }
 
     @Test
     public void thatReturnsFalseWhenOnlySpace() throws Exception {
-        assertFalse(StringUtils.nextCharAfterSpacesAndQuotesIsColon(" "));
+        assertFalse(SwaggerStringUtils.nextCharAfterSpacesAndQuotesIsColon(" "));
     }
 
     @Test
     public void thatStringHasTwoSpacesInRow() throws Exception {
-        assertEquals(2, StringUtils.getNumberOfSpacesInRowStartingFromEnd("text  "));
+        assertEquals(2, SwaggerStringUtils.getNumberOfSpacesInRowStartingFromEnd("text  "));
     }
 
     @Test
     public void thatStringHasNoSpacesInRow() throws Exception {
-        assertEquals(0, StringUtils.getNumberOfSpacesInRowStartingFromEnd("text"));
+        assertEquals(0, SwaggerStringUtils.getNumberOfSpacesInRowStartingFromEnd("text"));
     }
 
     @Test
     public void thatEmptyStringHasNoSpacesInRow() throws Exception {
-        assertEquals(0, StringUtils.getNumberOfSpacesInRowStartingFromEnd(""));
+        assertEquals(0, SwaggerStringUtils.getNumberOfSpacesInRowStartingFromEnd(""));
     }
 
     @Test
     public void thatStringHasSingleQuoteIsBeforeColon() throws Exception {
-        assertTrue(StringUtils.hasSingleQuoteBeforeColonStartingFromEnd("$ref: 'somevalue"));
+        assertTrue(SwaggerStringUtils.hasSingleQuoteBeforeColonStartingFromEnd("$ref: 'somevalue"));
     }
 
     @Test
     public void thatStringDoesNotHaveSingleQuoteIsBeforeColon() throws Exception {
-        assertFalse(StringUtils.hasSingleQuoteBeforeColonStartingFromEnd("$ref: somevalue"));
+        assertFalse(SwaggerStringUtils.hasSingleQuoteBeforeColonStartingFromEnd("$ref: somevalue"));
     }
 
 }

@@ -1,11 +1,7 @@
 package org.zalando.intellij.swagger.index;
 
 import com.intellij.util.containers.HashSet;
-import com.intellij.util.indexing.DataIndexer;
-import com.intellij.util.indexing.FileBasedIndex;
-import com.intellij.util.indexing.FileBasedIndexExtension;
-import com.intellij.util.indexing.FileContent;
-import com.intellij.util.indexing.ID;
+import com.intellij.util.indexing.*;
 import com.intellij.util.io.DataExternalizer;
 import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
@@ -61,12 +57,12 @@ public class SwaggerFileIndex extends FileBasedIndexExtension<String, Set<String
         public Set<String> read(@NotNull DataInput in) throws IOException {
             final int size = in.readInt();
 
-            if (size < 0 || size > 65535) { // 65K: maximum number of resources for a given type
+            if (size < 0) {
                 // Something is very wrong (corrupt index); trigger an index rebuild.
                 throw new IOException("Corrupt Index: Size " + size);
             }
 
-            final Set<String> result = new HashSet<String>(size);
+            final Set<String> result = new HashSet<>(size);
 
             for (int i = 0; i < size; i++) {
                 final String s = in.readUTF();

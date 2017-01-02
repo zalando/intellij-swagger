@@ -1,5 +1,7 @@
 package org.zalando.intellij.swagger.completion.field.model;
 
+import static org.zalando.intellij.swagger.file.FileConstants.CARET;
+
 public class RefField extends Field {
 
     public RefField() {
@@ -8,12 +10,12 @@ public class RefField extends Field {
 
     @Override
     public String getJsonPlaceholderSuffix(final int indentation) {
-        return ": \"<caret>\"";
+        return ": \"" + CARET + "\"";
     }
 
     @Override
     public String getYamlPlaceholderSuffix(final int indentation) {
-        return ": '<caret>'";
+        return ": '" + CARET + "'";
     }
 
     @Override

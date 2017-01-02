@@ -1,7 +1,5 @@
 package org.zalando.intellij.swagger.reference;
 
-import com.intellij.patterns.ElementPattern;
-
 public class SwaggerConstants {
 
     public static final String SLASH = "/";
