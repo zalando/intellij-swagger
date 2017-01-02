@@ -40,6 +40,12 @@ paths:
             type: array
             items:
               "$ref": pet.yml
+        '201':
+          $ref: "response_definitions_in_root.yml#/myResponse"
+        '204':
+          $ref: "response_definitions_not_in_root.yml#/responses/myResponse"
+        '404':
+          $ref: "response.yml"
         default:
           description: unexpected error
           schema:

@@ -97,10 +97,7 @@ public class DefinitionPathResolver implements PathResolver {
 
     @Override
     public final boolean childOfDefinitions(final PsiElement psiElement) {
-        return psiElement.getParent() instanceof PsiFile ||
-                psiElement.getParent().getParent() instanceof PsiFile ||
-                psiElement.getParent().getParent().getParent() instanceof PsiFile ||
-                psiElement.getParent().getParent().getParent().getParent() instanceof PsiFile;
+        return hasPath(psiElement, "$");
     }
 
     @Override

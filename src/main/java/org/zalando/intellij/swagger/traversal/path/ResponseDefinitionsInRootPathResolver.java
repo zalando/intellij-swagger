@@ -1,9 +1,8 @@
 package org.zalando.intellij.swagger.traversal.path;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 
-public class ParameterPathResolver implements PathResolver {
+public class ResponseDefinitionsInRootPathResolver implements PathResolver {
 
     @Override
     public boolean childOfRoot(final PsiElement psiElement) {
@@ -47,7 +46,7 @@ public class ParameterPathResolver implements PathResolver {
 
     @Override
     public final boolean childOfItems(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.items");
+        return false;
     }
 
     @Override
@@ -62,7 +61,7 @@ public class ParameterPathResolver implements PathResolver {
 
     @Override
     public final boolean childOfResponseDefinition(final PsiElement psiElement) {
-        return false;
+        return hasPath(psiElement, "$.*");
     }
 
     @Override
@@ -87,7 +86,7 @@ public class ParameterPathResolver implements PathResolver {
 
     @Override
     public final boolean childOfSchema(final PsiElement psiElement) {
-        return false;
+        return hasPath(psiElement, "$.**.schema");
     }
 
     @Override
@@ -102,7 +101,7 @@ public class ParameterPathResolver implements PathResolver {
 
     @Override
     public final boolean childOfParameterDefinition(final PsiElement psiElement) {
-        return hasPath(psiElement, "$");
+        return false;
     }
 
     @Override

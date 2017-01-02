@@ -47,6 +47,8 @@ public class RenameRefTest extends SwaggerLightCodeInsightFixtureTestCase {
         assertNull(myFixture.findFileInTempDir("definitions/pet.yaml"));
     }
 
+    //Definitions
+
     public void testRenameExternalDefinitionWhereDefinitionsAreInRoot() {
         myFixture.copyFileToProject(FILES_PATH + "definitions_in_root.yaml", "definitions.yaml");
         final VirtualFile swaggerFile = myFixture.copyFileToProject(FILES_PATH + "external_definition_definitions_in_root_with_caret.yaml", "swagger.yaml");
@@ -83,6 +85,8 @@ public class RenameRefTest extends SwaggerLightCodeInsightFixtureTestCase {
         myFixture.checkResultByFile("definitions.yaml", FILES_PATH + "definitions_not_in_root_with_caret_after.yaml", true);
     }
 
+    // Parameters
+
     public void testRenameExternalParameterDefinitionWhereDefinitionsAreInRoot() {
         myFixture.copyFileToProject(FILES_PATH + "parameter_definitions_in_root.yaml", "parameters.yaml");
         final VirtualFile swaggerFile = myFixture.copyFileToProject(FILES_PATH + "external_definition_parameter_definitions_in_root_with_caret.yaml", "swagger.yaml");
@@ -118,4 +122,43 @@ public class RenameRefTest extends SwaggerLightCodeInsightFixtureTestCase {
         myFixture.checkResultByFile("swagger.yaml", FILES_PATH + "external_definition_parameter_definitions_not_in_root_after.yaml", true);
         myFixture.checkResultByFile("parameters.yaml", FILES_PATH + "parameter_definitions_not_in_root_with_caret_after.yaml", true);
     }
+
+    // Responses
+
+    public void testRenameExternalResponseDefinitionWhereDefinitionsAreInRoot() {
+        myFixture.copyFileToProject(FILES_PATH + "response_definitions_in_root.yaml", "responses.yaml");
+        final VirtualFile swaggerFile = myFixture.copyFileToProject(FILES_PATH + "external_definition_response_definitions_in_root_with_caret.yaml", "swagger.yaml");
+        myFixture.configureFromExistingVirtualFile(swaggerFile);
+        myFixture.renameElementAtCaret("newName");
+        myFixture.checkResultByFile("swagger.yaml", FILES_PATH + "external_definition_response_definitions_in_root_with_caret_after.yaml", true);
+        myFixture.checkResultByFile("responses.yaml", FILES_PATH + "response_definitions_in_root_after.yaml", true);
+    }
+
+    public void testRenameExternalResponseDefinitionDeclarationWhereResponseDefinitionsAreInRoot() {
+        final VirtualFile definitionsFile = myFixture.copyFileToProject(FILES_PATH + "response_definitions_in_root_with_caret.yaml", "responses.yaml");
+        myFixture.copyFileToProject(FILES_PATH + "external_definition_response_definitions_in_root.yaml", "swagger.yaml");
+        myFixture.configureFromExistingVirtualFile(definitionsFile);
+        myFixture.renameElementAtCaret("newName");
+        myFixture.checkResultByFile("swagger.yaml", FILES_PATH + "external_definition_response_definitions_in_root_after.yaml", true);
+        myFixture.checkResultByFile("responses.yaml", FILES_PATH + "response_definitions_in_root_with_caret_after.yaml", true);
+    }
+
+    public void testRenameExternalResponseDefinitionWhereDefinitionsAreNotInRoot() {
+        myFixture.copyFileToProject(FILES_PATH + "response_definitions_not_in_root.yaml", "responses.yaml");
+        final VirtualFile swaggerFile = myFixture.copyFileToProject(FILES_PATH + "external_definition_response_definitions_not_in_root_with_caret.yaml", "swagger.yaml");
+        myFixture.configureFromExistingVirtualFile(swaggerFile);
+        myFixture.renameElementAtCaret("newName");
+        myFixture.checkResultByFile("swagger.yaml", FILES_PATH + "external_definition_response_definitions_not_in_root_with_caret_after.yaml", true);
+        myFixture.checkResultByFile("responses.yaml", FILES_PATH + "response_definitions_not_in_root_after.yaml", true);
+    }
+
+    public void testRenameExternalResponseDefinitionDeclarationWhereResponseDefinitionsAreNotInRoot() {
+        final VirtualFile definitionsFile = myFixture.copyFileToProject(FILES_PATH + "response_definitions_not_in_root_with_caret.yaml", "responses.yaml");
+        myFixture.copyFileToProject(FILES_PATH + "external_definition_response_definitions_not_in_root.yaml", "swagger.yaml");
+        myFixture.configureFromExistingVirtualFile(definitionsFile);
+        myFixture.renameElementAtCaret("newName");
+        myFixture.checkResultByFile("swagger.yaml", FILES_PATH + "external_definition_response_definitions_not_in_root_after.yaml", true);
+        myFixture.checkResultByFile("responses.yaml", FILES_PATH + "response_definitions_not_in_root_with_caret_after.yaml", true);
+    }
+
 }

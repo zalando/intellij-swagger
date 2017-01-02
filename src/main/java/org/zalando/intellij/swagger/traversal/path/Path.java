@@ -55,8 +55,9 @@ class Path {
     private boolean childOfRoot(final PsiElement psiElement) {
         return psiElement != null && (
                 psiElement.getParent() instanceof PsiFile ||
-                psiElement.getParent().getParent() instanceof PsiFile ||
-                psiElement.getParent().getParent().getParent() instanceof PsiFile);
+                        psiElement.getParent().getParent() instanceof PsiFile ||
+                        psiElement.getParent().getParent().getParent() instanceof PsiFile ||
+                        psiElement.getParent().getParent().getParent().getParent() instanceof PsiFile);
     }
 
     private String getNthPathItem(final int nth) {

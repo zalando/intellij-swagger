@@ -52,10 +52,19 @@
               }
             }
           },
+          "201": {
+            "$ref": "response_definitions_in_root.json#/myResponse"
+          },
+          "204": {
+            "$ref": "response.json"
+          },
+          "404": {
+            "$ref": "response_definitions_not_in_root.json#/responses/myResponse"
+          },
           "default": {
             "description": "unexpected error",
             "schema": {
-              "$ref": "/definitions_in_root.json#/Error"
+              "$ref": "definitions_in_root.json#/Error"
             }
           }
         }

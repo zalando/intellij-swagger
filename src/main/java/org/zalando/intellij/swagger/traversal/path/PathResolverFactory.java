@@ -18,6 +18,12 @@ public class PathResolverFactory {
                 return new ParameterDefinitionsInRootPathResolver();
             case PARAMETERS_MULTIPLE_NOT_IN_ROOT:
                 return new ParameterDefinitionsNotInRootPathResolver();
+            case RESPONSES:
+                return new ResponsePathResolver();
+            case RESPONSES_MULTIPLE_IN_ROOT:
+                return new ResponseDefinitionsInRootPathResolver();
+            case RESPONSES_MULTIPLE_NOT_IN_ROOT:
+                return new ResponseDefinitionsNotInRootPathResolver();
             default:
                 return new MainPathResolver();
         }
