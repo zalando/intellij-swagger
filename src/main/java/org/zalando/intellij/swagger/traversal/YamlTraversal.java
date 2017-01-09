@@ -8,6 +8,7 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.containers.ContainerUtil;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.yaml.YAMLElementGenerator;
 import org.jetbrains.yaml.psi.*;
 import org.jetbrains.yaml.psi.impl.YAMLPlainTextImpl;
@@ -221,10 +222,14 @@ public class YamlTraversal extends Traversal {
 
     @Override
     public PsiElement extractObjectForValidation(final PsiElement psiElement) {
-        if (psiElement.getParent().getParent().getParent() instanceof YAMLKeyValue) {
-            return ((YAMLKeyValue) psiElement.getParent().getParent().getParent()).getKey();
-        } else if (psiElement.getParent().getParent().getParent() instanceof YAMLSequenceItem) {
-            return ((YAMLSequenceItem) psiElement.getParent().getParent().getParent()).getValue();
+        final Optional<PsiElement> thirdParent = Optional.ofNullable(psiElement.getParent())
+                .map(PsiElement::getParent)
+                .map(PsiElement::getParent);
+
+        if (thirdParent.isPresent() && thirdParent.get() instanceof YAMLSequenceItem) {
+            return ((YAMLSequenceItem) thirdParent.get()).getValue();
+        } else if (thirdParent.isPresent() && thirdParent.get() instanceof YAMLKeyValue) {
+            return ((YAMLKeyValue) thirdParent.get()).getKey();
         } else {
             return psiElement.getParent();
         }
@@ -248,11 +253,13 @@ public class YamlTraversal extends Traversal {
 
     @Override
     public boolean isValue(final PsiElement psiElement) {
-        final PsiElement grandparent = psiElement.getParent().getParent();
-        return grandparent instanceof YAMLKeyValue &&
-                !(psiElement instanceof YAMLKeyValue) &&
-                ((YAMLKeyValue) grandparent).getValue() == psiElement.getParent() &&
-                !"".equals(psiElement.getText().trim());
+        return !(StringUtils.isBlank(psiElement.getText()) || psiElement instanceof YAMLKeyValue) &&
+                Optional.ofNullable(psiElement.getParent())
+                        .map(PsiElement::getParent)
+                        .filter(el -> el instanceof YAMLKeyValue)
+                        .map(YAMLKeyValue.class::cast)
+                        .filter(el -> el.getValue() == psiElement.getParent())
+                        .isPresent();
     }
 
     @Override
