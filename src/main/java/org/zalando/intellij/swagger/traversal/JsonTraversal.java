@@ -21,7 +21,9 @@ import java.util.stream.Collectors;
 public class JsonTraversal extends Traversal {
 
     public boolean isKey(final PsiElement psiElement) {
-        return JsonPsiUtil.isPropertyKey(psiElement.getParent());
+        return Optional.ofNullable(psiElement.getParent())
+                .filter(JsonPsiUtil::isPropertyKey)
+                .isPresent();
     }
 
     @Override
