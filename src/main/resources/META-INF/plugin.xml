@@ -8,9 +8,9 @@
     <depends>org.jetbrains.plugins.yaml</depends>
 
     <description><![CDATA[
-     <p>A plugin to help you easily edit Swagger specification files.</p>
+     <p>A plugin to help you easily edit Swagger specification files.</p><br/>
 
-     <p>Source code can be found at https://github.com/zalando/intellij-swagger</p>
+     <p>Like this plugin? <b>Give it a star</b> at <a href="https://github.com/zalando/intellij-swagger">GitHub</a> and spread the word!</p>
     ]]></description>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
