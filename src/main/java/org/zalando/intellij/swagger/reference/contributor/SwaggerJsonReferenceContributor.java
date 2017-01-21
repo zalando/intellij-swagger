@@ -42,7 +42,6 @@ public class SwaggerJsonReferenceContributor extends ReferenceContributor {
     private PsiElementPattern.Capture<JsonLiteral> localDefinitionsPattern() {
         return psiElement(JsonLiteral.class)
                 .withParent(psiElement(JsonProperty.class).withName(SwaggerConstants.REF_KEY))
-                .inside(psiElement(JsonProperty.class).withName(SwaggerConstants.SCHEMA_KEY))
                 .withText(StandardPatterns.string().contains(SwaggerConstants.LOCAL_DEFINITIONS_PREFIX))
                 .andNot(StandardPatterns.string().contains(FileConstants.JSON_FILE_NAME_SUFFIX))
                 .withLanguage(JsonLanguage.INSTANCE);
@@ -51,7 +50,6 @@ public class SwaggerJsonReferenceContributor extends ReferenceContributor {
     private PsiElementPattern.Capture<JsonLiteral> externalDefinitionsInRootPattern() {
         return psiElement(JsonLiteral.class)
                 .withParent(psiElement(JsonProperty.class).withName(SwaggerConstants.REF_KEY))
-                .inside(psiElement(JsonProperty.class).withName(SwaggerConstants.SCHEMA_KEY))
                 .withText(StandardPatterns.string().matches("(.*).json#/([^/])*$"))
                 .withLanguage(JsonLanguage.INSTANCE);
     }
@@ -75,7 +73,6 @@ public class SwaggerJsonReferenceContributor extends ReferenceContributor {
     private PsiElementPattern.Capture<JsonLiteral> externalDefinitionsNotInRootPattern() {
         return psiElement(JsonLiteral.class)
                 .withParent(psiElement(JsonProperty.class).withName(SwaggerConstants.REF_KEY))
-                .inside(psiElement(JsonProperty.class).withName(SwaggerConstants.SCHEMA_KEY))
                 .withText(StandardPatterns.string().matches("(.*).json#/(.*)/(.*)"))
                 .withLanguage(JsonLanguage.INSTANCE);
     }
