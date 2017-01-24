@@ -7,8 +7,8 @@ import com.intellij.ide.browsers.OpenInBrowserRequest;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.LocalFileUrl;
 import com.intellij.util.Url;
-import com.intellij.util.Urls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.builtInWebServer.BuiltInWebBrowserUrlProvider;
@@ -16,6 +16,7 @@ import org.zalando.intellij.swagger.file.FileContentManipulator;
 import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.file.SwaggerUiCreator;
 
+import java.io.File;
 import java.io.IOException;
 
 public class SwaggerUiUrlProvider extends BuiltInWebBrowserUrlProvider implements DumbAware {
@@ -45,7 +46,7 @@ public class SwaggerUiUrlProvider extends BuiltInWebBrowserUrlProvider implement
     protected Url getUrl(@NotNull OpenInBrowserRequest request, @NotNull VirtualFile file) throws BrowserException {
         return swaggerUiCreator.createSwaggerUiFiles(getSpecificationContentAsJson(request))
                 .map(swaggerUiFolderPath ->
-                        Urls.parseEncoded("file://" + swaggerUiFolderPath + "/index.html"))
+                        new LocalFileUrl(swaggerUiFolderPath + File.separator + "index.html"))
                 .orElse(null);
     }
 
