@@ -21,6 +21,14 @@ public class RenameRefTest extends SwaggerLightCodeInsightFixtureTestCase {
         testRename("NewPets", "rename_definition_ref_declaration.json", "rename_definition_ref_declaration_after.json");
     }
 
+    public void testRenameLocalNestedDefinitionReference() {
+        testRename("NewCategory", "rename_definition_ref_nested_reference.json", "rename_definition_ref_nested_reference_after.json");
+    }
+
+    public void testRenameLocalNestedDefinitionDeclaration() {
+        testRename("NewCategory", "rename_definition_ref_nested_declaration.json", "rename_definition_ref_nested_declaration_after.json");
+    }
+
     public void testRenameLocalParameterReference() {
         testRename("newName", "rename_parameter_ref_reference.json", "rename_parameter_ref_reference_after.json");
     }
