@@ -40,7 +40,6 @@ public class SwaggerYamlReferenceContributor extends ReferenceContributor {
     private PsiElementPattern.Capture<YAMLQuotedText> localDefinitionsPattern() {
         return psiElement(YAMLQuotedText.class)
                 .withParent(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.REF_KEY))
-                .inside(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.SCHEMA_KEY))
                 .withText(StandardPatterns.string().contains(SwaggerConstants.LOCAL_DEFINITIONS_PREFIX))
                 .andNot(StandardPatterns.string().matches(".ya?ml"))
                 .withLanguage(YAMLLanguage.INSTANCE);
@@ -49,7 +48,6 @@ public class SwaggerYamlReferenceContributor extends ReferenceContributor {
     private PsiElementPattern.Capture<YAMLQuotedText> externalDefinitionsInRootPattern() {
         return psiElement(YAMLQuotedText.class)
                 .withParent(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.REF_KEY))
-                .inside(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.SCHEMA_KEY))
                 .withText(StandardPatterns.string().matches("(.*).ya?ml#/([^/])*$"))
                 .withLanguage(YAMLLanguage.INSTANCE);
     }
@@ -73,7 +71,6 @@ public class SwaggerYamlReferenceContributor extends ReferenceContributor {
     private PsiElementPattern.Capture<YAMLQuotedText> externalDefinitionsNotInRootPattern() {
         return psiElement(YAMLQuotedText.class)
                 .withParent(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.REF_KEY))
-                .inside(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.SCHEMA_KEY))
                 .withText(StandardPatterns.string().matches("(.*).ya?ml#/(.*)/(.*)"))
                 .withLanguage(YAMLLanguage.INSTANCE);
     }
