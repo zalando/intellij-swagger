@@ -43,9 +43,8 @@ public class MainPathResolver implements PathResolver {
                 hasPath(psiElement, "$.paths.*.parameters");
     }
 
-    public final boolean childOfItems(final PsiElement psiElement) {
+    public final boolean childOfParameterItems(final PsiElement psiElement) {
         return hasPath(psiElement, "$.paths.*.*.parameters.items") ||
-                hasPath(psiElement, "$.**.schema.items") ||
                 hasPath(psiElement, "$.paths.*.*.responses.*.headers.*.items") ||
                 hasPath(psiElement, "$.paths.*.parameters.items");
     }
@@ -80,6 +79,10 @@ public class MainPathResolver implements PathResolver {
 
     public final boolean childOfSchema(final PsiElement psiElement) {
         return hasPath(psiElement, "$.**.schema");
+    }
+
+    public final boolean childOfSchemaItems(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.schema.items");
     }
 
     public final boolean childOfXml(final PsiElement psiElement) {

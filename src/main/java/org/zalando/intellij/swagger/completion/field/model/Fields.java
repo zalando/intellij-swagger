@@ -58,7 +58,7 @@ public class Fields {
                 new ArrayField("required"),
                 new ArrayField("enum"),
                 new StringField("type"),
-                new ItemsField(),
+                new ObjectField("items"),
                 new ArrayField("allOf"),
                 new ObjectField("properties"),
                 new ObjectField("additionalProperties"),
@@ -68,6 +68,10 @@ public class Fields {
                 new ExternalDocsField(),
                 new ObjectField("example")
         );
+    }
+
+    public static List<Field> schemaItems() {
+        return schema();
     }
 
     public static List<Field> externalDocs() {
@@ -82,7 +86,7 @@ public class Fields {
                 new StringField("description"),
                 new StringField("type", true),
                 new StringField("format"),
-                new ItemsField(),
+                new ParameterItemsField(),
                 new StringField("collectionFormat"),
                 new StringField("default"),
                 new StringField("maximum"),
@@ -111,12 +115,11 @@ public class Fields {
         );
     }
 
-    public static List<Field> items() {
+    public static List<Field> parameterItems() {
         return ImmutableList.of(
-                new RefField(),
                 new StringField("type", true),
                 new StringField("format"),
-                new ItemsField(),
+                new ParameterItemsField(),
                 new StringField("collectionFormat"),
                 new StringField("default"),
                 new StringField("maximum"),
@@ -168,7 +171,7 @@ public class Fields {
                 new StringField("type"),
                 new StringField("format"),
                 new StringField("allowEmptyValue"),
-                new ItemsField(),
+                new ParameterItemsField(),
                 new StringField("collectionFormat"),
                 new StringField("default"),
                 new StringField("maximum"),
@@ -197,7 +200,7 @@ public class Fields {
                 new StringField("type"),
                 new StringField("format"),
                 new StringField("allowEmptyValue"),
-                new ItemsField(),
+                new ParameterItemsField(),
                 new StringField("collectionFormat"),
                 new StringField("default"),
                 new StringField("maximum"),

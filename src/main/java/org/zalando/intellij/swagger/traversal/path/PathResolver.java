@@ -20,7 +20,7 @@ public interface PathResolver {
 
     boolean childOfParameters(PsiElement psiElement);
 
-    boolean childOfItems(PsiElement psiElement);
+    boolean childOfParameterItems(PsiElement psiElement);
 
     boolean childOfResponses(PsiElement psiElement);
 
@@ -37,6 +37,8 @@ public interface PathResolver {
     boolean childOfSecurityDefinition(PsiElement psiElement);
 
     boolean childOfSchema(PsiElement psiElement);
+
+    boolean childOfSchemaItems(PsiElement psiElement);
 
     boolean childOfXml(PsiElement psiElement);
 

@@ -25,8 +25,8 @@ public class FieldCompletionFactory {
             return Optional.of(new ExternalDocsCompletion(completionHelper, completionResultSet));
         } else if (completionHelper.completeParametersKey()) {
             return Optional.of(new ParametersCompletion(completionHelper, completionResultSet));
-        } else if (completionHelper.completeItemsKey()) {
-            return Optional.of(new ItemsCompletion(completionHelper, completionResultSet));
+        } else if (completionHelper.completeParameterItemsKey()) {
+            return Optional.of(new ParameterItemsCompletion(completionHelper, completionResultSet));
         } else if (completionHelper.completeResponsesKey()) {
             return Optional.of(new ResponsesCompletion(completionHelper, completionResultSet));
         } else if (completionHelper.completeResponseKey()) {
@@ -39,6 +39,8 @@ public class FieldCompletionFactory {
             return Optional.of(new SecurityDefinitionCompletion(completionHelper, completionResultSet));
         } else if (completionHelper.completeSchemaKey()) {
             return Optional.of(new SchemaCompletion(completionHelper, completionResultSet));
+        } else if (completionHelper.completeSchemaItemsKey()) {
+            return Optional.of(new SchemaItemsCompletion(completionHelper, completionResultSet));
         } else if (completionHelper.completeXmlKey()) {
             return Optional.of(new XmlCompletion(completionHelper, completionResultSet));
         } else if (completionHelper.completeDefinitionsKey()) {

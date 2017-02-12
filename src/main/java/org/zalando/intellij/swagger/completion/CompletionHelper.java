@@ -57,8 +57,8 @@ public class CompletionHelper {
         return pathResolver.childOfParameters(psiElement);
     }
 
-    public boolean completeItemsKey() {
-        return pathResolver.childOfItems(psiElement);
+    public boolean completeParameterItemsKey() {
+        return pathResolver.childOfParameterItems(psiElement);
     }
 
     public boolean completeResponsesKey() {
@@ -89,6 +89,9 @@ public class CompletionHelper {
         return pathResolver.childOfSchema(psiElement);
     }
 
+    public boolean completeSchemaItemsKey() {
+        return pathResolver.childOfSchemaItems(psiElement);
+    }
     public boolean completeXmlKey() {
         return pathResolver.childOfXml(psiElement);
     }
@@ -220,4 +223,5 @@ public class CompletionHelper {
     public boolean completeTagsValue() {
         return pathResolver.isTagsValue(psiElement);
     }
+
 }

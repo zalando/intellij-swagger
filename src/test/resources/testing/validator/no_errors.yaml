@@ -59,6 +59,19 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Pet"
+        201:
+          description: "pet response",
+          schema:
+            type: "array",
+            items:
+              type: "object",
+              title: "title",
+              properties:
+                id:
+                  type: integer
+                  format": int32
+                name:
+                  type: string
         default:
           description: "error payload"
           schema:

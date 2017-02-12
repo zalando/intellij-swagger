@@ -23,6 +23,11 @@ public class UnknownFieldTest extends SwaggerLightCodeInsightFixtureTestCase {
         doTest("unknown_schema.yaml");
     }
 
+    public void testUnknownSchemaItemsField() {
+        doTest("unknown_schema_items.json");
+        doTest("unknown_schema_items.yaml");
+    }
+
     public void testUnknownExternalDocsField() {
         doTest("unknown_external_docs.json");
         doTest("unknown_external_docs.yaml");
@@ -39,8 +44,8 @@ public class UnknownFieldTest extends SwaggerLightCodeInsightFixtureTestCase {
     }
 
     public void testUnknownItemsField() {
-        doTest("unknown_items.json");
-        doTest("unknown_items.yaml");
+        doTest("unknown_parameter_items.json");
+        doTest("unknown_parameter_items.yaml");
     }
 
     public void testUnknownLicenseField() {

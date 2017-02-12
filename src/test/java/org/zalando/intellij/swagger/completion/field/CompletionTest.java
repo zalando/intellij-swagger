@@ -122,37 +122,39 @@ public class CompletionTest extends JsonAndYamlCompletionTest {
     @Test
     public void thatItemsKeysInOperationParametersAreSuggested() {
         getCaretCompletions("items_in_operation_parameters")
-                .assertContains("$ref", "type", "format", "items", "collectionFormat", "default", "maximum",
+                .assertContains("type", "format", "items", "collectionFormat", "default", "maximum",
                         "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern",
                         "maxItems", "minItems", "uniqueItems", "multipleOf")
-                .isOfSize(18);
+                .isOfSize(17);
     }
 
     @Test
     public void thatItemsKeysInPathParametersAreSuggested() {
         getCaretCompletions("items_in_path_parameters")
-                .assertContains("$ref", "type", "format", "items", "collectionFormat", "default", "maximum",
+                .assertContains("type", "format", "items", "collectionFormat", "default", "maximum",
                         "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern",
                         "maxItems", "minItems", "uniqueItems", "multipleOf")
-                .isOfSize(18);
+                .isOfSize(17);
     }
 
     @Test
     public void thatItemsKeysInSchemaAreSuggested() {
         getCaretCompletions("items_in_schema")
-                .assertContains("$ref", "type", "format", "items", "collectionFormat", "default", "maximum",
+                .assertContains("$ref", "format", "title", "description", "default", "multipleOf", "maximum",
                         "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern",
-                        "maxItems", "minItems", "uniqueItems", "multipleOf")
-                .isOfSize(18);
+                        "maxItems", "minItems", "uniqueItems", "maxProperties", "minProperties", "required", "enum",
+                        "type", "items", "allOf", "properties", "additionalProperties", "discriminator", "readOnly",
+                        "xml", "externalDocs", "example")
+                .isOfSize(30);
     }
 
     @Test
     public void thatItemsKeysInHeaderAreSuggested() {
         getCaretCompletions("items_in_header")
-                .assertContains("$ref", "type", "format", "items", "collectionFormat", "default", "maximum",
+                .assertContains("type", "format", "items", "collectionFormat", "default", "maximum",
                         "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern",
                         "maxItems", "minItems", "uniqueItems", "multipleOf")
-                .isOfSize(18);
+                .isOfSize(17);
     }
 
     @Test

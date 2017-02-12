@@ -4,12 +4,12 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 
-class ItemsField extends ObjectField {
+class ParameterItemsField extends ObjectField {
 
     private static final List<Field> REQUIRED_FIELDS =
             ImmutableList.of(new StringField("type"));
 
-    public ItemsField() {
+    public ParameterItemsField() {
         super("items");
     }
 

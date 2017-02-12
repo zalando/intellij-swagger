@@ -4,14 +4,14 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import org.zalando.intellij.swagger.completion.field.model.Fields;
 import org.zalando.intellij.swagger.completion.CompletionHelper;
 
-class ItemsCompletion extends FieldCompletion {
+class ParameterItemsCompletion extends FieldCompletion {
 
-    ItemsCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    ParameterItemsCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
         super(completionHelper, completionResultSet);
     }
 
     public void fill() {
-        Fields.items().forEach(this::addUnique);
+        Fields.parameterItems().forEach(this::addUnique);
     }
 
 }

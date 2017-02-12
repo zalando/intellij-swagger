@@ -45,7 +45,7 @@ public class ResponsePathResolver implements PathResolver {
     }
 
     @Override
-    public final boolean childOfItems(final PsiElement psiElement) {
+    public final boolean childOfParameterItems(final PsiElement psiElement) {
         return false;
     }
 
@@ -87,6 +87,11 @@ public class ResponsePathResolver implements PathResolver {
     @Override
     public final boolean childOfSchema(final PsiElement psiElement) {
         return hasPath(psiElement, "$.**.schema");
+    }
+
+    @Override
+    public final boolean childOfSchemaItems(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.schema.items");
     }
 
     @Override

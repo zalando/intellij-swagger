@@ -4,8 +4,8 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.field.model.Fields;
-import org.zalando.intellij.swagger.traversal.path.MainPathResolver;
 import org.zalando.intellij.swagger.traversal.Traversal;
+import org.zalando.intellij.swagger.traversal.path.MainPathResolver;
 
 public class FieldsValidator {
 
@@ -35,14 +35,16 @@ public class FieldsValidator {
                 unknownKeyValidator.validate(keyName, Fields.contact(), psiElement, annotationHolder);
             } else if (pathResolver.childOfSchema(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.schema(), psiElement, annotationHolder);
+            } else if (pathResolver.childOfSchemaItems(keyObject)) {
+                unknownKeyValidator.validate(keyName, Fields.schemaItems(), psiElement, annotationHolder);
             } else if (pathResolver.childOfExternalDocs(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.externalDocs(), psiElement, annotationHolder);
             } else if (pathResolver.childOfHeader(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.header(), psiElement, annotationHolder);
             } else if (pathResolver.childOfInfo(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.info(), psiElement, annotationHolder);
-            } else if (pathResolver.childOfItems(keyObject)) {
-                unknownKeyValidator.validate(keyName, Fields.items(), psiElement, annotationHolder);
+            } else if (pathResolver.childOfParameterItems(keyObject)) {
+                unknownKeyValidator.validate(keyName, Fields.parameterItems(), psiElement, annotationHolder);
             } else if (pathResolver.childOfLicense(keyObject)) {
                 unknownKeyValidator.validate(keyName, Fields.license(), psiElement, annotationHolder);
             } else if (pathResolver.childOfOperation(keyObject)) {
