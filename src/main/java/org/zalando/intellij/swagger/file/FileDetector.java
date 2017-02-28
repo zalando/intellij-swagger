@@ -3,8 +3,10 @@ package org.zalando.intellij.swagger.file;
 import com.google.common.collect.Lists;
 import com.intellij.json.psi.JsonFile;
 import com.intellij.json.psi.JsonProperty;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.yaml.psi.YAMLDocument;
 import org.jetbrains.yaml.psi.YAMLFile;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
@@ -57,5 +59,9 @@ public class FileDetector {
 
     public boolean isSwaggerFile(final PsiFile file) {
         return isMainSwaggerJsonFile(file) || isMainSwaggerYamlFile(file);
+    }
+
+    public boolean isSwaggerContentCompatible(VirtualFile file) {
+        return FilenameUtils.isExtension(file.getName(), new String[]{"json", "yaml", "yml"});
     }
 }
