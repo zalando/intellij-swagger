@@ -94,23 +94,6 @@ public class FileDetectorTest {
     }
 
     @Test
-    public void thatSimilarileExtensionAreNotSwaggerContentCompatible() throws Exception {
-        VirtualFile yamlFile = mock(VirtualFile.class);
-
-        when(yamlFile.getName()).thenReturn("file.libyaml");
-        assertFalse(fileDetector.isSwaggerContentCompatible(yamlFile));
-
-        when(yamlFile.getName()).thenReturn("file.libyml");
-        assertFalse(fileDetector.isSwaggerContentCompatible(yamlFile));
-
-        when(yamlFile.getName()).thenReturn("i-love-yaml");
-        assertFalse(fileDetector.isSwaggerContentCompatible(yamlFile));
-
-        when(yamlFile.getName()).thenReturn("pseudo-json");
-        assertFalse(fileDetector.isSwaggerContentCompatible(yamlFile));
-    }
-
-    @Test
     public void thatJsonFileExtensionIsSwaggerContentCompatible() throws Exception {
         VirtualFile yamlFile = mock(VirtualFile.class);
 
@@ -119,4 +102,20 @@ public class FileDetectorTest {
         assertTrue(fileDetector.isSwaggerContentCompatible(yamlFile));
     }
 
+    @Test
+    public void thatSimilarileExtensionAreNotSwaggerContentCompatible() throws Exception {
+        VirtualFile file = mock(VirtualFile.class);
+
+        when(file.getName()).thenReturn("file.libyaml");
+        assertFalse(fileDetector.isSwaggerContentCompatible(file));
+
+        when(file.getName()).thenReturn("file.libyml");
+        assertFalse(fileDetector.isSwaggerContentCompatible(file));
+
+        when(file.getName()).thenReturn("i-love-yaml");
+        assertFalse(fileDetector.isSwaggerContentCompatible(file));
+
+        when(file.getName()).thenReturn("pseudo-json");
+        assertFalse(fileDetector.isSwaggerContentCompatible(file));
+    }
 }
