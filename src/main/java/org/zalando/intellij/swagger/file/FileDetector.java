@@ -19,6 +19,8 @@ import java.util.Optional;
 
 public class FileDetector {
 
+    private static final String SWAGGER_KEY = "swagger";
+
     public boolean isMainSwaggerJsonFile(final PsiFile psiFile) {
         return psiFile.getName().equals(FileConstants.MAIN_SWAGGER_JSON_FILE) || hasSwaggerJsonKey(psiFile);
     }
@@ -41,7 +43,7 @@ public class FileDetector {
 
         return children.stream()
                 .anyMatch(psiElement -> psiElement instanceof YAMLKeyValue
-                        && "swagger".equals(psiElement.getName()));
+                        && SWAGGER_KEY.equals(psiElement.getName()));
     }
 
     private boolean hasSwaggerJsonKey(final PsiFile psiFile) {
@@ -54,7 +56,7 @@ public class FileDetector {
 
         return children.stream()
                 .anyMatch(psiElement -> psiElement instanceof JsonProperty
-                        && ((JsonProperty) psiElement).getName().equals("swagger"));
+                        && ((JsonProperty) psiElement).getName().equals(SWAGGER_KEY));
     }
 
     public boolean isSwaggerFile(final PsiFile file) {
