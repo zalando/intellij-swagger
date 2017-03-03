@@ -62,6 +62,9 @@ public class FileDetector {
     }
 
     public boolean isSwaggerContentCompatible(VirtualFile file) {
-        return FilenameUtils.isExtension(file.getName(), new String[]{"json", "yaml", "yml"});
+        return FilenameUtils.isExtension(file.getName(),
+                new String[]{FileConstants.JSON_FILE_EXTENSION,
+                        FileConstants.YAML_FILE_EXTENSION,
+                        FileConstants.YML_FILE_EXTENSION});
     }
 }
