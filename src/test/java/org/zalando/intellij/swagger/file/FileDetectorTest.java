@@ -103,7 +103,7 @@ public class FileDetectorTest {
     }
 
     @Test
-    public void thatSimilarileExtensionAreNotSwaggerContentCompatible() throws Exception {
+    public void thatSimilarFileExtensionsAreNotSwaggerContentCompatible() throws Exception {
         VirtualFile file = mock(VirtualFile.class);
 
         when(file.getName()).thenReturn("file.libyaml");
