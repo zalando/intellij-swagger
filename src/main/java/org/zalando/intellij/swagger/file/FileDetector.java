@@ -56,7 +56,7 @@ public class FileDetector {
 
         return children.stream()
                 .anyMatch(psiElement -> psiElement instanceof JsonProperty
-                        && ((JsonProperty) psiElement).getName().equals(SWAGGER_KEY));
+                        && SWAGGER_KEY.equals(((JsonProperty) psiElement).getName()));
     }
 
     public boolean isSwaggerFile(final PsiFile file) {
