@@ -20,12 +20,12 @@ import java.util.Optional;
 public class FileDetector {
 
     public boolean isMainSwaggerJsonFile(final PsiFile psiFile) {
-        return psiFile.getName().equals("swagger.json") || hasSwaggerJsonKey(psiFile);
+        return psiFile.getName().equals(FileConstants.MAIN_SWAGGER_JSON_FILE) || hasSwaggerJsonKey(psiFile);
     }
 
     public boolean isMainSwaggerYamlFile(final PsiFile psiFile) {
-        return psiFile.getName().equals("swagger.yaml") ||
-                psiFile.getName().equals("swagger.yml") ||
+        return psiFile.getName().equals(FileConstants.MAIN_SWAGGER_YAML_FILE) ||
+                psiFile.getName().equals(FileConstants.MAIN_SWAGGER_YML_FILE) ||
                 hasSwaggerYamlKey(psiFile);
     }
 
