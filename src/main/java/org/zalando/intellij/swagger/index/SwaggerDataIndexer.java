@@ -36,21 +36,30 @@ class SwaggerDataIndexer implements DataIndexer<String, Set<String>, FileContent
     @Override
     public Map<String, Set<String>> map(@NotNull FileContent inputData) {
         final Map<String, Set<String>> indexMap = new HashMap<>();
+
+        if (inputData.getFileType().isBinary()) {
+            return indexMap;
+        }
+
         final PsiFile file = inputData.getPsiFile();
 
-        if (fileDetector.isMainSwaggerJsonFile(file) || fileDetector.isMainSwaggerYamlFile(file)) {
-            Set<String> partialSwaggerFileNames;
-
-            if (isJsonFile(file)) {
-                partialSwaggerFileNames = getPartialJsonSwaggerFileNames(file);
-            } else {
-                partialSwaggerFileNames = getPartialYamlSwaggerFileNames(file);
-            }
+        if (fileDetector.isSwaggerFile(file)) {
+            Set<String> partialSwaggerFileNames = getPartialSwaggerFileNames(file);
 
             indexMap.put(SwaggerFileIndex.PARTIAL_SWAGGER_FILES, partialSwaggerFileNames);
             indexMap.put(SwaggerFileIndex.MAIN_SWAGGER_FILE, ImmutableSet.of(file.getName() + DELIMITER + SwaggerFileType.MAIN));
         }
         return indexMap;
+    }
+
+    private Set<String> getPartialSwaggerFileNames(PsiFile file) {
+        Set<String> partialSwaggerFileNames;
+        if (isJsonFile(file)) {
+            partialSwaggerFileNames = getPartialJsonSwaggerFileNames(file);
+        } else {
+            partialSwaggerFileNames = getPartialYamlSwaggerFileNames(file);
+        }
+        return partialSwaggerFileNames;
     }
 
     private boolean isJsonFile(PsiFile file) {

@@ -6,6 +6,7 @@ import com.intellij.util.io.DataExternalizer;
 import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
 import org.jetbrains.annotations.NotNull;
+import org.zalando.intellij.swagger.file.FileDetector;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -19,6 +20,8 @@ public class SwaggerFileIndex extends FileBasedIndexExtension<String, Set<String
 
     static final ID<String, Set<String>> SWAGGER_INDEX_ID = ID.create("SwaggerFileIndex");
     private static final int VERSION = 1;
+
+    private final FileDetector fileDetector = new FileDetector();
 
     @NotNull
     @Override
@@ -80,9 +83,7 @@ public class SwaggerFileIndex extends FileBasedIndexExtension<String, Set<String
     @NotNull
     @Override
     public FileBasedIndex.InputFilter getInputFilter() {
-        return file -> file.getName().endsWith("json")
-                || file.getName().endsWith("yaml")
-                || file.getName().endsWith("yml");
+        return fileDetector::isSwaggerContentCompatible;
     }
 
     @Override
