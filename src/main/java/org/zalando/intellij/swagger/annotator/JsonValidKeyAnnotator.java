@@ -9,7 +9,7 @@ import org.zalando.intellij.swagger.intention.field.RemoveJsonFieldIntentionActi
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
 import org.zalando.intellij.swagger.traversal.path.MainPathResolver;
 import org.zalando.intellij.swagger.validator.field.FieldsValidator;
-import org.zalando.intellij.swagger.validator.field.UnknownKeyValidator;
+import org.zalando.intellij.swagger.validator.field.UnknownJsonKeyValidator;
 
 public class JsonValidKeyAnnotator implements Annotator {
 
@@ -19,8 +19,7 @@ public class JsonValidKeyAnnotator implements Annotator {
         if (new FileDetector().isMainSwaggerJsonFile(psiElement.getContainingFile())) {
             final FieldsValidator fieldsValidator = new FieldsValidator(new JsonTraversal(),
                     new MainPathResolver(),
-                    new UnknownKeyValidator(
-                            new RemoveJsonFieldIntentionAction(psiElement)));
+                    new UnknownJsonKeyValidator(new RemoveJsonFieldIntentionAction(psiElement)));
 
             fieldsValidator.validate(psiElement, annotationHolder);
         }

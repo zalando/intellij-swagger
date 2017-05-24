@@ -25,11 +25,24 @@ public class YamlTraversal extends Traversal {
 
     @Override
     public Optional<String> getKeyNameIfKey(final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
+        return getAsYamlKeyValue(psiElement)
+                .map(YAMLKeyValue::getKeyText);
+    }
+
+    public boolean isAnchorKey(final PsiElement psiElement) {
+        return getAsYamlKeyValue(psiElement)
+                .map(YAMLKeyValue::getValue)
+                .map(YAMLValue::getText)
+                .filter(value -> value.startsWith("&"))
+                .isPresent();
+    }
+
+    private Optional<YAMLKeyValue> getAsYamlKeyValue(final PsiElement psiElement) {
+        return Optional.ofNullable(psiElement)
+                .map(PsiElement::getParent)
                 .filter(el -> el instanceof YAMLKeyValue)
                 .map(YAMLKeyValue.class::cast)
-                .filter(value -> value.getKey() == psiElement)
-                .map(YAMLKeyValue::getKeyText);
+                .filter(value -> value.getKey() == psiElement);
     }
 
     @Override
@@ -293,4 +306,13 @@ public class YamlTraversal extends Traversal {
                         .isPresent();
     }
 
+    public boolean isChildOfAnchorKey(final PsiElement psiElement) {
+        if (isAnchorKey(extractObjectForValidation(psiElement))) {
+            return true;
+        }
+
+        final PsiElement parent = psiElement.getParent();
+
+        return parent != null && isChildOfAnchorKey(parent);
+    }
 }

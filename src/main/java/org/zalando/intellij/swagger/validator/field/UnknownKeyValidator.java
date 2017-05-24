@@ -8,24 +8,29 @@ import org.zalando.intellij.swagger.completion.field.model.Field;
 
 import java.util.List;
 
-public class UnknownKeyValidator {
-
-    private static final String VENDOR_EXTENSION_PREFIX = "x-";
+abstract class UnknownKeyValidator {
 
     private final IntentionAction intentionAction;
 
-    public UnknownKeyValidator(final IntentionAction intentionAction) {
+    UnknownKeyValidator(final IntentionAction intentionAction) {
         this.intentionAction = intentionAction;
     }
 
     void validate(final String key,
-                         final List<Field> availableKeys,
-                         final PsiElement psiElement,
-                         final AnnotationHolder annotationHolder) {
-        boolean keyFoundInAvailableKeys = availableKeys.stream().anyMatch(field -> field.getName().equals(key));
-        if (!keyFoundInAvailableKeys && !key.startsWith(VENDOR_EXTENSION_PREFIX)) {
+                  final List<Field> availableKeys,
+                  final PsiElement psiElement,
+                  final AnnotationHolder annotationHolder) {
+        if (shouldIgnore(key, psiElement)) {
+            return;
+        }
+
+        if (isInvalid(key, availableKeys)) {
             final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(psiElement, "Invalid key");
             errorAnnotation.registerFix(intentionAction);
         }
     }
+
+    abstract boolean isInvalid(final String key, final List<Field> availableKeys);
+
+    abstract boolean shouldIgnore(final String key, final PsiElement psiElement);
 }
