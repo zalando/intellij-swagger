@@ -53,6 +53,10 @@ paths:
         - "application/json"
         - "text/html"
       responses:
+        Default: &default_response
+          400:
+            description: "default response",
+        <<: *default_response
         200:
           description: "pet response"
           schema:
@@ -72,10 +76,6 @@ paths:
                   format": int32
                 name:
                   type: string
-        default:
-          description: "error payload"
-          schema:
-            $ref: "#/definitions/ErrorModel"
 securityDefinitions:
   githubAccessCode:
     type: "oauth2"
