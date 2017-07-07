@@ -54,7 +54,9 @@ public class Values {
                 new StringValue("binary"),
                 new StringValue("date"),
                 new StringValue("date-time"),
-                new StringValue("password")
+                new StringValue("password"),
+                new StringValue("email"),
+                new StringValue("uuid")
         );
     }
 
