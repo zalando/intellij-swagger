@@ -92,6 +92,15 @@ public class CompletionHelper {
     public boolean completeSchemaItemsKey() {
         return pathResolver.childOfSchemaItems(psiElement);
     }
+
+    public boolean completePropertiesSchemaKey()  {
+        return pathResolver.childOfPropertiesSchema(psiElement);
+    }
+
+    public boolean completeAdditionalPropertiesKey() {
+        return pathResolver.childOfAdditionalProperties(psiElement);
+    }
+
     public boolean completeXmlKey() {
         return pathResolver.childOfXml(psiElement);
     }

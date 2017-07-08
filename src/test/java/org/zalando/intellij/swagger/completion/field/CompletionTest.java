@@ -224,6 +224,22 @@ public class CompletionTest extends JsonAndYamlCompletionTest {
     }
 
     @Test
+    public void thatDefinitionsPropertiesKeysAreSuggested() {
+        String[] expectedCompletion = {"$ref", "format", "title", "description", "default", "multipleOf", "maximum",
+                "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern",
+                "maxItems", "minItems", "uniqueItems", "maxProperties", "minProperties", "required", "enum",
+                "type", "items", "allOf", "properties", "additionalProperties", "discriminator", "readOnly",
+                "xml", "externalDocs", "example"};
+
+        getCaretCompletions("schema_properties")
+                .assertContains(expectedCompletion)
+                .isOfSize(30);
+        getCaretCompletions("schema_additionalProperties")
+                .assertContains(expectedCompletion)
+                .isOfSize(30);
+    }
+
+    @Test
     public void thatParameterDefinitionKeysAreSuggested() {
         getCaretCompletions("parameter_definition")
                 .assertContains("name", "in", "description", "required", "schema", "type", "format",

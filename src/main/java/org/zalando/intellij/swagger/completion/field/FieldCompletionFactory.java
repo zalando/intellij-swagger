@@ -37,14 +37,14 @@ public class FieldCompletionFactory {
             return Optional.of(new TagsCompletion(completionHelper, completionResultSet));
         } else if (completionHelper.completeSecurityDefinitionKey()) {
             return Optional.of(new SecurityDefinitionCompletion(completionHelper, completionResultSet));
-        } else if (completionHelper.completeSchemaKey()) {
+        } else if (completionHelper.completeSchemaKey()
+                || completionHelper.completeSchemaItemsKey()
+                || completionHelper.completeDefinitionsKey()
+                || completionHelper.completePropertiesSchemaKey()
+                || completionHelper.completeAdditionalPropertiesKey()) {
             return Optional.of(new SchemaCompletion(completionHelper, completionResultSet));
-        } else if (completionHelper.completeSchemaItemsKey()) {
-            return Optional.of(new SchemaItemsCompletion(completionHelper, completionResultSet));
         } else if (completionHelper.completeXmlKey()) {
             return Optional.of(new XmlCompletion(completionHelper, completionResultSet));
-        } else if (completionHelper.completeDefinitionsKey()) {
-            return Optional.of(new DefinitionsCompletion(completionHelper, completionResultSet));
         } else if (completionHelper.completeParameterDefinitionKey()) {
             return Optional.of(new ParameterDefinitionCompletion(completionHelper, completionResultSet));
         } else if (completionHelper.completeHeadersKey()) {

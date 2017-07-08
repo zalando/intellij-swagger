@@ -1,0 +1,7 @@
+swagger: 2
+definitions:
+  Category:
+    type: object
+    properties:
+      test:
+        <caret>
