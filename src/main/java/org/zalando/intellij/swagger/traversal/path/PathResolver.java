@@ -40,6 +40,14 @@ public interface PathResolver {
 
     boolean childOfSchemaItems(PsiElement psiElement);
 
+    default boolean childOfPropertiesSchema(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean childOfAdditionalProperties(PsiElement psiElement) {
+        return false;
+    }
+
     boolean childOfXml(PsiElement psiElement);
 
     boolean childOfDefinitions(PsiElement psiElement);
