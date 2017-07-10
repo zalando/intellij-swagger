@@ -234,7 +234,7 @@ public class CompletionTest extends JsonAndYamlCompletionTest {
         getCaretCompletions("schema_properties")
                 .assertContains(expectedCompletion)
                 .isOfSize(30);
-        getCaretCompletions("schema_additionalProperties")
+        getCaretCompletions("schema_additional_properties")
                 .assertContains(expectedCompletion)
                 .isOfSize(30);
     }
