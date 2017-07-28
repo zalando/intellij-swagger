@@ -38,7 +38,7 @@ public class InsertValueTest extends JsonAndYamlCompletionTest {
     }
 
     @Test
-    public void thatValueInsideQuotesIsHandled() {
+    public void thatValueInsideSingleQuotesIsHandled() {
         completeAndCheckResultsByFile("value_inside_quotes", "value_inside_quotes_after");
     }
 
