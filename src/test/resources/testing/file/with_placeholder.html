@@ -6,7 +6,19 @@
 </head>
 <body>
 
-<h1>spec: ${swaggerSpecification}</h1>
+const ui = SwaggerUIBundle({
+spec: /*intellij-swagger-spec-start*/${swaggerSpecification}/*intellij-swagger-spec-end*/,
+validatorUrl: null,
+dom_id: '#swagger-ui',
+presets: [
+SwaggerUIBundle.presets.apis,
+SwaggerUIStandalonePreset
+],
+plugins: [
+SwaggerUIBundle.plugins.DownloadUrl
+],
+layout: "StandaloneLayout"
+})
 
 </body>
 </html>

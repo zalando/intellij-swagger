@@ -6,7 +6,19 @@
 </head>
 <body>
 
-<h1>spec: http://petstore.swagger.io/v2/swagger.json</h1>
+const ui = SwaggerUIBundle({
+spec: /*intellij-swagger-spec-start*/{}/*intellij-swagger-spec-end*/,
+validatorUrl: null,
+dom_id: '#swagger-ui',
+presets: [
+SwaggerUIBundle.presets.apis,
+SwaggerUIStandalonePreset
+],
+plugins: [
+SwaggerUIBundle.plugins.DownloadUrl
+],
+layout: "StandaloneLayout"
+})
 
 </body>
 </html>

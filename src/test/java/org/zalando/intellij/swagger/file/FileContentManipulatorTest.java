@@ -29,7 +29,7 @@ public class FileContentManipulatorTest {
         File targetFile = copyResourceTo("with_placeholder.html", "index.html");
         File expectedOutputFile = copyResourceTo("with_placeholder_replaced.html", "expected.html");
 
-        fileContentManipulator.setPlaceholderValue("${swaggerSpecification}", "http://petstore.swagger.io/v2/swagger.json", targetFile);
+        fileContentManipulator.setJsonToIndexFile("{}", targetFile);
 
         assertTrue("The files differ!", FileUtils.contentEquals(targetFile, expectedOutputFile));
 
