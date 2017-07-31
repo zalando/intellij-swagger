@@ -3,10 +3,18 @@ package org.zalando.intellij.swagger.ui;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.intellij.AppTopics;
+import com.intellij.ide.DataManager;
 import com.intellij.ide.browsers.OpenInBrowserRequest;
-import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.fileEditor.FileDocumentManagerAdapter;
 import com.intellij.openapi.project.DumbAware;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiFile;
 import com.intellij.util.LocalFileUrl;
 import com.intellij.util.Url;
 import org.jetbrains.annotations.NotNull;
@@ -17,14 +25,14 @@ import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.file.SwaggerUiCreator;
 
 import java.io.File;
-import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class SwaggerUiUrlProvider extends BuiltInWebBrowserUrlProvider implements DumbAware {
 
-    private static final Logger LOG = Logger.getInstance("#org.zalando.intellij.swagger.ui.SwaggerUiUrlProvider");
-
     private final FileDetector fileDetector;
     private final SwaggerUiCreator swaggerUiCreator;
+    private LocalFileUrl swaggerUiIndexFile;
 
     public SwaggerUiUrlProvider() {
         this(new FileDetector(), new SwaggerUiCreator(new FileContentManipulator()));
@@ -34,6 +42,26 @@ public class SwaggerUiUrlProvider extends BuiltInWebBrowserUrlProvider implement
                                  final SwaggerUiCreator swaggerUiCreator) {
         this.fileDetector = fileDetector;
         this.swaggerUiCreator = swaggerUiCreator;
+        ApplicationManager.getApplication().getMessageBus().connect().subscribe(AppTopics.FILE_DOCUMENT_SYNC, new FileDocumentManagerAdapter() {
+            @Override
+            public void beforeDocumentSaving(@NotNull final Document document) {
+                if (indexFileExists()) {
+                    Project project = DataManager.getInstance().getDataContextFromFocus().getResult().getData(DataKeys.PROJECT);
+
+                    if (project != null) {
+                        final PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
+                        if (psiFile != null) {
+                            final boolean swaggerFile = fileDetector.isSwaggerFile(psiFile);
+
+                            if (swaggerFile) {
+                                final String specificationContentAsJson = getSpecificationContentAsJson(psiFile);
+                                swaggerUiCreator.updateSwaggerUiFile(swaggerUiIndexFile, specificationContentAsJson);
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -44,16 +72,26 @@ public class SwaggerUiUrlProvider extends BuiltInWebBrowserUrlProvider implement
     @Nullable
     @Override
     protected Url getUrl(@NotNull OpenInBrowserRequest request, @NotNull VirtualFile file) throws BrowserException {
-        return swaggerUiCreator.createSwaggerUiFiles(getSpecificationContentAsJson(request))
+        if (indexFileExists()) {
+            return swaggerUiIndexFile;
+        }
+
+        swaggerUiIndexFile = swaggerUiCreator.createSwaggerUiFiles(getSpecificationContentAsJson(request.getFile()))
                 .map(swaggerUiFolderPath ->
                         new LocalFileUrl(swaggerUiFolderPath + File.separator + "index.html"))
                 .orElse(null);
+
+        return swaggerUiIndexFile;
     }
 
-    private String getSpecificationContentAsJson(final @NotNull OpenInBrowserRequest request) {
-        final String content = request.getFile().getText();
+    private boolean indexFileExists() {
+        return swaggerUiIndexFile != null && Files.exists(Paths.get(swaggerUiIndexFile.getPath()));
+    }
 
-        return fileDetector.isMainSwaggerJsonFile(request.getFile()) ? content : yamlToJson(content);
+    private String getSpecificationContentAsJson(final @NotNull PsiFile psiFile) {
+        final String content = psiFile.getText();
+
+        return fileDetector.isMainSwaggerJsonFile(psiFile) ? content : yamlToJson(content);
     }
 
     private String yamlToJson(final String content) {

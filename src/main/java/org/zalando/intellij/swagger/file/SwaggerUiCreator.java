@@ -2,11 +2,13 @@ package org.zalando.intellij.swagger.file;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.util.LocalFileUrl;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 public class SwaggerUiCreator {
@@ -14,7 +16,6 @@ public class SwaggerUiCreator {
     private static final Logger LOG = Logger.getInstance("#org.zalando.intellij.swagger.file.SwaggerUiCreator");
 
     private static final String SWAGGER_UI_FOLDER_NAME = "swagger-ui";
-    private static final String SPECIFICATION_PLACEHOLDER = "${swaggerSpecification}";
 
     private final FileContentManipulator fileContentManipulator;
 
@@ -31,11 +32,25 @@ public class SwaggerUiCreator {
         }
     }
 
+    public void updateSwaggerUiFile(final LocalFileUrl indexFileUrl, final String specificationContent) {
+        try {
+            tryToUpdateSwaggerUiFiles(indexFileUrl, specificationContent);
+        } catch (final Exception e) {
+            LOG.error(e);
+        }
+    }
+
+    private void tryToUpdateSwaggerUiFiles(final LocalFileUrl indexFileUrl, final String specificationContent) {
+        final File indexFile = new File(Paths.get(indexFileUrl.getPath()).toUri());
+
+        setSwaggerConfigurationValues(indexFile, specificationContent);
+    }
+
     private Optional<String> tryToCreateSwaggerUiFiles(final String specificationContent)
             throws IOException, URISyntaxException {
         final File tempSwaggerUiDir = copySwaggerUiToTempDir();
 
-        setSwaggerConfigurationValues(tempSwaggerUiDir, specificationContent);
+        setSwaggerConfigurationValues(new File(tempSwaggerUiDir, "index.html"), specificationContent);
 
         return Optional.of(tempSwaggerUiDir.getAbsolutePath());
     }
@@ -51,10 +66,8 @@ public class SwaggerUiCreator {
         return tempSwaggerUiDir;
     }
 
-    private void setSwaggerConfigurationValues(final File swaggerDir, final String specificationContent) {
-        fileContentManipulator.setPlaceholderValue(SPECIFICATION_PLACEHOLDER,
-                specificationContent,
-                new File(swaggerDir, "index.html"));
+    private void setSwaggerConfigurationValues(final File indexFile, final String specificationContent) {
+        fileContentManipulator.setJsonToIndexFile(specificationContent, indexFile);
     }
 
 }
