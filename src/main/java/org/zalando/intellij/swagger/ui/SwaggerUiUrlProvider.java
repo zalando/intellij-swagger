@@ -6,6 +6,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.intellij.AppTopics;
 import com.intellij.ide.DataManager;
 import com.intellij.ide.browsers.OpenInBrowserRequest;
+import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
@@ -46,16 +47,24 @@ public class SwaggerUiUrlProvider extends BuiltInWebBrowserUrlProvider implement
             @Override
             public void beforeDocumentSaving(@NotNull final Document document) {
                 if (indexFileExists()) {
-                    Project project = DataManager.getInstance().getDataContextFromFocus().getResult().getData(DataKeys.PROJECT);
+                    final DataManager dataManager = DataManager.getInstance();
 
-                    if (project != null) {
-                        final PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
-                        if (psiFile != null) {
-                            final boolean swaggerFile = fileDetector.isSwaggerFile(psiFile);
+                    if (dataManager != null) {
+                        final DataContext dataContext = dataManager.getDataContextFromFocus().getResult();
 
-                            if (swaggerFile) {
-                                final String specificationContentAsJson = getSpecificationContentAsJson(psiFile);
-                                swaggerUiCreator.updateSwaggerUiFile(swaggerUiIndexFile, specificationContentAsJson);
+                        if (dataContext != null) {
+                            Project project = dataContext.getData(DataKeys.PROJECT);
+
+                            if (project != null) {
+                                final PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
+                                if (psiFile != null) {
+                                    final boolean swaggerFile = fileDetector.isSwaggerFile(psiFile);
+
+                                    if (swaggerFile) {
+                                        final String specificationContentAsJson = getSpecificationContentAsJson(psiFile);
+                                        swaggerUiCreator.updateSwaggerUiFile(swaggerUiIndexFile, specificationContentAsJson);
+                                    }
+                                }
                             }
                         }
                     }
