@@ -30,19 +30,19 @@ public class FileDetectorTest {
     }
 
     @Test
-    public void thatIsSwaggerJsonFileBasedOnFileName() throws Exception {
+    public void thatIsNotSwaggerJsonFileBasedOnFileName() throws Exception {
         final PsiFile jsonFile = mock(PsiFile.class);
         when(jsonFile.getName()).thenReturn("swagger.json");
 
-        assertTrue(fileDetector.isMainSwaggerJsonFile(jsonFile));
+        assertFalse(fileDetector.isMainSwaggerJsonFile(jsonFile));
     }
 
     @Test
-    public void thatIsSwaggerYamlFileBasedOnFileName() throws Exception {
-        final PsiFile jsonFile = mock(PsiFile.class);
-        when(jsonFile.getName()).thenReturn("swagger.yaml");
+    public void thatIsNotSwaggerYamlFileBasedOnFileName() throws Exception {
+        final PsiFile yamlFile = mock(PsiFile.class);
+        when(yamlFile.getName()).thenReturn("swagger.yaml");
 
-        assertTrue(fileDetector.isMainSwaggerYamlFile(jsonFile));
+        assertFalse(fileDetector.isMainSwaggerYamlFile(yamlFile));
     }
 
     @Test
@@ -60,6 +60,20 @@ public class FileDetectorTest {
     }
 
     @Test
+    public void thatIsOpenApiJsonFileBasedOnFileContent() throws Exception {
+        final JsonFile jsonFile = mock(JsonFile.class);
+        final JsonValue jsonValue = mock(JsonValue.class);
+        final JsonProperty jsonProperty = mock(JsonProperty.class);
+
+        when(jsonFile.getName()).thenReturn("file.json");
+        when(jsonFile.getTopLevelValue()).thenReturn(jsonValue);
+        when(jsonValue.getChildren()).thenReturn(new PsiElement[]{jsonProperty});
+        when(jsonProperty.getName()).thenReturn("openapi");
+
+        assertTrue(fileDetector.isMainOpenApiJsonFile(jsonFile));
+    }
+
+    @Test
     public void thatIsSwaggerYamlFileBasedOnFileContent() throws Exception {
         YAMLFile yamlFile = mock(YAMLFile.class);
         YAMLDocument yamlDocument = mock(YAMLDocument.class);
@@ -73,6 +87,22 @@ public class FileDetectorTest {
         when(yamlKeyValue.getName()).thenReturn("swagger");
 
         assertTrue(fileDetector.isMainSwaggerYamlFile(yamlFile));
+    }
+
+    @Test
+    public void thatIsOpenApiYamlFileBasedOnFileContent() throws Exception {
+        YAMLFile yamlFile = mock(YAMLFile.class);
+        YAMLDocument yamlDocument = mock(YAMLDocument.class);
+        YAMLValue yamlValue = mock(YAMLValue.class);
+        YAMLKeyValue yamlKeyValue = mock(YAMLKeyValue.class);
+
+        when(yamlFile.getName()).thenReturn("file.yaml");
+        when(yamlFile.getDocuments()).thenReturn(Lists.newArrayList(yamlDocument));
+        when(yamlDocument.getTopLevelValue()).thenReturn(yamlValue);
+        when(yamlValue.getYAMLElements()).thenReturn(Lists.newArrayList(yamlKeyValue));
+        when(yamlKeyValue.getName()).thenReturn("openapi");
+
+        assertTrue(fileDetector.isMainOpenApiYamlFile(yamlFile));
     }
 
     @Test

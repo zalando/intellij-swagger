@@ -7,11 +7,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.apache.commons.io.FilenameUtils;
-import org.jetbrains.yaml.psi.YAMLDocument;
-import org.jetbrains.yaml.psi.YAMLFile;
-import org.jetbrains.yaml.psi.YAMLKeyValue;
-import org.jetbrains.yaml.psi.YAMLPsiElement;
-import org.jetbrains.yaml.psi.YAMLValue;
+import org.jetbrains.yaml.psi.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,18 +16,25 @@ import java.util.Optional;
 public class FileDetector {
 
     private static final String SWAGGER_KEY = "swagger";
+    private static final String OPEN_API_KEY = "openapi";
 
     public boolean isMainSwaggerJsonFile(final PsiFile psiFile) {
-        return psiFile.getName().equals(FileConstants.MAIN_SWAGGER_JSON_FILE) || hasSwaggerJsonKey(psiFile);
+        return hasJsonRootKey(psiFile, SWAGGER_KEY);
     }
 
     public boolean isMainSwaggerYamlFile(final PsiFile psiFile) {
-        return psiFile.getName().equals(FileConstants.MAIN_SWAGGER_YAML_FILE) ||
-                psiFile.getName().equals(FileConstants.MAIN_SWAGGER_YML_FILE) ||
-                hasSwaggerYamlKey(psiFile);
+        return hasYamlRootKey(psiFile, SWAGGER_KEY);
     }
 
-    private boolean hasSwaggerYamlKey(final PsiFile psiFile) {
+    public boolean isMainOpenApiJsonFile(final PsiFile psiFile) {
+        return hasJsonRootKey(psiFile, OPEN_API_KEY);
+    }
+
+    public boolean isMainOpenApiYamlFile(final PsiFile psiFile) {
+        return hasYamlRootKey(psiFile, OPEN_API_KEY);
+    }
+
+    private boolean hasYamlRootKey(final PsiFile psiFile, final String lookupKey) {
         final List<YAMLPsiElement> children = Optional.of(psiFile)
                 .filter(f -> f instanceof YAMLFile)
                 .map(YAMLFile.class::cast)
@@ -43,10 +46,10 @@ public class FileDetector {
 
         return children.stream()
                 .anyMatch(psiElement -> psiElement instanceof YAMLKeyValue
-                        && SWAGGER_KEY.equals(psiElement.getName()));
+                        && lookupKey.equals(psiElement.getName()));
     }
 
-    private boolean hasSwaggerJsonKey(final PsiFile psiFile) {
+    private boolean hasJsonRootKey(final PsiFile psiFile, final String lookupKey) {
         final List<PsiElement> children = Optional.of(psiFile)
                 .filter(f -> f instanceof JsonFile)
                 .map(JsonFile.class::cast)
@@ -56,7 +59,7 @@ public class FileDetector {
 
         return children.stream()
                 .anyMatch(psiElement -> psiElement instanceof JsonProperty
-                        && SWAGGER_KEY.equals(((JsonProperty) psiElement).getName()));
+                        && lookupKey.equals(((JsonProperty) psiElement).getName()));
     }
 
     public boolean isSwaggerFile(final PsiFile file) {
