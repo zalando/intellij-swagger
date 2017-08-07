@@ -9,7 +9,7 @@ import com.intellij.json.psi.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.completion.SwaggerStringUtils;
+import org.zalando.intellij.swagger.StringUtils;
 import org.zalando.intellij.swagger.completion.field.model.Field;
 import org.zalando.intellij.swagger.completion.value.model.Value;
 import org.zalando.intellij.swagger.insert.JsonInsertFieldHandler;
@@ -29,7 +29,7 @@ public class JsonTraversal extends Traversal {
     @Override
     public Optional<String> getKeyNameIfKey(final PsiElement psiElement) {
         return isKey(psiElement)
-                ? Optional.of(SwaggerStringUtils.removeAllQuotes(psiElement.getParent().getText()))
+                ? Optional.of(StringUtils.removeAllQuotes(psiElement.getParent().getText()))
                 : Optional.empty();
     }
 
@@ -45,7 +45,7 @@ public class JsonTraversal extends Traversal {
     public Optional<String> getParentKeyName(final PsiElement psiElement) {
         return getNthOfType(psiElement, 1, JsonProperty.class)
                 .map(JsonProperty::getName)
-                .map(SwaggerStringUtils::removeAllQuotes);
+                .map(StringUtils::removeAllQuotes);
     }
 
     @Override
@@ -120,7 +120,7 @@ public class JsonTraversal extends Traversal {
     public List<String> getTagNames(final PsiFile psiFile) {
         return getTags(psiFile).stream()
                 .map(PsiElement::getText)
-                .map(SwaggerStringUtils::removeAllQuotes)
+                .map(StringUtils::removeAllQuotes)
                 .collect(Collectors.toList());
     }
 
@@ -160,7 +160,7 @@ public class JsonTraversal extends Traversal {
                 .map(children -> children.stream().filter(c -> c instanceof JsonLiteral))
                 .map(childrenStream -> childrenStream.map(JsonLiteral.class::cast))
                 .map(childrenStream -> childrenStream.noneMatch(jsonLiteral ->
-                        value.equals(SwaggerStringUtils.removeAllQuotes(jsonLiteral.getText()))))
+                        value.equals(StringUtils.removeAllQuotes(jsonLiteral.getText()))))
                 .orElse(true);
     }
 
@@ -182,7 +182,7 @@ public class JsonTraversal extends Traversal {
                 .anyMatch(prop -> {
                     final Optional<String> value = Optional.ofNullable(prop.getValue())
                             .map(JsonValue::getText)
-                            .map(SwaggerStringUtils::removeAllQuotes);
+                            .map(StringUtils::removeAllQuotes);
                     return "type".equals(prop.getName()) && Optional.of("oauth2").equals(value);
                 });
 

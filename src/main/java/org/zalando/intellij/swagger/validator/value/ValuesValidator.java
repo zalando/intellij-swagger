@@ -3,7 +3,7 @@ package org.zalando.intellij.swagger.validator.value;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.traversal.path.MainPathResolver;
+import org.zalando.intellij.swagger.traversal.path.swagger.MainPathResolver;
 import org.zalando.intellij.swagger.traversal.Traversal;
 
 public class ValuesValidator {

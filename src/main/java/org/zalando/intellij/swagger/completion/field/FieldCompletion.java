@@ -9,17 +9,17 @@ import org.zalando.intellij.swagger.completion.CompletionHelper;
 
 public abstract class FieldCompletion {
 
-    final CompletionHelper completionHelper;
+    protected final CompletionHelper completionHelper;
     final CompletionResultSet completionResultSet;
 
-    FieldCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    public FieldCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
         this.completionHelper = completionHelper;
         this.completionResultSet = completionResultSet;
     }
 
     public abstract void fill();
 
-    void addUnique(final Field field) {
+    public void addUnique(final Field field) {
         if (completionHelper.isUniqueKey(field.getName())) {
             completionResultSet.addElement(create(field, completionHelper.createInsertFieldHandler(field)));
         }

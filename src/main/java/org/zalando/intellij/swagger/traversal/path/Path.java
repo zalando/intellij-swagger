@@ -7,7 +7,7 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.Optional;
 
-class Path {
+public class Path {
 
     private static final String ANY_KEY = "*";
     private static final String ANY_KEYS = "**";
@@ -15,12 +15,12 @@ class Path {
     private final PsiElement psiElement;
     private final String pathExpression;
 
-    Path(final PsiElement psiElement, final String pathExpression) {
+    public Path(final PsiElement psiElement, final String pathExpression) {
         this.psiElement = psiElement;
         this.pathExpression = pathExpression;
     }
 
-    boolean exists() {
+    public boolean exists() {
         String parentKeyName = getNthPathItem(1);
 
         if (parentKeyName.equals("$")) {

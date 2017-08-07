@@ -62,8 +62,12 @@ public class FileDetector {
                         && lookupKey.equals(((JsonProperty) psiElement).getName()));
     }
 
-    public boolean isSwaggerFile(final PsiFile file) {
+    public boolean isMainSwaggerFile(final PsiFile file) {
         return isMainSwaggerJsonFile(file) || isMainSwaggerYamlFile(file);
+    }
+
+    public boolean isMainOpenApiFile(final PsiFile file) {
+        return isMainOpenApiJsonFile(file) || isMainOpenApiYamlFile(file);
     }
 
     public boolean isSwaggerContentCompatible(VirtualFile file) {

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.intention.field.RemoveYamlFieldIntentionAction;
 import org.zalando.intellij.swagger.traversal.YamlTraversal;
-import org.zalando.intellij.swagger.traversal.path.MainPathResolver;
+import org.zalando.intellij.swagger.traversal.path.swagger.MainPathResolver;
 import org.zalando.intellij.swagger.validator.field.FieldsValidator;
 import org.zalando.intellij.swagger.validator.field.UnknownYamlKeyValidator;
 

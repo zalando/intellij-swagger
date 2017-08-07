@@ -6,7 +6,7 @@ import com.intellij.psi.PsiReferenceContributor;
 import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.completion.SwaggerStringUtils;
+import org.zalando.intellij.swagger.StringUtils;
 import org.zalando.intellij.swagger.reference.*;
 import org.zalando.intellij.swagger.traversal.Traversal;
 
@@ -30,7 +30,7 @@ abstract class ReferenceContributor extends PsiReferenceContributor {
                         .map(text -> new PsiReference[]{
                                 new DefinitionsInRootReference(
                                         element,
-                                        SwaggerStringUtils.removeAllQuotes(text),
+                                        StringUtils.removeAllQuotes(text),
                                         traversal)
                         }).orElse(DefinitionsInRootReference.EMPTY_ARRAY);
             }
@@ -47,7 +47,7 @@ abstract class ReferenceContributor extends PsiReferenceContributor {
                         .map(text -> new PsiReference[]{
                                 new DefinitionsNotInRootReference(
                                         element,
-                                        SwaggerStringUtils.removeAllQuotes(text),
+                                        StringUtils.removeAllQuotes(text),
                                         traversal)
                         }).orElse(DefinitionsNotInRootReference.EMPTY_ARRAY);
             }
@@ -63,7 +63,7 @@ abstract class ReferenceContributor extends PsiReferenceContributor {
                 return Optional.ofNullable(element.getText())
                         .map(text -> new PsiReference[]{new LocalReference(
                                 element,
-                                SwaggerStringUtils.removeAllQuotes(text),
+                                StringUtils.removeAllQuotes(text),
                                 traversal)
                         }).orElse(LocalReference.EMPTY_ARRAY);
             }
@@ -80,7 +80,7 @@ abstract class ReferenceContributor extends PsiReferenceContributor {
                         .map(text -> new PsiReference[]{
                                 new FileReference(
                                         element,
-                                        SwaggerStringUtils.removeAllQuotes(text))
+                                        StringUtils.removeAllQuotes(text))
                         }).orElse(FileReference.EMPTY_ARRAY);
             }
         };

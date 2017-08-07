@@ -7,7 +7,7 @@ import com.intellij.openapi.editor.EditorModificationUtil;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.text.CharArrayUtil;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.completion.SwaggerStringUtils;
+import org.zalando.intellij.swagger.StringUtils;
 import org.zalando.intellij.swagger.completion.field.model.Field;
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
 
@@ -30,7 +30,7 @@ public class JsonInsertFieldHandler implements InsertHandler<LookupElement> {
         handleStartingQuote(insertionContext, lookupElement);
         handleEndingQuote(insertionContext);
 
-        if (!SwaggerStringUtils.nextCharAfterSpacesAndQuotesIsColon(getStringAfterAutoCompletedValue(insertionContext))) {
+        if (!StringUtils.nextCharAfterSpacesAndQuotesIsColon(getStringAfterAutoCompletedValue(insertionContext))) {
             final String suffixWithCaret = field.getJsonPlaceholderSuffix(getIndentation(insertionContext, lookupElement));
             final String suffixWithoutCaret = suffixWithCaret.replace(CARET, "");
             EditorModificationUtil.insertStringAtCaret(
@@ -70,7 +70,7 @@ public class JsonInsertFieldHandler implements InsertHandler<LookupElement> {
 
     private int getIndentation(final InsertionContext context, final LookupElement item) {
         final String stringBeforeAutoCompletedValue = getStringBeforeAutoCompletedValue(context, item);
-        return SwaggerStringUtils.getNumberOfSpacesInRowStartingFromEnd(stringBeforeAutoCompletedValue);
+        return StringUtils.getNumberOfSpacesInRowStartingFromEnd(stringBeforeAutoCompletedValue);
     }
 
     @NotNull

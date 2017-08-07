@@ -17,8 +17,11 @@
     <idea-version since-build="145"/>
 
     <extensions defaultExtensionNs="com.intellij">
-        <completion.contributor language="JSON" implementationClass="org.zalando.intellij.swagger.completion.contributor.SwaggerJsonCompletionContributor"/>
-        <completion.contributor language="yaml" implementationClass="org.zalando.intellij.swagger.completion.contributor.SwaggerYamlCompletionContributor"/>
+        <completion.contributor language="JSON" implementationClass="org.zalando.intellij.swagger.completion.contributor.swagger.SwaggerJsonCompletionContributor"/>
+        <completion.contributor language="yaml" implementationClass="org.zalando.intellij.swagger.completion.contributor.swagger.SwaggerYamlCompletionContributor"/>
+
+        <completion.contributor language="JSON" implementationClass="org.zalando.intellij.swagger.completion.contributor.openapi.OpenApiJsonCompletionContributor"/>
+        <completion.contributor language="yaml" implementationClass="org.zalando.intellij.swagger.completion.contributor.openapi.OpenApiYamlCompletionContributor"/>
 
         <psi.referenceContributor implementation="org.zalando.intellij.swagger.reference.contributor.SwaggerYamlReferenceContributor"/>
         <psi.referenceContributor implementation="org.zalando.intellij.swagger.reference.contributor.SwaggerJsonReferenceContributor"/>
@@ -33,7 +36,8 @@
 
         <webBrowserUrlProvider implementation="org.zalando.intellij.swagger.ui.SwaggerUiUrlProvider" order="last"/>
 
-        <fileBasedIndex implementation="org.zalando.intellij.swagger.index.SwaggerFileIndex" />
+        <fileBasedIndex implementation="org.zalando.intellij.swagger.index.swagger.SwaggerFileIndex" />
+        <fileBasedIndex implementation="org.zalando.intellij.swagger.index.openapi.OpenApiFileIndex" />
 
     </extensions>
 
