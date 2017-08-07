@@ -5,7 +5,7 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.field.model.Fields;
 import org.zalando.intellij.swagger.traversal.Traversal;
-import org.zalando.intellij.swagger.traversal.path.MainPathResolver;
+import org.zalando.intellij.swagger.traversal.path.swagger.MainPathResolver;
 
 public class FieldsValidator {
 

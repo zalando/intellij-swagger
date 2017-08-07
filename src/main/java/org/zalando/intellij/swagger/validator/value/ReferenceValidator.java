@@ -4,7 +4,7 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.psi.PsiElement;
-import org.zalando.intellij.swagger.completion.SwaggerStringUtils;
+import org.zalando.intellij.swagger.StringUtils;
 import org.zalando.intellij.swagger.reference.extractor.ReferenceValueExtractor;
 import org.zalando.intellij.swagger.traversal.Traversal;
 
@@ -70,7 +70,7 @@ public class ReferenceValidator {
     }
 
     private boolean isLocalReference(final PsiElement psiElement) {
-        return SwaggerStringUtils.removeAllQuotes(psiElement.getText()).startsWith("#/");
+        return StringUtils.removeAllQuotes(psiElement.getText()).startsWith("#/");
     }
 
     private Set<String> getAvailableDefinitions(final PsiElement psiElement) {

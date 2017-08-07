@@ -5,7 +5,7 @@ import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.editor.EditorModificationUtil;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.completion.SwaggerStringUtils;
+import org.zalando.intellij.swagger.StringUtils;
 import org.zalando.intellij.swagger.completion.field.model.Field;
 
 import static org.zalando.intellij.swagger.file.FileConstants.CARET;
@@ -20,7 +20,7 @@ public class YamlInsertFieldHandler implements InsertHandler<LookupElement> {
 
     @Override
     public void handleInsert(final InsertionContext context, final LookupElement item) {
-        if (!SwaggerStringUtils.nextCharAfterSpacesAndQuotesIsColon(getStringAfterAutoCompletedValue(context))) {
+        if (!StringUtils.nextCharAfterSpacesAndQuotesIsColon(getStringAfterAutoCompletedValue(context))) {
             final String suffixWithCaret = field.getYamlPlaceholderSuffix(getIndentation(context, item));
             final String suffixWithoutCaret = suffixWithCaret.replace(CARET, "");
             EditorModificationUtil.insertStringAtCaret(context.getEditor(), suffixWithoutCaret, false, true, getCaretIndex(suffixWithCaret));
@@ -33,7 +33,7 @@ public class YamlInsertFieldHandler implements InsertHandler<LookupElement> {
 
     private int getIndentation(final InsertionContext context, final LookupElement item) {
         final String stringBeforeAutoCompletedValue = getStringBeforeAutoCompletedValue(context, item);
-        return SwaggerStringUtils.getNumberOfSpacesInRowStartingFromEnd(stringBeforeAutoCompletedValue);
+        return StringUtils.getNumberOfSpacesInRowStartingFromEnd(stringBeforeAutoCompletedValue);
     }
 
     @NotNull

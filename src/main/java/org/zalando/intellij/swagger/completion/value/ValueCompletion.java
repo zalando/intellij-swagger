@@ -4,22 +4,23 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import org.zalando.intellij.swagger.completion.value.model.Value;
 import org.zalando.intellij.swagger.completion.CompletionHelper;
+import org.zalando.intellij.swagger.completion.value.model.Value;
+import org.zalando.intellij.swagger.completion.SwaggerCompletionHelper;
 
 public abstract class ValueCompletion {
 
-    final CompletionHelper completionHelper;
+    protected final CompletionHelper completionHelper;
     private final CompletionResultSet completionResultSet;
 
-    ValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    public ValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
         this.completionHelper = completionHelper;
         this.completionResultSet = completionResultSet;
     }
 
     public abstract void fill();
 
-    void addValue(final Value value) {
+    public void addValue(final Value value) {
         if (completionHelper.isUniqueArrayStringValue(value.getValue())) {
             completionResultSet.addElement(create(value, completionHelper.createInsertValueHandler(value)));
         }

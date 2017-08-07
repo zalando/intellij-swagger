@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.completion.SwaggerStringUtils;
+import org.zalando.intellij.swagger.StringUtils;
 
 public class RemoveJsonFieldIntentionAction implements IntentionAction {
 
@@ -48,9 +48,9 @@ public class RemoveJsonFieldIntentionAction implements IntentionAction {
     private void removeSiblingFieldCommaIfNecessary(final Editor editor) {
         final int offset = editor.getCaretModel().getOffset();
         final String textAfterOffset = editor.getDocument().getText().substring(offset);
-        if (SwaggerStringUtils.nextCharAfterSpacesAndLineBreaksIsCurlyBraces(textAfterOffset)) {
+        if (StringUtils.nextCharAfterSpacesAndLineBreaksIsCurlyBraces(textAfterOffset)) {
             final String textBeforeOffset = editor.getDocument().getText().substring(0, offset);
-            if (SwaggerStringUtils.nextCharAfterSpacesAndLineBreaksIsCommaStartingFromEnd(textBeforeOffset)) {
+            if (StringUtils.nextCharAfterSpacesAndLineBreaksIsCommaStartingFromEnd(textBeforeOffset)) {
                 final int lastCommaIndex = textBeforeOffset.lastIndexOf(",");
                 editor.getDocument().deleteString(lastCommaIndex, lastCommaIndex + 1);
             }

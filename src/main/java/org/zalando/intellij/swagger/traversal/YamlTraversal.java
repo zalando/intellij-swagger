@@ -8,11 +8,10 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.containers.ContainerUtil;
-import org.apache.commons.lang.StringUtils;
 import org.jetbrains.yaml.YAMLElementGenerator;
 import org.jetbrains.yaml.psi.*;
 import org.jetbrains.yaml.psi.impl.YAMLPlainTextImpl;
-import org.zalando.intellij.swagger.completion.SwaggerStringUtils;
+import org.zalando.intellij.swagger.StringUtils;
 import org.zalando.intellij.swagger.completion.field.model.Field;
 import org.zalando.intellij.swagger.completion.value.model.Value;
 import org.zalando.intellij.swagger.insert.YamlInsertFieldHandler;
@@ -57,7 +56,7 @@ public class YamlTraversal extends Traversal {
     public Optional<String> getParentKeyName(final PsiElement psiElement) {
         return getNthOfType(psiElement, 1, YAMLKeyValue.class)
                 .map(YAMLKeyValue::getName)
-                .map(SwaggerStringUtils::removeAllQuotes);
+                .map(StringUtils::removeAllQuotes);
     }
 
     @Override
@@ -194,7 +193,7 @@ public class YamlTraversal extends Traversal {
                 .map(childrenStream -> childrenStream.map(YAMLSequenceItem.class::cast))
                 .map(childrenStream -> childrenStream.noneMatch(item ->
                         item.getValue() != null &&
-                                value.equals(SwaggerStringUtils.removeAllQuotes(item.getValue().getText()))))
+                                value.equals(StringUtils.removeAllQuotes(item.getValue().getText()))))
                 .orElse(true);
 
     }
@@ -217,7 +216,7 @@ public class YamlTraversal extends Traversal {
                 .anyMatch(prop -> {
                     final Optional<String> value = Optional.ofNullable(prop.getValue())
                             .map(YAMLValue::getText)
-                            .map(SwaggerStringUtils::removeAllQuotes);
+                            .map(StringUtils::removeAllQuotes);
                     return "type".equals(prop.getName()) && Optional.of("oauth2").equals(value);
                 });
 
@@ -266,7 +265,7 @@ public class YamlTraversal extends Traversal {
 
     @Override
     public boolean isValue(final PsiElement psiElement) {
-        return !(StringUtils.isBlank(psiElement.getText()) || psiElement instanceof YAMLKeyValue) &&
+        return !(org.apache.commons.lang.StringUtils.isBlank(psiElement.getText()) || psiElement instanceof YAMLKeyValue) &&
                 Optional.ofNullable(psiElement.getParent())
                         .map(PsiElement::getParent)
                         .filter(el -> el instanceof YAMLKeyValue)
