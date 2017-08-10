@@ -3,7 +3,7 @@ package org.zalando.intellij.swagger.completion;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
-import org.zalando.intellij.swagger.completion.field.model.Field;
+import org.zalando.intellij.swagger.completion.field.model.common.Field;
 import org.zalando.intellij.swagger.completion.value.model.Value;
 import org.zalando.intellij.swagger.traversal.Traversal;
 import org.zalando.intellij.swagger.traversal.path.openapi.PathResolver;
@@ -209,6 +209,10 @@ public class OpenApiCompletionHelper implements CompletionHelper {
         return traversal.getKeyNameOfObject(psiElement);
     }
 
+    public boolean completeDefinitionRefValue() {
+        return false;
+    }
+
     public Optional<String> getParentKeyName() {
         return traversal.getParentKeyName(psiElement);
     }
@@ -233,4 +237,47 @@ public class OpenApiCompletionHelper implements CompletionHelper {
         return pathResolver.isTagsValue(psiElement);
     }
 
+    public boolean completeServerKey() {
+        return pathResolver.childOfServer(psiElement);
+    }
+
+    public boolean completeServerVariableKey() {
+        return pathResolver.childOfServerVariable(psiElement);
+    }
+
+    public boolean completeComponentKey() {
+        return pathResolver.childOfComponent(psiElement);
+    }
+
+    public boolean completeRequestBodyKey() {
+        return pathResolver.childOfRequestBody(psiElement);
+    }
+
+    public boolean completeMediaTypeKey() {
+        return pathResolver.childOfMediaType(psiElement);
+    }
+
+    public boolean completeExampleKey() {
+        return pathResolver.childOfExample(psiElement);
+    }
+
+    public boolean completeEncodingKey() {
+        return pathResolver.childOfEncoding(psiElement);
+    }
+
+    public boolean completeLinkKey() {
+        return pathResolver.childOfLink(psiElement);
+    }
+
+    public boolean completeCallbackKey() {
+        return pathResolver.childOfCallback(psiElement);
+    }
+
+    public boolean completeSecuritySchemeKey() {
+        return pathResolver.childOfSecurityScheme(psiElement);
+    }
+
+    public boolean completeContentKey() {
+        return pathResolver.childOfContent(psiElement);
+    }
 }

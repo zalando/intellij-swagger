@@ -6,7 +6,7 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.editor.EditorModificationUtil;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.StringUtils;
-import org.zalando.intellij.swagger.completion.field.model.Field;
+import org.zalando.intellij.swagger.completion.field.model.common.Field;
 
 import static org.zalando.intellij.swagger.file.FileConstants.CARET;
 

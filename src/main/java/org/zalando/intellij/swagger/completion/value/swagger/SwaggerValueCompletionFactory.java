@@ -1,6 +1,7 @@
 package org.zalando.intellij.swagger.completion.value.swagger;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
+import org.zalando.intellij.swagger.completion.OpenApiCompletionHelper;
 import org.zalando.intellij.swagger.completion.SwaggerCompletionHelper;
 import org.zalando.intellij.swagger.completion.value.*;
 

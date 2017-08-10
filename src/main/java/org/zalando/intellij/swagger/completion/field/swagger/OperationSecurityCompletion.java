@@ -2,8 +2,9 @@ package org.zalando.intellij.swagger.completion.field.swagger;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
+import org.zalando.intellij.swagger.completion.CompletionHelper;
 import org.zalando.intellij.swagger.completion.field.FieldCompletion;
-import org.zalando.intellij.swagger.completion.field.model.ArrayField;
+import org.zalando.intellij.swagger.completion.field.model.common.ArrayField;
 import org.zalando.intellij.swagger.completion.SwaggerCompletionHelper;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 
 class OperationSecurityCompletion extends FieldCompletion {
 
-    OperationSecurityCompletion(final SwaggerCompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    OperationSecurityCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
         super(completionHelper, completionResultSet);
     }
 

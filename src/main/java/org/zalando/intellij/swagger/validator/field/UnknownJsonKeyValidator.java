@@ -3,7 +3,7 @@ package org.zalando.intellij.swagger.validator.field;
 import com.google.common.collect.ImmutableSet;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.psi.PsiElement;
-import org.zalando.intellij.swagger.completion.field.model.Field;
+import org.zalando.intellij.swagger.completion.field.model.common.Field;
 
 import java.util.List;
 import java.util.Set;
