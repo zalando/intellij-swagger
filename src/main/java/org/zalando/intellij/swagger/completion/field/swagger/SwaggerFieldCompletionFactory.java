@@ -3,6 +3,7 @@ package org.zalando.intellij.swagger.completion.field.swagger;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import org.zalando.intellij.swagger.completion.SwaggerCompletionHelper;
 import org.zalando.intellij.swagger.completion.field.FieldCompletion;
+import org.zalando.intellij.swagger.completion.field.common.InfoCompletion;
 
 import java.util.Optional;
 
@@ -35,7 +36,7 @@ public class SwaggerFieldCompletionFactory {
         } else if (completionHelper.completeHeaderKey()) {
             return Optional.of(new HeaderCompletion(completionHelper, completionResultSet));
         } else if (completionHelper.completeTagKey()) {
-            return Optional.of(new TagsCompletion(completionHelper, completionResultSet));
+            return Optional.of(new TagCompletion(completionHelper, completionResultSet));
         } else if (completionHelper.completeSecurityDefinitionKey()) {
             return Optional.of(new SecurityDefinitionCompletion(completionHelper, completionResultSet));
         } else if (completionHelper.completeSchemaKey()

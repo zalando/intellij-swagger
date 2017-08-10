@@ -33,14 +33,13 @@ public class MainPathResolver implements PathResolver {
     }
 
     public final boolean childOfExternalDocs(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.externalDocs") ||
-                hasPath(psiElement, "$.paths.*.*.externalDocs") ||
-                hasPath(psiElement, "$.**.schema.externalDocs");
+        return hasPath(psiElement, "$.**.externalDocs");
     }
 
     public final boolean childOfParameters(final PsiElement psiElement) {
         return hasPath(psiElement, "$.paths.*.*.parameters") ||
-                hasPath(psiElement, "$.paths.*.parameters");
+                hasPath(psiElement, "$.paths.*.parameters") ||
+                hasPath(psiElement, "$.components.parameters.*");
     }
 
     public final boolean childOfParameterItems(final PsiElement psiElement) {
@@ -54,7 +53,8 @@ public class MainPathResolver implements PathResolver {
     }
 
     public final boolean childOfResponse(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.responses.*");
+        return hasPath(psiElement, "$.paths.*.*.responses.*") ||
+                hasPath(psiElement, "$.components.responses.*");
     }
 
     public final boolean childOfResponseDefinition(final PsiElement psiElement) {
@@ -62,7 +62,8 @@ public class MainPathResolver implements PathResolver {
     }
 
     public final boolean childOfHeader(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.responses.*.headers.*");
+        return hasPath(psiElement, "$.paths.*.*.responses.*.headers.*") ||
+                hasPath(psiElement, "$.components.headers.*");
     }
 
     public final boolean childOfHeaders(final PsiElement psiElement) {
@@ -78,7 +79,8 @@ public class MainPathResolver implements PathResolver {
     }
 
     public final boolean childOfSchema(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.schema");
+        return hasPath(psiElement, "$.**.schema") ||
+                hasPath(psiElement, "$.components.schemas.*");
     }
 
     public final boolean childOfSchemaItems(final PsiElement psiElement) {
@@ -158,4 +160,63 @@ public class MainPathResolver implements PathResolver {
         return hasPath(psiElement, "$.paths.*.*.responses.*.headers.*.collectionFormat");
     }
 
+    @Override
+    public boolean childOfServer(PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.servers") ||
+                hasPath(psiElement, "$.**.server");
+    }
+
+    @Override
+    public boolean childOfServerVariable(PsiElement psiElement) {
+        return hasPath(psiElement, "$.servers.variables.*");
+    }
+
+    @Override
+    public boolean childOfComponent(PsiElement psiElement) {
+        return hasPath(psiElement, "$.components");
+    }
+
+    @Override
+    public boolean childOfRequestBody(PsiElement psiElement) {
+        return hasPath(psiElement, "$.paths.*.*.requestBody") ||
+                hasPath(psiElement, "$.components.requestBodies.*");
+    }
+
+    @Override
+    public boolean childOfMediaType(PsiElement psiElement) {
+        return hasPath(psiElement, "$.paths.*.*.requestBody.content.*") ||
+                hasPath(psiElement, "$.paths.*.*.responses.*.content.*");
+    }
+
+    @Override
+    public boolean childOfExample(PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.examples.*");
+    }
+
+    @Override
+    public boolean childOfEncoding(PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.encoding.*");
+    }
+
+    @Override
+    public boolean childOfLink(PsiElement psiElement) {
+        return hasPath(psiElement, "$.paths.*.*.responses.*.links.*") ||
+                hasPath(psiElement, "$.components.links.*");
+    }
+
+    @Override
+    public boolean childOfCallback(PsiElement psiElement) {
+        return hasPath(psiElement, "$.paths.*.*.callbacks.*") ||
+                hasPath(psiElement, "$.components.callbacks.*.*");
+    }
+
+    @Override
+    public boolean childOfSecurityScheme(PsiElement psiElement) {
+        return hasPath(psiElement, "$.components.securitySchemes.*");
+    }
+
+    @Override
+    public boolean childOfContent(PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.content");
+    }
 }

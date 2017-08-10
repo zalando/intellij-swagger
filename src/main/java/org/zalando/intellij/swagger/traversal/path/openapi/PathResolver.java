@@ -82,4 +82,48 @@ public interface PathResolver {
     default boolean hasPath(final PsiElement psiElement, final String pathExpression) {
         return new Path(psiElement, pathExpression).exists();
     }
+
+    default boolean childOfServer(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean childOfServerVariable(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean childOfComponent(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean childOfRequestBody(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean childOfMediaType(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean childOfExample(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean childOfEncoding(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean childOfLink(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean childOfCallback(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean childOfSecurityScheme(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean childOfContent(PsiElement psiElement) {
+        return false;
+    }
 }

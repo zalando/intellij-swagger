@@ -1,0 +1,18 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/pathA": {
+      "get": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                <caret>
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

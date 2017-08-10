@@ -12,7 +12,7 @@ import org.jetbrains.yaml.YAMLElementGenerator;
 import org.jetbrains.yaml.psi.*;
 import org.jetbrains.yaml.psi.impl.YAMLPlainTextImpl;
 import org.zalando.intellij.swagger.StringUtils;
-import org.zalando.intellij.swagger.completion.field.model.Field;
+import org.zalando.intellij.swagger.completion.field.model.common.Field;
 import org.zalando.intellij.swagger.completion.value.model.Value;
 import org.zalando.intellij.swagger.insert.YamlInsertFieldHandler;
 import org.zalando.intellij.swagger.insert.YamlInsertValueHandler;

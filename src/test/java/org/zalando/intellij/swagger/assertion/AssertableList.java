@@ -29,7 +29,7 @@ public class AssertableList {
         return this;
     }
 
-    private AssertableList assertContainsOne(String element) {
+    public AssertableList assertContainsOne(String element) {
         assertThat(myActualList, IsCollectionContaining.hasItem(element));
         return this;
     }

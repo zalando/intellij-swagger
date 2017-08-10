@@ -1,0 +1,9 @@
+openapi: 3.0.0
+paths:
+  /pathA:
+    get:
+      responses:
+        200:
+          headers:
+            x-next:
+              <caret>

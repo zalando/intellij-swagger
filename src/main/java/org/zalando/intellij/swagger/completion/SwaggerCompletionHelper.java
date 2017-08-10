@@ -3,7 +3,7 @@ package org.zalando.intellij.swagger.completion;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
-import org.zalando.intellij.swagger.completion.field.model.Field;
+import org.zalando.intellij.swagger.completion.field.model.common.Field;
 import org.zalando.intellij.swagger.completion.value.model.Value;
 import org.zalando.intellij.swagger.traversal.path.swagger.PathResolver;
 import org.zalando.intellij.swagger.traversal.Traversal;
