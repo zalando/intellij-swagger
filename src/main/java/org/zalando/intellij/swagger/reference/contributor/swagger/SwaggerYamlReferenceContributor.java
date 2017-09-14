@@ -1,4 +1,4 @@
-package org.zalando.intellij.swagger.reference.contributor;
+package org.zalando.intellij.swagger.reference.contributor.swagger;
 
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.StandardPatterns;
@@ -8,7 +8,7 @@ import org.jetbrains.yaml.YAMLLanguage;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.jetbrains.yaml.psi.YAMLQuotedText;
 import org.jetbrains.yaml.psi.YAMLValue;
-import org.zalando.intellij.swagger.reference.SwaggerConstants;
+import org.zalando.intellij.swagger.reference.swagger.SwaggerConstants;
 import org.zalando.intellij.swagger.traversal.YamlTraversal;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;

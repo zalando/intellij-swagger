@@ -1,10 +1,10 @@
-package org.zalando.intellij.swagger.reference.extractor;
+package org.zalando.intellij.swagger.reference.swagger;
 
 
 import org.zalando.intellij.swagger.StringUtils;
 
-import static org.zalando.intellij.swagger.reference.SwaggerConstants.REFERENCE_PREFIX;
-import static org.zalando.intellij.swagger.reference.SwaggerConstants.SLASH;
+import static org.zalando.intellij.swagger.reference.swagger.SwaggerConstants.REFERENCE_PREFIX;
+import static org.zalando.intellij.swagger.reference.swagger.SwaggerConstants.SLASH;
 
 public class ReferenceValueExtractor {
 

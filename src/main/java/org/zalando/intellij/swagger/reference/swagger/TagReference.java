@@ -1,4 +1,4 @@
-package org.zalando.intellij.swagger.reference;
+package org.zalando.intellij.swagger.reference.swagger;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceBase;

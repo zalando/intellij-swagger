@@ -1,0 +1,9 @@
+openapi: 3.0.0
+paths:
+  /pathA:
+    get:
+      requestBody:
+        $ref: "#/components/requestBodies/NewFoo"
+components:
+  requestBodies:
+    <caret>NewFoo:

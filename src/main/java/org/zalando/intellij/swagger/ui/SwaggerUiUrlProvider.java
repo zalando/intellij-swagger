@@ -51,7 +51,7 @@ public class SwaggerUiUrlProvider extends BuiltInWebBrowserUrlProvider implement
                         final PsiFile psiFile = PsiDocumentManager.getInstance(openProjects[0]).getPsiFile(document);
 
                         if (psiFile != null) {
-                            final boolean swaggerFile = fileDetector.isMainSwaggerFile(psiFile);
+                            final boolean swaggerFile = fileDetector.isMainSwaggerFile(psiFile) || fileDetector.isMainOpenApiFile(psiFile);
 
                             if (swaggerFile) {
                                 final String specificationContentAsJson = getSpecificationContentAsJson(psiFile);
@@ -66,7 +66,9 @@ public class SwaggerUiUrlProvider extends BuiltInWebBrowserUrlProvider implement
 
     @Override
     public boolean canHandleElement(@NotNull OpenInBrowserRequest request) {
-        return fileDetector.isMainSwaggerFile(request.getFile());
+        final PsiFile file = request.getFile();
+
+        return fileDetector.isMainSwaggerFile(file) || fileDetector.isMainOpenApiFile(file);
     }
 
     @Nullable

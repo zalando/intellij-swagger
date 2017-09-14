@@ -1,4 +1,4 @@
-package org.zalando.intellij.swagger.reference.contributor;
+package org.zalando.intellij.swagger.reference.contributor.swagger;
 
 import com.intellij.json.JsonLanguage;
 import com.intellij.json.psi.JsonLiteral;
@@ -10,7 +10,7 @@ import com.intellij.patterns.StringPattern;
 import com.intellij.psi.PsiReferenceRegistrar;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.file.FileConstants;
-import org.zalando.intellij.swagger.reference.SwaggerConstants;
+import org.zalando.intellij.swagger.reference.swagger.SwaggerConstants;
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;

@@ -1,18 +1,20 @@
-package org.zalando.intellij.swagger.reference;
+package org.zalando.intellij.swagger.reference.swagger;
 
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiReferenceBase;
 import com.intellij.util.IncorrectOperationException;
-import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.zalando.intellij.swagger.reference.extractor.ReferenceValueExtractor;
 import org.zalando.intellij.swagger.traversal.Traversal;
+import org.zalando.intellij.swagger.traversal.path.PathFinder;
 
 import java.util.Optional;
 
-import static org.zalando.intellij.swagger.reference.SwaggerConstants.REFERENCE_PREFIX;
-import static org.zalando.intellij.swagger.reference.SwaggerConstants.SLASH;
+import static org.zalando.intellij.swagger.reference.swagger.SwaggerConstants.REFERENCE_PREFIX;
+import static org.zalando.intellij.swagger.reference.swagger.SwaggerConstants.SLASH;
 
 public class DefinitionsNotInRootReference extends PsiReferenceBase<PsiElement> {
 
@@ -36,14 +38,11 @@ public class DefinitionsNotInRootReference extends PsiReferenceBase<PsiElement> 
             return null;
         }
 
-        final String referenceType = ReferenceValueExtractor.extractType(originalRefValue);
-        final String referenceValue = ReferenceValueExtractor.extractValue(originalRefValue);
+        final String referencedType = ReferenceValueExtractor.extractType(originalRefValue);
+        final String referencedValue = ReferenceValueExtractor.extractValue(originalRefValue);
+        final String pathExpression = String.format("$.%s.%s", referencedType, referencedValue);
 
-        return traversal.getChildrenOfRootProperty(referenceType, referencedFile).stream()
-                .filter(el -> el instanceof PsiNamedElement)
-                .map(PsiNamedElement.class::cast)
-                .filter(namedElement -> referenceValue.equals(namedElement.getName()))
-                .findFirst()
+        return new PathFinder().findByPathFrom(referencedFile, pathExpression)
                 .orElse(null);
     }
 

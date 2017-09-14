@@ -1,4 +1,4 @@
-package org.zalando.intellij.swagger.reference.contributor;
+package org.zalando.intellij.swagger.reference.contributor.swagger;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -7,7 +7,7 @@ import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.StringUtils;
-import org.zalando.intellij.swagger.reference.*;
+import org.zalando.intellij.swagger.reference.swagger.*;
 import org.zalando.intellij.swagger.traversal.Traversal;
 
 import java.util.Optional;
@@ -28,10 +28,7 @@ abstract class ReferenceContributor extends PsiReferenceContributor {
                                                          @NotNull ProcessingContext context) {
                 return Optional.ofNullable(element.getText())
                         .map(text -> new PsiReference[]{
-                                new DefinitionsInRootReference(
-                                        element,
-                                        StringUtils.removeAllQuotes(text),
-                                        traversal)
+                                new DefinitionsInRootReference(element, StringUtils.removeAllQuotes(text))
                         }).orElse(DefinitionsInRootReference.EMPTY_ARRAY);
             }
         };
@@ -61,10 +58,7 @@ abstract class ReferenceContributor extends PsiReferenceContributor {
             public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
                                                          @NotNull ProcessingContext context) {
                 return Optional.ofNullable(element.getText())
-                        .map(text -> new PsiReference[]{new LocalReference(
-                                element,
-                                StringUtils.removeAllQuotes(text),
-                                traversal)
+                        .map(text -> new PsiReference[]{new LocalReference(element, StringUtils.removeAllQuotes(text))
                         }).orElse(LocalReference.EMPTY_ARRAY);
             }
         };

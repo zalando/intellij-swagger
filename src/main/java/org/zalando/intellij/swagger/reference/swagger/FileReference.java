@@ -1,4 +1,4 @@
-package org.zalando.intellij.swagger.reference;
+package org.zalando.intellij.swagger.reference.swagger;
 
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;

@@ -1,27 +1,24 @@
 package org.zalando.intellij.swagger.traversal.path;
 
+import com.intellij.json.psi.JsonStringLiteral;
+import com.intellij.psi.NavigatablePsiElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiNamedElement;
 import org.apache.commons.lang.StringUtils;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-public class Path {
+public class PathFinder {
 
     private static final String ANY_KEY = "*";
     private static final String ANY_KEYS = "**";
 
-    private final PsiElement psiElement;
-    private final String pathExpression;
-
-    public Path(final PsiElement psiElement, final String pathExpression) {
-        this.psiElement = psiElement;
-        this.pathExpression = pathExpression;
-    }
-
-    public boolean exists() {
-        String parentKeyName = getNthPathItem(1);
+    public boolean isInsidePath(final PsiElement psiElement, final String pathExpression) {
+        String parentKeyName = getNthPathItemFromEnd(1, pathExpression);
 
         if (parentKeyName.equals("$")) {
             return childOfRoot(psiElement);
@@ -30,7 +27,7 @@ public class Path {
         if (parentKeyName.equals(ANY_KEY)) {
             final Optional<PsiNamedElement> immediateNamedParent = getNextNamedParent(psiElement);
             return immediateNamedParent.isPresent() &&
-                    new Path(immediateNamedParent.get().getParent(), reducePath(pathExpression)).exists();
+                    isInsidePath(immediateNamedParent.get().getParent(), removeLastPath(pathExpression));
         }
 
         final Optional<PsiNamedElement> immediateParentElement = getNextNamedParent(psiElement);
@@ -38,17 +35,17 @@ public class Path {
                 .map(PsiNamedElement::getName)
                 .orElse(null);
 
-        if (getNthPathItem(2).equals(ANY_KEYS)) {
+        if (getNthPathItemFromEnd(2, pathExpression).equals(ANY_KEYS)) {
             if (parentKeyName.equals(immediateParentName)) {
-                return goUpToElementWithParentName(psiElement, getNthPathItem(3))
-                        .map(parent -> new Path(parent, reducePath(reducePath(pathExpression))).exists())
+                return goUpToElementWithParentName(psiElement, getNthPathItemFromEnd(3, pathExpression))
+                        .map(parent -> isInsidePath(parent, removeLastPath(removeLastPath(pathExpression))))
                         .orElse(false);
             }
         }
 
         return parentKeyName.equals(immediateParentName) &&
-                (getPathLength() == 1 || immediateParentElement
-                        .map(parent -> new Path(parent.getParent(), reducePath(pathExpression)).exists())
+                (getPathLength(pathExpression) == 1 || immediateParentElement
+                        .map(parent -> isInsidePath(parent.getParent(), removeLastPath(pathExpression)))
                         .orElse(false));
     }
 
@@ -60,17 +57,26 @@ public class Path {
                         psiElement.getParent().getParent().getParent().getParent() instanceof PsiFile);
     }
 
-    private String getNthPathItem(final int nth) {
+    private String getNthPathItemFromEnd(final int nth, final String pathExpression) {
         final String[] paths = pathExpression.split("\\.");
         return paths[paths.length - nth];
     }
 
-    private int getPathLength() {
+    private String getNthPathItemFromStart(final int nth, final String pathExpression) {
+        final String[] paths = pathExpression.split("\\.");
+        return paths[nth];
+    }
+
+    private int getPathLength(final String pathExpression) {
         return pathExpression.split("\\.").length;
     }
 
-    private String reducePath(final String path) {
+    private String removeLastPath(final String path) {
         return StringUtils.substringBeforeLast(path, ".");
+    }
+
+    private String removeFirstPath(final String path) {
+        return StringUtils.substringAfter(path, ".");
     }
 
     private Optional<PsiElement> goUpToElementWithParentName(final PsiElement psiElement, final String keyName) {
@@ -107,5 +113,46 @@ public class Path {
         }
 
         return getNextNamedParent(psiElement.getParent());
+    }
+
+    private Optional<? extends PsiElement> getChildByName(final PsiElement psiElement, final String name) {
+        List<PsiNamedElement> children = Arrays.stream(psiElement.getChildren())
+                .filter(child -> child instanceof PsiNamedElement)
+                .map(child -> (PsiNamedElement) child)
+                .collect(Collectors.toList());
+
+        if (children.isEmpty()) {
+            Optional<PsiElement> navigatablePsiElement = Arrays.stream(psiElement.getChildren())
+                    .filter(child -> child instanceof NavigatablePsiElement)
+                    .filter(child -> !(child instanceof JsonStringLiteral))
+                    .findFirst();
+
+            return navigatablePsiElement.isPresent() ? getChildByName(navigatablePsiElement.get(), name) : Optional.empty();
+        }
+
+        return children.stream()
+                .filter(child -> name.equals(child.getName()))
+                .findFirst();
+    }
+
+    public Optional<PsiElement> findByPathFrom(final PsiElement psiElement, String pathExpression) {
+        if ("".equals(pathExpression)) {
+            return Optional.of(psiElement);
+        }
+
+        String currentNodeName = getNthPathItemFromStart(0, pathExpression);
+
+        if ("$".equals(currentNodeName)) {
+            currentNodeName = getNthPathItemFromStart(1, pathExpression);
+            pathExpression = removeFirstPath(pathExpression);
+        }
+
+        Optional<? extends PsiElement> childByName = getChildByName(psiElement, currentNodeName);
+
+        if (!childByName.isPresent()) {
+            return Optional.empty();
+        }
+
+        return findByPathFrom(childByName.get(), removeFirstPath(pathExpression));
     }
 }
