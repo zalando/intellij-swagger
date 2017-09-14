@@ -1,4 +1,4 @@
-package org.zalando.intellij.swagger.reference;
+package org.zalando.intellij.swagger.reference.swagger;
 
 public class SwaggerConstants {
 

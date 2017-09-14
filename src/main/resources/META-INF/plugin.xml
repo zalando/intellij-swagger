@@ -23,8 +23,11 @@
         <completion.contributor language="JSON" implementationClass="org.zalando.intellij.swagger.completion.contributor.openapi.OpenApiJsonCompletionContributor"/>
         <completion.contributor language="yaml" implementationClass="org.zalando.intellij.swagger.completion.contributor.openapi.OpenApiYamlCompletionContributor"/>
 
-        <psi.referenceContributor implementation="org.zalando.intellij.swagger.reference.contributor.SwaggerYamlReferenceContributor"/>
-        <psi.referenceContributor implementation="org.zalando.intellij.swagger.reference.contributor.SwaggerJsonReferenceContributor"/>
+        <psi.referenceContributor implementation="org.zalando.intellij.swagger.reference.contributor.swagger.SwaggerYamlReferenceContributor"/>
+        <psi.referenceContributor implementation="org.zalando.intellij.swagger.reference.contributor.swagger.SwaggerJsonReferenceContributor"/>
+
+        <psi.referenceContributor implementation="org.zalando.intellij.swagger.reference.contributor.openapi.OpenApiJsonReferenceContributor"/>
+        <psi.referenceContributor implementation="org.zalando.intellij.swagger.reference.contributor.openapi.OpenApiYamlReferenceContributor"/>
 
         <lang.findUsagesProvider language="yaml" implementationClass="org.zalando.intellij.swagger.reference.usage.YamlFindUsagesProvider"/>
 

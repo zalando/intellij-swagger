@@ -5,7 +5,7 @@ import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.psi.PsiElement;
 import org.zalando.intellij.swagger.StringUtils;
-import org.zalando.intellij.swagger.reference.extractor.ReferenceValueExtractor;
+import org.zalando.intellij.swagger.reference.swagger.ReferenceValueExtractor;
 import org.zalando.intellij.swagger.traversal.Traversal;
 
 import java.util.Set;

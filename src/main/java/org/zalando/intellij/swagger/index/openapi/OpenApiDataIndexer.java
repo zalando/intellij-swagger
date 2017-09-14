@@ -16,7 +16,7 @@ import org.zalando.intellij.swagger.StringUtils;
 import org.zalando.intellij.swagger.file.FileConstants;
 import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.file.OpenApiFileType;
-import org.zalando.intellij.swagger.reference.OpenApiConstants;
+import org.zalando.intellij.swagger.reference.swagger.OpenApiConstants;
 import org.zalando.intellij.swagger.traversal.path.openapi.MainPathResolver;
 
 import java.util.HashMap;
@@ -122,7 +122,7 @@ class OpenApiDataIndexer implements DataIndexer<String, Set<String>, FileContent
      * definitions.json -> definitions.json
      */
     private String extractFileNameFromFileRefValue(final String fileRefValue) {
-        return org.apache.commons.lang.StringUtils.substringBefore(fileRefValue, OpenApiConstants.REFERENCE_PREFIX);
+        return org.apache.commons.lang.StringUtils.substringBefore(fileRefValue, OpenApiConstants.COMPONENT_REFERENCE_PREFIX);
     }
 
     @NotNull
@@ -140,7 +140,7 @@ class OpenApiDataIndexer implements DataIndexer<String, Set<String>, FileContent
     private OpenApiFileType getFileTypeFromRefValue(final String refValue,
                                                     final OpenApiFileType singleDefinitionInFile,
                                                     final OpenApiFileType multipleDefinitionsInRootFile) {
-        if (refValue.contains(OpenApiConstants.REFERENCE_PREFIX)) {
+        if (refValue.contains(OpenApiConstants.COMPONENT_REFERENCE_PREFIX)) {
             return multipleDefinitionsInRootFile;
         }
 

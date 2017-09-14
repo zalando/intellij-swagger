@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.StringUtils;
 import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.intention.reference.CreateYamlReferenceIntentionAction;
-import org.zalando.intellij.swagger.reference.extractor.ReferenceValueExtractor;
+import org.zalando.intellij.swagger.reference.swagger.ReferenceValueExtractor;
 import org.zalando.intellij.swagger.traversal.path.swagger.MainPathResolver;
 import org.zalando.intellij.swagger.traversal.YamlTraversal;
 import org.zalando.intellij.swagger.validator.value.ReferenceValidator;

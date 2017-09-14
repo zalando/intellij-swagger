@@ -1,7 +1,7 @@
 package org.zalando.intellij.swagger.traversal.path.swagger;
 
 import com.intellij.psi.PsiElement;
-import org.zalando.intellij.swagger.traversal.path.Path;
+import org.zalando.intellij.swagger.traversal.path.PathFinder;
 
 public interface PathResolver {
 
@@ -80,6 +80,6 @@ public interface PathResolver {
     boolean childOfHeadersCollectionFormat(PsiElement psiElement);
 
     default boolean hasPath(final PsiElement psiElement, final String pathExpression) {
-        return new Path(psiElement, pathExpression).exists();
+        return new PathFinder().isInsidePath(psiElement, pathExpression);
     }
 }

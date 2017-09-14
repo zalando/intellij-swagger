@@ -2,6 +2,7 @@ package org.zalando.intellij.swagger.reference.extractor;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+import org.zalando.intellij.swagger.reference.swagger.ReferenceValueExtractor;
 
 public class ReferenceValueExtractorTest {
 

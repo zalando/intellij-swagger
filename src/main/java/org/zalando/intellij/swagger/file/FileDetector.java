@@ -1,17 +1,12 @@
 package org.zalando.intellij.swagger.file;
 
-import com.google.common.collect.Lists;
-import com.intellij.json.psi.JsonFile;
-import com.intellij.json.psi.JsonProperty;
+import com.intellij.json.JsonLanguage;
+import com.intellij.lang.Language;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.apache.commons.io.FilenameUtils;
-import org.jetbrains.yaml.psi.*;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import org.jetbrains.yaml.YAMLLanguage;
+import org.zalando.intellij.swagger.traversal.path.PathFinder;
 
 public class FileDetector {
 
@@ -19,47 +14,31 @@ public class FileDetector {
     private static final String OPEN_API_KEY = "openapi";
 
     public boolean isMainSwaggerJsonFile(final PsiFile psiFile) {
-        return hasJsonRootKey(psiFile, SWAGGER_KEY);
+        return hasJsonRootKey(psiFile, String.format("$.%s", SWAGGER_KEY));
     }
 
     public boolean isMainSwaggerYamlFile(final PsiFile psiFile) {
-        return hasYamlRootKey(psiFile, SWAGGER_KEY);
+        return hasYamlRootKey(psiFile, String.format("$.%s", SWAGGER_KEY));
     }
 
     public boolean isMainOpenApiJsonFile(final PsiFile psiFile) {
-        return hasJsonRootKey(psiFile, OPEN_API_KEY);
+        return hasJsonRootKey(psiFile, String.format("$.%s", OPEN_API_KEY));
     }
 
     public boolean isMainOpenApiYamlFile(final PsiFile psiFile) {
-        return hasYamlRootKey(psiFile, OPEN_API_KEY);
+        return hasYamlRootKey(psiFile, String.format("$.%s", OPEN_API_KEY));
     }
 
     private boolean hasYamlRootKey(final PsiFile psiFile, final String lookupKey) {
-        final List<YAMLPsiElement> children = Optional.of(psiFile)
-                .filter(f -> f instanceof YAMLFile)
-                .map(YAMLFile.class::cast)
-                .map(YAMLFile::getDocuments)
-                .map(yamlDocuments -> yamlDocuments.get(0))
-                .map(YAMLDocument::getTopLevelValue)
-                .map(YAMLValue::getYAMLElements)
-                .orElse(Lists.newArrayList());
+        final Language language = psiFile.getLanguage();
 
-        return children.stream()
-                .anyMatch(psiElement -> psiElement instanceof YAMLKeyValue
-                        && lookupKey.equals(psiElement.getName()));
+        return YAMLLanguage.INSTANCE.is(language) && new PathFinder().findByPathFrom(psiFile, lookupKey).isPresent();
     }
 
     private boolean hasJsonRootKey(final PsiFile psiFile, final String lookupKey) {
-        final List<PsiElement> children = Optional.of(psiFile)
-                .filter(f -> f instanceof JsonFile)
-                .map(JsonFile.class::cast)
-                .map(JsonFile::getTopLevelValue)
-                .map(jsonValue -> Arrays.asList(jsonValue.getChildren()))
-                .orElse(Lists.newArrayList());
+        final Language language = psiFile.getLanguage();
 
-        return children.stream()
-                .anyMatch(psiElement -> psiElement instanceof JsonProperty
-                        && lookupKey.equals(((JsonProperty) psiElement).getName()));
+        return JsonLanguage.INSTANCE.is(language) && new PathFinder().findByPathFrom(psiFile, lookupKey).isPresent();
     }
 
     public boolean isMainSwaggerFile(final PsiFile file) {
