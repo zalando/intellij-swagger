@@ -1,0 +1,12 @@
+openapi: 3.0.0
+paths:
+  /pathA:
+    get:
+      responses:
+        200:
+          links:
+            foo:
+              $ref: "<caret>"
+components:
+  links:
+    Link:

@@ -8,7 +8,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiNamedElement;
 import org.jetbrains.yaml.psi.YAMLSequence;
 import org.zalando.intellij.swagger.completion.field.model.common.Field;
-import org.zalando.intellij.swagger.completion.value.model.Value;
+import org.zalando.intellij.swagger.completion.value.model.common.Value;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,13 +24,7 @@ public abstract class Traversal {
 
     public abstract Optional<String> getParentKeyName(final PsiElement psiElement);
 
-    public abstract boolean elementIsDirectValueOfKey(final PsiElement psiElement, final String... keyNames);
-
-    public abstract List<PsiElement> getChildrenOfRootProperty(final String propertyName, final PsiFile psiFile);
-
     public abstract List<String> getTagNames(final PsiFile psiFile);
-
-    public abstract List<String> getKeyNamesOfDefinition(final String propertyName, final PsiFile containingFile);
 
     public abstract boolean isUniqueKey(String keyName, final PsiElement psiElement);
 
@@ -53,11 +47,6 @@ public abstract class Traversal {
     public abstract Optional<? extends PsiElement> getRootChildByName(final String keyName, final PsiFile psiFile);
 
     public abstract void addReferenceDefinition(final String definitions, final String referenceValue, final PsiFile psiFile);
-
-    public final boolean isBooleanValue(final PsiElement psiElement) {
-        return elementIsDirectValueOfKey(psiElement, "deprecated", "required", "allowEmptyValue",
-                "exclusiveMaximum", "exclusiveMinimum", "uniqueItems", "readOnly", "attribute", "wrapped");
-    }
 
     <T extends PsiElement> Optional<T> getNthOfType(final PsiElement psiElement, int nth, Class<T> targetType) {
         if (psiElement == null) {
@@ -97,5 +86,4 @@ public abstract class Traversal {
     }
 
     public abstract List<PsiElement> getTags(final PsiFile containingFile);
-
 }

@@ -1,0 +1,10 @@
+openapi: "3.0.0"
+paths:
+  /pets:
+    get:
+      responses:
+        '404':
+          $ref: "<caret>"
+components:
+  responses:
+    NotFound:

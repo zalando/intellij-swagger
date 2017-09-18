@@ -113,6 +113,30 @@ public class MainPathResolver implements PathResolver {
 
     }
 
+    public final boolean isFormatValue(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.format");
+    }
+
+    public final boolean isTypeValue(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.type");
+    }
+
+    public final boolean isInValue(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.in");
+    }
+
+    public final boolean isBooleanValue(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.deprecated") ||
+                hasPath(psiElement, "$.**.required") ||
+                hasPath(psiElement, "$.**.allowEmptyValue") ||
+                hasPath(psiElement, "$.**.exclusiveMaximum") ||
+                hasPath(psiElement, "$.**.exclusiveMinimum") ||
+                hasPath(psiElement, "$.**.uniqueItems") ||
+                hasPath(psiElement, "$.**.readOnly") ||
+                hasPath(psiElement, "$.**.attribute") ||
+                hasPath(psiElement, "$.**.wrapped");
+    }
+
     public final boolean isSchemesValue(final PsiElement psiElement) {
         return hasPath(psiElement, "$.schemes");
     }

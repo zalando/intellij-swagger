@@ -2,7 +2,6 @@ package org.zalando.intellij.swagger.traversal;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
@@ -13,7 +12,7 @@ import org.jetbrains.yaml.psi.*;
 import org.jetbrains.yaml.psi.impl.YAMLPlainTextImpl;
 import org.zalando.intellij.swagger.StringUtils;
 import org.zalando.intellij.swagger.completion.field.model.common.Field;
-import org.zalando.intellij.swagger.completion.value.model.Value;
+import org.zalando.intellij.swagger.completion.value.model.common.Value;
 import org.zalando.intellij.swagger.insert.YamlInsertFieldHandler;
 import org.zalando.intellij.swagger.insert.YamlInsertValueHandler;
 
@@ -57,17 +56,6 @@ public class YamlTraversal extends Traversal {
         return getNthOfType(psiElement, 1, YAMLKeyValue.class)
                 .map(YAMLKeyValue::getName)
                 .map(StringUtils::removeAllQuotes);
-    }
-
-    @Override
-    public List<PsiElement> getChildrenOfRootProperty(final String propertyName, final PsiFile psiFile) {
-        return getRootChildrenOfType(psiFile, YAMLKeyValue.class).stream()
-                .filter(yamlKeyValue -> propertyName.equals(yamlKeyValue.getName()))
-                .findAny()
-                .map(YAMLKeyValue::getValue)
-                .map(YAMLValue::getYAMLElements)
-                .map(c -> c.stream().map(PsiElement.class::cast).collect(Collectors.toList()))
-                .orElse(Lists.newArrayList());
     }
 
     @Override
@@ -160,15 +148,6 @@ public class YamlTraversal extends Traversal {
                     yamlMapping.addBefore(new YAMLElementGenerator(yamlMapping.getProject()).createEol(), addedKeyValue);
                     return addedKeyValue;
                 });
-    }
-
-    @Override
-    public List<String> getKeyNamesOfDefinition(final String propertyName, final PsiFile containingFile) {
-        return getChildrenOfRootProperty(propertyName, containingFile).stream()
-                .filter(el -> el instanceof YAMLKeyValue)
-                .map(YAMLKeyValue.class::cast)
-                .map(YAMLKeyValue::getName)
-                .collect(Collectors.toList());
     }
 
     @Override
@@ -290,19 +269,6 @@ public class YamlTraversal extends Traversal {
                 .filter(el -> el instanceof YAMLKeyValue)
                 .map(YAMLKeyValue.class::cast)
                 .map(YAMLKeyValue::getName);
-    }
-
-    @Override
-    public boolean elementIsDirectValueOfKey(final PsiElement psiElement, final String... keyNames) {
-        final Set<String> targetKeyNames = Sets.newHashSet(keyNames);
-        return getNthOfType(psiElement, 1, YAMLKeyValue.class)
-                .map(YAMLKeyValue::getName)
-                .filter(targetKeyNames::contains)
-                .isPresent() &&
-                !Optional.ofNullable(psiElement.getParent())
-                        .map(PsiElement::getParent)
-                        .filter(el -> el instanceof YAMLSequenceItem)
-                        .isPresent();
     }
 
     public boolean isChildOfAnchorKey(final PsiElement psiElement) {

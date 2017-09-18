@@ -30,7 +30,7 @@ public class LocalReference extends PsiReferenceBase<PsiElement> {
         final String pathExpression = String.format("$.%s.%s", referenceType, referencedValue);
         final PsiFile psiFile = getElement().getContainingFile();
 
-        return new PathFinder().findByPathFrom(psiFile, pathExpression)
+        return new PathFinder().findByPathFrom(pathExpression, psiFile)
                 .orElse(null);
     }
 

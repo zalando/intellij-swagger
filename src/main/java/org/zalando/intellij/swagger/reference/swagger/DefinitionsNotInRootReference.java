@@ -42,7 +42,7 @@ public class DefinitionsNotInRootReference extends PsiReferenceBase<PsiElement> 
         final String referencedValue = ReferenceValueExtractor.extractValue(originalRefValue);
         final String pathExpression = String.format("$.%s.%s", referencedType, referencedValue);
 
-        return new PathFinder().findByPathFrom(referencedFile, pathExpression)
+        return new PathFinder().findByPathFrom(pathExpression, referencedFile)
                 .orElse(null);
     }
 
