@@ -5,7 +5,7 @@ import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.editor.EditorModificationUtil;
 import com.intellij.util.text.CharArrayUtil;
-import org.zalando.intellij.swagger.completion.value.model.Value;
+import org.zalando.intellij.swagger.completion.value.model.common.Value;
 
 public class JsonInsertValueHandler implements InsertHandler<LookupElement> {
 

@@ -4,9 +4,10 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiNamedElement;
 import org.zalando.intellij.swagger.StringUtils;
 import org.zalando.intellij.swagger.reference.swagger.ReferenceValueExtractor;
-import org.zalando.intellij.swagger.traversal.Traversal;
+import org.zalando.intellij.swagger.traversal.path.PathFinder;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -14,15 +15,9 @@ import java.util.stream.Collectors;
 public class ReferenceValidator {
 
     private final IntentionAction intentionAction;
-    private final ReferenceValueExtractor referenceValueExtractor;
-    private final Traversal traversal;
 
-    public ReferenceValidator(final IntentionAction intentionAction,
-                              final ReferenceValueExtractor referenceValueExtractor,
-                              final Traversal traversal) {
+    public ReferenceValidator(final IntentionAction intentionAction) {
         this.intentionAction = intentionAction;
-        this.referenceValueExtractor = referenceValueExtractor;
-        this.traversal = traversal;
     }
 
     void validateDefinitionReference(final PsiElement psiElement,
@@ -30,7 +25,7 @@ public class ReferenceValidator {
         if (isLocalReference(psiElement)) {
             final boolean definitionFound =
                     getAvailableDefinitions(psiElement)
-                            .contains(referenceValueExtractor.extractValue(psiElement.getText()));
+                            .contains(ReferenceValueExtractor.extractValue(psiElement.getText()));
 
             if (!definitionFound) {
                 final Annotation errorAnnotation =
@@ -45,7 +40,7 @@ public class ReferenceValidator {
         if (isLocalReference(psiElement)) {
             final boolean parameterFound =
                     getAvailableParameters(psiElement)
-                            .contains(referenceValueExtractor.extractValue(psiElement.getText()));
+                            .contains(ReferenceValueExtractor.extractValue(psiElement.getText()));
 
             if (!parameterFound) {
                 final Annotation errorAnnotation =
@@ -60,7 +55,7 @@ public class ReferenceValidator {
         if (isLocalReference(psiElement)) {
             final boolean responseFound =
                     getAvailableResponses(psiElement)
-                            .contains(referenceValueExtractor.extractValue(psiElement.getText()));
+                            .contains(ReferenceValueExtractor.extractValue(psiElement.getText()));
 
             if (!responseFound) {
                 final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(psiElement, "Response not found");
@@ -74,21 +69,23 @@ public class ReferenceValidator {
     }
 
     private Set<String> getAvailableDefinitions(final PsiElement psiElement) {
-        return traversal.getKeyNamesOfDefinition("definitions", psiElement.getContainingFile())
-                .stream()
-                .collect(Collectors.toSet());
+        return getAvailableNames(psiElement, "definitions");
     }
 
     private Set<String> getAvailableParameters(final PsiElement psiElement) {
-        return traversal.getKeyNamesOfDefinition("parameters", psiElement.getContainingFile())
-                .stream()
-                .collect(Collectors.toSet());
+        return getAvailableNames(psiElement, "parameters");
     }
 
     private Set<String> getAvailableResponses(final PsiElement psiElement) {
-        return traversal.getKeyNamesOfDefinition("responses", psiElement.getContainingFile())
-                .stream()
-                .collect(Collectors.toSet());
+        return getAvailableNames(psiElement, "responses");
     }
 
+    private Set<String> getAvailableNames(final PsiElement psiElement, final String refType) {
+        String pathExpression = String.format("$.%s", refType);
+
+        return new PathFinder().findChildrenByPathFrom(pathExpression, psiElement.getContainingFile())
+                .stream()
+                .map(PsiNamedElement::getName)
+                .collect(Collectors.toSet());
+    }
 }

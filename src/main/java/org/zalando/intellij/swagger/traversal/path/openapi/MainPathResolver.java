@@ -124,15 +124,67 @@ public class MainPathResolver implements PathResolver {
     }
 
     public final boolean isSchemaRefValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.schema.$ref") || hasPath(psiElement, "$.**.items.$ref");
+        return hasPath(psiElement, "$.**.schema.$ref") ||
+                hasPath(psiElement, "$.**.items.$ref");
     }
 
     public final boolean isParameterRefValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.parameters.$ref");
+        return hasPath(psiElement, "$.**.parameters.$ref");
     }
 
     public final boolean isResponseRefValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.responses.*.$ref");
+        return hasPath(psiElement, "$.**.responses.*.$ref");
+    }
+
+    public final boolean isExampleRefValue(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.examples.*.$ref");
+    }
+
+    public final boolean isRequestBodyRefValue(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.requestBody.$ref");
+    }
+
+    public final boolean isHeaderRefValue(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.headers.*.$ref");
+    }
+
+    public final boolean isLinkRefValue(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.links.*.$ref");
+    }
+
+    public final boolean isBooleanValue(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.deprecated") ||
+                hasPath(psiElement, "$.**.explode") ||
+                hasPath(psiElement, "$.**.allowReserved") ||
+                hasPath(psiElement, "$.**.required") ||
+                hasPath(psiElement, "$.**.nullable") ||
+                hasPath(psiElement, "$.**.readOnly") ||
+                hasPath(psiElement, "$.**.writeOnly") ||
+                hasPath(psiElement, "$.**.attribute") ||
+                hasPath(psiElement, "$.**.wrapped") ||
+                hasPath(psiElement, "$.**.exclusiveMaximum") ||
+                hasPath(psiElement, "$.**.exclusiveMinimum") ||
+                hasPath(psiElement, "$.**.uniqueItems");
+    }
+
+    public final boolean isTypeValue(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.type");
+    }
+
+    public final boolean isInValue(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.in");
+    }
+
+    public final boolean isFormatValue(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.format");
+    }
+
+    public final boolean isStyleValue(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.style");
+    }
+
+    public final boolean isCallbackRefValue(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.callbacks.*.$ref");
     }
 
     public final boolean childOfRootSecurityKey(final PsiElement psiElement) {

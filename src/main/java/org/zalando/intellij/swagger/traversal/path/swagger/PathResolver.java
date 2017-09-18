@@ -82,4 +82,20 @@ public interface PathResolver {
     default boolean hasPath(final PsiElement psiElement, final String pathExpression) {
         return new PathFinder().isInsidePath(psiElement, pathExpression);
     }
+
+    default boolean isFormatValue(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean isTypeValue(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean isInValue(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean isBooleanValue(PsiElement psiElement) {
+        return false;
+    }
 }

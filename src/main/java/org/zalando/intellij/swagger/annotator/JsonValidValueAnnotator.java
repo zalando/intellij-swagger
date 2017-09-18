@@ -21,11 +21,9 @@ public class JsonValidValueAnnotator implements Annotator {
         if (new FileDetector().isMainSwaggerJsonFile(psiElement.getContainingFile())) {
             final ValuesValidator valuesValidator = new ValuesValidator(new JsonTraversal(),
                     new MainPathResolver(), new ReferenceValidator(
-                            new CreateJsonReferenceIntentionAction(
-                                    StringUtils.removeAllQuotes(psiElement.getText()),
-                                    new ReferenceValueExtractor()),
-                            new ReferenceValueExtractor(),
-                            new JsonTraversal()),
+                    new CreateJsonReferenceIntentionAction(
+                            StringUtils.removeAllQuotes(psiElement.getText()),
+                            new ReferenceValueExtractor())),
                     new SchemesValidator());
 
             valuesValidator.validate(psiElement, annotationHolder);

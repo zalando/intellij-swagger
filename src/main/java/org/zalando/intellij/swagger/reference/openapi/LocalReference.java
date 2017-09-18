@@ -4,7 +4,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.util.IncorrectOperationException;
-import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.zalando.intellij.swagger.traversal.path.PathFinder;
@@ -31,7 +30,7 @@ public class LocalReference extends PsiReferenceBase<PsiElement> {
         final String pathExpression = String.format("$.components.%s.%s", referenceType, referencedValue);
         final PsiFile psiFile = getElement().getContainingFile();
 
-        return new PathFinder().findByPathFrom(psiFile, pathExpression)
+        return new PathFinder().findByPathFrom(pathExpression, psiFile)
                 .orElse(null);
     }
 

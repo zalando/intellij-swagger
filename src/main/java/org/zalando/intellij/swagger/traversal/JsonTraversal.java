@@ -11,7 +11,7 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.StringUtils;
 import org.zalando.intellij.swagger.completion.field.model.common.Field;
-import org.zalando.intellij.swagger.completion.value.model.Value;
+import org.zalando.intellij.swagger.completion.value.model.common.Value;
 import org.zalando.intellij.swagger.insert.JsonInsertFieldHandler;
 import org.zalando.intellij.swagger.insert.JsonInsertValueHandler;
 
@@ -76,16 +76,6 @@ public class JsonTraversal extends Traversal {
                 .map(JsonProperty::getName);
     }
 
-    @Override
-    public List<PsiElement> getChildrenOfRootProperty(final String propertyName, final PsiFile psiFile) {
-        return getRootChildrenOfType(psiFile, JsonProperty.class).stream()
-                .filter(jsonProperty -> propertyName.equals(jsonProperty.getName()))
-                .findAny()
-                .map(JsonProperty::getValue)
-                .map(jsonValue -> Arrays.asList(jsonValue.getChildren()))
-                .orElse(Lists.newArrayList());
-    }
-
     private boolean hasRootKey(final String propertyName, final PsiFile psiFile) {
         return getRootChildrenOfType(psiFile, JsonProperty.class).stream()
                 .anyMatch(jsonProperty -> propertyName.equals(jsonProperty.getName()));
@@ -104,15 +94,6 @@ public class JsonTraversal extends Traversal {
         return Arrays.stream(children)
                 .filter(child -> type.isAssignableFrom(child.getClass()))
                 .map(type::cast)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<String> getKeyNamesOfDefinition(final String propertyName, final PsiFile containingFile) {
-        return getChildrenOfRootProperty(propertyName, containingFile).stream()
-                .filter(el -> el instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
                 .collect(Collectors.toList());
     }
 
@@ -221,18 +202,6 @@ public class JsonTraversal extends Traversal {
 
     private Optional<JsonProperty> toJsonProperty(final PsiElement psiElement) {
         return psiElement instanceof JsonProperty ? Optional.of((JsonProperty) psiElement) : Optional.empty();
-    }
-
-    @Override
-    public boolean elementIsDirectValueOfKey(final PsiElement psiElement, final String... keyNames) {
-        final Set<String> targetKeyNames = Sets.newHashSet(keyNames);
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .filter(element -> element instanceof JsonProperty)
-                .map(JsonProperty.class::cast)
-                .map(JsonProperty::getName)
-                .filter(targetKeyNames::contains)
-                .isPresent();
     }
 
     public boolean isLastChild(@NotNull PsiElement psiElement) {

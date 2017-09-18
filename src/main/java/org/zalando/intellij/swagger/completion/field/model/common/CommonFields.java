@@ -2,8 +2,6 @@ package org.zalando.intellij.swagger.completion.field.model.common;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.net.MediaType;
-import org.zalando.intellij.swagger.completion.value.model.StringValue;
-import org.zalando.intellij.swagger.completion.value.model.Value;
 
 import java.util.List;
 

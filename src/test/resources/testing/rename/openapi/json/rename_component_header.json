@@ -1,17 +1,13 @@
 {
   "openapi": "3.0.0",
   "paths": {
-    "/": {
+    "/pathA": {
       "get": {
         "responses": {
           "200": {
-            "content": {
-              "application/json": {
-                "examples": {
-                  "foo": {
-                    "$ref": "#/components/examples/Header"
-                  }
-                }
+            "headers": {
+              "x-next": {
+                "$ref": "#/components/headers/Header"
               }
             }
           }
@@ -20,7 +16,7 @@
     }
   },
   "components": {
-    "examples": {
+    "headers": {
       "<caret>Header": {}
     }
   }

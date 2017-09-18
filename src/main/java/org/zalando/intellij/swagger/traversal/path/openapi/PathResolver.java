@@ -126,4 +126,44 @@ public interface PathResolver {
     default boolean childOfContent(PsiElement psiElement) {
         return false;
     }
+
+    default boolean isExampleRefValue(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean isRequestBodyRefValue(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean isHeaderRefValue(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean isLinkRefValue(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean isCallbackRefValue(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean isBooleanValue(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean isTypeValue(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean isInValue(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean isFormatValue(PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean isStyleValue(PsiElement psiElement) {
+        return false;
+    }
 }

@@ -7,6 +7,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiNamedElement;
 import org.apache.commons.lang.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -135,7 +136,25 @@ public class PathFinder {
                 .findFirst();
     }
 
-    public Optional<PsiElement> findByPathFrom(final PsiElement psiElement, String pathExpression) {
+    private List<? extends PsiNamedElement> getNamedChildren(final PsiElement psiElement) {
+        List<PsiNamedElement> children = Arrays.stream(psiElement.getChildren())
+                .filter(child -> child instanceof PsiNamedElement)
+                .map(child -> (PsiNamedElement) child)
+                .collect(Collectors.toList());
+
+        if (children.isEmpty()) {
+            Optional<PsiElement> navigatablePsiElement = Arrays.stream(psiElement.getChildren())
+                    .filter(child -> child instanceof NavigatablePsiElement)
+                    .filter(child -> !(child instanceof JsonStringLiteral))
+                    .findFirst();
+
+            return navigatablePsiElement.isPresent() ? getNamedChildren(navigatablePsiElement.get()) : new ArrayList<>();
+        }
+
+        return new ArrayList<>(children);
+    }
+
+    public Optional<PsiElement> findByPathFrom(String pathExpression, final PsiElement psiElement) {
         if ("".equals(pathExpression)) {
             return Optional.of(psiElement);
         }
@@ -153,6 +172,27 @@ public class PathFinder {
             return Optional.empty();
         }
 
-        return findByPathFrom(childByName.get(), removeFirstPath(pathExpression));
+        return findByPathFrom(removeFirstPath(pathExpression), childByName.get());
+    }
+
+    public List<? extends PsiNamedElement> findChildrenByPathFrom(String pathExpression, final PsiElement psiElement) {
+        if ("".equals(pathExpression)) {
+            return getNamedChildren(psiElement);
+        }
+
+        String currentNodeName = getNthPathItemFromStart(0, pathExpression);
+
+        if ("$".equals(currentNodeName)) {
+            currentNodeName = getNthPathItemFromStart(1, pathExpression);
+            pathExpression = removeFirstPath(pathExpression);
+        }
+
+        Optional<? extends PsiElement> childByName = getChildByName(psiElement, currentNodeName);
+
+        if (!childByName.isPresent()) {
+            return new ArrayList<>();
+        }
+
+        return findChildrenByPathFrom(removeFirstPath(pathExpression), childByName.get());
     }
 }

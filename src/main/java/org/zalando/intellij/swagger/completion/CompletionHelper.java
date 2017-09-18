@@ -3,8 +3,9 @@ package org.zalando.intellij.swagger.completion;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import org.zalando.intellij.swagger.completion.field.model.common.Field;
-import org.zalando.intellij.swagger.completion.value.model.Value;
+import org.zalando.intellij.swagger.completion.value.model.common.Value;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,10 +26,6 @@ public interface CompletionHelper {
 
     InsertHandler<LookupElement> createInsertValueHandler(final Value value);
 
-    List<String> getKeyNamesOfDefinition(final String propertyName);
-
-    List<PsiElement> getChildrenOfRoot(final String propertyName);
-
     List<PsiElement> getChildrenOfArrayObject(final PsiElement psiElement);
 
     List<String> getTagNames();
@@ -37,4 +34,5 @@ public interface CompletionHelper {
 
     Optional<String> getKeyNameOfObject(final PsiElement psiElement);
 
+    PsiFile getPsiFile();
 }

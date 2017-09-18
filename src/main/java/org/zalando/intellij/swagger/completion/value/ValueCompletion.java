@@ -5,8 +5,7 @@ import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import org.zalando.intellij.swagger.completion.CompletionHelper;
-import org.zalando.intellij.swagger.completion.value.model.Value;
-import org.zalando.intellij.swagger.completion.SwaggerCompletionHelper;
+import org.zalando.intellij.swagger.completion.value.model.common.Value;
 
 public abstract class ValueCompletion {
 

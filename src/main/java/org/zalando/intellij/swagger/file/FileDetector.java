@@ -32,13 +32,13 @@ public class FileDetector {
     private boolean hasYamlRootKey(final PsiFile psiFile, final String lookupKey) {
         final Language language = psiFile.getLanguage();
 
-        return YAMLLanguage.INSTANCE.is(language) && new PathFinder().findByPathFrom(psiFile, lookupKey).isPresent();
+        return YAMLLanguage.INSTANCE.is(language) && new PathFinder().findByPathFrom(lookupKey, psiFile).isPresent();
     }
 
     private boolean hasJsonRootKey(final PsiFile psiFile, final String lookupKey) {
         final Language language = psiFile.getLanguage();
 
-        return JsonLanguage.INSTANCE.is(language) && new PathFinder().findByPathFrom(psiFile, lookupKey).isPresent();
+        return JsonLanguage.INSTANCE.is(language) && new PathFinder().findByPathFrom(lookupKey, psiFile).isPresent();
     }
 
     public boolean isMainSwaggerFile(final PsiFile file) {

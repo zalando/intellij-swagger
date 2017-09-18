@@ -3,10 +3,11 @@ package org.zalando.intellij.swagger.completion;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import org.zalando.intellij.swagger.completion.field.model.common.Field;
-import org.zalando.intellij.swagger.completion.value.model.Value;
-import org.zalando.intellij.swagger.traversal.path.swagger.PathResolver;
+import org.zalando.intellij.swagger.completion.value.model.common.Value;
 import org.zalando.intellij.swagger.traversal.Traversal;
+import org.zalando.intellij.swagger.traversal.path.swagger.PathResolver;
 
 import java.util.List;
 import java.util.Optional;
@@ -129,16 +130,8 @@ public class SwaggerCompletionHelper implements CompletionHelper {
         return pathResolver.isParameterRefValue(psiElement);
     }
 
-    public List<PsiElement> getChildrenOfRoot(final String propertyName) {
-        return traversal.getChildrenOfRootProperty(propertyName, psiElement.getContainingFile());
-    }
-
     public List<PsiElement> getChildrenOfArrayObject(final PsiElement psiElement) {
         return traversal.getChildrenOfArrayObject(psiElement);
-    }
-
-    public List<String> getKeyNamesOfDefinition(final String propertyName) {
-        return traversal.getKeyNamesOfDefinition(propertyName, psiElement.getContainingFile());
     }
 
     public List<String> getTagNames() {
@@ -162,19 +155,19 @@ public class SwaggerCompletionHelper implements CompletionHelper {
     }
 
     public boolean completeBooleanValue() {
-        return traversal.isBooleanValue(psiElement);
+        return pathResolver.isBooleanValue(psiElement);
     }
 
     public boolean completeTypeValue() {
-        return traversal.elementIsDirectValueOfKey(psiElement, "type");
+        return pathResolver.isTypeValue(psiElement);
     }
 
     public boolean completeFormatValue() {
-        return traversal.elementIsDirectValueOfKey(psiElement, "format");
+        return pathResolver.isFormatValue(psiElement);
     }
 
     public boolean completeInValue() {
-        return traversal.elementIsDirectValueOfKey(psiElement, "in");
+        return pathResolver.isInValue(psiElement);
     }
 
     public boolean completeResponseRefValue() {
@@ -207,6 +200,10 @@ public class SwaggerCompletionHelper implements CompletionHelper {
 
     public Optional<String> getKeyNameOfObject(final PsiElement psiElement) {
         return traversal.getKeyNameOfObject(psiElement);
+    }
+
+    public PsiFile getPsiFile() {
+        return psiElement.getContainingFile();
     }
 
     public Optional<String> getParentKeyName() {
