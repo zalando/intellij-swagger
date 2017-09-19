@@ -5,41 +5,77 @@ import org.zalando.intellij.swagger.traversal.path.PathFinder;
 
 public interface PathResolver {
 
-    boolean childOfRoot(PsiElement psiElement);
+    default boolean childOfRoot(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfInfo(PsiElement psiElement);
+    default boolean childOfInfo(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfContact(PsiElement psiElement);
+    default boolean childOfContact(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfLicense(PsiElement psiElement);
+    default boolean childOfLicense(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfPath(PsiElement psiElement);
+    default boolean childOfPath(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfOperation(PsiElement psiElement);
+    default boolean childOfOperation(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfExternalDocs(PsiElement psiElement);
+    default boolean childOfExternalDocs(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfParameters(PsiElement psiElement);
+    default boolean childOfParameters(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfParameterItems(PsiElement psiElement);
+    default boolean childOfParameterItems(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfResponses(PsiElement psiElement);
+    default boolean childOfResponses(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfResponse(PsiElement psiElement);
+    default boolean childOfResponse(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfResponseDefinition(PsiElement psiElement);
+    default boolean childOfResponseDefinition(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfHeader(PsiElement psiElement);
+    default boolean childOfHeader(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfHeaders(PsiElement psiElement);
+    default boolean childOfHeaders(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfTag(PsiElement psiElement);
+    default boolean childOfTag(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfSecurityDefinition(PsiElement psiElement);
+    default boolean childOfSecurityDefinition(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfSchema(PsiElement psiElement);
+    default boolean childOfSchema(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfSchemaItems(PsiElement psiElement);
+    default boolean childOfSchemaItems(PsiElement psiElement) {
+        return false;
+    }
 
     default boolean childOfPropertiesSchema(PsiElement psiElement) {
         return false;
@@ -49,38 +85,64 @@ public interface PathResolver {
         return false;
     }
 
-    boolean childOfXml(PsiElement psiElement);
+    default boolean childOfXml(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfDefinitions(PsiElement psiElement);
+    default boolean childOfDefinitions(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfParameterDefinition(PsiElement psiElement);
+    default boolean childOfParameterDefinition(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean isMimeValue(PsiElement psiElement);
+    default boolean isMimeValue(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean isSchemesValue(PsiElement psiElement);
+    default boolean isSchemesValue(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean isTagsValue(PsiElement psiElement);
+    default boolean isTagsValue(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean isDefinitionRefValue(PsiElement psiElement);
+    default boolean isDefinitionRefValue(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean isParameterRefValue(PsiElement psiElement);
+    default boolean isParameterRefValue(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean isResponseRefValue(PsiElement psiElement);
+    default boolean isResponseRefValue(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfRootSecurityKey(PsiElement psiElement);
+    default boolean childOfRootSecurityKey(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfOperationSecurityKey(PsiElement psiElement);
+    default boolean childOfOperationSecurityKey(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean isSecurityScopeNameValue(PsiElement psiElement);
+    default boolean isSecurityScopeNameValue(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfItemsCollectionFormat(PsiElement psiElement);
+    default boolean childOfItemsCollectionFormat(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfParametersCollectionFormat(PsiElement psiElement);
+    default boolean childOfParametersCollectionFormat(PsiElement psiElement) {
+        return false;
+    }
 
-    boolean childOfHeadersCollectionFormat(PsiElement psiElement);
-
-    default boolean hasPath(final PsiElement psiElement, final String pathExpression) {
-        return new PathFinder().isInsidePath(psiElement, pathExpression);
+    default boolean childOfHeadersCollectionFormat(PsiElement psiElement) {
+        return false;
     }
 
     default boolean isFormatValue(PsiElement psiElement) {
@@ -97,5 +159,9 @@ public interface PathResolver {
 
     default boolean isBooleanValue(PsiElement psiElement) {
         return false;
+    }
+
+    default boolean hasPath(final PsiElement psiElement, final String pathExpression) {
+        return new PathFinder().isInsidePath(psiElement, pathExpression);
     }
 }

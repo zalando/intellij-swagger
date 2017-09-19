@@ -42,10 +42,7 @@ abstract class ReferenceContributor extends PsiReferenceContributor {
                                                          @NotNull ProcessingContext context) {
                 return Optional.ofNullable(element.getText())
                         .map(text -> new PsiReference[]{
-                                new DefinitionsNotInRootReference(
-                                        element,
-                                        StringUtils.removeAllQuotes(text),
-                                        traversal)
+                                new DefinitionsNotInRootReference(element, StringUtils.removeAllQuotes(text))
                         }).orElse(DefinitionsNotInRootReference.EMPTY_ARRAY);
             }
         };
