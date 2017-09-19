@@ -19,14 +19,11 @@ import static org.zalando.intellij.swagger.reference.swagger.SwaggerConstants.SL
 public class DefinitionsNotInRootReference extends PsiReferenceBase<PsiElement> {
 
     private final String originalRefValue;
-    private final Traversal traversal;
 
     public DefinitionsNotInRootReference(@NotNull final PsiElement element,
-                                         @NotNull final String originalRefValue,
-                                         @NotNull final Traversal traversal) {
+                                         @NotNull final String originalRefValue) {
         super(element);
         this.originalRefValue = originalRefValue;
-        this.traversal = traversal;
     }
 
     @Nullable
