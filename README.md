@@ -2,19 +2,17 @@
 [![Coverage Status](https://coveralls.io/repos/github/zalando/intellij-swagger/badge.svg?branch=master)](https://coveralls.io/github/zalando/intellij-swagger?branch=master)
 
 # Swagger Plugin
-Swagger Plugin makes it easy to edit Swagger specification files inside IntelliJ IDEA. You can find it on JetBrains' [plugin page](https://plugins.jetbrains.com/plugin/8347).
+Swagger Plugin makes it easy to edit Swagger and OpenAPI specification files inside IntelliJ IDEA. You can find it on JetBrains' [plugin page](https://plugins.jetbrains.com/plugin/8347).
 
 ![Swagger Plugin features](https://github.com/zalando/intellij-swagger/blob/master/docs/features.gif?raw=true)
 
 ### Usage
 
-Swagger Plugin supports and identifies YAML and JSON specifications with the following rules:
-- **YAML:** File is named swagger.yaml or swagger.yml or "swagger" field exists in the YAML document
-- **JSON:** File is named swagger.json or "swagger" field exists in the JSON root object
+Open a Swagger or OpenAPI specification file, that's it.
 
 ## Development
 
-Developing with Swagger Plugin is easy, just execute the following command:
+Developing the Swagger Plugin is easy, just execute the following command:
 
 ```./gradlew runIdea```
 
@@ -30,7 +28,7 @@ If you find a bug, it would be awesome if you created an issue about it. Please 
 sebastian.monte@zalando.de
 
 ## License
-The MIT License (MIT) Copyright © 2016 Zalando SE, https://tech.zalando.com
+The MIT License (MIT) Copyright © 2017 Zalando SE, https://tech.zalando.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
