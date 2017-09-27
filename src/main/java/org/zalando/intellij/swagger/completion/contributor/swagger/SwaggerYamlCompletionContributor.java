@@ -6,16 +6,16 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.SwaggerCompletionHelper;
+import org.zalando.intellij.swagger.completion.contributor.ReferencePrefixExtractor;
 import org.zalando.intellij.swagger.completion.field.FieldCompletion;
 import org.zalando.intellij.swagger.completion.field.completion.swagger.SwaggerFieldCompletionFactory;
 import org.zalando.intellij.swagger.completion.value.ValueCompletion;
 import org.zalando.intellij.swagger.completion.value.completion.swagger.SwaggerValueCompletionFactory;
 import org.zalando.intellij.swagger.file.SwaggerFileType;
 import org.zalando.intellij.swagger.index.swagger.SwaggerIndexService;
+import org.zalando.intellij.swagger.traversal.YamlTraversal;
 import org.zalando.intellij.swagger.traversal.path.swagger.PathResolver;
 import org.zalando.intellij.swagger.traversal.path.swagger.PathResolverFactory;
-import org.zalando.intellij.swagger.completion.contributor.ReferencePrefixExtractor;
-import org.zalando.intellij.swagger.traversal.YamlTraversal;
 
 public class SwaggerYamlCompletionContributor extends CompletionContributor {
 

@@ -6,6 +6,7 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.SwaggerCompletionHelper;
+import org.zalando.intellij.swagger.completion.contributor.ReferencePrefixExtractor;
 import org.zalando.intellij.swagger.completion.field.FieldCompletion;
 import org.zalando.intellij.swagger.completion.field.completion.swagger.SwaggerFieldCompletionFactory;
 import org.zalando.intellij.swagger.completion.value.ValueCompletion;
@@ -15,7 +16,6 @@ import org.zalando.intellij.swagger.index.swagger.SwaggerIndexService;
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
 import org.zalando.intellij.swagger.traversal.path.swagger.PathResolver;
 import org.zalando.intellij.swagger.traversal.path.swagger.PathResolverFactory;
-import org.zalando.intellij.swagger.completion.contributor.ReferencePrefixExtractor;
 
 public class SwaggerJsonCompletionContributor extends CompletionContributor {
 

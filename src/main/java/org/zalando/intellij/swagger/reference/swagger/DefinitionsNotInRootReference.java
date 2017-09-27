@@ -8,7 +8,6 @@ import com.intellij.psi.PsiReferenceBase;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.zalando.intellij.swagger.traversal.Traversal;
 import org.zalando.intellij.swagger.traversal.path.PathFinder;
 
 import java.util.Optional;

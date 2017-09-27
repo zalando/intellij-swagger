@@ -1,8 +1,6 @@
 package org.zalando.intellij.swagger.traversal;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.json.psi.*;
@@ -81,7 +79,6 @@ public class JsonTraversal extends Traversal {
                 .anyMatch(jsonProperty -> propertyName.equals(jsonProperty.getName()));
     }
 
-    @Override
     public Optional<? extends PsiElement> getRootChildByName(final String propertyName, final PsiFile psiFile) {
         return getRootChildrenOfType(psiFile, JsonProperty.class).stream()
                 .filter(jsonProperty -> propertyName.equals(jsonProperty.getName()))

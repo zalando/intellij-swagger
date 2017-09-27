@@ -1,17 +1,7 @@
 package org.zalando.intellij.swagger.file;
 
-import com.google.common.collect.Lists;
-import com.intellij.json.JsonLanguage;
-import com.intellij.json.psi.JsonFile;
-import com.intellij.json.psi.JsonProperty;
-import com.intellij.json.psi.JsonValue;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.yaml.psi.YAMLDocument;
-import org.jetbrains.yaml.psi.YAMLFile;
-import org.jetbrains.yaml.psi.YAMLKeyValue;
-import org.jetbrains.yaml.psi.YAMLValue;
 import org.junit.Before;
 import org.junit.Test;
 

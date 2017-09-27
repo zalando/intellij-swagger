@@ -1,9 +1,6 @@
 package org.zalando.intellij.swagger.completion.field.model.common;
 
 import com.google.common.collect.ImmutableList;
-import org.zalando.intellij.swagger.completion.field.model.common.Field;
-import org.zalando.intellij.swagger.completion.field.model.common.ObjectField;
-import org.zalando.intellij.swagger.completion.field.model.common.StringField;
 
 import java.util.List;
 

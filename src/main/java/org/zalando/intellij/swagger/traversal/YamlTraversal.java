@@ -89,7 +89,6 @@ public class YamlTraversal extends Traversal {
                 .anyMatch(yamlKeyValue -> keyName.equals(yamlKeyValue.getName()));
     }
 
-    @Override
     public Optional<? extends PsiElement> getRootChildByName(final String keyName, final PsiFile psiFile) {
         return getRootChildrenOfType(psiFile, YAMLKeyValue.class).stream()
                 .filter(yamlKeyValue -> keyName.equals(yamlKeyValue.getName()))

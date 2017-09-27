@@ -3,11 +3,7 @@ package org.zalando.intellij.swagger.ui;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.browsers.WebBrowser;
 import com.intellij.ide.browsers.WebBrowserManager;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.ComputableActionGroup;
-import com.intellij.openapi.actionSystem.Presentation;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.psi.util.CachedValueProvider;
 import org.jetbrains.annotations.NotNull;
 

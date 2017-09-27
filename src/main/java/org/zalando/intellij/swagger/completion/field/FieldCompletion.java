@@ -4,8 +4,8 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import org.zalando.intellij.swagger.completion.field.model.common.Field;
 import org.zalando.intellij.swagger.completion.CompletionHelper;
+import org.zalando.intellij.swagger.completion.field.model.common.Field;
 
 public abstract class FieldCompletion {
 

@@ -15,8 +15,9 @@ import static org.junit.Assert.assertTrue;
 
 public class FileContentManipulatorTest {
     private FileContentManipulator fileContentManipulator;
+
     @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
+    public final TemporaryFolder tempFolder = new TemporaryFolder();
 
 
     @Before

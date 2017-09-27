@@ -12,12 +12,9 @@ import org.zalando.intellij.swagger.traversal.JsonTraversal;
 public class CreateJsonReferenceIntentionAction implements IntentionAction {
 
     private final String referenceValueWithPrefix;
-    private final ReferenceValueExtractor referenceValueExtractor;
 
-    public CreateJsonReferenceIntentionAction(final String referenceValueWithPrefix,
-                                              final ReferenceValueExtractor referenceValueExtractor) {
+    public CreateJsonReferenceIntentionAction(final String referenceValueWithPrefix) {
         this.referenceValueWithPrefix = referenceValueWithPrefix;
-        this.referenceValueExtractor = referenceValueExtractor;
     }
 
     @Nls
@@ -41,8 +38,8 @@ public class CreateJsonReferenceIntentionAction implements IntentionAction {
 
     @Override
     public void invoke(@NotNull final Project project, final Editor editor, final PsiFile psiFile) {
-        final String referenceType = referenceValueExtractor.extractType(referenceValueWithPrefix);
-        final String referenceValueWithoutPrefix = referenceValueExtractor.extractValue(referenceValueWithPrefix);
+        final String referenceType = ReferenceValueExtractor.extractType(referenceValueWithPrefix);
+        final String referenceValueWithoutPrefix = ReferenceValueExtractor.extractValue(referenceValueWithPrefix);
 
         new ReferenceCreator(referenceValueWithoutPrefix, referenceType, psiFile, new JsonTraversal()).create();
     }

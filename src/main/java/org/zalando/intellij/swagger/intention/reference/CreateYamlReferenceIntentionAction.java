@@ -13,12 +13,9 @@ import org.zalando.intellij.swagger.traversal.YamlTraversal;
 public class CreateYamlReferenceIntentionAction implements IntentionAction {
 
     private final String referenceValueWithPrefix;
-    private final ReferenceValueExtractor referenceValueExtractor;
 
-    public CreateYamlReferenceIntentionAction(final String referenceValueWithPrefix,
-                                              final ReferenceValueExtractor referenceValueExtractor) {
+    public CreateYamlReferenceIntentionAction(final String referenceValueWithPrefix) {
         this.referenceValueWithPrefix = referenceValueWithPrefix;
-        this.referenceValueExtractor = referenceValueExtractor;
     }
 
     @Nls
@@ -42,8 +39,8 @@ public class CreateYamlReferenceIntentionAction implements IntentionAction {
 
     @Override
     public void invoke(@NotNull final Project project, final Editor editor, final PsiFile psiFile) {
-        final String referenceType = referenceValueExtractor.extractType(referenceValueWithPrefix);
-        final String referenceValueWithoutPrefix = referenceValueExtractor.extractValue(referenceValueWithPrefix);
+        final String referenceType = ReferenceValueExtractor.extractType(referenceValueWithPrefix);
+        final String referenceValueWithoutPrefix = ReferenceValueExtractor.extractValue(referenceValueWithPrefix);
 
         new ReferenceCreator(referenceValueWithoutPrefix, referenceType, psiFile, new YamlTraversal()).create();
         PsiDocumentManager.getInstance(psiFile.getProject()).doPostponedOperationsAndUnblockDocument(editor.getDocument());

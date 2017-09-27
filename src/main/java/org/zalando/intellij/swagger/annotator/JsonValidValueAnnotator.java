@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.StringUtils;
 import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.intention.reference.CreateJsonReferenceIntentionAction;
-import org.zalando.intellij.swagger.reference.swagger.ReferenceValueExtractor;
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
 import org.zalando.intellij.swagger.traversal.path.swagger.MainPathResolver;
 import org.zalando.intellij.swagger.validator.value.ReferenceValidator;
@@ -22,8 +21,7 @@ public class JsonValidValueAnnotator implements Annotator {
             final ValuesValidator valuesValidator = new ValuesValidator(new JsonTraversal(),
                     new MainPathResolver(), new ReferenceValidator(
                     new CreateJsonReferenceIntentionAction(
-                            StringUtils.removeAllQuotes(psiElement.getText()),
-                            new ReferenceValueExtractor())),
+                            StringUtils.removeAllQuotes(psiElement.getText()))),
                     new SchemesValidator());
 
             valuesValidator.validate(psiElement, annotationHolder);

@@ -2,7 +2,6 @@ package org.zalando.intellij.swagger.completion.value.model.swagger;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.net.MediaType;
-import org.zalando.intellij.swagger.completion.value.model.common.BooleanValue;
 import org.zalando.intellij.swagger.completion.value.model.common.StringValue;
 import org.zalando.intellij.swagger.completion.value.model.common.Value;
 

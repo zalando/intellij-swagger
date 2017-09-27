@@ -58,10 +58,6 @@ public class OpenApiCompletionHelper implements CompletionHelper {
         return pathResolver.childOfParameters(psiElement);
     }
 
-    public boolean completeParameterItemsKey() {
-        return pathResolver.childOfParameterItems(psiElement);
-    }
-
     public boolean completeResponsesKey() {
         return pathResolver.childOfResponses(psiElement);
     }
@@ -74,52 +70,13 @@ public class OpenApiCompletionHelper implements CompletionHelper {
         return pathResolver.childOfHeader(psiElement);
     }
 
-    public boolean completeHeadersKey() {
-        return pathResolver.childOfHeaders(psiElement);
-    }
 
     public boolean completeTagKey() {
         return pathResolver.childOfTag(psiElement);
     }
 
-    public boolean completeSecurityDefinitionKey() {
-        return pathResolver.childOfSecurityDefinition(psiElement);
-    }
-
     public boolean completeSchemaKey() {
         return pathResolver.childOfSchema(psiElement);
-    }
-
-    public boolean completeSchemaItemsKey() {
-        return pathResolver.childOfSchemaItems(psiElement);
-    }
-
-    public boolean completePropertiesSchemaKey() {
-        return pathResolver.childOfPropertiesSchema(psiElement);
-    }
-
-    public boolean completeAdditionalPropertiesKey() {
-        return pathResolver.childOfAdditionalProperties(psiElement);
-    }
-
-    public boolean completeXmlKey() {
-        return pathResolver.childOfXml(psiElement);
-    }
-
-    public boolean completeDefinitionsKey() {
-        return pathResolver.childOfDefinitions(psiElement);
-    }
-
-    public boolean completeParameterDefinitionKey() {
-        return pathResolver.childOfParameterDefinition(psiElement);
-    }
-
-    public boolean completeMimeValue() {
-        return pathResolver.isMimeValue(psiElement);
-    }
-
-    public boolean completeSchemesValue() {
-        return pathResolver.isSchemesValue(psiElement);
     }
 
     public boolean completeSchemaRefValue() {
@@ -198,28 +155,12 @@ public class OpenApiCompletionHelper implements CompletionHelper {
         return pathResolver.isResponseRefValue(psiElement);
     }
 
-    public boolean completeResponseDefinition() {
-        return pathResolver.childOfResponseDefinition(psiElement);
-    }
-
-    public boolean completeRootSecurityKey() {
-        return pathResolver.childOfRootSecurityKey(psiElement);
-    }
-
-    public boolean completeOperationSecurityKey() {
-        return pathResolver.childOfOperationSecurityKey(psiElement);
-    }
-
     public Optional<String> extractSecurityNameFromSecurityObject(final PsiElement psiElement) {
         return traversal.extractSecurityNameFromSecurityItem(psiElement);
     }
 
     public List<String> getSecurityScopesIfOAuth2(final PsiElement securityDefinitionItem) {
         return traversal.getSecurityScopesIfOAuth2(securityDefinitionItem);
-    }
-
-    public boolean completeSecurityScopeNameValue() {
-        return pathResolver.isSecurityScopeNameValue(psiElement);
     }
 
     public Optional<String> getKeyNameOfObject(final PsiElement psiElement) {
@@ -230,32 +171,12 @@ public class OpenApiCompletionHelper implements CompletionHelper {
         return psiElement.getContainingFile();
     }
 
-    public boolean completeDefinitionRefValue() {
-        return false;
-    }
-
     public Optional<String> getParentKeyName() {
         return traversal.getParentKeyName(psiElement);
     }
 
     public Optional<PsiElement> getParentByName(final String parentName) {
         return traversal.getParentByName(psiElement, parentName);
-    }
-
-    public boolean completeItemsCollectionFormat() {
-        return pathResolver.childOfItemsCollectionFormat(psiElement);
-    }
-
-    public boolean completeParametersCollectionFormat() {
-        return pathResolver.childOfParametersCollectionFormat(psiElement);
-    }
-
-    public boolean completeHeadersCollectionFormat() {
-        return pathResolver.childOfHeadersCollectionFormat(psiElement);
-    }
-
-    public boolean completeTagsValue() {
-        return pathResolver.isTagsValue(psiElement);
     }
 
     public boolean completeServerKey() {
