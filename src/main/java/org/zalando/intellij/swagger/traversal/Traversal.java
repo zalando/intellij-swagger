@@ -26,8 +26,6 @@ public abstract class Traversal {
 
     public abstract List<String> getTagNames(final PsiFile psiFile);
 
-    public abstract boolean isUniqueKey(String keyName, final PsiElement psiElement);
-
     public abstract boolean isUniqueArrayStringValue(String value, final PsiElement psiElement);
 
     public abstract boolean isValue(final PsiElement psiElement);

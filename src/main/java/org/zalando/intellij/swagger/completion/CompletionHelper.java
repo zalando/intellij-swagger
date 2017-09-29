@@ -4,35 +4,48 @@ import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiNamedElement;
 import org.zalando.intellij.swagger.completion.field.model.common.Field;
 import org.zalando.intellij.swagger.completion.value.model.common.Value;
+import org.zalando.intellij.swagger.traversal.path.PathFinder;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface CompletionHelper {
+public abstract class CompletionHelper {
 
-    boolean isUniqueKey(final String keyName);
+    protected final PsiElement psiElement;
 
-    InsertHandler<LookupElement> createInsertFieldHandler(final Field field);
+    protected CompletionHelper(final PsiElement psiElement) {
+        this.psiElement = psiElement;
+    }
 
-    Optional<String> extractSecurityNameFromSecurityObject(final PsiElement psiElement);
+    public boolean isUniqueKey(final String keyName) {
+        List<? extends PsiNamedElement> children = new PathFinder().findChildrenByPathFrom("parent", psiElement);
 
-    List<String> getSecurityScopesIfOAuth2(final PsiElement securityDefinitionItem);
+        return children.stream()
+                .noneMatch((c) -> keyName.equals(c.getName()));
+    }
 
-    Optional<PsiElement> getParentByName(final String parentName);
+    public abstract InsertHandler<LookupElement> createInsertFieldHandler(final Field field);
 
-    boolean isUniqueArrayStringValue(final String keyName);
+    public abstract Optional<String> extractSecurityNameFromSecurityObject(final PsiElement psiElement);
 
-    InsertHandler<LookupElement> createInsertValueHandler(final Value value);
+    public abstract List<String> getSecurityScopesIfOAuth2(final PsiElement securityDefinitionItem);
 
-    List<PsiElement> getChildrenOfArrayObject(final PsiElement psiElement);
+    public abstract Optional<PsiElement> getParentByName(final String parentName);
 
-    List<String> getTagNames();
+    public abstract boolean isUniqueArrayStringValue(final String keyName);
 
-    Optional<String> getParentKeyName();
+    public abstract InsertHandler<LookupElement> createInsertValueHandler(final Value value);
 
-    Optional<String> getKeyNameOfObject(final PsiElement psiElement);
+    public abstract List<PsiElement> getChildrenOfArrayObject(final PsiElement psiElement);
 
-    PsiFile getPsiFile();
+    public abstract List<String> getTagNames();
+
+    public abstract Optional<String> getParentKeyName();
+
+    public abstract Optional<String> getKeyNameOfObject(final PsiElement psiElement);
+
+    public abstract PsiFile getPsiFile();
 }

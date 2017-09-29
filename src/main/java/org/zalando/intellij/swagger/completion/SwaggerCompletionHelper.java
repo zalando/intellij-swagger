@@ -12,16 +12,16 @@ import org.zalando.intellij.swagger.traversal.path.swagger.PathResolver;
 import java.util.List;
 import java.util.Optional;
 
-public class SwaggerCompletionHelper implements CompletionHelper {
+public class SwaggerCompletionHelper extends CompletionHelper {
 
-    private final PsiElement psiElement;
     private final Traversal traversal;
     private final PathResolver pathResolver;
 
     public SwaggerCompletionHelper(final PsiElement psiElement,
                                    final Traversal traversal,
                                    final PathResolver pathResolver) {
-        this.psiElement = psiElement;
+
+        super(psiElement);
         this.traversal = traversal;
         this.pathResolver = pathResolver;
     }
@@ -136,10 +136,6 @@ public class SwaggerCompletionHelper implements CompletionHelper {
 
     public List<String> getTagNames() {
         return traversal.getTagNames(psiElement.getContainingFile());
-    }
-
-    public boolean isUniqueKey(final String keyName) {
-        return traversal.isUniqueKey(keyName, psiElement);
     }
 
     public boolean isUniqueArrayStringValue(final String keyName) {

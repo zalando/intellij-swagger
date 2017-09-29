@@ -118,18 +118,6 @@ public class JsonTraversal extends Traversal {
     }
 
     @Override
-    public boolean isUniqueKey(final String keyName, final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(PsiElement::getParent)
-                .map(el -> Arrays.asList(el.getChildren()))
-                .map(children -> children.stream().filter(c -> c instanceof JsonProperty))
-                .map(childrenStream -> childrenStream.map(JsonProperty.class::cast))
-                .map(childrenStream -> childrenStream.noneMatch(jsonProperty -> keyName.equals(jsonProperty.getName())))
-                .orElse(true);
-    }
-
-    @Override
     public boolean isUniqueArrayStringValue(final String value, final PsiElement psiElement) {
         return Optional.ofNullable(psiElement.getParent())
                 .map(PsiElement::getParent)

@@ -4,24 +4,25 @@ import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiNamedElement;
 import org.zalando.intellij.swagger.completion.field.model.common.Field;
 import org.zalando.intellij.swagger.completion.value.model.common.Value;
 import org.zalando.intellij.swagger.traversal.Traversal;
+import org.zalando.intellij.swagger.traversal.path.PathFinder;
 import org.zalando.intellij.swagger.traversal.path.openapi.PathResolver;
 
 import java.util.List;
 import java.util.Optional;
 
-public class OpenApiCompletionHelper implements CompletionHelper {
+public class OpenApiCompletionHelper extends CompletionHelper {
 
-    private final PsiElement psiElement;
     private final Traversal traversal;
     private final PathResolver pathResolver;
 
     public OpenApiCompletionHelper(final PsiElement psiElement,
                                    final Traversal traversal,
                                    final PathResolver pathResolver) {
-        this.psiElement = psiElement;
+        super(psiElement);
         this.traversal = traversal;
         this.pathResolver = pathResolver;
     }
@@ -113,10 +114,6 @@ public class OpenApiCompletionHelper implements CompletionHelper {
 
     public List<String> getTagNames() {
         return traversal.getTagNames(psiElement.getContainingFile());
-    }
-
-    public boolean isUniqueKey(final String keyName) {
-        return traversal.isUniqueKey(keyName, psiElement);
     }
 
     public boolean isUniqueArrayStringValue(final String keyName) {

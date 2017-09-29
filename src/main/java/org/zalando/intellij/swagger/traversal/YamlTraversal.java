@@ -150,17 +150,6 @@ public class YamlTraversal extends Traversal {
     }
 
     @Override
-    public boolean isUniqueKey(final String keyName, final PsiElement psiElement) {
-        return Optional.ofNullable(psiElement.getParent())
-                .map(PsiElement::getParent)
-                .map(el -> Arrays.asList(el.getChildren()))
-                .map(children -> children.stream().filter(c -> c instanceof YAMLKeyValue))
-                .map(childrenStream -> childrenStream.map(YAMLKeyValue.class::cast))
-                .map(childrenStream -> childrenStream.noneMatch(yamlKeyValue -> keyName.equals(yamlKeyValue.getName())))
-                .orElse(true);
-    }
-
-    @Override
     public boolean isUniqueArrayStringValue(final String value, final PsiElement psiElement) {
         return Optional.ofNullable(psiElement.getParent())
                 .map(PsiElement::getParent)
