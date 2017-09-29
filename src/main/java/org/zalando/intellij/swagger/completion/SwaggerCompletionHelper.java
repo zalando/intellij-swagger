@@ -1,28 +1,18 @@
 package org.zalando.intellij.swagger.completion;
 
-import com.intellij.codeInsight.completion.InsertHandler;
-import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import org.zalando.intellij.swagger.completion.field.model.common.Field;
-import org.zalando.intellij.swagger.completion.value.model.common.Value;
 import org.zalando.intellij.swagger.traversal.Traversal;
 import org.zalando.intellij.swagger.traversal.path.swagger.PathResolver;
 
-import java.util.List;
-import java.util.Optional;
-
 public class SwaggerCompletionHelper extends CompletionHelper {
 
-    private final Traversal traversal;
     private final PathResolver pathResolver;
 
     public SwaggerCompletionHelper(final PsiElement psiElement,
                                    final Traversal traversal,
                                    final PathResolver pathResolver) {
 
-        super(psiElement);
-        this.traversal = traversal;
+        super(psiElement, traversal);
         this.pathResolver = pathResolver;
     }
 
@@ -130,26 +120,6 @@ public class SwaggerCompletionHelper extends CompletionHelper {
         return pathResolver.isParameterRefValue(psiElement);
     }
 
-    public List<PsiElement> getChildrenOfArrayObject(final PsiElement psiElement) {
-        return traversal.getChildrenOfArrayObject(psiElement);
-    }
-
-    public List<String> getTagNames() {
-        return traversal.getTagNames(psiElement.getContainingFile());
-    }
-
-    public boolean isUniqueArrayStringValue(final String keyName) {
-        return traversal.isUniqueArrayStringValue(keyName, psiElement);
-    }
-
-    public InsertHandler<LookupElement> createInsertFieldHandler(final Field field) {
-        return traversal.createInsertFieldHandler(field);
-    }
-
-    public InsertHandler<LookupElement> createInsertValueHandler(final Value value) {
-        return traversal.createInsertValueHandler(value);
-    }
-
     public boolean completeBooleanValue() {
         return pathResolver.isBooleanValue(psiElement);
     }
@@ -182,34 +152,6 @@ public class SwaggerCompletionHelper extends CompletionHelper {
         return pathResolver.childOfOperationSecurityKey(psiElement);
     }
 
-    public Optional<String> extractSecurityNameFromSecurityObject(final PsiElement psiElement) {
-        return traversal.extractSecurityNameFromSecurityItem(psiElement);
-    }
-
-    public List<String> getSecurityScopesIfOAuth2(final PsiElement securityDefinitionItem) {
-        return traversal.getSecurityScopesIfOAuth2(securityDefinitionItem);
-    }
-
-    public boolean completeSecurityScopeNameValue() {
-        return pathResolver.isSecurityScopeNameValue(psiElement);
-    }
-
-    public Optional<String> getKeyNameOfObject(final PsiElement psiElement) {
-        return traversal.getKeyNameOfObject(psiElement);
-    }
-
-    public PsiFile getPsiFile() {
-        return psiElement.getContainingFile();
-    }
-
-    public Optional<String> getParentKeyName() {
-        return traversal.getParentKeyName(psiElement);
-    }
-
-    public Optional<PsiElement> getParentByName(final String parentName) {
-        return traversal.getParentByName(psiElement, parentName);
-    }
-
     public boolean completeItemsCollectionFormat() {
         return pathResolver.childOfItemsCollectionFormat(psiElement);
     }
@@ -224,6 +166,10 @@ public class SwaggerCompletionHelper extends CompletionHelper {
 
     public boolean completeTagsValue() {
         return pathResolver.isTagsValue(psiElement);
+    }
+
+    public boolean completeSecurityScopeNameValue() {
+        return pathResolver.isSecurityScopeNameValue(psiElement);
     }
 
 }

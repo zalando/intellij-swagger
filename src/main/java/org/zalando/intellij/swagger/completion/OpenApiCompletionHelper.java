@@ -1,29 +1,18 @@
 package org.zalando.intellij.swagger.completion;
 
-import com.intellij.codeInsight.completion.InsertHandler;
-import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiNamedElement;
-import org.zalando.intellij.swagger.completion.field.model.common.Field;
-import org.zalando.intellij.swagger.completion.value.model.common.Value;
 import org.zalando.intellij.swagger.traversal.Traversal;
-import org.zalando.intellij.swagger.traversal.path.PathFinder;
 import org.zalando.intellij.swagger.traversal.path.openapi.PathResolver;
-
-import java.util.List;
-import java.util.Optional;
 
 public class OpenApiCompletionHelper extends CompletionHelper {
 
-    private final Traversal traversal;
     private final PathResolver pathResolver;
 
     public OpenApiCompletionHelper(final PsiElement psiElement,
                                    final Traversal traversal,
                                    final PathResolver pathResolver) {
-        super(psiElement);
-        this.traversal = traversal;
+        super(psiElement, traversal);
         this.pathResolver = pathResolver;
     }
 
@@ -71,7 +60,6 @@ public class OpenApiCompletionHelper extends CompletionHelper {
         return pathResolver.childOfHeader(psiElement);
     }
 
-
     public boolean completeTagKey() {
         return pathResolver.childOfTag(psiElement);
     }
@@ -108,26 +96,6 @@ public class OpenApiCompletionHelper extends CompletionHelper {
         return pathResolver.isCallbackRefValue(psiElement);
     }
 
-    public List<PsiElement> getChildrenOfArrayObject(final PsiElement psiElement) {
-        return traversal.getChildrenOfArrayObject(psiElement);
-    }
-
-    public List<String> getTagNames() {
-        return traversal.getTagNames(psiElement.getContainingFile());
-    }
-
-    public boolean isUniqueArrayStringValue(final String keyName) {
-        return traversal.isUniqueArrayStringValue(keyName, psiElement);
-    }
-
-    public InsertHandler<LookupElement> createInsertFieldHandler(final Field field) {
-        return traversal.createInsertFieldHandler(field);
-    }
-
-    public InsertHandler<LookupElement> createInsertValueHandler(final Value value) {
-        return traversal.createInsertValueHandler(value);
-    }
-
     public boolean completeBooleanValue() {
         return pathResolver.isBooleanValue(psiElement);
     }
@@ -150,30 +118,6 @@ public class OpenApiCompletionHelper extends CompletionHelper {
 
     public boolean completeResponseRefValue() {
         return pathResolver.isResponseRefValue(psiElement);
-    }
-
-    public Optional<String> extractSecurityNameFromSecurityObject(final PsiElement psiElement) {
-        return traversal.extractSecurityNameFromSecurityItem(psiElement);
-    }
-
-    public List<String> getSecurityScopesIfOAuth2(final PsiElement securityDefinitionItem) {
-        return traversal.getSecurityScopesIfOAuth2(securityDefinitionItem);
-    }
-
-    public Optional<String> getKeyNameOfObject(final PsiElement psiElement) {
-        return traversal.getKeyNameOfObject(psiElement);
-    }
-
-    public PsiFile getPsiFile() {
-        return psiElement.getContainingFile();
-    }
-
-    public Optional<String> getParentKeyName() {
-        return traversal.getParentKeyName(psiElement);
-    }
-
-    public Optional<PsiElement> getParentByName(final String parentName) {
-        return traversal.getParentByName(psiElement, parentName);
     }
 
     public boolean completeServerKey() {
