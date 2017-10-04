@@ -51,13 +51,6 @@ public class MainPathResolver implements PathResolver {
     }
 
     @Override
-    public final boolean childOfParameterItems(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.parameters.items") ||
-                hasPath(psiElement, "$.paths.*.*.responses.*.headers.*.items") ||
-                hasPath(psiElement, "$.paths.*.parameters.items");
-    }
-
-    @Override
     public final boolean childOfResponses(final PsiElement psiElement) {
         return hasPath(psiElement, "$.paths.*.*.responses");
     }
@@ -69,19 +62,9 @@ public class MainPathResolver implements PathResolver {
     }
 
     @Override
-    public final boolean childOfResponseDefinition(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.responses.*");
-    }
-
-    @Override
     public final boolean childOfHeader(final PsiElement psiElement) {
         return hasPath(psiElement, "$.paths.*.*.responses.*.headers.*") ||
                 hasPath(psiElement, "$.components.headers.*");
-    }
-
-    @Override
-    public final boolean childOfHeaders(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.responses.*.headers");
     }
 
     @Override
@@ -90,63 +73,9 @@ public class MainPathResolver implements PathResolver {
     }
 
     @Override
-    public final boolean childOfSecurityDefinition(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.securityDefinitions.*");
-    }
-
-    @Override
     public final boolean childOfSchema(final PsiElement psiElement) {
         return hasPath(psiElement, "$.**.schema") ||
                 hasPath(psiElement, "$.components.schemas.*");
-    }
-
-    @Override
-    public final boolean childOfSchemaItems(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.schema.items");
-    }
-
-    @Override
-    public final boolean childOfPropertiesSchema(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.properties.*");
-    }
-
-    @Override
-    public final boolean childOfAdditionalProperties(PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.additionalProperties");
-    }
-
-    @Override
-    public final boolean childOfXml(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.schema.xml");
-    }
-
-    @Override
-    public final boolean childOfDefinitions(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.definitions.*");
-    }
-
-    @Override
-    public final boolean childOfParameterDefinition(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.parameters.*");
-    }
-
-    @Override
-    public final boolean isMimeValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.consumes") ||
-                hasPath(psiElement, "$.produces") ||
-                hasPath(psiElement, "$.paths.*.*.consumes") ||
-                hasPath(psiElement, "$.paths.*.*.produces");
-
-    }
-
-    @Override
-    public final boolean isSchemesValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.schemes");
-    }
-
-    @Override
-    public final boolean isTagsValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.tags");
     }
 
     @Override
@@ -224,37 +153,6 @@ public class MainPathResolver implements PathResolver {
     @Override
     public final boolean isCallbackRefValue(final PsiElement psiElement) {
         return hasPath(psiElement, "$.**.callbacks.*.$ref");
-    }
-
-    @Override
-    public final boolean childOfRootSecurityKey(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.security");
-    }
-
-    @Override
-    public final boolean childOfOperationSecurityKey(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.security");
-    }
-
-    @Override
-    public boolean isSecurityScopeNameValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.security.*") ||
-                hasPath(psiElement, "$.paths.*.*.security.*");
-    }
-
-    @Override
-    public boolean childOfItemsCollectionFormat(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.items.collectionFormat");
-    }
-
-    @Override
-    public boolean childOfParametersCollectionFormat(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.parameters.collectionFormat");
-    }
-
-    @Override
-    public boolean childOfHeadersCollectionFormat(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.paths.*.*.responses.*.headers.*.collectionFormat");
     }
 
     @Override
