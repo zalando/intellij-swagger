@@ -37,10 +37,6 @@ public interface PathResolver {
         return false;
     }
 
-    default boolean childOfParameterItems(PsiElement psiElement) {
-        return false;
-    }
-
     default boolean childOfResponses(PsiElement psiElement) {
         return false;
     }
@@ -49,15 +45,7 @@ public interface PathResolver {
         return false;
     }
 
-    default boolean childOfResponseDefinition(PsiElement psiElement) {
-        return false;
-    }
-
     default boolean childOfHeader(PsiElement psiElement) {
-        return false;
-    }
-
-    default boolean childOfHeaders(PsiElement psiElement) {
         return false;
     }
 
@@ -65,47 +53,7 @@ public interface PathResolver {
         return false;
     }
 
-    default boolean childOfSecurityDefinition(PsiElement psiElement) {
-        return false;
-    }
-
     default boolean childOfSchema(PsiElement psiElement) {
-        return false;
-    }
-
-    default boolean childOfSchemaItems(PsiElement psiElement) {
-        return false;
-    }
-
-    default boolean childOfPropertiesSchema(PsiElement psiElement) {
-        return false;
-    }
-
-    default boolean childOfAdditionalProperties(PsiElement psiElement) {
-        return false;
-    }
-
-    default boolean childOfXml(PsiElement psiElement) {
-        return false;
-    }
-
-    default boolean childOfDefinitions(PsiElement psiElement) {
-        return false;
-    }
-
-    default boolean childOfParameterDefinition(PsiElement psiElement) {
-        return false;
-    }
-
-    default boolean isMimeValue(PsiElement psiElement) {
-        return false;
-    }
-
-    default boolean isSchemesValue(PsiElement psiElement) {
-        return false;
-    }
-
-    default boolean isTagsValue(PsiElement psiElement) {
         return false;
     }
 
@@ -118,30 +66,6 @@ public interface PathResolver {
     }
 
     default boolean isResponseRefValue(PsiElement psiElement) {
-        return false;
-    }
-
-    default boolean childOfRootSecurityKey(PsiElement psiElement) {
-        return false;
-    }
-
-    default boolean childOfOperationSecurityKey(PsiElement psiElement) {
-        return false;
-    }
-
-    default boolean isSecurityScopeNameValue(PsiElement psiElement) {
-        return false;
-    }
-
-    default boolean childOfItemsCollectionFormat(PsiElement psiElement) {
-        return false;
-    }
-
-    default boolean childOfParametersCollectionFormat(PsiElement psiElement) {
-        return false;
-    }
-
-    default boolean childOfHeadersCollectionFormat(PsiElement psiElement) {
         return false;
     }
 

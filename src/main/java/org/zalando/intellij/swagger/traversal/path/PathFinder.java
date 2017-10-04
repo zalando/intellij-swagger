@@ -125,13 +125,9 @@ public class PathFinder {
         final String currentNodeName = pathExpression.getCurrentPath();
         final PathExpression remainingPathExpression = pathExpression.afterFirst();
 
-        Optional<? extends PsiElement> childByName = getChildByName(psiElement, currentNodeName);
+        final Optional<? extends PsiElement> childByName = getChildByName(psiElement, currentNodeName);
 
-        if (!childByName.isPresent()) {
-            return Optional.empty();
-        }
-
-        return findByPathFrom(remainingPathExpression, childByName.get());
+        return childByName.flatMap(el -> findByPathFrom(remainingPathExpression, el));
     }
 
     private List<? extends PsiNamedElement> findChildrenByPathFrom(final PathExpression pathExpression, final PsiElement psiElement) {
@@ -150,13 +146,11 @@ public class PathFinder {
             return findChildrenByPathFrom(ROOT_PATH_EXPRESSION, getNextObjectParent(psiElement));
         }
 
-        Optional<? extends PsiElement> childByName = getChildByName(psiElement, currentNodeName);
+        final Optional<? extends PsiElement> childByName = getChildByName(psiElement, currentNodeName);
 
-        if (!childByName.isPresent()) {
-            return new ArrayList<>();
-        }
-
-        return findChildrenByPathFrom(remainingPathExpression, childByName.get());
+        return childByName
+                .map(el -> findChildrenByPathFrom(remainingPathExpression, el))
+                .orElseGet(ArrayList::new);
     }
 
     private Optional<? extends PsiElement> getChildByName(final PsiElement psiElement, final String name) {
