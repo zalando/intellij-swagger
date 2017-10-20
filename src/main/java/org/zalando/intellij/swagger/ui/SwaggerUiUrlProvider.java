@@ -74,14 +74,16 @@ public class SwaggerUiUrlProvider extends BuiltInWebBrowserUrlProvider implement
     @Nullable
     @Override
     protected Url getUrl(@NotNull OpenInBrowserRequest request, @NotNull VirtualFile file) throws BrowserException {
-        if (indexFileExists()) {
-            return swaggerUiIndexFile;
-        }
+        final String specificationContentAsJson = getSpecificationContentAsJson(request.getFile());
 
-        swaggerUiIndexFile = swaggerUiCreator.createSwaggerUiFiles(getSpecificationContentAsJson(request.getFile()))
-                .map(swaggerUiFolderPath ->
-                        new LocalFileUrl(swaggerUiFolderPath + File.separator + "index.html"))
-                .orElse(null);
+        if (indexFileExists()) {
+            swaggerUiCreator.updateSwaggerUiFile(swaggerUiIndexFile, specificationContentAsJson);
+        } else {
+            swaggerUiIndexFile = swaggerUiCreator.createSwaggerUiFiles(specificationContentAsJson)
+                    .map(swaggerUiFolderPath ->
+                            new LocalFileUrl(swaggerUiFolderPath + File.separator + "index.html"))
+                    .orElse(null);
+        }
 
         return swaggerUiIndexFile;
     }
