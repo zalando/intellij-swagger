@@ -41,12 +41,5 @@
 
         <fileBasedIndex implementation="org.zalando.intellij.swagger.index.swagger.SwaggerFileIndex" />
         <fileBasedIndex implementation="org.zalando.intellij.swagger.index.openapi.OpenApiFileIndex" />
-
     </extensions>
-
-    <actions>
-        <group id="SwaggerOpenInBrowserEditorContextBarGroupAction" class="org.zalando.intellij.swagger.ui.SwaggerOpenInBrowserBaseGroupAction">
-        </group>
-    </actions>
-
 </idea-plugin>
