@@ -2,6 +2,7 @@ package org.zalando.intellij.swagger.reference.swagger;
 
 public class SwaggerConstants {
 
+    public static final String SWAGGER = "swagger";
     public static final String SLASH = "/";
     public static final String REFERENCE_PREFIX = "#/";
     public static final String HASH = "#";

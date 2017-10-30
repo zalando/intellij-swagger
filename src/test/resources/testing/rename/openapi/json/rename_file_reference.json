@@ -1,0 +1,20 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/pets": {
+      "get": {
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "<caret>pet.json"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
 package org.zalando.intellij.swagger.rename.openapi.yaml;
 
+import com.intellij.openapi.vfs.VirtualFile;
 import org.zalando.intellij.swagger.SwaggerLightCodeInsightFixtureTestCase;
 
 public class OpenApiRenameRefTest extends SwaggerLightCodeInsightFixtureTestCase {
@@ -43,4 +44,35 @@ public class OpenApiRenameRefTest extends SwaggerLightCodeInsightFixtureTestCase
     public void testRenameLocalCallbackReference() {
         testRename("NewCallback", "rename_component_callback.yaml", "rename_component_callback_after.yaml");
     }
+
+    public void testRenameFileReference() {
+        myFixture.copyFileToProject(getSourceFile("pet.yaml"), "pet.yaml");
+
+        rename("rename_file_reference.yaml", "NewName.yaml");
+
+        myFixture.checkResultByFile(getSourceFile("rename_file_reference_after.yaml"));
+
+        assertNotNull(myFixture.findFileInTempDir("NewName.yaml"));
+        assertNull(myFixture.findFileInTempDir("pet.yaml"));
+    }
+
+    public void testRenameComponentFileReference() {
+        myFixture.copyFileToProject(getSourceFile("components.yaml"), "components.yaml");
+
+        rename("rename_component_file_reference.yaml", "NewName");
+
+        myFixture.checkResultByFile(getSourceFile("rename_component_file_reference_after.yaml"));
+    }
+
+    private void rename(final String file, final String newName) {
+        final VirtualFile specFile = myFixture.copyFileToProject(getSourceFile(file), "openapi.yaml");
+
+        myFixture.configureFromExistingVirtualFile(specFile);
+        myFixture.renameElementAtCaret(newName);
+    }
+
+    private String getSourceFile(final String file) {
+        return FILES_PATH + file;
+    }
+
 }
