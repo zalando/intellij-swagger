@@ -1,8 +1,9 @@
-/path:
-  get:
-    parameters:
-      -
-        $ref: '#/parameters/<caret>paramName'
+swagger: 2.0
+paths:
+  /path:
+    get:
+      parameters:
+        - $ref: '#/parameters/<caret>paramName'
 parameters:
   paramName:
     name: limit

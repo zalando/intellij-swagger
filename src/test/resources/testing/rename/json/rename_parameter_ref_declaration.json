@@ -1,11 +1,14 @@
 {
-  "/path": {
-    "get": {
-      "parameters": [
-        {
-          "$ref": "#/parameters/paramName"
-        }
-      ]
+  "swagger": "2.0",
+  "paths": {
+    "/path": {
+      "get": {
+        "parameters": [
+          {
+            "$ref": "#/parameters/paramName"
+          }
+        ]
+      }
     }
   },
   "parameters": {
