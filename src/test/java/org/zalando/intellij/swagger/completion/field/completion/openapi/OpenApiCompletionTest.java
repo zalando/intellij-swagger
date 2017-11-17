@@ -267,4 +267,10 @@ public class OpenApiCompletionTest extends JsonAndYamlCompletionTest {
                 .isOfSize(77);
     }
 
+    @Test
+    public void thatExampleKeysAreSuggested() {
+        getCaretCompletions("example")
+                .assertContains("$ref", "summary", "description", "value", "externalValue")
+                .isOfSize(5);
+    }
 }

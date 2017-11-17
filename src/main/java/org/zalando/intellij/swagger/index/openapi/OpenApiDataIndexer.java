@@ -115,22 +115,44 @@ class OpenApiDataIndexer implements DataIndexer<String, Set<String>, FileContent
         return result;
     }
 
-    /*
-     * Extracts a file name from a file reference. For example:
-     *
-     * definitions.json#/Pet -> definitions.json
-     * definitions.json -> definitions.json
-     */
     private String extractFileNameFromFileRefValue(final String fileRefValue) {
-        return org.apache.commons.lang.StringUtils.substringBefore(fileRefValue, OpenApiConstants.COMPONENT_REFERENCE_PREFIX);
+        return org.apache.commons.lang.StringUtils.substringBefore(fileRefValue, OpenApiConstants.REFERENCE_PREFIX);
     }
 
     @NotNull
     private OpenApiFileType getOpenApiFileTypeFromRefElement(final PsiElement psiElement, final String refValue) {
         if (mainPathResolver.isSchemaRefValue(psiElement)) {
             return getFileTypeFromRefValue(refValue,
-                    OpenApiFileType.SCHEMAS,
-                    OpenApiFileType.SCHEMAS_IN_ROOT);
+                    OpenApiFileType.SINGLE_SCHEMA,
+                    OpenApiFileType.MULTIPLE_SCHEMAS);
+        } else if (mainPathResolver.isResponseRefValue(psiElement)) {
+            return getFileTypeFromRefValue(refValue,
+                    OpenApiFileType.SINGLE_RESPONSE,
+                    OpenApiFileType.MULTIPLE_RESPONSES);
+        } else if (mainPathResolver.isParameterRefValue(psiElement)) {
+            return getFileTypeFromRefValue(refValue,
+                    OpenApiFileType.SINGLE_PARAMETER,
+                    OpenApiFileType.MULTIPLE_PARAMETERS);
+        } else if (mainPathResolver.isExampleRefValue(psiElement)) {
+            return getFileTypeFromRefValue(refValue,
+                    OpenApiFileType.SINGLE_EXAMPLE,
+                    OpenApiFileType.MULTIPLE_EXAMPLES);
+        } else if (mainPathResolver.isRequestBodyRefValue(psiElement)) {
+            return getFileTypeFromRefValue(refValue,
+                    OpenApiFileType.SINGLE_REQUEST_BODY,
+                    OpenApiFileType.MULTIPLE_REQUEST_BODIES);
+        } else if (mainPathResolver.isHeaderRefValue(psiElement)) {
+            return getFileTypeFromRefValue(refValue,
+                    OpenApiFileType.SINGLE_HEADER,
+                    OpenApiFileType.MULTIPLE_HEADERS);
+        } else if (mainPathResolver.isLinkRefValue(psiElement)) {
+            return getFileTypeFromRefValue(refValue,
+                    OpenApiFileType.SINGLE_LINK,
+                    OpenApiFileType.MULTIPLE_LINKS);
+        } else if (mainPathResolver.isCallbackRefValue(psiElement)) {
+            return getFileTypeFromRefValue(refValue,
+                    OpenApiFileType.SINGLE_CALLBACK,
+                    OpenApiFileType.MULTIPLE_CALLBACKS);
         }
 
         return OpenApiFileType.UNDEFINED;
@@ -139,12 +161,10 @@ class OpenApiDataIndexer implements DataIndexer<String, Set<String>, FileContent
     @NotNull
     private OpenApiFileType getFileTypeFromRefValue(final String refValue,
                                                     final OpenApiFileType singleDefinitionInFile,
-                                                    final OpenApiFileType multipleDefinitionsInRootFile) {
-        if (refValue.contains(OpenApiConstants.COMPONENT_REFERENCE_PREFIX)) {
-            return multipleDefinitionsInRootFile;
-        }
-
-        return singleDefinitionInFile;
+                                                    final OpenApiFileType multipleDefinitionsInFile) {
+        return refValue.contains(OpenApiConstants.HASH + OpenApiConstants.SLASH)
+                ? multipleDefinitionsInFile
+                : singleDefinitionInFile;
     }
 
 }
