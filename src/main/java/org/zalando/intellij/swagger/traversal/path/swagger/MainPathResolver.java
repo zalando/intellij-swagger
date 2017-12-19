@@ -146,7 +146,9 @@ public class MainPathResolver implements PathResolver {
     }
 
     public final boolean isDefinitionRefValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.schema.$ref") || hasPath(psiElement, "$.**.items.$ref");
+        return hasPath(psiElement, "$.**.schema.$ref") ||
+                hasPath(psiElement, "$.**.items.$ref") ||
+                hasPath(psiElement, "$.definitions.**.$ref");
     }
 
     public final boolean isParameterRefValue(final PsiElement psiElement) {

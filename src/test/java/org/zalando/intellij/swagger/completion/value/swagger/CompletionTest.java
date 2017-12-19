@@ -62,6 +62,13 @@ public class CompletionTest extends JsonAndYamlCompletionTest {
     }
 
     @Test
+    public void testDefinitionRefValueInDefinition() throws Exception {
+        getCaretCompletions("definition_ref_value_in_definition")
+                .assertContains("#/definitions/Bar")
+                .isOfSize(2);
+    }
+
+    @Test
     public void testParameterRefValue() throws Exception {
         getCaretCompletions("parameter_ref_value")
                 .assertContains("#/parameters/Dog")

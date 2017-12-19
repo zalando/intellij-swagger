@@ -47,7 +47,7 @@ public class PathFinder {
 
         if (pathExpression.isAnyKeys()) {
             return isInsidePath(goUpToElementWithParentName(psiElement, pathExpression.secondLast()),
-                    pathExpression.beforeLast().beforeLast());
+                    pathExpression.beforeLast());
         }
 
         if (targetKeyName.equals(ROOT_PATH)) {

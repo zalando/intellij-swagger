@@ -1,0 +1,14 @@
+{
+  "swagger": 2.0,
+  "definitions": {
+    "Foo": {
+      "type": "object",
+      "properties": {
+        "prop": {
+          "$ref": "<caret>"
+        }
+      }
+    },
+    "Bar": {}
+  }
+}
