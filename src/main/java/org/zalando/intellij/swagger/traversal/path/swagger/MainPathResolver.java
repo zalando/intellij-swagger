@@ -159,6 +159,10 @@ public class MainPathResolver implements PathResolver {
         return hasPath(psiElement, "$.paths.*.*.responses.*.$ref");
     }
 
+    public final boolean isPathRefValue(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.paths.*.$ref");
+    }
+
     public final boolean childOfRootSecurityKey(final PsiElement psiElement) {
         return hasPath(psiElement, "$.security");
     }

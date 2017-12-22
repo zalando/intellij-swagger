@@ -1,0 +1,4 @@
+swagger: 2.0
+paths:
+  /path:
+    $ref: 'paths.yaml#/<caret>pathName'

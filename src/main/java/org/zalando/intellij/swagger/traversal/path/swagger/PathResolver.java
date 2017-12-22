@@ -121,6 +121,10 @@ public interface PathResolver {
         return false;
     }
 
+    default boolean isPathRefValue(PsiElement psiElement) {
+        return false;
+    }
+
     default boolean childOfRootSecurityKey(PsiElement psiElement) {
         return false;
     }
