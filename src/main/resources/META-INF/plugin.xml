@@ -37,9 +37,36 @@
         <annotator language="JSON" implementationClass="org.zalando.intellij.swagger.annotator.JsonValidValueAnnotator"/>
         <annotator language="yaml" implementationClass="org.zalando.intellij.swagger.annotator.YamlValidValueAnnotator"/>
 
-        <webBrowserUrlProvider implementation="org.zalando.intellij.swagger.ui.SwaggerUiUrlProvider" order="last"/>
+        <webBrowserUrlProvider implementation="org.zalando.intellij.swagger.ui.provider.SwaggerUiUrlProvider" order="last"/>
 
         <fileBasedIndex implementation="org.zalando.intellij.swagger.index.swagger.SwaggerFileIndex" />
         <fileBasedIndex implementation="org.zalando.intellij.swagger.index.openapi.OpenApiFileIndex" />
+
+        <fileEditorProvider implementation="org.zalando.intellij.swagger.ui.provider.SwaggerUIEditorProvider"/>
+
+        <applicationService serviceImplementation="org.zalando.intellij.swagger.service.SwaggerFileService" />
     </extensions>
+
+    <actions>
+        <group id="Swagger.Toolbar" class="com.intellij.openapi.actionSystem.DefaultActionGroup" text="Actions for hiding and displaying the swagger UI">
+            <action class="org.zalando.intellij.swagger.ui.actions.ShowSwaggerUIViewAction"
+                    id="showSwaggerUILiveAction"
+                    text="Show Swagger UI"
+                    description="Show the swagger UI in a split view"
+                    icon="/icons/swagger.png">
+            </action>
+            <action class="org.zalando.intellij.swagger.ui.actions.HideSwaggerUIViewAction"
+                    id="hideSwaggerUILiveAction"
+                    text="Hide Swagger UI"
+                    description="Hide the swagger UI from the split view"
+                    icon="/icons/hide_swagger.png">
+            </action>
+            <action class="org.zalando.intellij.swagger.ui.actions.RefreshSwaggerUIAction"
+                    id="refreshSwaggerUIAction"
+                    text="Refesh Swagger UI"
+                    description="Creates or regenerates the swagger HTML files"
+                    icon="/icons/refresh.png">
+            </action>
+        </group>
+    </actions>
 </idea-plugin>
