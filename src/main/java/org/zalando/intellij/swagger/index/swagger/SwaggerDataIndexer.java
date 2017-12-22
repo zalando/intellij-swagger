@@ -133,6 +133,11 @@ class SwaggerDataIndexer implements DataIndexer<String, Set<String>, FileContent
                     SwaggerFileType.RESPONSES,
                     SwaggerFileType.RESPONSES_MULTIPLE_IN_ROOT,
                     SwaggerFileType.RESPONSES_MULTIPLE_NOT_IN_ROOT);
+        } else if (pathResolver.isPathRefValue(psiElement)) {
+            return getFileTypeFromRefValue(refValue,
+                    SwaggerFileType.PATHS,
+                    SwaggerFileType.PATHS_MULTIPLE_IN_ROOT,
+                    SwaggerFileType.PATHS_MULTIPLE_NOT_IN_ROOT);
         }
         return SwaggerFileType.UNDEFINED;
     }

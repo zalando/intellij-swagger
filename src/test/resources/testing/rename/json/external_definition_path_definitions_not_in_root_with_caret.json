@@ -1,0 +1,8 @@
+{
+  "swagger": 2.0,
+  "paths": {
+    "/path": {
+      "$ref": "paths.json#/paths/<caret>pathName"
+    }
+  }
+}

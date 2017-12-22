@@ -153,6 +153,15 @@
           }
         }
       }
+    },
+    "/external-1": {
+      "$ref": "path.json"
+    },
+    "/external-2": {
+      "$ref": "path_definitions_in_root.json#/Path"
+    },
+    "/external-3": {
+      "$ref": "path_definitions_not_in_root.json#/paths/Path"
     }
   }
 }

@@ -107,3 +107,9 @@ paths:
           description: unexpected error
           schema:
             "$ref": "../common/Error.yaml"
+  "/external-1":
+      $ref: "path.yaml"
+  "/external-2":
+      "$ref": "path_definitions_in_root.yaml#/Path"
+  "/external-3":
+      "$ref": "path_definitions_not_in_root.yaml#/paths/Path"
