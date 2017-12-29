@@ -20,14 +20,23 @@ import java.util.Optional;
 
 public class SwaggerFileService {
 
-    private Map<PsiFile, Path> convertedSwaggerDocuments = new HashMap<>();
+    final private Map<PsiFile, Path> convertedSwaggerDocuments = new HashMap<>();
+    final private SwaggerUiCreator swaggerUiCreator = new SwaggerUiCreator(new FileContentManipulator());
+    final private FileDetector fileDetector = new FileDetector();
 
-    private SwaggerUiCreator swaggerUiCreator = new SwaggerUiCreator(new FileContentManipulator());
-    private FileDetector fileDetector = new FileDetector();
+    public Optional<Path> convertSwaggerToHtml(@NotNull final PsiFile swaggerFile) {
+        final Optional<Path> htmlSwaggerFilesDirectory = createOrUpdateSwaggerUiFiles(swaggerFile);
+        publishChanges(htmlSwaggerFilesDirectory);
 
+        return htmlSwaggerFilesDirectory;
+    }
 
-    public Optional<Path> convertSwaggerToHtml(@NotNull PsiFile swaggerFile) {
-        String specificationContentAsJson = getSpecificationContentAsJson(swaggerFile);
+    public boolean swaggerContentExistsFor(final PsiFile file) {
+        return convertedSwaggerDocuments.containsKey(file);
+    }
+
+    private Optional<Path> createOrUpdateSwaggerUiFiles(@NotNull final PsiFile swaggerFile) {
+        final String specificationContentAsJson = getSpecificationContentAsJson(swaggerFile);
         Path htmlSwaggerContentsDirectory = convertedSwaggerDocuments.get(swaggerFile);
 
         if (htmlSwaggerContentsDirectory != null) {
@@ -35,28 +44,25 @@ public class SwaggerFileService {
             swaggerUiCreator.updateSwaggerUiFile(indexPath, specificationContentAsJson);
         } else {
             htmlSwaggerContentsDirectory = swaggerUiCreator.createSwaggerUiFiles(specificationContentAsJson)
-                    .map(Paths::get)
-                    .orElse(null);
+                .map(Paths::get)
+                .orElse(null);
             if (htmlSwaggerContentsDirectory != null) {
                 convertedSwaggerDocuments.put(swaggerFile, htmlSwaggerContentsDirectory);
             }
         }
 
-        Optional<Path> htmlSwaggerFilesPotentialUpdate = Optional.ofNullable(htmlSwaggerContentsDirectory);
-        htmlSwaggerFilesPotentialUpdate.ifPresent(swaggerHtmlFilesDir -> {
+        return Optional.ofNullable(htmlSwaggerContentsDirectory);
+    }
+
+    private void publishChanges(@NotNull final Optional<Path> htmlSwaggerFilesDirectory) {
+        htmlSwaggerFilesDirectory.ifPresent(swaggerHtmlFilesDir -> {
             SwaggerUIFilesChangeNotifier publisher = ApplicationManager
-                    .getApplication()
-                    .getMessageBus()
-                    .syncPublisher(SwaggerUIFilesChangeNotifier.SWAGGER_UI_FILES_CHANGED);
+                .getApplication()
+                .getMessageBus()
+                .syncPublisher(SwaggerUIFilesChangeNotifier.SWAGGER_UI_FILES_CHANGED);
 
             publisher.swaggerHTMLFilesChanged(SwaggerFilesUtils.convertSwaggerLocationToUrl(swaggerHtmlFilesDir));
         });
-
-        return htmlSwaggerFilesPotentialUpdate;
-    }
-
-    public boolean swaggerContentExistsFor(PsiFile file) {
-        return convertedSwaggerDocuments.containsKey(file);
     }
 
     private String getSpecificationContentAsJson(final @NotNull PsiFile psiFile) {

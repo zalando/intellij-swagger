@@ -14,7 +14,7 @@ public class RefreshSwaggerUIAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        PsiFile target = e.getData(LangDataKeys.PSI_FILE);
+        final PsiFile target = e.getData(LangDataKeys.PSI_FILE);
         if (target != null) {
             SwaggerFileService swaggerFileService = ServiceManager.getService(SwaggerFileService.class);
             swaggerFileService.convertSwaggerToHtml(target);

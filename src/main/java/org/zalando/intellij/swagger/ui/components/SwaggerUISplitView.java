@@ -22,7 +22,7 @@ public class SwaggerUISplitView extends UserDataHolderBase implements FileEditor
 
     private JComponent swaggerUIToolbar;
 
-    public SwaggerUISplitView(@NotNull TextEditor swaggerEdtior, @NotNull SwaggerUIViewer swaggerViewer) {
+    public SwaggerUISplitView(@NotNull final TextEditor swaggerEdtior, @NotNull final SwaggerUIViewer swaggerViewer) {
         this.swaggerEditor = swaggerEdtior;
         this.swaggerViewer = swaggerViewer;
 

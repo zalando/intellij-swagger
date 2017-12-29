@@ -13,7 +13,7 @@ public class HideSwaggerUIViewAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        FileEditor fileEditor = e.getData(PlatformDataKeys.FILE_EDITOR);
+        final FileEditor fileEditor = e.getData(PlatformDataKeys.FILE_EDITOR);
         if (fileEditor instanceof SwaggerUISplitView) {
             ((SwaggerUISplitView) fileEditor).getUIViewer().setVisible(false);
         } else {
