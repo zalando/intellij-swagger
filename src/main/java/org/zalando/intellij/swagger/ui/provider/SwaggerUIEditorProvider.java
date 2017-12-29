@@ -26,7 +26,7 @@ public class SwaggerUIEditorProvider implements FileEditorProvider {
     }
 
     @Override
-    public boolean accept(@NotNull Project project, @NotNull VirtualFile file) {
+    public boolean accept(@NotNull final Project project, @NotNull final VirtualFile file) {
         PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
         return (
                 fileDetector.isSwaggerContentCompatible(file) &&
@@ -36,7 +36,7 @@ public class SwaggerUIEditorProvider implements FileEditorProvider {
 
     @NotNull
     @Override
-    public FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile file) {
+    public FileEditor createEditor(@NotNull final Project project, @NotNull final VirtualFile file) {
         FileEditor fileEditor = editorProvider.createEditor(project, file);
         return new SwaggerUISplitView(
                 (TextEditor) fileEditor,
@@ -45,19 +45,19 @@ public class SwaggerUIEditorProvider implements FileEditorProvider {
     }
 
     @Override
-    public void disposeEditor(@NotNull FileEditor editor) {
+    public void disposeEditor(@NotNull final FileEditor editor) {
         editor.dispose();
     }
 
     @NotNull
     @Override
-    public FileEditorState readState(@NotNull Element sourceElement, @NotNull Project project, @NotNull VirtualFile file) {
+    public FileEditorState readState(@NotNull final Element sourceElement, @NotNull final Project project, @NotNull final VirtualFile file) {
         Element child = sourceElement.getChild(SWAGGER_EDITOR);
         return editorProvider.readState(child, project, file);
     }
 
     @Override
-    public void writeState(@NotNull FileEditorState state, @NotNull Project project, @NotNull Element targetElement) {}
+    public void writeState(@NotNull final FileEditorState state, @NotNull final Project project, @NotNull final Element targetElement) {}
 
     @NotNull
     @Override

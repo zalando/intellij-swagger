@@ -9,7 +9,7 @@ import java.nio.file.Path;
 
 public class SwaggerFilesUtils {
 
-    public static Url convertSwaggerLocationToUrl(@NotNull Path swaggerHtmlDirectory) {
+    public static Url convertSwaggerLocationToUrl(@NotNull final Path swaggerHtmlDirectory) {
         return new LocalFileUrl(swaggerHtmlDirectory.toString() + File.separator + "index.html");
     }
 }

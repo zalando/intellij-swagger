@@ -11,11 +11,11 @@ import com.intellij.util.ui.UIUtil;
 import javax.swing.*;
 import java.awt.*;
 
-public class SwaggerUIToolbar extends JPanel {
+class SwaggerUIToolbar extends JPanel {
 
     private static final String SWAGGER_TOOLBAR_GROUP_ID = "Swagger.Toolbar";
 
-    public SwaggerUIToolbar(final JComponent targetComponentForActions) {
+    SwaggerUIToolbar(final JComponent targetComponentForActions) {
         super(new GridBagLayout());
 
         final ActionToolbar toolbar = createToolbarFromGroupId(SWAGGER_TOOLBAR_GROUP_ID);
@@ -25,7 +25,7 @@ public class SwaggerUIToolbar extends JPanel {
         setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UIUtil.CONTRAST_BORDER_COLOR));
     }
 
-    private static ActionToolbar createToolbarFromGroupId(String groupId) {
+    private static ActionToolbar createToolbarFromGroupId(final String groupId) {
         final ActionManager actionManager = ActionManager.getInstance();
 
         if (!actionManager.isGroup(groupId)) {

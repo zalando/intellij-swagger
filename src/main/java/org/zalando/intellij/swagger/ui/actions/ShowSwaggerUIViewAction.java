@@ -17,8 +17,8 @@ public class ShowSwaggerUIViewAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        FileEditor fileEditor = e.getData(PlatformDataKeys.FILE_EDITOR);
-        PsiFile target = e.getData(LangDataKeys.PSI_FILE);
+        final FileEditor fileEditor = e.getData(PlatformDataKeys.FILE_EDITOR);
+        final PsiFile target = e.getData(LangDataKeys.PSI_FILE);
         if (fileEditor instanceof SwaggerUISplitView && target != null) {
             ((SwaggerUISplitView) fileEditor).getUIViewer().setVisible(true);
             SwaggerFileService swaggerFileService = ServiceManager.getService(SwaggerFileService.class);
