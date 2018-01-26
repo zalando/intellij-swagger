@@ -56,7 +56,7 @@ public class SwaggerUIViewer extends JPanel {
 
         @Override
         public void swaggerHTMLFilesChanged(Url indexUrl) {
-            Platform.runLater(() -> webEngine.load("file://" + indexUrl.toExternalForm()));
+            Platform.runLater(() -> webEngine.load("file:///" + indexUrl.toExternalForm()));
         }
     }
 }
