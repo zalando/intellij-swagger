@@ -64,7 +64,8 @@ public class SwaggerUISplitView extends UserDataHolderBase implements FileEditor
     }
 
     @Override
-    public void setState(@NotNull FileEditorState state) { }
+    public void setState(@NotNull FileEditorState state) {
+    }
 
     @Override
     public boolean isModified() {
@@ -109,5 +110,6 @@ public class SwaggerUISplitView extends UserDataHolderBase implements FileEditor
     }
 
     @Override
-    public void dispose() { }
+    public void dispose() {
+    }
 }

@@ -1,15 +1,15 @@
 package org.zalando.intellij.swagger.ui.components;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.ui.JBColor;
-import com.intellij.util.Url;
-import com.sun.javafx.application.PlatformImpl;
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.Scene;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
-import org.zalando.intellij.swagger.ui.actions.SwaggerUIFilesChangeNotifier;
+import com.intellij.openapi.application.*;
+import com.intellij.ui.*;
+import com.intellij.util.*;
+import com.intellij.util.messages.*;
+import com.sun.javafx.application.*;
+import javafx.application.*;
+import javafx.embed.swing.*;
+import javafx.scene.*;
+import javafx.scene.web.*;
+import org.zalando.intellij.swagger.ui.actions.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +17,8 @@ import java.awt.*;
 public class SwaggerUIViewer extends JPanel {
 
     private WebEngine webEngine;
+    private MessageBus messageBus;
+    private MessageBusConnection messageBusConnection;
 
     public SwaggerUIViewer() {
         super(new BorderLayout());
@@ -27,6 +29,10 @@ public class SwaggerUIViewer extends JPanel {
         ApplicationManager
                 .getApplication()
                 .invokeLater(() -> PlatformImpl.startup(this::createWebView));
+
+        messageBus = ApplicationManager
+                .getApplication()
+                .getMessageBus();
     }
 
     private void createWebView() {
@@ -34,22 +40,26 @@ public class SwaggerUIViewer extends JPanel {
         WebView myWebView = new WebView();
         Scene scene = new Scene(myWebView);
 
-        webEngine  = myWebView.getEngine();
+        webEngine = myWebView.getEngine();
 
         Platform.runLater(() -> myPanel.setScene(scene));
 
         this.add(myPanel, BorderLayout.CENTER);
         this.repaint();
-
-        subscribeToSwaggerFileUpdates();
     }
 
-    private void subscribeToSwaggerFileUpdates() {
-        ApplicationManager
-                .getApplication()
-                .getMessageBus()
-                .connect()
-                .subscribe(SwaggerUIFilesChangeNotifier.SWAGGER_UI_FILES_CHANGED, new SwaggerUIUpdater());
+    public void subscribeChanges() {
+        messageBusConnection = messageBus.connect();
+
+        messageBusConnection.subscribe(
+                SwaggerUIFilesChangeNotifier.SWAGGER_UI_FILES_CHANGED,
+                new SwaggerUIUpdater());
+    }
+
+    public void unsubscribeChanges() {
+        if (messageBusConnection != null) {
+            messageBusConnection.disconnect();
+        }
     }
 
     class SwaggerUIUpdater implements SwaggerUIFilesChangeNotifier {
