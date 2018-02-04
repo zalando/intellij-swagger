@@ -38,9 +38,10 @@ public class SwaggerUIEditorProvider implements FileEditorProvider {
     @Override
     public FileEditor createEditor(@NotNull final Project project, @NotNull final VirtualFile file) {
         FileEditor fileEditor = editorProvider.createEditor(project, file);
+
         return new SwaggerUISplitView(
                 (TextEditor) fileEditor,
-                new SwaggerUIViewer()
+                new SwaggerUIViewer(file)
         );
     }
 

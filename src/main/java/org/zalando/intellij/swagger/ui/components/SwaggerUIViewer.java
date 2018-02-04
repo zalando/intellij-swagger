@@ -1,6 +1,7 @@
 package org.zalando.intellij.swagger.ui.components;
 
 import com.intellij.openapi.application.*;
+import com.intellij.openapi.vfs.*;
 import com.intellij.ui.*;
 import com.intellij.util.*;
 import com.intellij.util.messages.*;
@@ -19,9 +20,11 @@ public class SwaggerUIViewer extends JPanel {
     private WebEngine webEngine;
     private MessageBus messageBus;
     private MessageBusConnection messageBusConnection;
+    private final VirtualFile file;
 
-    public SwaggerUIViewer() {
+    public SwaggerUIViewer(final VirtualFile file) {
         super(new BorderLayout());
+        this.file = file;
         this.setBackground(JBColor.background());
         this.setVisible(false);
         Platform.setImplicitExit(false);
@@ -65,8 +68,10 @@ public class SwaggerUIViewer extends JPanel {
     class SwaggerUIUpdater implements SwaggerUIFilesChangeNotifier {
 
         @Override
-        public void swaggerHTMLFilesChanged(Url indexUrl) {
-            Platform.runLater(() -> webEngine.load("file:///" + indexUrl.toExternalForm()));
+        public void swaggerHTMLFilesChanged(final VirtualFile updatedFile, Url indexUrl) {
+            if (file.equals(updatedFile)) {
+                Platform.runLater(() -> webEngine.load("file:///" + indexUrl.toExternalForm()));
+            }
         }
     }
 }

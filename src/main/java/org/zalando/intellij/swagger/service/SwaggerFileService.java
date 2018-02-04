@@ -1,22 +1,17 @@
 package org.zalando.intellij.swagger.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.psi.PsiFile;
-import com.intellij.util.LocalFileUrl;
-import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.file.FileContentManipulator;
-import org.zalando.intellij.swagger.file.FileDetector;
-import org.zalando.intellij.swagger.file.SwaggerUiCreator;
-import org.zalando.intellij.swagger.ui.actions.SwaggerUIFilesChangeNotifier;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.dataformat.yaml.*;
+import com.intellij.openapi.application.*;
+import com.intellij.openapi.vfs.*;
+import com.intellij.psi.*;
+import com.intellij.util.*;
+import org.jetbrains.annotations.*;
+import org.zalando.intellij.swagger.file.*;
+import org.zalando.intellij.swagger.ui.actions.*;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.nio.file.*;
+import java.util.*;
 
 public class SwaggerFileService {
 
@@ -25,10 +20,11 @@ public class SwaggerFileService {
     final private FileDetector fileDetector = new FileDetector();
 
     public Optional<Path> convertSwaggerToHtml(@NotNull final PsiFile swaggerFile) {
-        final Optional<Path> htmlSwaggerFilesDirectory = createOrUpdateSwaggerUiFiles(swaggerFile);
-        publishChanges(htmlSwaggerFilesDirectory);
+        Optional<Path> swaggerUiDirectory = createOrUpdateSwaggerUiFiles(swaggerFile);
 
-        return htmlSwaggerFilesDirectory;
+        swaggerUiDirectory.ifPresent((path -> publishChanges(swaggerFile.getVirtualFile(), path)));
+
+        return swaggerUiDirectory;
     }
 
     public boolean swaggerContentExistsFor(final PsiFile file) {
@@ -44,8 +40,8 @@ public class SwaggerFileService {
             swaggerUiCreator.updateSwaggerUiFile(indexPath, specificationContentAsJson);
         } else {
             htmlSwaggerContentsDirectory = swaggerUiCreator.createSwaggerUiFiles(specificationContentAsJson)
-                .map(Paths::get)
-                .orElse(null);
+                    .map(Paths::get)
+                    .orElse(null);
             if (htmlSwaggerContentsDirectory != null) {
                 convertedSwaggerDocuments.put(swaggerFile, htmlSwaggerContentsDirectory);
             }
@@ -54,15 +50,12 @@ public class SwaggerFileService {
         return Optional.ofNullable(htmlSwaggerContentsDirectory);
     }
 
-    private void publishChanges(@NotNull final Optional<Path> htmlSwaggerFilesDirectory) {
-        htmlSwaggerFilesDirectory.ifPresent(swaggerHtmlFilesDir -> {
-            SwaggerUIFilesChangeNotifier publisher = ApplicationManager
+    private void publishChanges(final VirtualFile swaggerFile, final Path swaggerUiDirectory) {
+        ApplicationManager
                 .getApplication()
                 .getMessageBus()
-                .syncPublisher(SwaggerUIFilesChangeNotifier.SWAGGER_UI_FILES_CHANGED);
-
-            publisher.swaggerHTMLFilesChanged(SwaggerFilesUtils.convertSwaggerLocationToUrl(swaggerHtmlFilesDir));
-        });
+                .syncPublisher(SwaggerUIFilesChangeNotifier.SWAGGER_UI_FILES_CHANGED)
+                .swaggerHTMLFilesChanged(swaggerFile, SwaggerFilesUtils.convertSwaggerLocationToUrl(swaggerUiDirectory));
     }
 
     private String getSpecificationContentAsJson(final @NotNull PsiFile psiFile) {
