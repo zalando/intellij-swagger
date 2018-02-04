@@ -1,15 +1,12 @@
 package org.zalando.intellij.swagger.ui.actions;
 
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileEditor.FileEditor;
-import com.intellij.psi.PsiFile;
-import org.zalando.intellij.swagger.service.SwaggerFileService;
-import org.zalando.intellij.swagger.ui.components.SwaggerUISplitView;
+import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.components.*;
+import com.intellij.openapi.diagnostic.*;
+import com.intellij.openapi.fileEditor.*;
+import com.intellij.psi.*;
+import org.zalando.intellij.swagger.service.*;
+import org.zalando.intellij.swagger.ui.components.*;
 
 public class ShowSwaggerUIViewAction extends AnAction {
 
@@ -20,7 +17,10 @@ public class ShowSwaggerUIViewAction extends AnAction {
         final FileEditor fileEditor = e.getData(PlatformDataKeys.FILE_EDITOR);
         final PsiFile target = e.getData(LangDataKeys.PSI_FILE);
         if (fileEditor instanceof SwaggerUISplitView && target != null) {
-            ((SwaggerUISplitView) fileEditor).getUIViewer().setVisible(true);
+            SwaggerUISplitView splitView = (SwaggerUISplitView) fileEditor;
+            splitView.getUIViewer().setVisible(true);
+            splitView.getUIViewer().subscribeChanges();
+
             SwaggerFileService swaggerFileService = ServiceManager.getService(SwaggerFileService.class);
             swaggerFileService.convertSwaggerToHtml(target);
         } else {
