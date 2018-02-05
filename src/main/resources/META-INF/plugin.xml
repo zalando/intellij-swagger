@@ -1,14 +1,14 @@
 <idea-plugin version="2">
     <id>org.zalando.intellij.swagger</id>
     <name>Swagger Plugin</name>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <vendor email="sebastian.monte@zalando.de" url="https://tech.zalando.com/">Zalando SE</vendor>
 
     <depends>com.intellij.modules.lang</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
 
     <description><![CDATA[
-     <p>A plugin to help you easily edit Swagger specification files.</p><br/>
+     <p>A plugin to help you easily edit Swagger and Open API specification files.</p><br/>
 
      <p>Like this plugin? <b>Give it a star</b> at <a href="https://github.com/zalando/intellij-swagger">GitHub</a> and spread the word!</p>
     ]]></description>
