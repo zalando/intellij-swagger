@@ -1,6 +1,10 @@
 package org.zalando.intellij.swagger.ui.provider;
 
-import com.intellij.openapi.fileEditor.*;
+import com.intellij.openapi.fileEditor.FileEditor;
+import com.intellij.openapi.fileEditor.FileEditorPolicy;
+import com.intellij.openapi.fileEditor.FileEditorProvider;
+import com.intellij.openapi.fileEditor.FileEditorState;
+import com.intellij.openapi.fileEditor.TextEditor;
 import com.intellij.openapi.fileEditor.impl.text.PsiAwareTextEditorProvider;
 import com.intellij.openapi.fileEditor.impl.text.TextEditorProvider;
 import com.intellij.openapi.project.Project;
@@ -14,8 +18,6 @@ import org.zalando.intellij.swagger.ui.components.SwaggerUISplitView;
 import org.zalando.intellij.swagger.ui.components.SwaggerUIViewer;
 
 public class SwaggerUIEditorProvider implements FileEditorProvider {
-
-    private static final String SWAGGER_EDITOR = "swagger_editor";
 
     private final TextEditorProvider editorProvider;
     private final FileDetector fileDetector;
@@ -45,25 +47,21 @@ public class SwaggerUIEditorProvider implements FileEditorProvider {
         );
     }
 
-    @Override
-    public void disposeEditor(@NotNull final FileEditor editor) {
-        editor.dispose();
-    }
-
     @NotNull
     @Override
     public FileEditorState readState(@NotNull final Element sourceElement, @NotNull final Project project, @NotNull final VirtualFile file) {
-        Element child = sourceElement.getChild(SWAGGER_EDITOR);
-        return editorProvider.readState(child, project, file);
+        return editorProvider.readState(sourceElement, project, file);
     }
 
     @Override
-    public void writeState(@NotNull final FileEditorState state, @NotNull final Project project, @NotNull final Element targetElement) {}
+    public void writeState(@NotNull final FileEditorState state, @NotNull final Project project, @NotNull final Element targetElement) {
+        editorProvider.writeState(state, project, targetElement);
+    }
 
     @NotNull
     @Override
     public String getEditorTypeId() {
-        return "SwingUIEditor["+editorProvider.toString()+"]";
+        return "SwingUIEditor[" + editorProvider.toString() + "]";
     }
 
     @NotNull

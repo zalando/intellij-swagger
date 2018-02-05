@@ -4,14 +4,17 @@ import com.intellij.codeHighlighting.BackgroundEditorHighlighter;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorLocation;
 import com.intellij.openapi.fileEditor.FileEditorState;
+import com.intellij.openapi.fileEditor.FileEditorStateLevel;
 import com.intellij.openapi.fileEditor.TextEditor;
+import com.intellij.openapi.fileEditor.impl.text.TextEditorState;
 import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.ui.JBSplitter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
 import java.beans.PropertyChangeListener;
 
 public class SwaggerUISplitView extends UserDataHolderBase implements FileEditor {
@@ -43,6 +46,7 @@ public class SwaggerUISplitView extends UserDataHolderBase implements FileEditor
         return result;
     }
 
+    @NotNull
     public JComponent getComponent() {
         return splitUIView;
     }
@@ -65,6 +69,12 @@ public class SwaggerUISplitView extends UserDataHolderBase implements FileEditor
 
     @Override
     public void setState(@NotNull FileEditorState state) {
+    }
+
+    @NotNull
+    @Override
+    public FileEditorState getState(@NotNull FileEditorStateLevel level) {
+        return new TextEditorState();
     }
 
     @Override
