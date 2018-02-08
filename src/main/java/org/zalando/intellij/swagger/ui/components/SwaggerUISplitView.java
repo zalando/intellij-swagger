@@ -64,7 +64,7 @@ public class SwaggerUISplitView extends UserDataHolderBase implements FileEditor
     @NotNull
     @Override
     public String getName() {
-        return "SwaggerUISplitView";
+        return "Swagger UI (Beta)";
     }
 
     @Override

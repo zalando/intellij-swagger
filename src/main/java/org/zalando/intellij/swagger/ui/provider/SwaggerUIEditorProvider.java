@@ -67,6 +67,6 @@ public class SwaggerUIEditorProvider implements FileEditorProvider {
     @NotNull
     @Override
     public FileEditorPolicy getPolicy() {
-        return FileEditorPolicy.HIDE_DEFAULT_EDITOR;
+        return FileEditorPolicy.PLACE_AFTER_DEFAULT_EDITOR;
     }
 }
