@@ -1,17 +1,20 @@
 package org.zalando.intellij.swagger.service;
 
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.dataformat.yaml.*;
-import com.intellij.openapi.application.*;
-import com.intellij.openapi.vfs.*;
-import com.intellij.psi.*;
-import com.intellij.util.*;
-import org.jetbrains.annotations.*;
-import org.zalando.intellij.swagger.file.*;
-import org.zalando.intellij.swagger.ui.actions.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.intellij.psi.PsiFile;
+import com.intellij.util.LocalFileUrl;
+import org.jetbrains.annotations.NotNull;
+import org.zalando.intellij.swagger.file.FileContentManipulator;
+import org.zalando.intellij.swagger.file.FileDetector;
+import org.zalando.intellij.swagger.file.SwaggerUiCreator;
 
-import java.nio.file.*;
-import java.util.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class SwaggerFileService {
 
@@ -20,18 +23,6 @@ public class SwaggerFileService {
     final private FileDetector fileDetector = new FileDetector();
 
     public Optional<Path> convertSwaggerToHtml(@NotNull final PsiFile swaggerFile) {
-        Optional<Path> swaggerUiDirectory = createOrUpdateSwaggerUiFiles(swaggerFile);
-
-        swaggerUiDirectory.ifPresent((path -> publishChanges(swaggerFile.getVirtualFile(), path)));
-
-        return swaggerUiDirectory;
-    }
-
-    public boolean swaggerContentExistsFor(final PsiFile file) {
-        return convertedSwaggerDocuments.containsKey(file);
-    }
-
-    private Optional<Path> createOrUpdateSwaggerUiFiles(@NotNull final PsiFile swaggerFile) {
         final String specificationContentAsJson = getSpecificationContentAsJson(swaggerFile);
         Path htmlSwaggerContentsDirectory = convertedSwaggerDocuments.get(swaggerFile);
 
@@ -50,13 +41,10 @@ public class SwaggerFileService {
         return Optional.ofNullable(htmlSwaggerContentsDirectory);
     }
 
-    private void publishChanges(final VirtualFile swaggerFile, final Path swaggerUiDirectory) {
-        ApplicationManager
-                .getApplication()
-                .getMessageBus()
-                .syncPublisher(SwaggerUIFilesChangeNotifier.SWAGGER_UI_FILES_CHANGED)
-                .swaggerHTMLFilesChanged(swaggerFile, SwaggerFilesUtils.convertSwaggerLocationToUrl(swaggerUiDirectory));
+    public boolean swaggerContentExistsFor(final PsiFile file) {
+        return convertedSwaggerDocuments.containsKey(file);
     }
+
 
     private String getSpecificationContentAsJson(final @NotNull PsiFile psiFile) {
         final String content = psiFile.getText();
