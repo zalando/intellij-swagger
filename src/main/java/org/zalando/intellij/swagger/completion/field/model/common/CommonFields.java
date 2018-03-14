@@ -51,6 +51,11 @@ public class CommonFields {
     public static List<Field> responses() {
         return ImmutableList.of(
                 new ObjectField("default"),
+                
+                new ResponseField("100"),
+                new ResponseField("101"),
+                new ResponseField("102"), 
+            
                 new ResponseField("200"),
                 new ResponseField("201"),
                 new ResponseField("202"),
