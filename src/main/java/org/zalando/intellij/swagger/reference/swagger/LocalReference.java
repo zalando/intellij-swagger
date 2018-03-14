@@ -25,7 +25,9 @@ public class LocalReference extends PsiReferenceBase<PsiElement> {
     @Override
     public PsiElement resolve() {
         final String referenceType = ReferenceValueExtractor.extractType(originalRefValue);
-        final String referencedValue = ReferenceValueExtractor.extractValue(originalRefValue);
+        String referencedValue = ReferenceValueExtractor.extractValue(originalRefValue);
+
+        referencedValue = referencedValue.replace(".", "\\.");
 
         final String pathExpression = String.format("$.%s.%s", referenceType, referencedValue);
         final PsiFile psiFile = getElement().getContainingFile();

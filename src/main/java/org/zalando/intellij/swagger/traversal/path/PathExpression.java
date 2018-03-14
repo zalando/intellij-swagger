@@ -1,6 +1,9 @@
 package org.zalando.intellij.swagger.traversal.path;
 
-import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class PathExpression {
 
@@ -15,37 +18,50 @@ public class PathExpression {
     }
 
     String getCurrentPath() {
-        return StringUtils.substringBefore(path, SEPARATOR);
+        return splitPath()[0];
+    }
+
+    @NotNull
+    private String[] splitPath() {
+        return path.split("(?<!\\\\)\\.");
     }
 
     PathExpression afterFirst() {
-        return new PathExpression(StringUtils.substringAfter(path, SEPARATOR));
+        final String[] parts = splitPath();
+
+        final String afterFirst = Arrays.stream(parts)
+                .skip(1)
+                .collect(Collectors.joining(SEPARATOR));
+
+        return new PathExpression(afterFirst);
     }
 
     PathExpression beforeLast() {
-        return new PathExpression(StringUtils.substringBeforeLast(path, SEPARATOR));
+        final String[] parts = splitPath();
+
+        final String beforeLast = Arrays.stream(parts)
+                .limit(parts.length == 1 ? 1 : parts.length - 1)
+                .collect(Collectors.joining(SEPARATOR));
+
+        return new PathExpression(beforeLast);
     }
 
     boolean isEmpty() {
-        return "".equals(path);
+        return path.isEmpty();
     }
 
     String last() {
-        String[] paths = splitToPaths();
+        String[] paths = splitPath();
         return paths[paths.length - 1];
     }
 
     String secondLast() {
-        String[] paths = splitToPaths();
+        String[] paths = splitPath();
         return paths[paths.length - 2];
     }
 
     boolean hasOnePath() {
-        return splitToPaths().length == 1;
-    }
-
-    private String[] splitToPaths() {
-        return StringUtils.split(path, SEPARATOR);
+        return splitPath().length == 1;
     }
 
     public boolean isRoot() {
@@ -58,5 +74,9 @@ public class PathExpression {
 
     boolean isAnyKeys() {
         return ANY_KEYS.equals(last());
+    }
+
+    String getPath() {
+        return path;
     }
 }

@@ -45,6 +45,10 @@ public class RenameRefTest extends SwaggerLightCodeInsightFixtureTestCase {
         testRename("newName", "rename_response_ref_declaration.json", "rename_response_ref_declaration_after.json");
     }
 
+    public void testRenameReferenceWithDotInKey() {
+        testRename("newName", "rename_definition_with_dot_in_key.json", "rename_definition_with_dot_in_key_after.json");
+    }
+
     public void testRenameJsonFileReference() {
         myFixture.copyFileToProject(FILES_PATH + "empty.json", "definitions/pet.json");
         final VirtualFile swaggerFile = myFixture.copyFileToProject(FILES_PATH + "rename_file_reference.json", "swagger.json");

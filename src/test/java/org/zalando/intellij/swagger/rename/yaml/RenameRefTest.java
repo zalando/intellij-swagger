@@ -45,6 +45,10 @@ public class RenameRefTest extends SwaggerLightCodeInsightFixtureTestCase {
         testRename("newName", "rename_response_ref_declaration.yaml", "rename_response_ref_declaration_after.yaml");
     }
 
+    public void testRenameReferenceWithDotInKey() {
+        testRename("newName", "rename_definition_with_dot_in_key.yaml", "rename_definition_with_dot_in_key_after.yaml");
+    }
+
     public void testRenameFileReference() {
         myFixture.copyFileToProject(FILES_PATH + "empty.yaml", "definitions/pet.yaml");
         final VirtualFile swaggerFile = myFixture.copyFileToProject(FILES_PATH + "rename_file_reference.yaml", "swagger.yaml");
