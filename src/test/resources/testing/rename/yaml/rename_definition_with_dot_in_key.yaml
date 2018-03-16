@@ -1,0 +1,11 @@
+swagger: '2.0'
+paths:
+  /pets:
+    get:
+      responses:
+        '200':
+          schema:
+            "$ref": "#/definitions/V1.Pets"
+definitions:
+  <caret>V1.Pets:
+  type: array

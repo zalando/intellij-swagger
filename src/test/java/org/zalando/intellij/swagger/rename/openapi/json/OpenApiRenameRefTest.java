@@ -45,6 +45,10 @@ public class OpenApiRenameRefTest extends SwaggerLightCodeInsightFixtureTestCase
         testRename("NewCallback", "rename_component_callback.json", "rename_component_callback_after.json");
     }
 
+    public void testRenameReferenceWithDotInKey() {
+        testRename("NewName", "rename_component_with_dot_in_key.json", "rename_component_with_dot_in_key_after.json");
+    }
+
     public void testRenameFileReference() {
         myFixture.copyFileToProject(getSourceFile("pet.json"), "pet.json");
 

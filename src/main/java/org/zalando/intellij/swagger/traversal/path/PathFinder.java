@@ -39,7 +39,7 @@ public class PathFinder {
         }
 
         final PsiNamedElement nextNamedParent = getNextNamedParent(psiElement);
-        final String targetKeyName = pathExpression.last();
+        final String unescapedTargetKeyName = unescapedName(pathExpression.last());
 
         if (pathExpression.isAnyKey()) {
             return isInsidePath(getNextNamedParent(nextNamedParent.getParent()), pathExpression.beforeLast());
@@ -50,11 +50,11 @@ public class PathFinder {
                     pathExpression.beforeLast());
         }
 
-        if (targetKeyName.equals(ROOT_PATH)) {
+        if (unescapedTargetKeyName.equals(ROOT_PATH)) {
             return nextNamedParent instanceof PsiFile;
         }
 
-        return targetKeyName.equals(nextNamedParent.getName()) &&
+        return unescapedTargetKeyName.equals(nextNamedParent.getName()) &&
                 (pathExpression.hasOnePath() ||
                         isInsidePath(nextNamedParent.getParent(), pathExpression.beforeLast()));
     }
@@ -71,7 +71,7 @@ public class PathFinder {
         if (psiElement instanceof PsiNamedElement) {
             final PsiNamedElement psiNamedElement = (PsiNamedElement) psiElement;
 
-            if (keyName.equals(psiNamedElement.getName())) {
+            if (unescapedName(keyName).equals(psiNamedElement.getName())) {
                 return (PsiNamedElement) psiElement;
             } else if (keyName.equals(ROOT_PATH)) {
                 return isRoot(psiElement) ?
@@ -172,9 +172,15 @@ public class PathFinder {
             return navigatablePsiElement.isPresent() ? getChildByName(navigatablePsiElement.get(), name) : Optional.empty();
         }
 
+        final String unescapedName = unescapedName(name);
+
         return children.stream()
-                .filter(child -> name.equals(child.getName()))
+                .filter(child -> unescapedName.equals(child.getName()))
                 .findFirst();
+    }
+
+    private String unescapedName(final String name) {
+        return name.replace("\\.", ".");
     }
 
     private PsiElement getNextObjectParent(final PsiElement psiElement) {
