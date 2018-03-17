@@ -33,7 +33,10 @@ public class DefinitionsInRootReference extends PsiReferenceBase<PsiElement> {
             return null;
         }
 
-        final String referencedValue = ReferenceValueExtractor.extractValue(originalRefValue);
+        String referencedValue = ReferenceValueExtractor.extractValue(originalRefValue);
+
+        referencedValue = referencedValue.replace(".", "\\.");
+
         final String pathExpression = String.format("$.%s", referencedValue);
 
         return new PathFinder().findByPathFrom(pathExpression, referencedFile)

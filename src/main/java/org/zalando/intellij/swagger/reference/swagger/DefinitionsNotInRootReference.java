@@ -35,7 +35,10 @@ public class DefinitionsNotInRootReference extends PsiReferenceBase<PsiElement> 
         }
 
         final String referencedType = ReferenceValueExtractor.extractType(originalRefValue);
-        final String referencedValue = ReferenceValueExtractor.extractValue(originalRefValue);
+        String referencedValue = ReferenceValueExtractor.extractValue(originalRefValue);
+
+        referencedValue = referencedValue.replace(".", "\\.");
+
         final String pathExpression = String.format("$.%s.%s", referencedType, referencedValue);
 
         return new PathFinder().findByPathFrom(pathExpression, referencedFile)
