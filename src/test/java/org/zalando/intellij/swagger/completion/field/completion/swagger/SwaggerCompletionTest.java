@@ -161,7 +161,7 @@ public class SwaggerCompletionTest extends JsonAndYamlCompletionTest {
     public void thatResponsesKeysAreSuggested() {
         getCaretCompletions("responses")
                 .assertContains("default", "200", "201")
-                .isOfSize(59);
+                .isOfSize(62);
     }
 
     @Test
