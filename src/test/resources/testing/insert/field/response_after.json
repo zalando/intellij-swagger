@@ -4,7 +4,7 @@
     "/pets": {
       "get": {
         "responses": {
-          "200": {
+          "100": {
             "description": "<caret>"
           }
         }
