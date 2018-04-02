@@ -76,6 +76,13 @@ public class CompletionTest extends JsonAndYamlCompletionTest {
     }
 
     @Test
+    public void testParameterRefValueChildOfPath() throws Exception {
+        getCaretCompletions("parameter_ref_value_child_of_path")
+                .assertContains("#/parameters/Dog")
+                .isOfSize(1);
+    }
+
+    @Test
     public void testResponseRefValue() throws Exception {
         getCaretCompletions("response_ref_value")
                 .assertContains("#/responses/responseName")
