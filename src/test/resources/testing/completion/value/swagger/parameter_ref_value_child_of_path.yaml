@@ -1,0 +1,10 @@
+swagger: 2.0
+paths:
+  /pets:
+    parameters:
+      - $ref: <caret>
+definitions:
+  Pets:
+  Error:
+parameters:
+  Dog:

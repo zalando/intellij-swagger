@@ -103,7 +103,7 @@ public class PathDefinitionsNotInRootPathResolver implements PathResolver {
     }
 
     public final boolean isParameterRefValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.*.*.*.parameters.$ref");
+        return hasPath(psiElement, "$.**.parameters.$ref");
     }
 
     public final boolean isResponseRefValue(final PsiElement psiElement) {
