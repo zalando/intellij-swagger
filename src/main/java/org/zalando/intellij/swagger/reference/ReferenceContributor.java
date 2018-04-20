@@ -1,4 +1,4 @@
-package org.zalando.intellij.swagger.reference.contributor.swagger;
+package org.zalando.intellij.swagger.reference;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -7,6 +7,8 @@ import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.StringUtils;
+import org.zalando.intellij.swagger.reference.FileReference;
+import org.zalando.intellij.swagger.reference.LocalReference;
 import org.zalando.intellij.swagger.reference.swagger.*;
 import org.zalando.intellij.swagger.traversal.Traversal;
 
@@ -18,34 +20,6 @@ abstract class ReferenceContributor extends PsiReferenceContributor {
 
     ReferenceContributor(Traversal traversal) {
         this.traversal = traversal;
-    }
-
-    PsiReferenceProvider createExternalDefinitionsInRootReferenceProvider() {
-        return new PsiReferenceProvider() {
-            @NotNull
-            @Override
-            public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
-                                                         @NotNull ProcessingContext context) {
-                return Optional.ofNullable(element.getText())
-                        .map(text -> new PsiReference[]{
-                                new DefinitionsInRootReference(element, StringUtils.removeAllQuotes(text))
-                        }).orElse(DefinitionsInRootReference.EMPTY_ARRAY);
-            }
-        };
-    }
-
-    PsiReferenceProvider createExternalDefinitionsNotInRootReferenceProvider() {
-        return new PsiReferenceProvider() {
-            @NotNull
-            @Override
-            public PsiReference[] getReferencesByElement(@NotNull PsiElement element,
-                                                         @NotNull ProcessingContext context) {
-                return Optional.ofNullable(element.getText())
-                        .map(text -> new PsiReference[]{
-                                new DefinitionsNotInRootReference(element, StringUtils.removeAllQuotes(text))
-                        }).orElse(DefinitionsNotInRootReference.EMPTY_ARRAY);
-            }
-        };
     }
 
     PsiReferenceProvider createLocalReferenceProvider() {

@@ -1,0 +1,3 @@
+Pet1:
+  $ref: '#/newName<caret>'
+newName:

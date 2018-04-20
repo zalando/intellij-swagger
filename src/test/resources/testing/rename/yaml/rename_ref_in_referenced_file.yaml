@@ -1,0 +1,4 @@
+swagger: '2.0'
+definitions:
+  Definition:
+    $ref: 'definitions.yaml#/Pet1'

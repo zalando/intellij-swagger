@@ -6,7 +6,7 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import org.zalando.intellij.swagger.StringUtils;
-import org.zalando.intellij.swagger.reference.swagger.ReferenceValueExtractor;
+import org.zalando.intellij.swagger.reference.ReferenceValueExtractor;
 import org.zalando.intellij.swagger.traversal.path.PathFinder;
 
 import java.util.Set;

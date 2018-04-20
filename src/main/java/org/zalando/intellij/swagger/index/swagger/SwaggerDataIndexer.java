@@ -16,7 +16,7 @@ import org.zalando.intellij.swagger.StringUtils;
 import org.zalando.intellij.swagger.file.FileConstants;
 import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.file.SwaggerFileType;
-import org.zalando.intellij.swagger.reference.swagger.SwaggerConstants;
+import org.zalando.intellij.swagger.reference.SwaggerConstants;
 import org.zalando.intellij.swagger.traversal.path.swagger.MainPathResolver;
 import org.zalando.intellij.swagger.traversal.path.swagger.PathResolver;
 

@@ -1,15 +1,18 @@
-package org.zalando.intellij.swagger.reference.openapi;
+package org.zalando.intellij.swagger.reference;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.util.IncorrectOperationException;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.zalando.intellij.swagger.traversal.path.PathFinder;
 
-import static org.zalando.intellij.swagger.reference.swagger.OpenApiConstants.COMPONENT_REFERENCE_PREFIX;
-import static org.zalando.intellij.swagger.reference.swagger.OpenApiConstants.SLASH;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+import static org.zalando.intellij.swagger.reference.SwaggerConstants.SLASH;
 
 public class LocalReference extends PsiReferenceBase<PsiElement> {
 
@@ -24,12 +27,13 @@ public class LocalReference extends PsiReferenceBase<PsiElement> {
     @Nullable
     @Override
     public PsiElement resolve() {
-        final String referenceType = ReferenceValueExtractor.extractType(originalRefValue);
-        String referencedValue = org.zalando.intellij.swagger.reference.swagger.ReferenceValueExtractor.extractValue(originalRefValue);
+        final String pathExpression = Arrays.stream(
+                originalRefValue
+                        .substring(2, originalRefValue.length())
+                        .split("/"))
+                .map(s -> s.replace(".", "\\."))
+                .collect(Collectors.joining(".","$.", ""));
 
-        referencedValue = referencedValue.replace(".", "\\.");
-
-        final String pathExpression = String.format("$.components.%s.%s", referenceType, referencedValue);
         final PsiFile psiFile = getElement().getContainingFile();
 
         return new PathFinder().findByPathFrom(pathExpression, psiFile)
@@ -44,8 +48,8 @@ public class LocalReference extends PsiReferenceBase<PsiElement> {
 
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
-        final String referenceType = ReferenceValueExtractor.extractType(originalRefValue);
-        return super.handleElementRename(COMPONENT_REFERENCE_PREFIX + referenceType + SLASH + newElementName);
+        final String referencePrefix = StringUtils.substringBeforeLast(originalRefValue, "/");
+        return super.handleElementRename(referencePrefix + SLASH + newElementName);
     }
 
 }

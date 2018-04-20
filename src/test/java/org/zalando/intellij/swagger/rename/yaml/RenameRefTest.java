@@ -194,4 +194,12 @@ public class RenameRefTest extends SwaggerLightCodeInsightFixtureTestCase {
         myFixture.checkResultByFile("paths.yaml", FILES_PATH + "path_definitions_not_in_root_after.yaml", true);
     }
 
+    public void testRenameRefInReferencedFile() {
+        final VirtualFile definitionsFile = myFixture.copyFileToProject(FILES_PATH + "ref_in_referenced_file_with_caret.yaml", "definitions.yaml");
+        final VirtualFile swaggerFile = myFixture.copyFileToProject(FILES_PATH + "rename_ref_in_referenced_file.yaml", "swagger.yaml");
+        myFixture.configureFromExistingVirtualFile(swaggerFile);
+        myFixture.configureFromExistingVirtualFile(definitionsFile);
+        myFixture.renameElementAtCaret("newName");
+        myFixture.checkResultByFile("definitions.yaml", FILES_PATH + "ref_in_referenced_file_with_caret_after.yaml", true);
+    }
 }

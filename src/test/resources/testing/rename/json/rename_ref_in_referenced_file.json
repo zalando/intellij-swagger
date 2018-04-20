@@ -1,0 +1,8 @@
+{
+  "swagger": "2.0",
+  "definitions": {
+    "Definition": {
+      "$ref": "definitions.json#/Pet1"
+    }
+  }
+}
