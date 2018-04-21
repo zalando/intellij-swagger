@@ -16,7 +16,7 @@ import org.zalando.intellij.swagger.StringUtils;
 import org.zalando.intellij.swagger.file.FileConstants;
 import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.file.OpenApiFileType;
-import org.zalando.intellij.swagger.reference.swagger.OpenApiConstants;
+import org.zalando.intellij.swagger.reference.OpenApiConstants;
 import org.zalando.intellij.swagger.traversal.path.openapi.MainPathResolver;
 
 import java.util.HashMap;

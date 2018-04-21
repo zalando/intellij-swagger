@@ -7,7 +7,7 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.reference.swagger.ReferenceValueExtractor;
+import org.zalando.intellij.swagger.reference.ReferenceValueExtractor;
 import org.zalando.intellij.swagger.traversal.YamlTraversal;
 
 public class CreateYamlReferenceIntentionAction implements IntentionAction {

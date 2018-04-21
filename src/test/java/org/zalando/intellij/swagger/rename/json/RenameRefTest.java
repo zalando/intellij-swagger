@@ -192,4 +192,13 @@ public class RenameRefTest extends SwaggerLightCodeInsightFixtureTestCase {
         myFixture.checkResultByFile("swagger.json", FILES_PATH + "external_definition_path_definitions_not_in_root_with_caret_after.json", true);
         myFixture.checkResultByFile("paths.json", FILES_PATH + "path_definitions_not_in_root_after.json", true);
     }
+
+    public void testRenameRefInReferencedFile() {
+        final VirtualFile definitionsFile = myFixture.copyFileToProject(FILES_PATH + "ref_in_referenced_file_with_caret.json", "definitions.json");
+        final VirtualFile swaggerFile = myFixture.copyFileToProject(FILES_PATH + "rename_ref_in_referenced_file.json", "swagger.json");
+        myFixture.configureFromExistingVirtualFile(swaggerFile);
+        myFixture.configureFromExistingVirtualFile(definitionsFile);
+        myFixture.renameElementAtCaret("newName");
+        myFixture.checkResultByFile("definitions.json", FILES_PATH + "ref_in_referenced_file_with_caret_after.json", true);
+    }
 }
