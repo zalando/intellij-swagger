@@ -158,6 +158,17 @@ public class SwaggerCompletionTest extends JsonAndYamlCompletionTest {
     }
 
     @Test
+    public void thatItemsKeysInDefinitionsAreSuggested() {
+        getCaretCompletions("items_in_definitions")
+                .assertContains("$ref", "format", "title", "description", "default", "multipleOf", "maximum",
+                        "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern",
+                        "maxItems", "minItems", "uniqueItems", "maxProperties", "minProperties", "required", "enum",
+                        "type", "items", "allOf", "properties", "additionalProperties", "discriminator", "readOnly",
+                        "xml", "externalDocs", "example")
+                .isOfSize(30);
+    }
+
+    @Test
     public void thatResponsesKeysAreSuggested() {
         getCaretCompletions("responses")
                 .assertContains("default", "200", "201")
