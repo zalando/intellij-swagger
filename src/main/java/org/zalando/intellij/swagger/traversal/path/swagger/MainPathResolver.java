@@ -82,7 +82,8 @@ public class MainPathResolver implements PathResolver {
     }
 
     public final boolean childOfSchemaItems(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.schema.items");
+        return hasPath(psiElement, "$.**.schema.items") ||
+                hasPath(psiElement, "$.definitions.**.items");
     }
 
     public final boolean childOfPropertiesSchema(final PsiElement psiElement) {
