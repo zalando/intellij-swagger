@@ -5,8 +5,12 @@ import com.intellij.psi.PsiElement;
 public class DefinitionsNotInRootPathResolver implements PathResolver {
 
     @Override
-    public final boolean childOfDefinitions(final PsiElement psiElement) {
+    public final boolean childOfSchema(final PsiElement psiElement) {
         return hasPath(psiElement, "$.*.*");
     }
 
+    @Override
+    public final boolean childOfSchemaItems(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.items");
+    }
 }
