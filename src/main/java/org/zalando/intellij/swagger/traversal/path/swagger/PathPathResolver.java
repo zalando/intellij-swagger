@@ -12,11 +12,6 @@ public class PathPathResolver implements PathResolver {
         return hasPath(psiElement, "$.*") && !childOfParameters(psiElement);
     }
 
-    public final boolean childOfExternalDocs(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.*.externalDocs") ||
-                hasPath(psiElement, "$.**.schema.externalDocs");
-    }
-
     public final boolean childOfParameters(final PsiElement psiElement) {
         return hasPath(psiElement, "$.*.parameters");
     }
@@ -51,14 +46,6 @@ public class PathPathResolver implements PathResolver {
         return hasPath(psiElement, "$.**.schema.items");
     }
 
-    public final boolean childOfPropertiesSchema(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.properties.*");
-    }
-
-    public final boolean childOfAdditionalProperties(PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.additionalProperties");
-    }
-
     public final boolean childOfXml(final PsiElement psiElement) {
         return hasPath(psiElement, "$.**.schema.xml");
     }
@@ -67,30 +54,6 @@ public class PathPathResolver implements PathResolver {
         return hasPath(psiElement, "$.*.consumes") ||
                 hasPath(psiElement, "$.*.produces");
 
-    }
-
-    public final boolean isFormatValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.format");
-    }
-
-    public final boolean isTypeValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.type");
-    }
-
-    public final boolean isInValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.in");
-    }
-
-    public final boolean isBooleanValue(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.**.deprecated") ||
-                hasPath(psiElement, "$.**.required") ||
-                hasPath(psiElement, "$.**.allowEmptyValue") ||
-                hasPath(psiElement, "$.**.exclusiveMaximum") ||
-                hasPath(psiElement, "$.**.exclusiveMinimum") ||
-                hasPath(psiElement, "$.**.uniqueItems") ||
-                hasPath(psiElement, "$.**.readOnly") ||
-                hasPath(psiElement, "$.**.attribute") ||
-                hasPath(psiElement, "$.**.wrapped");
     }
 
     public final boolean isTagsValue(final PsiElement psiElement) {

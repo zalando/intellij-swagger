@@ -29,9 +29,10 @@ public interface PathResolver {
         return false;
     }
 
-    default boolean childOfExternalDocs(PsiElement psiElement) {
-        return false;
+    default boolean childOfExternalDocs(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.externalDocs");
     }
+
 
     default boolean childOfParameters(PsiElement psiElement) {
         return false;
@@ -78,11 +79,11 @@ public interface PathResolver {
     }
 
     default boolean childOfPropertiesSchema(PsiElement psiElement) {
-        return false;
+        return hasPath(psiElement, "$.**.properties.*");
     }
 
     default boolean childOfAdditionalProperties(PsiElement psiElement) {
-        return false;
+        return hasPath(psiElement, "$.**.additionalProperties");
     }
 
     default boolean childOfXml(PsiElement psiElement) {
@@ -149,21 +150,30 @@ public interface PathResolver {
         return false;
     }
 
-    default boolean isFormatValue(PsiElement psiElement) {
-        return false;
+    default boolean isFormatValue(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.format");
     }
 
-    default boolean isTypeValue(PsiElement psiElement) {
-        return false;
+    default boolean isTypeValue(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.type");
     }
 
-    default boolean isInValue(PsiElement psiElement) {
-        return false;
+    default boolean isInValue(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.in");
     }
 
-    default boolean isBooleanValue(PsiElement psiElement) {
-        return false;
+    default boolean isBooleanValue(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.**.deprecated") ||
+                hasPath(psiElement, "$.**.required") ||
+                hasPath(psiElement, "$.**.allowEmptyValue") ||
+                hasPath(psiElement, "$.**.exclusiveMaximum") ||
+                hasPath(psiElement, "$.**.exclusiveMinimum") ||
+                hasPath(psiElement, "$.**.uniqueItems") ||
+                hasPath(psiElement, "$.**.readOnly") ||
+                hasPath(psiElement, "$.**.attribute") ||
+                hasPath(psiElement, "$.**.wrapped");
     }
+
 
     default boolean hasPath(final PsiElement psiElement, final String pathExpression) {
         return new PathFinder().isInsidePath(psiElement, pathExpression);
