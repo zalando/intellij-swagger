@@ -9,13 +9,14 @@ import org.apache.commons.io.FilenameUtils;
 import org.jetbrains.yaml.YAMLLanguage;
 import org.zalando.intellij.swagger.traversal.path.PathFinder;
 
+import java.util.Optional;
+
 public class FileDetector {
 
     private static final String SWAGGER_KEY = "swagger";
-    private static final String SWAGGER_VERSION = "2";
+    private static final String SWAGGER_VERSION = "[\"'](2\\.0)[\"']"; //Must be "2.0", yaml does allow '2.0'
     private static final String OPEN_API_KEY = "openapi";
-    private static final String OPEN_API_VERSION = "3";
-
+    private static final String OPEN_API_VERSION = ".*(3(\\.\\d+)+)(?![\\d\\.]).*"; //openapi uses semantic versioning so 3.*.* would be allowed.
     public boolean isMainSwaggerJsonFile(final PsiFile psiFile) {
         return hasJsonRootKey(psiFile, String.format("$.%s", SWAGGER_KEY), SWAGGER_VERSION);
     }
@@ -51,7 +52,11 @@ public class FileDetector {
     }
 
     private boolean hasVersion(final PsiElement psiElement, final String lookupVersion) {
-        return psiElement.getLastChild().getText().contains(lookupVersion);
+        return Optional.ofNullable(psiElement.getLastChild())
+                .filter(psiElement1 -> Optional.ofNullable(psiElement1.getText())
+                        .filter(element -> element.matches(lookupVersion))
+                        .isPresent())
+                .isPresent();
     }
 
     public boolean isMainSwaggerFile(final PsiFile file) {

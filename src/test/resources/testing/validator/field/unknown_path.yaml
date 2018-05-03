@@ -1,4 +1,4 @@
-swagger: 2
+swagger: '2.0'
 paths:
   /pathA:
     <error descr="Invalid key">unknown:</error>

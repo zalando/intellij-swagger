@@ -1,6 +1,6 @@
 # "Create" "true"
 
-swagger: 2.0
+swagger: '2.0'
 paths:
   /pets:
     get:
