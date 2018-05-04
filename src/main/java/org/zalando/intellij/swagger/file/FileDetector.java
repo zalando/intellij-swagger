@@ -53,9 +53,8 @@ public class FileDetector {
 
     private boolean hasVersion(final PsiElement psiElement, final String lookupVersion) {
         return Optional.ofNullable(psiElement.getLastChild())
-                .filter(psiElement1 -> Optional.ofNullable(psiElement1.getText())
-                        .filter(element -> element.matches(lookupVersion))
-                        .isPresent())
+                .map(PsiElement::getText)
+                .filter(text -> text.matches(lookupVersion))
                 .isPresent();
     }
 
