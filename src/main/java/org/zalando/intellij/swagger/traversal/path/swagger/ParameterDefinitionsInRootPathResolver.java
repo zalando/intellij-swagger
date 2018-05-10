@@ -9,4 +9,9 @@ public class ParameterDefinitionsInRootPathResolver implements PathResolver {
         return hasPath(psiElement, "$.*");
     }
 
+    @Override
+    public final boolean isParameter(final PsiElement psiElement) {
+        return hasPath(psiElement, "$");
+    }
+
 }

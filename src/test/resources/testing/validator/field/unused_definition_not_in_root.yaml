@@ -1,0 +1,3 @@
+models:
+  Pets:
+  <weak_warning descr="Definition is never used">Cats:</weak_warning>

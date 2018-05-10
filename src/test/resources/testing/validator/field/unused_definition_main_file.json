@@ -1,0 +1,9 @@
+{
+  "swagger": "2.0",
+  "definitions": {
+    <weak_warning descr="Definition is never used">"def1"</weak_warning>: {
+      "$ref": "#/definitions/def2"
+    },
+    "def2": {}
+  }
+}

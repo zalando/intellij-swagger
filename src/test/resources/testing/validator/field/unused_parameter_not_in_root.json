@@ -1,0 +1,6 @@
+{
+  "parameters": {
+    "Pets": {},
+    <weak_warning descr="Parameter is never used">"Cats"</weak_warning>: {}
+  }
+}

@@ -18,4 +18,9 @@ public class ResponseDefinitionsInRootPathResolver implements PathResolver {
     public final boolean childOfSchemaItems(final PsiElement psiElement) {
         return hasPath(psiElement, "$.**.schema.items");
     }
+
+    @Override
+    public final boolean isResponse(final PsiElement psiElement) {
+        return hasPath(psiElement, "$");
+    }
 }
