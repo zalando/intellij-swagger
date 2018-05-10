@@ -1,0 +1,6 @@
+{
+  "responses": {
+    "Pets": {},
+    <weak_warning descr="Response is never used">"Cats"</weak_warning>: {}
+  }
+}

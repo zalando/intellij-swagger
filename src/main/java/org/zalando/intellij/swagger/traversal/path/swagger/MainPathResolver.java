@@ -151,4 +151,15 @@ public class MainPathResolver implements PathResolver {
         return hasPath(psiElement, "$.paths.*.*.responses.*.headers.*.collectionFormat");
     }
 
+    public boolean isDefinition(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.definitions");
+    }
+
+    public boolean isParameter(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.parameters");
+    }
+
+    public boolean isResponse(final PsiElement psiElement) {
+        return hasPath(psiElement, "$.responses");
+    }
 }

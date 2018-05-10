@@ -178,4 +178,16 @@ public interface PathResolver {
     default boolean hasPath(final PsiElement psiElement, final String pathExpression) {
         return new PathFinder().isInsidePath(psiElement, pathExpression);
     }
+
+    default boolean isDefinition(final PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean isParameter(final PsiElement psiElement) {
+        return false;
+    }
+
+    default boolean isResponse(final PsiElement psiElement) {
+        return false;
+    }
 }

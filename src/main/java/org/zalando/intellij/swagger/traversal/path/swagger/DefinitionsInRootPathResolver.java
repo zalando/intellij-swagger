@@ -13,4 +13,9 @@ public class DefinitionsInRootPathResolver implements PathResolver {
     public final boolean childOfSchemaItems(final PsiElement psiElement) {
         return hasPath(psiElement, "$.**.items");
     }
+
+    @Override
+    public boolean isDefinition(final PsiElement psiElement) {
+        return hasPath(psiElement, "$");
+    }
 }
