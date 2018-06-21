@@ -23,6 +23,10 @@ public class CompletionHelper {
         this.traversal = traversal;
     }
 
+    public boolean hasPath(final String pathExpression) {
+        return new PathFinder().isInsidePath(psiElement, pathExpression);
+    }
+    
     public boolean isUniqueKey(final String keyName) {
         List<? extends PsiNamedElement> children = new PathFinder().findChildrenByPathFrom("parent", psiElement);
 

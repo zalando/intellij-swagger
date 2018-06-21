@@ -16,6 +16,11 @@
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="145"/>
 
+    <extensionPoints>
+        <extensionPoint qualifiedName="org.zalando.intellij.swagger.customFieldFactory" interface="org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomFieldCompletionFactory"/>
+        <extensionPoint qualifiedName="org.zalando.intellij.swagger.customValueFactory" interface="org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomValueCompletionFactory"/>
+    </extensionPoints>
+    
     <extensions defaultExtensionNs="com.intellij">
         <completion.contributor language="JSON" implementationClass="org.zalando.intellij.swagger.completion.contributor.swagger.SwaggerJsonCompletionContributor"/>
         <completion.contributor language="yaml" implementationClass="org.zalando.intellij.swagger.completion.contributor.swagger.SwaggerYamlCompletionContributor"/>
