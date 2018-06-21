@@ -11,6 +11,8 @@ import org.zalando.intellij.swagger.completion.field.FieldCompletion;
 import org.zalando.intellij.swagger.completion.field.completion.swagger.SwaggerFieldCompletionFactory;
 import org.zalando.intellij.swagger.completion.value.ValueCompletion;
 import org.zalando.intellij.swagger.completion.value.completion.swagger.SwaggerValueCompletionFactory;
+import org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomFieldCompletionFactory;
+import org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomValueCompletionFactory;
 import org.zalando.intellij.swagger.file.SwaggerFileType;
 import org.zalando.intellij.swagger.index.swagger.SwaggerIndexService;
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
@@ -59,9 +61,17 @@ public class SwaggerJsonCompletionContributor extends CompletionContributor {
             if (jsonTraversal.isKey(psiElement)) {
                 SwaggerFieldCompletionFactory.from(completionHelper, result)
                         .ifPresent(FieldCompletion::fill);
+                for (SwaggerCustomFieldCompletionFactory ep : SwaggerCustomFieldCompletionFactory.EP_NAME.getExtensions()) {
+                    ep.from(completionHelper, result)
+                            .ifPresent(FieldCompletion::fill);
+                }
             } else {
                 SwaggerValueCompletionFactory.from(completionHelper, getResultSetWithPrefixMatcher(parameters, result))
                         .ifPresent(ValueCompletion::fill);
+                for (SwaggerCustomValueCompletionFactory ep : SwaggerCustomValueCompletionFactory.EP_NAME.getExtensions()) {
+                    ep.from(completionHelper, result)
+                            .ifPresent(ValueCompletion::fill);
+                }
             }
 
             result.stopHere();

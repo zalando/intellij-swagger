@@ -7,6 +7,8 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.SwaggerCompletionHelper;
 import org.zalando.intellij.swagger.completion.contributor.ReferencePrefixExtractor;
+import org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomFieldCompletionFactory;
+import org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomValueCompletionFactory;
 import org.zalando.intellij.swagger.completion.field.FieldCompletion;
 import org.zalando.intellij.swagger.completion.field.completion.swagger.SwaggerFieldCompletionFactory;
 import org.zalando.intellij.swagger.completion.value.ValueCompletion;
@@ -62,6 +64,16 @@ public class SwaggerYamlCompletionContributor extends CompletionContributor {
 
             SwaggerValueCompletionFactory.from(completionHelper, getResultSetWithPrefixMatcher(parameters, result))
                     .ifPresent(ValueCompletion::fill);
+
+            for (SwaggerCustomFieldCompletionFactory ep : SwaggerCustomFieldCompletionFactory.EP_NAME.getExtensions()) {
+                ep.from(completionHelper, result)
+                        .ifPresent(FieldCompletion::fill);
+            }
+
+            for (SwaggerCustomValueCompletionFactory ep : SwaggerCustomValueCompletionFactory.EP_NAME.getExtensions()) {
+                ep.from(completionHelper, result)
+                        .ifPresent(ValueCompletion::fill);
+            }
 
             result.stopHere();
         }
