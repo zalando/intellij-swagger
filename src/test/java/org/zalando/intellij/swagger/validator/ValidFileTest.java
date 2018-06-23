@@ -5,7 +5,7 @@ import org.zalando.intellij.swagger.SwaggerLightCodeInsightFixtureTestCase;
 public class ValidFileTest extends SwaggerLightCodeInsightFixtureTestCase {
 
     private void doTest(final String fileName) {
-        myFixture.testHighlighting(true, false, false, "validator/" + fileName);
+        myFixture.testHighlighting(true, false, false, "validator/file_detection/" + fileName);
     }
 
     public void testThatSwaggerFileHasNoErrors() {
@@ -18,12 +18,12 @@ public class ValidFileTest extends SwaggerLightCodeInsightFixtureTestCase {
         doTest("not_swagger.yaml");
     }
 
-    public void testSwaggerRootNoVersionIsNotASwaggerFile(){
+    public void testSwaggerRootNoVersionIsNotASwaggerFile() {
         doTest("swagger-root-no-version.json");
         doTest("swagger-root-no-version.yaml");
     }
 
-    public void testOpenApiRootNoVersionIsNotOpenApiFile(){
+    public void testOpenApiRootNoVersionIsNotOpenApiFile() {
         doTest("openapi-root-no-version.json");
         doTest("openapi-root-no-version.yaml");
     }
