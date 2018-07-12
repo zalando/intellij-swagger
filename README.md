@@ -6,9 +6,22 @@ Swagger Plugin makes it easy to edit Swagger and OpenAPI specification files ins
 
 ![Swagger Plugin features](https://github.com/zalando/intellij-swagger/blob/master/docs/features.gif?raw=true)
 
-### Usage
+## Usage
 
 Open a Swagger or OpenAPI specification file, that's it.
+
+## Custom Extensions
+
+You can extend the auto completion in order to provide custom keys and and values. The plugin provides the following extension points for this:
+
+```xml
+<extensionPoints>
+    <extensionPoint qualifiedName="org.zalando.intellij.swagger.customFieldFactory" interface="org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomFieldCompletionFactory"/>
+    <extensionPoint qualifiedName="org.zalando.intellij.swagger.customValueFactory" interface="org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomValueCompletionFactory"/>
+</extensionPoints>
+```
+
+See the [Zalando extension example](https://github.com/zalando/intellij-swagger/blob/master/examples/extensions-zalando) for details.
 
 ## Development
 
