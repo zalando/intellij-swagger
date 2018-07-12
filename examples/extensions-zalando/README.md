@@ -1,7 +1,7 @@
 # Swagger Plugin Zalando Extension
 Zalando's architecture centers around microservices, and each API is documented with a Swagger specification. Zalando has its own [API Guidelines](https://opensource.zalando.com/restful-api-guidelines) that extends the standard Swagger specification. This extension example illustrates how the Swagger Plugin can be extended to support Zalando specific guidelines for REST APIs.
 
-![Zalando Extension (x-audience)](https://github.com/zalando/intellij-swagger/blob/master/docs/extensions-zalando.gif?raw=true)
+![Zalando Extension (x-audience)](https://github.com/zalando/intellij-swagger/blob/master/docs/extensions-zalando.png?raw=true)
 
 ## Development
 
@@ -12,15 +12,6 @@ Developing the Swagger Plugin is easy, just execute the following command:
 ```
 
 This will start IntelliJ IDEA with the plugin installed.
-
-## How to Contribute
-To contribute, please fork and create a pull request.
-
-### Bug Fixes
-If you find a bug, it would be awesome if you created an issue about it. Please include a clear description of the problem so that we can fix it!
-
-## Contact:
-sebastian.monte@zalando.de
 
 ## License
 The MIT License (MIT) Copyright © 2018 Zalando SE, https://tech.zalando.com
