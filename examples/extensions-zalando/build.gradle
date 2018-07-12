@@ -1,0 +1,34 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+plugins {
+    id "org.jetbrains.intellij" version "0.3.4"
+}
+
+apply plugin: 'idea'
+apply plugin: 'org.jetbrains.intellij'
+apply plugin: 'java'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.12'
+}
+
+intellij {
+    plugins 'org.zalando.intellij.swagger:1.0.14'
+    pluginName 'intellij-swagger-extensions-zalando'
+    updateSinceUntilBuild false
+    version '2016.2'
+}
+
+group 'org.zalando.intellij.examples.extensions'
+version = project.hasProperty('version') ? project['version'] : '0.0.1'
+
+apply plugin: 'java'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
