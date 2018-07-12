@@ -1,5 +1,6 @@
 package org.zalando.intellij.swagger.reference;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -62,10 +63,17 @@ public class FileReference extends PsiReferenceBase<PsiElement> {
     }
 
     private Optional<PsiFile> getReferencedFile(final String relativePath) {
-        final VirtualFile baseDir = getElement().getContainingFile().getVirtualFile().getParent();
 
-        return Optional.ofNullable(baseDir.findFileByRelativePath(relativePath))
-                .map(f -> PsiManager.getInstance(getElement().getProject()).findFile(f));
+        final Optional<VirtualFile> baseDir = Optional.ofNullable(getElement())
+                .map(PsiElement::getContainingFile)
+                .map(PsiFile::getVirtualFile)
+                .map(VirtualFile::getParent);
+
+        final PsiManager psiManager = PsiManager.getInstance(getElement().getProject());
+
+        return baseDir
+                .map(dir -> dir.findFileByRelativePath(relativePath))
+                .map(psiManager::findFile);
     }
 
     @NotNull
