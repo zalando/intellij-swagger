@@ -18,13 +18,13 @@ import java.util.Optional;
 
 public class SwaggerFileService {
 
-    final private Map<PsiFile, Path> convertedSwaggerDocuments = new HashMap<>();
+    final private Map<String, Path> convertedSwaggerDocuments = new HashMap<>();
     final private SwaggerUiCreator swaggerUiCreator = new SwaggerUiCreator(new FileContentManipulator());
     final private FileDetector fileDetector = new FileDetector();
 
     public Optional<Path> convertSwaggerToHtml(@NotNull final PsiFile swaggerFile) {
         final String specificationContentAsJson = getSpecificationContentAsJson(swaggerFile);
-        Path htmlSwaggerContentsDirectory = convertedSwaggerDocuments.get(swaggerFile);
+        Path htmlSwaggerContentsDirectory = convertedSwaggerDocuments.get(swaggerFile.getVirtualFile().getPath());
 
         if (htmlSwaggerContentsDirectory != null) {
             LocalFileUrl indexPath = new LocalFileUrl(Paths.get(htmlSwaggerContentsDirectory.toString(), "index.html").toString());
@@ -34,17 +34,12 @@ public class SwaggerFileService {
                     .map(Paths::get)
                     .orElse(null);
             if (htmlSwaggerContentsDirectory != null) {
-                convertedSwaggerDocuments.put(swaggerFile, htmlSwaggerContentsDirectory);
+                convertedSwaggerDocuments.put(swaggerFile.getVirtualFile().getPath(), htmlSwaggerContentsDirectory);
             }
         }
 
         return Optional.ofNullable(htmlSwaggerContentsDirectory);
     }
-
-    public boolean swaggerContentExistsFor(final PsiFile file) {
-        return convertedSwaggerDocuments.containsKey(file);
-    }
-
 
     private String getSpecificationContentAsJson(final @NotNull PsiFile psiFile) {
         final String content = psiFile.getText();
