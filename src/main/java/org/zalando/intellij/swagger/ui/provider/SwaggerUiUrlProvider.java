@@ -33,6 +33,7 @@ public class SwaggerUiUrlProvider extends BuiltInWebBrowserUrlProvider implement
 
     private SwaggerUiUrlProvider(final FileDetector fileDetector) {
         this.fileDetector = fileDetector;
+
         ApplicationManager.getApplication().getMessageBus().connect().subscribe(AppTopics.FILE_DOCUMENT_SYNC, new FileDocumentManagerAdapter() {
             @Override
             public void beforeDocumentSaving(@NotNull final Document document) {
@@ -42,7 +43,7 @@ public class SwaggerUiUrlProvider extends BuiltInWebBrowserUrlProvider implement
                 if (openProjects.length > 0) {
                     final PsiFile psiFile = PsiDocumentManager.getInstance(openProjects[0]).getPsiFile(document);
 
-                    if (psiFile != null && swaggerFileService.swaggerContentExistsFor(psiFile)) {
+                    if (psiFile != null) {
                         final boolean swaggerFile = fileDetector.isMainSwaggerFile(psiFile) || fileDetector.isMainOpenApiFile(psiFile);
 
                         if (swaggerFile) {
