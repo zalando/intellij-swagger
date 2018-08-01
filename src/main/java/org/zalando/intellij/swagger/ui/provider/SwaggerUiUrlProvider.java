@@ -47,7 +47,7 @@ public class SwaggerUiUrlProvider extends BuiltInWebBrowserUrlProvider implement
                         final boolean swaggerFile = fileDetector.isMainSwaggerFile(psiFile) || fileDetector.isMainOpenApiFile(psiFile);
 
                         if (swaggerFile) {
-                            swaggerFileService.convertSwaggerToHtml(psiFile);
+                            swaggerFileService.convertSwaggerToHtmlAsync(psiFile);
                         }
                     }
                 }

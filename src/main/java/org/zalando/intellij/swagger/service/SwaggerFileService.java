@@ -15,36 +15,54 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class SwaggerFileService {
 
-    final private Map<String, Path> convertedSwaggerDocuments = new HashMap<>();
+    final private ConcurrentHashMap<String, Path> convertedSwaggerDocuments = new ConcurrentHashMap<>();
     final private SwaggerUiCreator swaggerUiCreator = new SwaggerUiCreator(new FileContentManipulator());
     final private FileDetector fileDetector = new FileDetector();
+    final private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    public Optional<Path> convertSwaggerToHtml(@NotNull final PsiFile swaggerFile) {
-        final String specificationContentAsJson = getSpecificationContentAsJson(swaggerFile);
-        Path htmlSwaggerContentsDirectory = convertedSwaggerDocuments.get(swaggerFile.getVirtualFile().getPath());
+    public Optional<Path> convertSwaggerToHtml(@NotNull final PsiFile file) {
+        if (fileDetector.isMainSwaggerJsonFile(file) || fileDetector.isMainOpenApiJsonFile(file)) {
+            return convertSwaggerToHtml(file, file.getText());
+        } else {
+            return convertSwaggerToHtml(file, yamlToJson(file.getText()));
+        }
+    }
+
+    public void convertSwaggerToHtmlAsync(@NotNull final PsiFile file) {
+        if (fileDetector.isMainSwaggerJsonFile(file) || fileDetector.isMainOpenApiJsonFile(file)) {
+            executorService.submit(() -> {
+                convertSwaggerToHtml(file, file.getText());
+            });
+        } else {
+            executorService.submit(() -> {
+                final String contentAsJson = yamlToJson(file.getText());
+                convertSwaggerToHtml(file, contentAsJson);
+            });
+        }
+    }
+
+    private Optional<Path> convertSwaggerToHtml(final PsiFile file, final String contentAsJson) {
+        Path htmlSwaggerContentsDirectory = convertedSwaggerDocuments.get(file.getVirtualFile().getPath());
 
         if (htmlSwaggerContentsDirectory != null) {
             LocalFileUrl indexPath = new LocalFileUrl(Paths.get(htmlSwaggerContentsDirectory.toString(), "index.html").toString());
-            swaggerUiCreator.updateSwaggerUiFile(indexPath, specificationContentAsJson);
+            swaggerUiCreator.updateSwaggerUiFile(indexPath, contentAsJson);
         } else {
-            htmlSwaggerContentsDirectory = swaggerUiCreator.createSwaggerUiFiles(specificationContentAsJson)
+            htmlSwaggerContentsDirectory = swaggerUiCreator.createSwaggerUiFiles(contentAsJson)
                     .map(Paths::get)
                     .orElse(null);
             if (htmlSwaggerContentsDirectory != null) {
-                convertedSwaggerDocuments.put(swaggerFile.getVirtualFile().getPath(), htmlSwaggerContentsDirectory);
+                convertedSwaggerDocuments.putIfAbsent(file.getVirtualFile().getPath(), htmlSwaggerContentsDirectory);
             }
         }
 
         return Optional.ofNullable(htmlSwaggerContentsDirectory);
-    }
-
-    private String getSpecificationContentAsJson(final @NotNull PsiFile psiFile) {
-        final String content = psiFile.getText();
-
-        return fileDetector.isMainSwaggerJsonFile(psiFile) ? content : yamlToJson(content);
     }
 
     private String yamlToJson(final String content) {
