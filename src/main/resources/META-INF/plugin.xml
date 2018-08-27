@@ -20,7 +20,7 @@
         <extensionPoint qualifiedName="org.zalando.intellij.swagger.customFieldFactory" interface="org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomFieldCompletionFactory"/>
         <extensionPoint qualifiedName="org.zalando.intellij.swagger.customValueFactory" interface="org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomValueCompletionFactory"/>
     </extensionPoints>
-    
+
     <extensions defaultExtensionNs="com.intellij">
         <completion.contributor language="JSON" implementationClass="org.zalando.intellij.swagger.completion.contributor.swagger.SwaggerJsonCompletionContributor"/>
         <completion.contributor language="yaml" implementationClass="org.zalando.intellij.swagger.completion.contributor.swagger.SwaggerYamlCompletionContributor"/>
@@ -42,6 +42,7 @@
         <annotator language="JSON" implementationClass="org.zalando.intellij.swagger.annotator.swagger.JsonUnusedRefAnnotator"/>
         <annotator language="yaml" implementationClass="org.zalando.intellij.swagger.annotator.swagger.YamlUnusedRefAnnotator"/>
 
+        <fileDocumentManagerListener implementation="org.zalando.intellij.swagger.ui.provider.FileDocumentListener"/>
         <webBrowserUrlProvider implementation="org.zalando.intellij.swagger.ui.provider.SwaggerUiUrlProvider" order="last"/>
 
         <fileBasedIndex implementation="org.zalando.intellij.swagger.index.swagger.SwaggerFileIndex" />
