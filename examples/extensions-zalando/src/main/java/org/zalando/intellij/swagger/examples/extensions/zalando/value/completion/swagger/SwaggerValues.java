@@ -1,8 +1,6 @@
 package org.zalando.intellij.swagger.examples.extensions.zalando.value.completion.swagger;
 
 import com.google.common.collect.ImmutableList;
-import org.zalando.intellij.swagger.completion.field.model.common.Field;
-import org.zalando.intellij.swagger.completion.field.model.common.StringField;
 import org.zalando.intellij.swagger.completion.value.model.common.StringValue;
 import org.zalando.intellij.swagger.completion.value.model.common.Value;
 
