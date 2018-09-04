@@ -16,4 +16,20 @@
         <customFieldFactory implementation="org.zalando.intellij.swagger.examples.extensions.zalando.field.completion.swagger.SwaggerFieldFactory" />
         <customValueFactory implementation="org.zalando.intellij.swagger.examples.extensions.zalando.value.completion.swagger.SwaggerValueFactory" />
     </extensions>
+
+    <extensions defaultExtensionNs="com.intellij">
+
+        <localInspection displayName="Zally Validator" groupName="OpenAPI Validation"  enabledByDefault="true" language="yaml"
+                         implementationClass="org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.YamlFileValidator"/>
+
+        <applicationService serviceInterface="org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.ZallyService"
+                            serviceImplementation="org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.http.HttpZallyService"
+                            testServiceImplementation="org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.MockZallyService" />
+
+        <projectConfigurable groupId="tools"
+                             displayName="Zally"
+                             id="preferences.zally"
+                             instance="org.zalando.intellij.swagger.examples.extensions.zalando.validator.ZallySettingsGui" />
+        <applicationService serviceImplementation="org.zalando.intellij.swagger.examples.extensions.zalando.validator.ZallySettings"/>
+    </extensions>
 </idea-plugin>

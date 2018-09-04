@@ -17,7 +17,7 @@ task wrapper(type: Wrapper) {
 }
 
 intellij {
-    plugins 'org.zalando.intellij.swagger:1.0.14'
+    plugins 'org.zalando.intellij.swagger:1.0.16', 'yaml'
     pluginName 'intellij-swagger-extensions-zalando'
     updateSinceUntilBuild false
     version '2016.2'
@@ -31,4 +31,9 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+}
+
+dependencies {
+    compile 'io.github.openfeign:feign-core:10.0.1'
+    compile 'io.github.openfeign:feign-gson:10.0.1'
 }

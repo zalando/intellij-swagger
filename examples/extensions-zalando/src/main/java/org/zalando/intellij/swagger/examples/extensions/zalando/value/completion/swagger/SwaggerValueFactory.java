@@ -2,10 +2,7 @@ package org.zalando.intellij.swagger.examples.extensions.zalando.value.completio
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import org.zalando.intellij.swagger.completion.SwaggerCompletionHelper;
-import org.zalando.intellij.swagger.completion.field.FieldCompletion;
 import org.zalando.intellij.swagger.completion.value.ValueCompletion;
-import org.zalando.intellij.swagger.examples.extensions.zalando.field.completion.swagger.InfoCompletion;
-import org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomFieldCompletionFactory;
 import org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomValueCompletionFactory;
 
 import java.util.Optional;
