@@ -31,7 +31,7 @@ class ComponentRefValueCompletion extends ValueCompletion {
         final PsiFile psiFile = completionHelper.getPsiFile();
         final String pathExpression = String.format("$.components.%s", refType);
 
-        return new PathFinder().findChildrenByPathFrom(pathExpression, psiFile).stream()
+        return new PathFinder().findNamedChildren(pathExpression, psiFile).stream()
                 .map(e -> String.format("#/components/%s/%s", refType, e.getName()))
                 .map(StringValue::new)
                 .collect(Collectors.toList());

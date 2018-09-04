@@ -42,7 +42,7 @@ class OperationSecurityCompletion extends FieldCompletion {
     private List<ArrayField> getSecurityDefinitions() {
         final PsiFile containingFile = completionHelper.getPsiFile().getContainingFile();
         final List<? extends PsiNamedElement> securityDefinitions =
-                new PathFinder().findChildrenByPathFrom("$.securityDefinitions", containingFile);
+                new PathFinder().findNamedChildren("$.securityDefinitions", containingFile);
 
         return securityDefinitions.stream()
                 .map(PsiNamedElement::getName)

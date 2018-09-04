@@ -28,7 +28,7 @@ public class CompletionHelper {
     }
     
     public boolean isUniqueKey(final String keyName) {
-        List<? extends PsiNamedElement> children = new PathFinder().findChildrenByPathFrom("parent", psiElement);
+        List<? extends PsiNamedElement> children = new PathFinder().findDirectNamedChildren("parent", psiElement);
 
         return children.stream()
                 .noneMatch((c) -> keyName.equals(c.getName()));

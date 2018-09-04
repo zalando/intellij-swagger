@@ -1,0 +1,17 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/pathA": {
+      "get": {
+        "parameters": [
+          {
+            "$ref": "ref1"
+          },
+          {
+            <caret>
+          }
+        ]
+      }
+    }
+  }
+}

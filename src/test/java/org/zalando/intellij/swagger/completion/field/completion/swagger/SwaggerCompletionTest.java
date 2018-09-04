@@ -120,6 +120,16 @@ public class SwaggerCompletionTest extends JsonAndYamlCompletionTest {
     }
 
     @Test
+    public void thatRefKeyIsSuggestedEvenIfParametersHaveExistingRef() {
+        getCaretCompletions("parameters_ref")
+                .assertContains("$ref", "name", "in", "description", "required", "schema", "type", "format",
+                        "allowEmptyValue", "items", "collectionFormat", "default", "maximum", "exclusiveMaximum",
+                        "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern", "maxItems", "minItems",
+                        "uniqueItems", "enum", "multipleOf")
+                .isOfSize(24);
+    }
+
+    @Test
     public void thatItemsKeysInOperationParametersAreSuggested() {
         getCaretCompletions("items_in_operation_parameters")
                 .assertContains("type", "format", "items", "collectionFormat", "default", "maximum",
