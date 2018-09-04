@@ -30,7 +30,7 @@ class SecurityScopeNameValueCompletion extends ValueCompletion {
     private List<Value> getSecurityDefinitionByName(final String securityDefinitionName) {
         final PsiFile containingFile = completionHelper.getPsiFile().getContainingFile();
         final List<? extends PsiNamedElement> securityDefinitions =
-                new PathFinder().findChildrenByPathFrom("$.securityDefinitions", containingFile);
+                new PathFinder().findNamedChildren("$.securityDefinitions", containingFile);
 
         return securityDefinitions.stream()
                 .filter(e -> securityDefinitionName.equals(completionHelper.getKeyNameOfObject(e).orElse(null)))

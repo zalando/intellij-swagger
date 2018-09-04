@@ -83,7 +83,7 @@ public class ReferenceValidator {
     private Set<String> getAvailableNames(final PsiElement psiElement, final String refType) {
         String pathExpression = String.format("$.%s", refType);
 
-        return new PathFinder().findChildrenByPathFrom(pathExpression, psiElement.getContainingFile())
+        return new PathFinder().findNamedChildren(pathExpression, psiElement.getContainingFile())
                 .stream()
                 .map(PsiNamedElement::getName)
                 .collect(Collectors.toSet());

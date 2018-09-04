@@ -22,7 +22,7 @@ class RootSecurityCompletion extends FieldCompletion {
         getSecurityDefinitions().forEach(field -> {
             final PsiFile containingFile = completionHelper.getPsiFile().getContainingFile();
             final List<? extends PsiNamedElement> security =
-                    new PathFinder().findChildrenByPathFrom("$.security", containingFile);
+                    new PathFinder().findNamedChildren("$.security", containingFile);
             final List<String> existingNames = extractNames(security);
 
             if (!existingNames.contains(field.getName())) {
@@ -40,7 +40,7 @@ class RootSecurityCompletion extends FieldCompletion {
     private List<ArrayField> getSecurityDefinitions() {
         final PsiFile containingFile = completionHelper.getPsiFile().getContainingFile();
         final List<? extends PsiNamedElement> securityDefinitions =
-                new PathFinder().findChildrenByPathFrom("$.securityDefinitions", containingFile);
+                new PathFinder().findNamedChildren("$.securityDefinitions", containingFile);
 
         return securityDefinitions.stream()
                 .map(PsiNamedElement::getName)

@@ -1,5 +1,6 @@
 package org.zalando.intellij.swagger.traversal.path;
 
+import com.intellij.json.psi.JsonArray;
 import com.intellij.json.psi.JsonObject;
 import com.intellij.json.psi.JsonStringLiteral;
 import com.intellij.psi.NavigatablePsiElement;
@@ -8,11 +9,13 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiNamedElement;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.jetbrains.yaml.psi.YAMLMapping;
+import org.jetbrains.yaml.psi.YAMLSequence;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class PathFinder {
@@ -21,12 +24,46 @@ public class PathFinder {
     private static final String ROOT_PATH = "$";
     private static final PathExpression ROOT_PATH_EXPRESSION = new PathExpression(ROOT_PATH);
 
-    public List<? extends PsiNamedElement> findChildrenByPathFrom(final String path, final PsiElement psiElement) {
-        return findChildrenByPathFrom(new PathExpression(path), psiElement);
+    /*
+     * Finds named children, continuing the traversal even if a child is a list. For example, given:
+     * items:
+     *   - item1: value1
+     *   - item2: value2
+     *
+     * The method would return "item1" and "item2" elements when called with path "$" and "items" PSI element.
+     */
+    public List<? extends PsiNamedElement> findNamedChildren(final String path, final PsiElement psiElement) {
+        Predicate<PsiElement> childFilter = child ->
+                child instanceof NavigatablePsiElement &&
+                        !(child instanceof JsonStringLiteral);
+
+        return findChildrenByPathFrom(new PathExpression(path), psiElement, childFilter);
+    }
+
+    /*
+     * Finds named children, stopping the traversal if a child is a list. For example, given:
+     * items:
+     *   - item1: value1
+     *   - item2: value2
+     *
+     * The method would return an empty list when called with path "$" and "items" PSI element.
+     */
+    public List<? extends PsiNamedElement> findDirectNamedChildren(final String path, final PsiElement psiElement) {
+        Predicate<PsiElement> childFilter = child ->
+                child instanceof NavigatablePsiElement &&
+                        !(child instanceof JsonStringLiteral) &&
+                        !(child instanceof YAMLSequence) &&
+                        !(child instanceof JsonArray);
+
+        return findChildrenByPathFrom(new PathExpression(path), psiElement, childFilter);
     }
 
     public Optional<PsiElement> findByPathFrom(final String path, final PsiElement psiElement) {
-        return findByPathFrom(new PathExpression(path), psiElement);
+        Predicate<PsiElement> childFilter = child ->
+                child instanceof NavigatablePsiElement &&
+                        !(child instanceof JsonStringLiteral);
+
+        return findByPathFrom(new PathExpression(path), psiElement, childFilter);
     }
 
     public boolean isInsidePath(final PsiElement psiElement, final String path) {
@@ -99,7 +136,8 @@ public class PathFinder {
         return getNextNamedParent(psiElement.getParent());
     }
 
-    private List<? extends PsiNamedElement> getNamedChildren(final PsiElement psiElement) {
+    private List<? extends PsiNamedElement> getNamedChildren(final PsiElement psiElement,
+                                                             Predicate<PsiElement> childFilter) {
         List<PsiNamedElement> children = Arrays.stream(psiElement.getChildren())
                 .filter(child -> child instanceof PsiNamedElement)
                 .map(child -> (PsiNamedElement) child)
@@ -107,17 +145,16 @@ public class PathFinder {
 
         if (children.isEmpty()) {
             Optional<PsiElement> navigatablePsiElement = Arrays.stream(psiElement.getChildren())
-                    .filter(child -> child instanceof NavigatablePsiElement)
-                    .filter(child -> !(child instanceof JsonStringLiteral))
+                    .filter(childFilter)
                     .findFirst();
 
-            return navigatablePsiElement.isPresent() ? getNamedChildren(navigatablePsiElement.get()) : new ArrayList<>();
+            return navigatablePsiElement.isPresent() ? getNamedChildren(navigatablePsiElement.get(), childFilter) : new ArrayList<>();
         }
 
         return new ArrayList<>(children);
     }
 
-    private Optional<PsiElement> findByPathFrom(final PathExpression pathExpression, final PsiElement psiElement) {
+    private Optional<PsiElement> findByPathFrom(final PathExpression pathExpression, final PsiElement psiElement, Predicate<PsiElement> childFilter) {
         if (pathExpression.isEmpty()) {
             return Optional.of(psiElement);
         }
@@ -125,35 +162,39 @@ public class PathFinder {
         final String currentNodeName = pathExpression.getCurrentPath();
         final PathExpression remainingPathExpression = pathExpression.afterFirst();
 
-        final Optional<? extends PsiElement> childByName = getChildByName(psiElement, currentNodeName);
+        final Optional<? extends PsiElement> childByName = getChildByName(psiElement, currentNodeName, childFilter);
 
-        return childByName.flatMap(el -> findByPathFrom(remainingPathExpression, el));
+        return childByName.flatMap(el -> findByPathFrom(remainingPathExpression, el, childFilter));
     }
 
-    private List<? extends PsiNamedElement> findChildrenByPathFrom(final PathExpression pathExpression, final PsiElement psiElement) {
+    private List<? extends PsiNamedElement> findChildrenByPathFrom(final PathExpression pathExpression,
+                                                                   final PsiElement psiElement,
+                                                                   Predicate<PsiElement> childFilter) {
         if (psiElement == null) {
             return new ArrayList<>();
         }
 
         if (pathExpression.isEmpty()) {
-            return getNamedChildren(psiElement);
+            return getNamedChildren(psiElement, childFilter);
         }
 
         final String currentNodeName = pathExpression.getCurrentPath();
         final PathExpression remainingPathExpression = pathExpression.afterFirst();
 
         if ("parent".equals(currentNodeName)) {
-            return findChildrenByPathFrom(ROOT_PATH_EXPRESSION, getNextObjectParent(psiElement));
+            return findChildrenByPathFrom(ROOT_PATH_EXPRESSION, getNextObjectParent(psiElement), childFilter);
         }
 
-        final Optional<? extends PsiElement> childByName = getChildByName(psiElement, currentNodeName);
+        final Optional<? extends PsiElement> childByName = getChildByName(psiElement, currentNodeName, childFilter);
 
         return childByName
-                .map(el -> findChildrenByPathFrom(remainingPathExpression, el))
+                .map(el -> findChildrenByPathFrom(remainingPathExpression, el, childFilter))
                 .orElseGet(ArrayList::new);
     }
 
-    private Optional<? extends PsiElement> getChildByName(final PsiElement psiElement, final String name) {
+    private Optional<? extends PsiElement> getChildByName(final PsiElement psiElement,
+                                                          final String name,
+                                                          Predicate<PsiElement> childFilter) {
         if (ROOT_PATH.equals(name)) {
             return Optional.of(psiElement);
         }
@@ -169,7 +210,7 @@ public class PathFinder {
                     .filter(child -> !(child instanceof JsonStringLiteral))
                     .findFirst();
 
-            return navigatablePsiElement.isPresent() ? getChildByName(navigatablePsiElement.get(), name) : Optional.empty();
+            return navigatablePsiElement.isPresent() ? getChildByName(navigatablePsiElement.get(), name, childFilter) : Optional.empty();
         }
 
         final String unescapedName = unescapedName(name);
