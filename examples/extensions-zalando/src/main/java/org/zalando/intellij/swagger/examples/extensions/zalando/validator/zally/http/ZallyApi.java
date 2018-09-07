@@ -10,5 +10,5 @@ import java.util.Map;
 public interface ZallyApi {
 
     @RequestLine("POST /api-violations")
-    LintingResponse validate(@HeaderMap Map<String, Object> headerMap, LintingRequest request);
+    LintingResponse lint(@HeaderMap Map<String, Object> headerMap, LintingRequest request);
 }

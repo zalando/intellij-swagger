@@ -20,8 +20,8 @@ import java.util.Map;
 
 public class HttpZallyService implements ZallyService {
 
-    public LintingResponse validate(final String spec) {
-        return connect().validate(zallyHeaders(), new LintingRequest(spec));
+    public LintingResponse lint(final String spec) {
+        return connect().lint(zallyHeaders(), new LintingRequest(spec));
     }
 
     private Map<String, Object> zallyHeaders() {
