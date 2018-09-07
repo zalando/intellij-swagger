@@ -26,15 +26,15 @@ public class YamlFileValidator extends LocalInspectionTool {
 
     @Override
     public ProblemDescriptor[] checkFile(@NotNull PsiFile file, @NotNull InspectionManager manager, boolean isOnTheFly) {
-        if (shouldValidate(file)) {
-            final LintingResponse lintingResponse = validate(file);
+        if (shouldLint(file)) {
+            final LintingResponse lintingResponse = lint(file);
             return createViolations(manager, isOnTheFly, lintingResponse, file);
         }
 
         return ProblemDescriptor.EMPTY_ARRAY;
     }
 
-    private boolean shouldValidate(final PsiFile file) {
+    private boolean shouldLint(final PsiFile file) {
         return hasZallyUrl() && isSwaggerFile(file);
     }
 
@@ -48,13 +48,13 @@ public class YamlFileValidator extends LocalInspectionTool {
         return zallySettings.zallyUrl != null && !zallySettings.zallyUrl.isEmpty();
     }
 
-    private LintingResponse validate(final PsiFile file) {
+    private LintingResponse lint(final PsiFile file) {
         try {
             final ZallyService zallyService = ServiceManager.getService(ZallyService.class);
 
-            return zallyService.validate(file.getText());
+            return zallyService.lint(file.getText());
         } catch (final Exception e) {
-            LOG.error("Could not validate specification with Zally", e);
+            LOG.error("Could not lint specification with Zally", e);
 
             throw new RuntimeException(e);
         }

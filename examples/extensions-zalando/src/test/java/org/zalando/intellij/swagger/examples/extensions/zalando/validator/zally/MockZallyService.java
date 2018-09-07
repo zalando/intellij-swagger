@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class MockZallyService implements ZallyService {
 
-    public LintingResponse validate(final String spec) {
+    public LintingResponse lint(final String spec) {
         final Set<Violation> violations = new HashSet<>();
         violations.add(new Violation("Violation 1", "MUST", "Violation link"));
 
