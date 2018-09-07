@@ -23,6 +23,15 @@ public class YamlFileValidator extends LocalInspectionTool {
 
     private final PathFinder pathFinder = new PathFinder();
     private final FileDetector fileDetector = new FileDetector();
+    private final ZallyService zallyService;
+
+    public YamlFileValidator() {
+        this(ServiceManager.getService(ZallyService.class));
+    }
+
+    public YamlFileValidator(ZallyService zallyService) {
+        this.zallyService = zallyService;
+    }
 
     @Override
     public ProblemDescriptor[] checkFile(@NotNull PsiFile file, @NotNull InspectionManager manager, boolean isOnTheFly) {
@@ -50,8 +59,6 @@ public class YamlFileValidator extends LocalInspectionTool {
 
     private LintingResponse lint(final PsiFile file) {
         try {
-            final ZallyService zallyService = ServiceManager.getService(ZallyService.class);
-
             return zallyService.lint(file.getText());
         } catch (final Exception e) {
             LOG.error("Could not lint specification with Zally", e);
