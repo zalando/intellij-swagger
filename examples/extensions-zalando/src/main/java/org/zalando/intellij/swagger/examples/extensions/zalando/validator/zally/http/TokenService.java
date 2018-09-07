@@ -7,6 +7,7 @@ import com.google.common.cache.LoadingCache;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -33,11 +34,15 @@ public class TokenService {
     }
 
     private static String createToken() throws IOException {
-        ProcessBuilder pb =
-                new ProcessBuilder("/bin/bash", "-c", "/usr/local/bin/ztoken");
+        final ProcessBuilder pb = new ProcessBuilder("/bin/bash", "-c", "ztoken");
+        final String path = Optional.ofNullable(pb.environment().get("PATH"))
+                .map(p -> p.concat(":/usr/local/bin"))
+                .orElse("");
+
+        pb.environment().put("PATH", path);
         pb.environment().put("LANG", "en_US.UTF-8");
 
-        Process p = pb.start();
+        final Process p = pb.start();
 
         final String token = new BufferedReader(new
                 InputStreamReader(p.getInputStream())).readLine();
