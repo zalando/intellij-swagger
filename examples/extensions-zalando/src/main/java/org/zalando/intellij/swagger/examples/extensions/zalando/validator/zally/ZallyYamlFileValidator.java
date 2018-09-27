@@ -11,50 +11,33 @@ import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.zalando.intellij.swagger.examples.extensions.zalando.validator.ZallySettings;
 import org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.model.LintingResponse;
 import org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.model.Violation;
-import org.zalando.intellij.swagger.file.FileDetector;
-import org.zalando.intellij.swagger.traversal.path.PathFinder;
 
 import java.util.List;
 import java.util.Optional;
 
-public class YamlFileValidator extends LocalInspectionTool {
+public abstract class ZallyYamlFileValidator extends LocalInspectionTool {
 
-    private final static Logger LOG = Logger.getInstance(YamlFileValidator.class);
+    private final static Logger LOG = Logger.getInstance(OpenApiYamlFileValidator.class);
 
-    private final PathFinder pathFinder = new PathFinder();
-    private final FileDetector fileDetector = new FileDetector();
     private final ZallyService zallyService;
 
-    public YamlFileValidator() {
-        this(ServiceManager.getService(ZallyService.class));
-    }
-
-    public YamlFileValidator(ZallyService zallyService) {
+    ZallyYamlFileValidator(ZallyService zallyService) {
         this.zallyService = zallyService;
     }
 
-    @Override
-    public ProblemDescriptor[] checkFile(@NotNull PsiFile file, @NotNull InspectionManager manager, boolean isOnTheFly) {
+    abstract boolean supportsFile(PsiFile file);
+
+    abstract Optional<PsiElement> getRootElement(PsiFile file);
+
+    ProblemDescriptor[] checkViolations(final PsiFile file,
+                                               final InspectionManager manager,
+                                               final boolean isOnTheFly) {
         if (shouldLint(file)) {
             final LintingResponse lintingResponse = lint(file);
-            return createViolations(manager, isOnTheFly, lintingResponse, file);
+            return createProblems(manager, isOnTheFly, lintingResponse, file);
         }
 
-        return ProblemDescriptor.EMPTY_ARRAY;
-    }
-
-    private boolean shouldLint(final PsiFile file) {
-        return hasZallyUrl() && isSwaggerFile(file);
-    }
-
-    private boolean isSwaggerFile(PsiFile file) {
-        return fileDetector.isMainSwaggerYamlFile(file);
-    }
-
-    private boolean hasZallyUrl() {
-        final ZallySettings zallySettings = ServiceManager.getService(ZallySettings.class);
-
-        return zallySettings.zallyUrl != null && !zallySettings.zallyUrl.isEmpty();
+            return ProblemDescriptor.EMPTY_ARRAY;
     }
 
     private LintingResponse lint(final PsiFile file) {
@@ -67,14 +50,24 @@ public class YamlFileValidator extends LocalInspectionTool {
         }
     }
 
+    public boolean shouldLint(final PsiFile file) {
+        return hasZallyUrl() && supportsFile(file);
+    }
+
+    private boolean hasZallyUrl() {
+        final ZallySettings zallySettings = ServiceManager.getService(ZallySettings.class);
+
+        return zallySettings.zallyUrl != null && !zallySettings.zallyUrl.isEmpty();
+    }
+
     @NotNull
-    private ProblemDescriptor[] createViolations(final InspectionManager manager,
-                                                 final boolean isOnTheFly,
-                                                 final LintingResponse lintingResponse,
-                                                 final PsiFile file) {
+    ProblemDescriptor[] createProblems(final InspectionManager manager,
+                                       final boolean isOnTheFly,
+                                       final LintingResponse lintingResponse,
+                                       final PsiFile file) {
         final List<ProblemDescriptor> problems = Lists.newArrayList();
 
-        final Optional<PsiElement> root = pathFinder.findByPathFrom("$.swagger", file);
+        final Optional<PsiElement> root = getRootElement(file);
 
         root.filter(el -> el instanceof YAMLKeyValue)
                 .map(YAMLKeyValue.class::cast)
@@ -93,4 +86,6 @@ public class YamlFileValidator extends LocalInspectionTool {
 
         return problems.toArray(ProblemDescriptor.EMPTY_ARRAY);
     }
+
+
 }
