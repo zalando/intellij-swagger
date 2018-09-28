@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public abstract class ZallyYamlFileValidator extends LocalInspectionTool {
 
-    private final static Logger LOG = Logger.getInstance(OpenApiYamlFileValidator.class);
+    private final static Logger LOG = Logger.getInstance(ZallyYamlFileValidator.class);
 
     private final ZallyService zallyService;
 
