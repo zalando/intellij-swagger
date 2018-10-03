@@ -1,15 +1,17 @@
 package org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally;
 
+import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
 import org.zalando.intellij.swagger.examples.extensions.zalando.SwaggerLightCodeInsightFixtureTestCase;
 
 public class SwaggerYamlFileValidatorTest extends SwaggerLightCodeInsightFixtureTestCase {
 
-    private void doTest(final String fileName) {
-        myFixture.enableInspections(new SwaggerYamlFileValidator());
-        myFixture.testHighlighting(true, false, false, "zally/" + fileName);
+    public void testZallyViolationsAreReported() {
+        final SwaggerYamlFileValidator swaggerYamlFileValidator = new SwaggerYamlFileValidator();
+
+        myFixture.enableInspections(swaggerYamlFileValidator);
+
+        final LocalInspectionToolWrapper toolWrapper = new LocalInspectionToolWrapper(swaggerYamlFileValidator);
+        myFixture.testInspection("zally/yaml/", toolWrapper);
     }
 
-    public void testUnknownRootField() {
-        doTest("yaml/swagger.yaml");
-    }
 }
