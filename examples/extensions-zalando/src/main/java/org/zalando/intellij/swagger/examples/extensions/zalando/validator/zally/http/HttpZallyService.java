@@ -13,6 +13,7 @@ import feign.Logger;
 import feign.codec.Decoder;
 import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
+import org.zalando.intellij.swagger.examples.extensions.zalando.validator.DefaultZallySettings;
 import org.zalando.intellij.swagger.examples.extensions.zalando.validator.ZallySettings;
 import org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.ZallyService;
 import org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.model.LintingRequest;
@@ -48,7 +49,7 @@ public class HttpZallyService implements ZallyService {
     }
 
     private static ZallyApi connect() {
-        final String zallyUrl = ServiceManager.getService(ZallySettings.class).zallyUrl;
+        final String zallyUrl = ServiceManager.getService(ZallySettings.class).getZallyUrl();
 
         final Gson gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)

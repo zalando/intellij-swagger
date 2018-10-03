@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<problems>
+    <problem>
+        <file>swagger.yaml</file>
+        <line>1</line>
+        <description>[MUST] Violation 1 Location: (a/path)</description>
+    </problem>
+</problems>
+

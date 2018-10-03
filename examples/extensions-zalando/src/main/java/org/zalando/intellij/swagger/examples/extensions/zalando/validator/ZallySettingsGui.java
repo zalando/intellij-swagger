@@ -58,23 +58,23 @@ public class ZallySettingsGui implements SearchableConfigurable {
     public boolean isModified() {
         final ZallySettings settings = ServiceManager.getService(ZallySettings.class);
 
-        return (settings.zallyUrl != null &&
-                !settings.zallyUrl.equals(zallyUrlTextField.getText())) ||
-                settings.zallyUrl == null && zallyUrlTextField.getText() != null;
+        return (settings.getZallyUrl() != null &&
+                !settings.getZallyUrl().equals(zallyUrlTextField.getText())) ||
+                settings.getZallyUrl() == null && zallyUrlTextField.getText() != null;
     }
 
     @Override
     public void apply() throws ConfigurationException {
         final ZallySettings settings = ServiceManager.getService(ZallySettings.class);
 
-        settings.zallyUrl = zallyUrlTextField.getText();
+        settings.setZallyUrl(zallyUrlTextField.getText());
     }
 
     @Override
     public void reset() {
         final ZallySettings settings = ServiceManager.getService(ZallySettings.class);
 
-        zallyUrlTextField.setText(settings.zallyUrl);
+        zallyUrlTextField.setText(settings.getZallyUrl());
     }
 
     @Override

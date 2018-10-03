@@ -20,10 +20,10 @@
 
     <extensions defaultExtensionNs="com.intellij">
 
-        <localInspection displayName="Zally Swagger Validator" groupName="Swagger Validation"  enabledByDefault="true" language="yaml"
+        <localInspection displayName="Zally Swagger Validator" groupName="Swagger Validation" language="yaml"
                          implementationClass="org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.SwaggerYamlFileValidator"/>
 
-        <localInspection displayName="Zally Open API Validator" groupName="OpenAPI Validation"  enabledByDefault="true" language="yaml"
+        <localInspection displayName="Zally Open API Validator" groupName="OpenAPI Validation" language="yaml"
                          implementationClass="org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.OpenApiYamlFileValidator"/>
 
         <applicationService serviceInterface="org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.ZallyService"
@@ -34,6 +34,9 @@
                              displayName="Zally"
                              id="preferences.zally"
                              instance="org.zalando.intellij.swagger.examples.extensions.zalando.validator.ZallySettingsGui" />
-        <applicationService serviceImplementation="org.zalando.intellij.swagger.examples.extensions.zalando.validator.ZallySettings"/>
+        <applicationService
+                serviceInterface="org.zalando.intellij.swagger.examples.extensions.zalando.validator.ZallySettings"
+                serviceImplementation="org.zalando.intellij.swagger.examples.extensions.zalando.validator.DefaultZallySettings"
+                testServiceImplementation="org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.MockZallySettings"/>
     </extensions>
 </idea-plugin>

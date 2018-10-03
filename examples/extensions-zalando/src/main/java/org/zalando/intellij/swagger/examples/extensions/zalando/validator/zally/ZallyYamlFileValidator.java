@@ -14,6 +14,7 @@ import org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public abstract class ZallyYamlFileValidator extends LocalInspectionTool {
 
@@ -30,14 +31,14 @@ public abstract class ZallyYamlFileValidator extends LocalInspectionTool {
     abstract Optional<PsiElement> getRootElement(PsiFile file);
 
     ProblemDescriptor[] checkViolations(final PsiFile file,
-                                               final InspectionManager manager,
-                                               final boolean isOnTheFly) {
+                                        final InspectionManager manager,
+                                        final boolean isOnTheFly) {
         if (shouldLint(file)) {
             final LintingResponse lintingResponse = lint(file);
             return createProblems(manager, isOnTheFly, lintingResponse, file);
         }
 
-            return ProblemDescriptor.EMPTY_ARRAY;
+        return ProblemDescriptor.EMPTY_ARRAY;
     }
 
     private LintingResponse lint(final PsiFile file) {
@@ -57,7 +58,7 @@ public abstract class ZallyYamlFileValidator extends LocalInspectionTool {
     private boolean hasZallyUrl() {
         final ZallySettings zallySettings = ServiceManager.getService(ZallySettings.class);
 
-        return zallySettings.zallyUrl != null && !zallySettings.zallyUrl.isEmpty();
+        return zallySettings.getZallyUrl() != null && !zallySettings.getZallyUrl().isEmpty();
     }
 
     @NotNull
@@ -75,8 +76,13 @@ public abstract class ZallyYamlFileValidator extends LocalInspectionTool {
                     final PsiElement key = psiElement.getKey();
 
                     if (key != null) {
-                        for (Violation violation : lintingResponse.getViolations()) {
-                            String descriptionTemplate = "[" + violation.getViolationType() + "] " + violation.getTitle();
+                        final List<Violation> violations = lintingResponse.getViolations();
+
+                        for (Violation violation : violations) {
+                            final String descriptionTemplate = String.format("[%s] %s Location: (%s)",
+                                    violation.getViolationType(),
+                                    violation.getTitle(),
+                                    violation.getPaths().stream().collect(Collectors.joining(", ")));
 
                             problems.add(manager.createProblemDescriptor(psiElement.getKey(), descriptionTemplate,
                                     isOnTheFly, LocalQuickFix.EMPTY_ARRAY, ProblemHighlightType.GENERIC_ERROR));
