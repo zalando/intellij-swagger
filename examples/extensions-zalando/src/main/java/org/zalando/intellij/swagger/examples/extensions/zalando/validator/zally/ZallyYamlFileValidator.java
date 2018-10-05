@@ -35,7 +35,7 @@ public abstract class ZallyYamlFileValidator extends LocalInspectionTool {
     ProblemDescriptor[] checkViolations(final PsiFile file,
                                         final InspectionManager manager,
                                         final boolean isOnTheFly) {
-        if (shouldLint(file)) {
+        if (canLint(file)) {
             final LintingResponse lintingResponse = lint(file);
             return createProblems(manager, isOnTheFly, lintingResponse, file);
         }
@@ -53,7 +53,7 @@ public abstract class ZallyYamlFileValidator extends LocalInspectionTool {
         }
     }
 
-    private boolean shouldLint(final PsiFile file) {
+    private boolean canLint(final PsiFile file) {
         return hasZallyUrl() && supportsFile(file);
     }
 
@@ -96,8 +96,10 @@ public abstract class ZallyYamlFileValidator extends LocalInspectionTool {
     private Optional<YAMLKeyValue> getPsiElement(final String jsonPointer, final PsiFile file) {
         Optional<Optional<PsiElement>> psiElement = Optional.ofNullable(jsonPointer)
                 .map(pointer -> pointer
+                        // Unescape JSON pointer (https://tools.ietf.org/html/rfc6901)
                         .replace("/", ".")
-                        .replace("~1", "/"))
+                        .replace("~1", "/")
+                        .replace("~0", "~"))
                 .map(path -> pathFinder.findByPathFrom("$" + path, file));
 
         return psiElement
