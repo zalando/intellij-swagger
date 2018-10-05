@@ -14,14 +14,13 @@ import java.util.Optional;
 public class SwaggerYamlFileValidator extends ZallyYamlFileValidator {
 
     private final FileDetector fileDetector = new FileDetector();
-    private final PathFinder pathFinder = new PathFinder();
 
     public SwaggerYamlFileValidator() {
-        this(ServiceManager.getService(ZallyService.class));
+        this(ServiceManager.getService(ZallyService.class), new PathFinder());
     }
 
-    public SwaggerYamlFileValidator(ZallyService zallyService) {
-        super(zallyService);
+    public SwaggerYamlFileValidator(ZallyService zallyService, PathFinder pathFinder) {
+        super(zallyService, pathFinder);
     }
 
     @Override
