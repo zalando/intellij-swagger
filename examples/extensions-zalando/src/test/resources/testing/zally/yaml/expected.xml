@@ -3,7 +3,7 @@
     <problem>
         <file>swagger.yaml</file>
         <line>1</line>
-        <description>[MUST] Violation 1 Location: (a/path)</description>
+        <description>[MUST] Violation 1. Description</description>
     </problem>
 </problems>
 

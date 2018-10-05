@@ -14,14 +14,13 @@ import java.util.Optional;
 public class OpenApiYamlFileValidator extends ZallyYamlFileValidator {
 
     private final FileDetector fileDetector = new FileDetector();
-    private final PathFinder pathFinder = new PathFinder();
 
     public OpenApiYamlFileValidator() {
-        this(ServiceManager.getService(ZallyService.class));
+        this(ServiceManager.getService(ZallyService.class), new PathFinder());
     }
 
-    public OpenApiYamlFileValidator(ZallyService zallyService) {
-        super(zallyService);
+    public OpenApiYamlFileValidator(ZallyService zallyService, PathFinder pathFinder) {
+        super(zallyService, pathFinder);
     }
 
     @Override

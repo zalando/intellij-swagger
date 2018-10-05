@@ -11,19 +11,21 @@ import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.zalando.intellij.swagger.examples.extensions.zalando.validator.ZallySettings;
 import org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.model.LintingResponse;
 import org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.model.Violation;
+import org.zalando.intellij.swagger.traversal.path.PathFinder;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public abstract class ZallyYamlFileValidator extends LocalInspectionTool {
 
     private final static Logger LOG = Logger.getInstance(ZallyYamlFileValidator.class);
 
     private final ZallyService zallyService;
+    protected final PathFinder pathFinder;
 
-    ZallyYamlFileValidator(ZallyService zallyService) {
+    ZallyYamlFileValidator(ZallyService zallyService, PathFinder pathFinder) {
         this.zallyService = zallyService;
+        this.pathFinder = pathFinder;
     }
 
     abstract boolean supportsFile(PsiFile file);
@@ -51,7 +53,7 @@ public abstract class ZallyYamlFileValidator extends LocalInspectionTool {
         }
     }
 
-    public boolean shouldLint(final PsiFile file) {
+    private boolean shouldLint(final PsiFile file) {
         return hasZallyUrl() && supportsFile(file);
     }
 
@@ -62,36 +64,45 @@ public abstract class ZallyYamlFileValidator extends LocalInspectionTool {
     }
 
     @NotNull
-    ProblemDescriptor[] createProblems(final InspectionManager manager,
-                                       final boolean isOnTheFly,
-                                       final LintingResponse lintingResponse,
-                                       final PsiFile file) {
+    private ProblemDescriptor[] createProblems(final InspectionManager manager,
+                                               final boolean isOnTheFly,
+                                               final LintingResponse lintingResponse,
+                                               final PsiFile file) {
         final List<ProblemDescriptor> problems = Lists.newArrayList();
 
-        final Optional<PsiElement> root = getRootElement(file);
+        final List<Violation> violations = lintingResponse.getViolations();
 
-        root.filter(el -> el instanceof YAMLKeyValue)
-                .map(YAMLKeyValue.class::cast)
-                .ifPresent((psiElement) -> {
-                    final PsiElement key = psiElement.getKey();
+        for (Violation violation : violations) {
+            final Optional<YAMLKeyValue> psiElement = getPsiElement(violation.getPointer(), file);
 
-                    if (key != null) {
-                        final List<Violation> violations = lintingResponse.getViolations();
+            psiElement.ifPresent(el -> {
+                final String descriptionTemplate = String.format("[%s] %s. %s",
+                        violation.getViolationType(),
+                        violation.getTitle(),
+                        violation.getDescription());
 
-                        for (Violation violation : violations) {
-                            final String descriptionTemplate = String.format("[%s] %s Location: (%s)",
-                                    violation.getViolationType(),
-                                    violation.getTitle(),
-                                    violation.getPaths().stream().collect(Collectors.joining(", ")));
+                final PsiElement key = el.getKey();
 
-                            problems.add(manager.createProblemDescriptor(psiElement.getKey(), descriptionTemplate,
-                                    isOnTheFly, LocalQuickFix.EMPTY_ARRAY, ProblemHighlightType.GENERIC_ERROR));
-                        }
-                    }
-                });
+                if (key != null) {
+                    problems.add(manager.createProblemDescriptor(key, descriptionTemplate,
+                            isOnTheFly, LocalQuickFix.EMPTY_ARRAY, ProblemHighlightType.GENERIC_ERROR));
+                }
+            });
+        }
 
         return problems.toArray(ProblemDescriptor.EMPTY_ARRAY);
     }
 
+    private Optional<YAMLKeyValue> getPsiElement(final String jsonPointer, final PsiFile file) {
+        Optional<Optional<PsiElement>> psiElement = Optional.ofNullable(jsonPointer)
+                .map(pointer -> pointer
+                        .replace("/", ".")
+                        .replace("~1", "/"))
+                .map(path -> pathFinder.findByPathFrom("$" + path, file));
 
+        return psiElement
+                .orElse(getRootElement(file))
+                .filter(el -> el instanceof YAMLKeyValue)
+                .map(YAMLKeyValue.class::cast);
+    }
 }
