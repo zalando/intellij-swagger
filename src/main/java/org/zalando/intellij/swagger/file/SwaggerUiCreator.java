@@ -1,6 +1,5 @@
 package org.zalando.intellij.swagger.file;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.util.LocalFileUrl;
 import org.jetbrains.annotations.NotNull;
@@ -13,8 +12,6 @@ import java.util.Optional;
 
 public class SwaggerUiCreator {
 
-    private static final Logger LOG = Logger.getInstance("#org.zalando.intellij.swagger.file.SwaggerUiCreator");
-
     private static final String SWAGGER_UI_FOLDER_NAME = "swagger-ui";
 
     private final FileContentManipulator fileContentManipulator;
@@ -23,24 +20,11 @@ public class SwaggerUiCreator {
         this.fileContentManipulator = fileContentManipulator;
     }
 
-    public Optional<String> createSwaggerUiFiles(final String specificationContent) {
-        try {
-            return tryToCreateSwaggerUiFiles(specificationContent);
-        } catch (final Exception e) {
-            LOG.error(e);
-            return Optional.empty();
-        }
+    public Optional<String> createSwaggerUiFiles(final String specificationContent) throws Exception {
+        return tryToCreateSwaggerUiFiles(specificationContent);
     }
 
     public void updateSwaggerUiFile(final LocalFileUrl indexFileUrl, final String specificationContent) {
-        try {
-            tryToUpdateSwaggerUiFiles(indexFileUrl, specificationContent);
-        } catch (final Exception e) {
-            LOG.error(e);
-        }
-    }
-
-    private void tryToUpdateSwaggerUiFiles(final LocalFileUrl indexFileUrl, final String specificationContent) {
         final File indexFile = new File(Paths.get(indexFileUrl.getPath()).toUri());
 
         setSwaggerConfigurationValues(indexFile, specificationContent);
