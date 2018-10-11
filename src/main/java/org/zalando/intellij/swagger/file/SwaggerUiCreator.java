@@ -21,22 +21,17 @@ public class SwaggerUiCreator {
     }
 
     public Optional<String> createSwaggerUiFiles(final String specificationContent) throws Exception {
-        return tryToCreateSwaggerUiFiles(specificationContent);
+        final File tempSwaggerUiDir = copySwaggerUiToTempDir();
+
+        setSwaggerConfigurationValues(new File(tempSwaggerUiDir, "index.html"), specificationContent);
+
+        return Optional.of(tempSwaggerUiDir.getAbsolutePath());
     }
 
     public void updateSwaggerUiFile(final LocalFileUrl indexFileUrl, final String specificationContent) {
         final File indexFile = new File(Paths.get(indexFileUrl.getPath()).toUri());
 
         setSwaggerConfigurationValues(indexFile, specificationContent);
-    }
-
-    private Optional<String> tryToCreateSwaggerUiFiles(final String specificationContent)
-            throws IOException, URISyntaxException {
-        final File tempSwaggerUiDir = copySwaggerUiToTempDir();
-
-        setSwaggerConfigurationValues(new File(tempSwaggerUiDir, "index.html"), specificationContent);
-
-        return Optional.of(tempSwaggerUiDir.getAbsolutePath());
     }
 
     @NotNull
