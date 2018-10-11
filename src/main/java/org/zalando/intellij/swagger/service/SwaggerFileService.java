@@ -1,6 +1,5 @@
 package org.zalando.intellij.swagger.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -29,32 +28,22 @@ public class SwaggerFileService {
     final private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public Optional<Path> convertSwaggerToHtml(@NotNull final PsiFile file) {
-        if (fileDetector.isMainSwaggerJsonFile(file) || fileDetector.isMainOpenApiJsonFile(file)) {
-            return convertSwaggerToHtml(file, file.getText());
-        } else {
-            try {
-                return convertSwaggerToHtml(file, tryToConvertYamlToJson(file.getText()));
-            } catch (Exception e) {
-                notifyFailure(e);
-                return Optional.empty();
-            }
+        try {
+            return convertSwaggerToHtml(file, convertToJsonIfNecessary(file));
+        } catch (Exception e) {
+            notifyFailure(e);
+            return Optional.empty();
         }
     }
 
     public void convertSwaggerToHtmlAsync(@NotNull final PsiFile file) {
-        if (fileDetector.isMainSwaggerJsonFile(file) || fileDetector.isMainOpenApiJsonFile(file)) {
-            executorService.submit(() -> {
-                convertSwaggerToHtml(file, file.getText());
-            });
-        } else {
-            executorService.submit(() -> {
-                try {
-                    convertSwaggerToHtml(file, tryToConvertYamlToJson(file.getText()));
-                } catch (Exception e) {
-                    notifyFailure(e);
-                }
-            });
-        }
+        executorService.submit(() -> {
+            try {
+                convertSwaggerToHtml(file, convertToJsonIfNecessary(file));
+            } catch (Exception e) {
+                notifyFailure(e);
+            }
+        });
     }
 
     private void notifyFailure(final Exception exception) {
@@ -66,7 +55,7 @@ public class SwaggerFileService {
         Notifications.Bus.notify(notification);
     }
 
-    private Optional<Path> convertSwaggerToHtml(final PsiFile file, final String contentAsJson) {
+    private Optional<Path> convertSwaggerToHtml(final PsiFile file, final String contentAsJson) throws Exception {
         Path htmlSwaggerContentsDirectory = convertedSwaggerDocuments.get(file.getVirtualFile().getPath());
 
         if (htmlSwaggerContentsDirectory != null) {
@@ -84,9 +73,13 @@ public class SwaggerFileService {
         return Optional.ofNullable(htmlSwaggerContentsDirectory);
     }
 
-    private String tryToConvertYamlToJson(final String content) throws Exception {
+    private String convertToJsonIfNecessary(final PsiFile file) throws Exception {
+        if (fileDetector.isMainSwaggerJsonFile(file) || fileDetector.isMainOpenApiJsonFile(file)) {
+            return file.getText();
+        }
+
         final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        final JsonNode jsonNode = mapper.readTree(content);
+        final JsonNode jsonNode = mapper.readTree(file.getText());
         return new ObjectMapper().writeValueAsString(jsonNode);
     }
 }
