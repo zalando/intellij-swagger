@@ -1,8 +1,12 @@
 package org.zalando.intellij.swagger.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.LocalFileUrl;
 import org.jetbrains.annotations.NotNull;
@@ -12,8 +16,6 @@ import org.zalando.intellij.swagger.file.SwaggerUiCreator;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -30,7 +32,12 @@ public class SwaggerFileService {
         if (fileDetector.isMainSwaggerJsonFile(file) || fileDetector.isMainOpenApiJsonFile(file)) {
             return convertSwaggerToHtml(file, file.getText());
         } else {
-            return convertSwaggerToHtml(file, yamlToJson(file.getText()));
+            try {
+                return convertSwaggerToHtml(file, tryToConvertYamlToJson(file.getText()));
+            } catch (Exception e) {
+                notifyFailure(e);
+                return Optional.empty();
+            }
         }
     }
 
@@ -41,10 +48,22 @@ public class SwaggerFileService {
             });
         } else {
             executorService.submit(() -> {
-                final String contentAsJson = yamlToJson(file.getText());
-                convertSwaggerToHtml(file, contentAsJson);
+                try {
+                    convertSwaggerToHtml(file, tryToConvertYamlToJson(file.getText()));
+                } catch (Exception e) {
+                    notifyFailure(e);
+                }
             });
         }
+    }
+
+    private void notifyFailure(final Exception exception) {
+        Notification notification = new Notification(
+                "Swagger UI",
+                "Could not generate Swagger UI",
+                exception.getMessage(), NotificationType.WARNING);
+
+        Notifications.Bus.notify(notification);
     }
 
     private Optional<Path> convertSwaggerToHtml(final PsiFile file, final String contentAsJson) {
@@ -65,13 +84,9 @@ public class SwaggerFileService {
         return Optional.ofNullable(htmlSwaggerContentsDirectory);
     }
 
-    private String yamlToJson(final String content) {
-        try {
-            final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-            final JsonNode jsonNode = mapper.readTree(content);
-            return new ObjectMapper().writeValueAsString(jsonNode);
-        } catch (final Exception e) {
-            return "{}";
-        }
+    private String tryToConvertYamlToJson(final String content) throws Exception {
+        final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        final JsonNode jsonNode = mapper.readTree(content);
+        return new ObjectMapper().writeValueAsString(jsonNode);
     }
 }
