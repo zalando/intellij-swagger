@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
@@ -20,12 +21,12 @@ public class SwaggerUiCreator {
         this.fileContentManipulator = fileContentManipulator;
     }
 
-    public Optional<String> createSwaggerUiFiles(final String specificationContent) throws Exception {
+    public Path createSwaggerUiFiles(final String specificationContent) throws Exception {
         final File tempSwaggerUiDir = copySwaggerUiToTempDir();
 
         setSwaggerConfigurationValues(new File(tempSwaggerUiDir, "index.html"), specificationContent);
 
-        return Optional.of(tempSwaggerUiDir.getAbsolutePath());
+        return Paths.get(tempSwaggerUiDir.getAbsolutePath());
     }
 
     public void updateSwaggerUiFile(final LocalFileUrl indexFileUrl, final String specificationContent) {

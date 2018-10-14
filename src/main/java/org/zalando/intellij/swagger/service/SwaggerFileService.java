@@ -29,7 +29,7 @@ public class SwaggerFileService {
 
     public Optional<Path> convertSwaggerToHtml(@NotNull final PsiFile file) {
         try {
-            return convertSwaggerToHtml(file, convertToJsonIfNecessary(file));
+            return convertSwaggerToHtmlWithoutCache(file, convertToJsonIfNecessary(file));
         } catch (Exception e) {
             notifyFailure(e);
             return Optional.empty();
@@ -39,9 +39,12 @@ public class SwaggerFileService {
     public void convertSwaggerToHtmlAsync(@NotNull final PsiFile file) {
         executorService.submit(() -> {
             try {
-                convertSwaggerToHtml(file, convertToJsonIfNecessary(file));
+                convertSwaggerToHtmlWithCache(file, convertToJsonIfNecessary(file));
             } catch (Exception e) {
-                notifyFailure(e);
+                // This is a no-op; we don't want to notify the user if the
+                // Swagger UI generation fails on file save. A user may
+                // edit a spec file that is invalid on multiple saves, and
+                // this would result in a large number of notifications.
             }
         });
     }
@@ -55,22 +58,21 @@ public class SwaggerFileService {
         Notifications.Bus.notify(notification);
     }
 
-    private Optional<Path> convertSwaggerToHtml(final PsiFile file, final String contentAsJson) throws Exception {
-        Path htmlSwaggerContentsDirectory = convertedSwaggerDocuments.get(file.getVirtualFile().getPath());
+    private Optional<Path> convertSwaggerToHtmlWithoutCache(final PsiFile file,
+                                                            final String contentAsJson) throws Exception {
+        final Path path = swaggerUiCreator.createSwaggerUiFiles(contentAsJson);
 
-        if (htmlSwaggerContentsDirectory != null) {
-            LocalFileUrl indexPath = new LocalFileUrl(Paths.get(htmlSwaggerContentsDirectory.toString(), "index.html").toString());
-            swaggerUiCreator.updateSwaggerUiFile(indexPath, contentAsJson);
-        } else {
-            htmlSwaggerContentsDirectory = swaggerUiCreator.createSwaggerUiFiles(contentAsJson)
-                    .map(Paths::get)
-                    .orElse(null);
-            if (htmlSwaggerContentsDirectory != null) {
-                convertedSwaggerDocuments.putIfAbsent(file.getVirtualFile().getPath(), htmlSwaggerContentsDirectory);
-            }
-        }
+        convertedSwaggerDocuments.put(file.getVirtualFile().getPath(), path);
 
-        return Optional.ofNullable(htmlSwaggerContentsDirectory);
+        return Optional.of(path);
+    }
+
+    private void convertSwaggerToHtmlWithCache(final PsiFile file, final String contentAsJson) {
+        Optional.ofNullable(convertedSwaggerDocuments.get(file.getVirtualFile().getPath()))
+                .ifPresent(dir -> {
+                    LocalFileUrl indexPath = new LocalFileUrl(Paths.get(dir.toString(), "index.html").toString());
+                    swaggerUiCreator.updateSwaggerUiFile(indexPath, contentAsJson);
+                });
     }
 
     private String convertToJsonIfNecessary(final PsiFile file) throws Exception {
