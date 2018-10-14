@@ -40,7 +40,8 @@ public class MainPathResolver implements PathResolver {
     public final boolean childOfParameterItems(final PsiElement psiElement) {
         return hasPath(psiElement, "$.paths.*.*.parameters.items") ||
                 hasPath(psiElement, "$.paths.*.*.responses.*.headers.*.items") ||
-                hasPath(psiElement, "$.paths.*.parameters.items");
+                hasPath(psiElement, "$.paths.*.parameters.items") ||
+                hasPath(psiElement, "$.parameters.**.items");
     }
 
     public final boolean childOfResponses(final PsiElement psiElement) {
