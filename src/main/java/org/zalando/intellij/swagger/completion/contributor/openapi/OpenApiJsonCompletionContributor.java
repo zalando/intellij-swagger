@@ -6,7 +6,7 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.OpenApiCompletionHelper;
-import org.zalando.intellij.swagger.completion.contributor.ReferencePrefixExtractor;
+import org.zalando.intellij.swagger.completion.contributor.CompletionResultSetFactory;
 import org.zalando.intellij.swagger.completion.field.FieldCompletion;
 import org.zalando.intellij.swagger.completion.field.completion.openapi.OpenApiFieldCompletionFactory;
 import org.zalando.intellij.swagger.completion.value.ValueCompletion;
@@ -20,18 +20,15 @@ import org.zalando.intellij.swagger.traversal.path.openapi.PathResolverFactory;
 public class OpenApiJsonCompletionContributor extends CompletionContributor {
 
     private final JsonTraversal jsonTraversal;
-    private final ReferencePrefixExtractor referencePrefixExtractor;
     private final OpenApiIndexService openApiIndexService;
 
     public OpenApiJsonCompletionContributor() {
-        this(new JsonTraversal(), new ReferencePrefixExtractor(), new OpenApiIndexService());
+        this(new JsonTraversal(), new OpenApiIndexService());
     }
 
     private OpenApiJsonCompletionContributor(final JsonTraversal jsonTraversal,
-                                             final ReferencePrefixExtractor referencePrefixExtractor,
                                              final OpenApiIndexService openApiIndexService) {
         this.jsonTraversal = jsonTraversal;
-        this.referencePrefixExtractor = referencePrefixExtractor;
         this.openApiIndexService = openApiIndexService;
     }
 
@@ -60,19 +57,12 @@ public class OpenApiJsonCompletionContributor extends CompletionContributor {
                 OpenApiFieldCompletionFactory.from(completionHelper, result)
                         .ifPresent(FieldCompletion::fill);
             } else {
-                OpenApiValueCompletionFactory.from(completionHelper, getResultSetWithPrefixMatcher(parameters, result))
+                OpenApiValueCompletionFactory.from(completionHelper, CompletionResultSetFactory.forValue(parameters, result))
                         .ifPresent(ValueCompletion::fill);
             }
 
             result.stopHere();
         }
-    }
-
-    private CompletionResultSet getResultSetWithPrefixMatcher(final @NotNull CompletionParameters parameters,
-                                                              final @NotNull CompletionResultSet result) {
-        return referencePrefixExtractor.getPrefix(parameters.getOffset() - 1, parameters.getOriginalFile().getText())
-                .map(result::withPrefixMatcher)
-                .orElse(result);
     }
 
 }

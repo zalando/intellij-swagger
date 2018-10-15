@@ -1,0 +1,19 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/pets": {
+      "get": {
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "P<caret>"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Pets": {}
+  }
+}

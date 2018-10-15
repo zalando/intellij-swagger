@@ -6,7 +6,7 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.OpenApiCompletionHelper;
-import org.zalando.intellij.swagger.completion.contributor.ReferencePrefixExtractor;
+import org.zalando.intellij.swagger.completion.contributor.CompletionResultSetFactory;
 import org.zalando.intellij.swagger.completion.field.FieldCompletion;
 import org.zalando.intellij.swagger.completion.field.completion.openapi.OpenApiFieldCompletionFactory;
 import org.zalando.intellij.swagger.completion.value.ValueCompletion;
@@ -20,18 +20,15 @@ import org.zalando.intellij.swagger.traversal.path.openapi.PathResolverFactory;
 public class OpenApiYamlCompletionContributor extends CompletionContributor {
 
     private final YamlTraversal yamlTraversal;
-    private final ReferencePrefixExtractor referencePrefixExtractor;
     private final OpenApiIndexService openApiIndexService;
 
     public OpenApiYamlCompletionContributor() {
-        this(new YamlTraversal(), new ReferencePrefixExtractor(), new OpenApiIndexService());
+        this(new YamlTraversal(), new OpenApiIndexService());
     }
 
     private OpenApiYamlCompletionContributor(final YamlTraversal yamlTraversal,
-                                             final ReferencePrefixExtractor referencePrefixExtractor,
                                              final OpenApiIndexService openApiIndexService) {
         this.yamlTraversal = yamlTraversal;
-        this.referencePrefixExtractor = referencePrefixExtractor;
         this.openApiIndexService = openApiIndexService;
     }
 
@@ -60,18 +57,12 @@ public class OpenApiYamlCompletionContributor extends CompletionContributor {
             OpenApiFieldCompletionFactory.from(completionHelper, result)
                     .ifPresent(FieldCompletion::fill);
 
-            OpenApiValueCompletionFactory.from(completionHelper, getResultSetWithPrefixMatcher(parameters, result))
+            OpenApiValueCompletionFactory.from(completionHelper, CompletionResultSetFactory.forValue(parameters, result))
                     .ifPresent(ValueCompletion::fill);
 
             result.stopHere();
         }
     }
 
-    private CompletionResultSet getResultSetWithPrefixMatcher(final @NotNull CompletionParameters parameters,
-                                                              final @NotNull CompletionResultSet result) {
-        return referencePrefixExtractor.getPrefix(parameters.getOffset() - 1, parameters.getOriginalFile().getText())
-                .map(result::withPrefixMatcher)
-                .orElse(result);
-    }
 
 }
