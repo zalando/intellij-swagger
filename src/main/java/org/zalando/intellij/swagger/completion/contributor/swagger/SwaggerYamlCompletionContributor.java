@@ -6,13 +6,13 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.SwaggerCompletionHelper;
-import org.zalando.intellij.swagger.completion.contributor.ReferencePrefixExtractor;
-import org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomFieldCompletionFactory;
-import org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomValueCompletionFactory;
+import org.zalando.intellij.swagger.completion.contributor.CompletionResultSetFactory;
 import org.zalando.intellij.swagger.completion.field.FieldCompletion;
 import org.zalando.intellij.swagger.completion.field.completion.swagger.SwaggerFieldCompletionFactory;
 import org.zalando.intellij.swagger.completion.value.ValueCompletion;
 import org.zalando.intellij.swagger.completion.value.completion.swagger.SwaggerValueCompletionFactory;
+import org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomFieldCompletionFactory;
+import org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomValueCompletionFactory;
 import org.zalando.intellij.swagger.file.SwaggerFileType;
 import org.zalando.intellij.swagger.index.swagger.SwaggerIndexService;
 import org.zalando.intellij.swagger.traversal.YamlTraversal;
@@ -22,18 +22,15 @@ import org.zalando.intellij.swagger.traversal.path.swagger.PathResolverFactory;
 public class SwaggerYamlCompletionContributor extends CompletionContributor {
 
     private final YamlTraversal yamlTraversal;
-    private final ReferencePrefixExtractor referencePrefixExtractor;
     private final SwaggerIndexService swaggerIndexService;
 
     public SwaggerYamlCompletionContributor() {
-        this(new YamlTraversal(), new ReferencePrefixExtractor(), new SwaggerIndexService());
+        this(new YamlTraversal(), new SwaggerIndexService());
     }
 
     private SwaggerYamlCompletionContributor(final YamlTraversal yamlTraversal,
-                                             final ReferencePrefixExtractor referencePrefixExtractor,
                                              final SwaggerIndexService swaggerIndexService) {
         this.yamlTraversal = yamlTraversal;
-        this.referencePrefixExtractor = referencePrefixExtractor;
         this.swaggerIndexService = swaggerIndexService;
     }
 
@@ -62,7 +59,7 @@ public class SwaggerYamlCompletionContributor extends CompletionContributor {
             SwaggerFieldCompletionFactory.from(completionHelper, result)
                     .ifPresent(FieldCompletion::fill);
 
-            SwaggerValueCompletionFactory.from(completionHelper, getResultSetWithPrefixMatcher(parameters, result))
+            SwaggerValueCompletionFactory.from(completionHelper, CompletionResultSetFactory.forValue(parameters, result))
                     .ifPresent(ValueCompletion::fill);
 
             for (SwaggerCustomFieldCompletionFactory ep : SwaggerCustomFieldCompletionFactory.EP_NAME.getExtensions()) {
@@ -78,12 +75,4 @@ public class SwaggerYamlCompletionContributor extends CompletionContributor {
             result.stopHere();
         }
     }
-
-    private CompletionResultSet getResultSetWithPrefixMatcher(final @NotNull CompletionParameters parameters,
-                                                              final @NotNull CompletionResultSet result) {
-        return referencePrefixExtractor.getPrefix(parameters.getOffset() - 1, parameters.getOriginalFile().getText())
-                .map(result::withPrefixMatcher)
-                .orElse(result);
-    }
-
 }

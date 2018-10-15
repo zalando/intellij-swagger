@@ -157,4 +157,19 @@ public class CompletionTest extends JsonAndYamlCompletionTest {
                 .assertContains("tag1", "tag2")
                 .isOfSize(2);
     }
+
+    @Test
+    public void thatDefinitionsAreSuggestedWithLowercasePrefix() {
+        getCaretCompletions("ref_lowercase")
+                .assertContains("#/definitions/Pets")
+                .isOfSize(1);
+    }
+
+    @Test
+    public void thatDefinitionsAreSuggestedWithUppercasePrefix() {
+        getCaretCompletions("ref_uppercase")
+                .assertContains("#/definitions/Pets")
+                .isOfSize(1);
+    }
+
 }

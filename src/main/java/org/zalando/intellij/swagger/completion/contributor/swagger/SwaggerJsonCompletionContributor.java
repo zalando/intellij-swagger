@@ -6,7 +6,7 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.SwaggerCompletionHelper;
-import org.zalando.intellij.swagger.completion.contributor.ReferencePrefixExtractor;
+import org.zalando.intellij.swagger.completion.contributor.CompletionResultSetFactory;
 import org.zalando.intellij.swagger.completion.field.FieldCompletion;
 import org.zalando.intellij.swagger.completion.field.completion.swagger.SwaggerFieldCompletionFactory;
 import org.zalando.intellij.swagger.completion.value.ValueCompletion;
@@ -22,18 +22,15 @@ import org.zalando.intellij.swagger.traversal.path.swagger.PathResolverFactory;
 public class SwaggerJsonCompletionContributor extends CompletionContributor {
 
     private final JsonTraversal jsonTraversal;
-    private final ReferencePrefixExtractor referencePrefixExtractor;
     private final SwaggerIndexService swaggerIndexService;
 
     public SwaggerJsonCompletionContributor() {
-        this(new JsonTraversal(), new ReferencePrefixExtractor(), new SwaggerIndexService());
+        this(new JsonTraversal(), new SwaggerIndexService());
     }
 
     private SwaggerJsonCompletionContributor(final JsonTraversal jsonTraversal,
-                                             final ReferencePrefixExtractor referencePrefixExtractor,
                                              final SwaggerIndexService swaggerIndexService) {
         this.jsonTraversal = jsonTraversal;
-        this.referencePrefixExtractor = referencePrefixExtractor;
         this.swaggerIndexService = swaggerIndexService;
     }
 
@@ -66,7 +63,7 @@ public class SwaggerJsonCompletionContributor extends CompletionContributor {
                             .ifPresent(FieldCompletion::fill);
                 }
             } else {
-                SwaggerValueCompletionFactory.from(completionHelper, getResultSetWithPrefixMatcher(parameters, result))
+                SwaggerValueCompletionFactory.from(completionHelper, CompletionResultSetFactory.forValue(parameters, result))
                         .ifPresent(ValueCompletion::fill);
                 for (SwaggerCustomValueCompletionFactory ep : SwaggerCustomValueCompletionFactory.EP_NAME.getExtensions()) {
                     ep.from(completionHelper, result)
@@ -77,12 +74,4 @@ public class SwaggerJsonCompletionContributor extends CompletionContributor {
             result.stopHere();
         }
     }
-
-    private CompletionResultSet getResultSetWithPrefixMatcher(final @NotNull CompletionParameters parameters,
-                                                              final @NotNull CompletionResultSet result) {
-        return referencePrefixExtractor.getPrefix(parameters.getOffset() - 1, parameters.getOriginalFile().getText())
-                .map(result::withPrefixMatcher)
-                .orElse(result);
-    }
-
 }
