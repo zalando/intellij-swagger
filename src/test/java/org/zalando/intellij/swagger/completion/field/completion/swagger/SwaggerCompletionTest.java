@@ -181,7 +181,7 @@ public class SwaggerCompletionTest extends JsonAndYamlCompletionTest {
     @Test
     public void thatItemsKeysInParameterDefinitionsAreSuggested() {
         getCaretCompletions("items_in_parameter_definitions")
-                .assertContains("type", "format", "items", "collectionFormat", "default", "maximum",
+                .assertContains("enum", "type", "format", "items", "collectionFormat", "default", "maximum",
                         "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern",
                         "maxItems", "minItems", "uniqueItems", "multipleOf")
                 .isOfSize(17);
