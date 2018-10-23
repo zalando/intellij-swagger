@@ -73,7 +73,7 @@ public abstract class ZallyYamlFileValidator extends LocalInspectionTool {
         final List<Violation> violations = lintingResponse.getViolations();
 
         for (Violation violation : violations) {
-            final Optional<YAMLKeyValue> psiElement = getPsiElement(violation.getPointer(), file);
+            final Optional<YAMLKeyValue> psiElement = getYAMLKeyValue(violation.getPointer(), file);
 
             psiElement.ifPresent(el -> {
                 final String descriptionTemplate = String.format("[%s] %s. %s",
@@ -93,18 +93,25 @@ public abstract class ZallyYamlFileValidator extends LocalInspectionTool {
         return problems.toArray(ProblemDescriptor.EMPTY_ARRAY);
     }
 
-    private Optional<YAMLKeyValue> getPsiElement(final String jsonPointer, final PsiFile file) {
-        Optional<Optional<PsiElement>> psiElement = Optional.ofNullable(jsonPointer)
+    private Optional<YAMLKeyValue> getYAMLKeyValue(final String jsonPointer, final PsiFile file) {
+        return getPsiElement(jsonPointer, file)
+                .filter(el -> el instanceof YAMLKeyValue)
+                .map(YAMLKeyValue.class::cast);
+    }
+
+    private Optional<PsiElement> getPsiElement(final String jsonPointer, final PsiFile file) {
+        Optional<PsiElement> psiElement = Optional.ofNullable(jsonPointer)
                 .map(pointer -> pointer
                         // Unescape JSON pointer (https://tools.ietf.org/html/rfc6901)
                         .replace("/", ".")
                         .replace("~1", "/")
                         .replace("~0", "~"))
-                .map(path -> pathFinder.findByPathFrom("$" + path, file));
+                .flatMap(path -> pathFinder.findByPathFrom("$" + path, file));
 
-        return psiElement
-                .orElse(getRootElement(file))
-                .filter(el -> el instanceof YAMLKeyValue)
-                .map(YAMLKeyValue.class::cast);
+        if (psiElement.isPresent()) {
+            return psiElement;
+        }
+
+        return getRootElement(file);
     }
 }

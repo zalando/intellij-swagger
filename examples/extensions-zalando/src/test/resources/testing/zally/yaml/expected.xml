@@ -5,5 +5,10 @@
         <line>1</line>
         <description>[MUST] Violation 1. Description</description>
     </problem>
+    <problem>
+        <file>swagger.yaml</file>
+        <line>4</line>
+        <description>[MUST] Violation 2. Title</description>
+    </problem>
 </problems>
 
