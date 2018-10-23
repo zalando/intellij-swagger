@@ -4,10 +4,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class LintingRequest {
 
-    @SerializedName("api_definition_string")
-    public final String spec;
+  @SerializedName("api_definition_string")
+  public final String spec;
 
-    public LintingRequest(String spec) {
-        this.spec = spec;
-    }
+  public LintingRequest(String spec) {
+    this.spec = spec;
+  }
 }

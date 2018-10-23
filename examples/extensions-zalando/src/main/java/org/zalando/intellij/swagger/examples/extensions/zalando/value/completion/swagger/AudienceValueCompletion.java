@@ -6,12 +6,13 @@ import org.zalando.intellij.swagger.completion.value.ValueCompletion;
 
 class AudienceValueCompletion extends ValueCompletion {
 
-    AudienceValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
-        super(completionHelper, completionResultSet);
-    }
+  AudienceValueCompletion(
+      final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    super(completionHelper, completionResultSet);
+  }
 
-    @Override
-    public void fill() {
-        SwaggerValues.audience().forEach(this::addValue);
-    }
+  @Override
+  public void fill() {
+    SwaggerValues.audience().forEach(this::addValue);
+  }
 }

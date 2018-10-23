@@ -5,13 +5,13 @@ import org.zalando.intellij.swagger.examples.extensions.zalando.SwaggerLightCode
 
 public class SwaggerYamlFileValidatorTest extends SwaggerLightCodeInsightFixtureTestCase {
 
-    public void testZallyViolationsAreReported() {
-        final SwaggerYamlFileValidator swaggerYamlFileValidator = new SwaggerYamlFileValidator();
+  public void testZallyViolationsAreReported() {
+    final SwaggerYamlFileValidator swaggerYamlFileValidator = new SwaggerYamlFileValidator();
 
-        myFixture.enableInspections(swaggerYamlFileValidator);
+    myFixture.enableInspections(swaggerYamlFileValidator);
 
-        final LocalInspectionToolWrapper toolWrapper = new LocalInspectionToolWrapper(swaggerYamlFileValidator);
-        myFixture.testInspection("zally/yaml/", toolWrapper);
-    }
-
+    final LocalInspectionToolWrapper toolWrapper =
+        new LocalInspectionToolWrapper(swaggerYamlFileValidator);
+    myFixture.testInspection("zally/yaml/", toolWrapper);
+  }
 }

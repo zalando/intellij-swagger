@@ -6,30 +6,30 @@ import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.Nullable;
 
-@State(name = "SwaggerSetting",
-        storages = @Storage("intellij-swagger.xml"))
-public class DefaultZallySettings implements PersistentStateComponent<DefaultZallySettings>, ZallySettings {
+@State(name = "SwaggerSetting", storages = @Storage("intellij-swagger.xml"))
+public class DefaultZallySettings
+    implements PersistentStateComponent<DefaultZallySettings>, ZallySettings {
 
-    public String zallyUrl;
+  public String zallyUrl;
 
-    @Nullable
-    @Override
-    public DefaultZallySettings getState() {
-        return this;
-    }
+  @Nullable
+  @Override
+  public DefaultZallySettings getState() {
+    return this;
+  }
 
-    @Override
-    public void loadState(DefaultZallySettings state) {
-        XmlSerializerUtil.copyBean(state, this);
-    }
+  @Override
+  public void loadState(DefaultZallySettings state) {
+    XmlSerializerUtil.copyBean(state, this);
+  }
 
-    @Override
-    public String getZallyUrl() {
-        return zallyUrl;
-    }
+  @Override
+  public String getZallyUrl() {
+    return zallyUrl;
+  }
 
-    @Override
-    public void setZallyUrl(String zallyUrl) {
-        this.zallyUrl = zallyUrl;
-    }
+  @Override
+  public void setZallyUrl(String zallyUrl) {
+    this.zallyUrl = zallyUrl;
+  }
 }
