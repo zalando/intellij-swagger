@@ -6,6 +6,7 @@ buildscript {
 
 plugins {
     id "org.jetbrains.intellij" version "0.3.4"
+    id "com.diffplug.gradle.spotless" version "3.15.0"
 }
 
 apply plugin: 'idea'
@@ -36,4 +37,10 @@ repositories {
 dependencies {
     compile 'io.github.openfeign:feign-core:10.0.1'
     compile 'io.github.openfeign:feign-gson:10.0.1'
+}
+
+spotless {
+    java {
+        googleJavaFormat('1.6')
+    }
 }
