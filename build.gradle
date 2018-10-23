@@ -8,6 +8,7 @@ plugins {
     id "org.jetbrains.intellij" version "0.1.10"
     id 'jacoco'
     id 'com.github.kt3k.coveralls' version '2.7.1'
+    id "com.diffplug.gradle.spotless" version "3.15.0"
 }
 
 apply plugin: 'idea'
@@ -50,5 +51,11 @@ jacocoTestReport {
     reports {
         xml.enabled = true // coveralls plugin depends on xml format report
         html.enabled = true
+    }
+}
+
+spotless {
+    java {
+        googleJavaFormat('1.6')
     }
 }
