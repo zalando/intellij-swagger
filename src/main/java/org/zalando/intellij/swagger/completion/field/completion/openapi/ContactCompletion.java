@@ -7,12 +7,13 @@ import org.zalando.intellij.swagger.completion.field.model.common.CommonFields;
 
 class ContactCompletion extends FieldCompletion {
 
-    ContactCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
-        super(completionHelper, completionResultSet);
-    }
+  ContactCompletion(
+      final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    super(completionHelper, completionResultSet);
+  }
 
-    @Override
-    public void fill() {
-        CommonFields.contact().forEach(this::addUnique);
-    }
+  @Override
+  public void fill() {
+    CommonFields.contact().forEach(this::addUnique);
+  }
 }

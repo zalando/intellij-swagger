@@ -15,16 +15,20 @@ import org.zalando.intellij.swagger.validator.value.ValuesValidator;
 
 public class JsonValidValueAnnotator implements Annotator {
 
-    @Override
-    public void annotate(@NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
-        if (new FileDetector().isMainSwaggerJsonFile(psiElement.getContainingFile())) {
-            final ValuesValidator valuesValidator = new ValuesValidator(new JsonTraversal(),
-                    new MainPathResolver(), new ReferenceValidator(
-                    new CreateJsonReferenceIntentionAction(
-                            StringUtils.removeAllQuotes(psiElement.getText()))),
-                    new SchemesValidator());
+  @Override
+  public void annotate(
+      @NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
+    if (new FileDetector().isMainSwaggerJsonFile(psiElement.getContainingFile())) {
+      final ValuesValidator valuesValidator =
+          new ValuesValidator(
+              new JsonTraversal(),
+              new MainPathResolver(),
+              new ReferenceValidator(
+                  new CreateJsonReferenceIntentionAction(
+                      StringUtils.removeAllQuotes(psiElement.getText()))),
+              new SchemesValidator());
 
-            valuesValidator.validate(psiElement, annotationHolder);
-        }
+      valuesValidator.validate(psiElement, annotationHolder);
     }
+  }
 }

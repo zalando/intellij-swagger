@@ -19,50 +19,53 @@ import org.zalando.intellij.swagger.traversal.path.openapi.PathResolverFactory;
 
 public class OpenApiYamlCompletionContributor extends CompletionContributor {
 
-    private final YamlTraversal yamlTraversal;
-    private final OpenApiIndexService openApiIndexService;
+  private final YamlTraversal yamlTraversal;
+  private final OpenApiIndexService openApiIndexService;
 
-    public OpenApiYamlCompletionContributor() {
-        this(new YamlTraversal(), new OpenApiIndexService());
+  public OpenApiYamlCompletionContributor() {
+    this(new YamlTraversal(), new OpenApiIndexService());
+  }
+
+  private OpenApiYamlCompletionContributor(
+      final YamlTraversal yamlTraversal, final OpenApiIndexService openApiIndexService) {
+    this.yamlTraversal = yamlTraversal;
+    this.openApiIndexService = openApiIndexService;
+  }
+
+  @Override
+  public void fillCompletionVariants(
+      @NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
+    final boolean isMainOpenApiFile =
+        openApiIndexService.isMainOpenApiFile(
+            parameters.getOriginalFile().getVirtualFile(),
+            parameters.getOriginalFile().getProject());
+
+    final boolean isPartialOpenApiFile =
+        openApiIndexService.isPartialOpenApiFile(
+            parameters.getOriginalFile().getVirtualFile(),
+            parameters.getOriginalFile().getProject());
+
+    if (isMainOpenApiFile || isPartialOpenApiFile) {
+      final PsiElement psiElement = parameters.getPosition();
+      final OpenApiFileType openApiFileType =
+          isMainOpenApiFile
+              ? OpenApiFileType.MAIN
+              : openApiIndexService.getOpenApiFileType(
+                  parameters.getOriginalFile().getVirtualFile(),
+                  parameters.getOriginalFile().getProject());
+
+      final PathResolver pathResolver = PathResolverFactory.fromOpenApiFileType(openApiFileType);
+
+      final OpenApiCompletionHelper completionHelper =
+          new OpenApiCompletionHelper(psiElement, yamlTraversal, pathResolver);
+
+      OpenApiFieldCompletionFactory.from(completionHelper, result).ifPresent(FieldCompletion::fill);
+
+      OpenApiValueCompletionFactory.from(
+              completionHelper, CompletionResultSetFactory.forValue(parameters, result))
+          .ifPresent(ValueCompletion::fill);
+
+      result.stopHere();
     }
-
-    private OpenApiYamlCompletionContributor(final YamlTraversal yamlTraversal,
-                                             final OpenApiIndexService openApiIndexService) {
-        this.yamlTraversal = yamlTraversal;
-        this.openApiIndexService = openApiIndexService;
-    }
-
-    @Override
-    public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
-        final boolean isMainOpenApiFile = openApiIndexService.isMainOpenApiFile(
-                parameters.getOriginalFile().getVirtualFile(),
-                parameters.getOriginalFile().getProject());
-
-        final boolean isPartialOpenApiFile = openApiIndexService.isPartialOpenApiFile(
-                parameters.getOriginalFile().getVirtualFile(),
-                parameters.getOriginalFile().getProject());
-
-        if (isMainOpenApiFile || isPartialOpenApiFile) {
-            final PsiElement psiElement = parameters.getPosition();
-            final OpenApiFileType openApiFileType = isMainOpenApiFile
-                    ? OpenApiFileType.MAIN
-                    : openApiIndexService.getOpenApiFileType(
-                    parameters.getOriginalFile().getVirtualFile(),
-                    parameters.getOriginalFile().getProject());
-
-            final PathResolver pathResolver = PathResolverFactory.fromOpenApiFileType(openApiFileType);
-
-            final OpenApiCompletionHelper completionHelper = new OpenApiCompletionHelper(psiElement, yamlTraversal, pathResolver);
-
-            OpenApiFieldCompletionFactory.from(completionHelper, result)
-                    .ifPresent(FieldCompletion::fill);
-
-            OpenApiValueCompletionFactory.from(completionHelper, CompletionResultSetFactory.forValue(parameters, result))
-                    .ifPresent(ValueCompletion::fill);
-
-            result.stopHere();
-        }
-    }
-
-
+  }
 }

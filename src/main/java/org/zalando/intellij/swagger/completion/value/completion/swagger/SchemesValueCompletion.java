@@ -7,12 +7,13 @@ import org.zalando.intellij.swagger.completion.value.model.swagger.SwaggerValues
 
 class SchemesValueCompletion extends ValueCompletion {
 
-    SchemesValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
-        super(completionHelper, completionResultSet);
-    }
+  SchemesValueCompletion(
+      final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    super(completionHelper, completionResultSet);
+  }
 
-    @Override
-    public void fill() {
-        SwaggerValues.schemes().forEach(this::addValue);
-    }
+  @Override
+  public void fill() {
+    SwaggerValues.schemes().forEach(this::addValue);
+  }
 }

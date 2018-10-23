@@ -21,58 +21,63 @@ import org.zalando.intellij.swagger.traversal.path.swagger.PathResolverFactory;
 
 public class SwaggerYamlCompletionContributor extends CompletionContributor {
 
-    private final YamlTraversal yamlTraversal;
-    private final SwaggerIndexService swaggerIndexService;
+  private final YamlTraversal yamlTraversal;
+  private final SwaggerIndexService swaggerIndexService;
 
-    public SwaggerYamlCompletionContributor() {
-        this(new YamlTraversal(), new SwaggerIndexService());
+  public SwaggerYamlCompletionContributor() {
+    this(new YamlTraversal(), new SwaggerIndexService());
+  }
+
+  private SwaggerYamlCompletionContributor(
+      final YamlTraversal yamlTraversal, final SwaggerIndexService swaggerIndexService) {
+    this.yamlTraversal = yamlTraversal;
+    this.swaggerIndexService = swaggerIndexService;
+  }
+
+  @Override
+  public void fillCompletionVariants(
+      @NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
+    final boolean isMainSwaggerFile =
+        swaggerIndexService.isMainSwaggerFile(
+            parameters.getOriginalFile().getVirtualFile(),
+            parameters.getOriginalFile().getProject());
+
+    final boolean isPartialSwaggerFile =
+        swaggerIndexService.isPartialSwaggerFile(
+            parameters.getOriginalFile().getVirtualFile(),
+            parameters.getOriginalFile().getProject());
+
+    if (isMainSwaggerFile || isPartialSwaggerFile) {
+      final PsiElement psiElement = parameters.getPosition();
+      final SwaggerFileType swaggerFileType =
+          isMainSwaggerFile
+              ? SwaggerFileType.MAIN
+              : swaggerIndexService.getSwaggerFileType(
+                  parameters.getOriginalFile().getVirtualFile(),
+                  parameters.getOriginalFile().getProject());
+
+      final PathResolver pathResolver = PathResolverFactory.fromSwaggerFileType(swaggerFileType);
+
+      final SwaggerCompletionHelper completionHelper =
+          new SwaggerCompletionHelper(psiElement, yamlTraversal, pathResolver);
+
+      SwaggerFieldCompletionFactory.from(completionHelper, result).ifPresent(FieldCompletion::fill);
+
+      SwaggerValueCompletionFactory.from(
+              completionHelper, CompletionResultSetFactory.forValue(parameters, result))
+          .ifPresent(ValueCompletion::fill);
+
+      for (SwaggerCustomFieldCompletionFactory ep :
+          SwaggerCustomFieldCompletionFactory.EP_NAME.getExtensions()) {
+        ep.from(completionHelper, result).ifPresent(FieldCompletion::fill);
+      }
+
+      for (SwaggerCustomValueCompletionFactory ep :
+          SwaggerCustomValueCompletionFactory.EP_NAME.getExtensions()) {
+        ep.from(completionHelper, result).ifPresent(ValueCompletion::fill);
+      }
+
+      result.stopHere();
     }
-
-    private SwaggerYamlCompletionContributor(final YamlTraversal yamlTraversal,
-                                             final SwaggerIndexService swaggerIndexService) {
-        this.yamlTraversal = yamlTraversal;
-        this.swaggerIndexService = swaggerIndexService;
-    }
-
-    @Override
-    public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
-        final boolean isMainSwaggerFile = swaggerIndexService.isMainSwaggerFile(
-                parameters.getOriginalFile().getVirtualFile(),
-                parameters.getOriginalFile().getProject());
-
-        final boolean isPartialSwaggerFile = swaggerIndexService.isPartialSwaggerFile(
-                parameters.getOriginalFile().getVirtualFile(),
-                parameters.getOriginalFile().getProject());
-
-        if (isMainSwaggerFile || isPartialSwaggerFile) {
-            final PsiElement psiElement = parameters.getPosition();
-            final SwaggerFileType swaggerFileType = isMainSwaggerFile
-                    ? SwaggerFileType.MAIN
-                    : swaggerIndexService.getSwaggerFileType(
-                    parameters.getOriginalFile().getVirtualFile(),
-                    parameters.getOriginalFile().getProject());
-
-            final PathResolver pathResolver = PathResolverFactory.fromSwaggerFileType(swaggerFileType);
-
-            final SwaggerCompletionHelper completionHelper = new SwaggerCompletionHelper(psiElement, yamlTraversal, pathResolver);
-
-            SwaggerFieldCompletionFactory.from(completionHelper, result)
-                    .ifPresent(FieldCompletion::fill);
-
-            SwaggerValueCompletionFactory.from(completionHelper, CompletionResultSetFactory.forValue(parameters, result))
-                    .ifPresent(ValueCompletion::fill);
-
-            for (SwaggerCustomFieldCompletionFactory ep : SwaggerCustomFieldCompletionFactory.EP_NAME.getExtensions()) {
-                ep.from(completionHelper, result)
-                        .ifPresent(FieldCompletion::fill);
-            }
-
-            for (SwaggerCustomValueCompletionFactory ep : SwaggerCustomValueCompletionFactory.EP_NAME.getExtensions()) {
-                ep.from(completionHelper, result)
-                        .ifPresent(ValueCompletion::fill);
-            }
-
-            result.stopHere();
-        }
-    }
+  }
 }

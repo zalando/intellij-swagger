@@ -4,25 +4,25 @@ import org.zalando.intellij.swagger.assertion.AssertableList;
 
 public class ExampleFileCompletionTest extends PartialFileCompletionTest {
 
-    public void testThatExampleFileIsAutoCompleted() {
-        withSpecFiles("pet.json", "example.json");
+  public void testThatExampleFileIsAutoCompleted() {
+    withSpecFiles("pet.json", "example.json");
 
-        final AssertableList completions = new AssertableList(geCompletions("pet.json"));
+    final AssertableList completions = new AssertableList(geCompletions("pet.json"));
 
-        assertExampleCompletions(completions);
-    }
+    assertExampleCompletions(completions);
+  }
 
-    public void testThatExamplesFileIsAutoCompleted() {
-        withSpecFiles("components.json", "examples.json");
+  public void testThatExamplesFileIsAutoCompleted() {
+    withSpecFiles("components.json", "examples.json");
 
-        final AssertableList completions = new AssertableList(geCompletions("components.json"));
+    final AssertableList completions = new AssertableList(geCompletions("components.json"));
 
-        assertExampleCompletions(completions);
-    }
+    assertExampleCompletions(completions);
+  }
 
-    private void assertExampleCompletions(final AssertableList completions) {
-        completions
-                .assertContains("$ref", "summary", "description", "value", "externalValue")
-                .isOfSize(5);
-    }
+  private void assertExampleCompletions(final AssertableList completions) {
+    completions
+        .assertContains("$ref", "summary", "description", "value", "externalValue")
+        .isOfSize(5);
+  }
 }

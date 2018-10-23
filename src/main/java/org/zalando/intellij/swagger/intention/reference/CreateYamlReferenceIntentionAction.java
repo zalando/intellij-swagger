@@ -12,50 +12,54 @@ import org.zalando.intellij.swagger.traversal.YamlTraversal;
 
 public class CreateYamlReferenceIntentionAction implements IntentionAction {
 
-    private final String referenceValueWithPrefix;
+  private final String referenceValueWithPrefix;
 
-    public CreateYamlReferenceIntentionAction(final String referenceValueWithPrefix) {
-        this.referenceValueWithPrefix = referenceValueWithPrefix;
-    }
+  public CreateYamlReferenceIntentionAction(final String referenceValueWithPrefix) {
+    this.referenceValueWithPrefix = referenceValueWithPrefix;
+  }
 
-    @Nls
-    @NotNull
-    @Override
-    public String getText() {
-        return "Create";
-    }
+  @Nls
+  @NotNull
+  @Override
+  public String getText() {
+    return "Create";
+  }
 
-    @Nls
-    @NotNull
-    @Override
-    public String getFamilyName() {
-        return "Create";
-    }
+  @Nls
+  @NotNull
+  @Override
+  public String getFamilyName() {
+    return "Create";
+  }
 
-    @Override
-    public boolean isAvailable(@NotNull final Project project, final Editor editor, final PsiFile psiFile) {
-        return true;
-    }
+  @Override
+  public boolean isAvailable(
+      @NotNull final Project project, final Editor editor, final PsiFile psiFile) {
+    return true;
+  }
 
-    @Override
-    public void invoke(@NotNull final Project project, final Editor editor, final PsiFile psiFile) {
-        final String referenceType = ReferenceValueExtractor.extractType(referenceValueWithPrefix);
-        final String referenceValueWithoutPrefix = ReferenceValueExtractor.extractValue(referenceValueWithPrefix);
+  @Override
+  public void invoke(@NotNull final Project project, final Editor editor, final PsiFile psiFile) {
+    final String referenceType = ReferenceValueExtractor.extractType(referenceValueWithPrefix);
+    final String referenceValueWithoutPrefix =
+        ReferenceValueExtractor.extractValue(referenceValueWithPrefix);
 
-        new ReferenceCreator(referenceValueWithoutPrefix, referenceType, psiFile, new YamlTraversal()).create();
-        PsiDocumentManager.getInstance(psiFile.getProject()).doPostponedOperationsAndUnblockDocument(editor.getDocument());
+    new ReferenceCreator(referenceValueWithoutPrefix, referenceType, psiFile, new YamlTraversal())
+        .create();
+    PsiDocumentManager.getInstance(psiFile.getProject())
+        .doPostponedOperationsAndUnblockDocument(editor.getDocument());
 
-        forceDocumentUpdate(editor, psiFile);
-    }
+    forceDocumentUpdate(editor, psiFile);
+  }
 
-    private void forceDocumentUpdate(final Editor editor, final PsiFile psiFile) {
-        editor.getDocument().insertString(0, " ");
-        PsiDocumentManager.getInstance(psiFile.getProject()).commitDocument(editor.getDocument());
-        editor.getDocument().deleteString(0, 1);
-    }
+  private void forceDocumentUpdate(final Editor editor, final PsiFile psiFile) {
+    editor.getDocument().insertString(0, " ");
+    PsiDocumentManager.getInstance(psiFile.getProject()).commitDocument(editor.getDocument());
+    editor.getDocument().deleteString(0, 1);
+  }
 
-    @Override
-    public boolean startInWriteAction() {
-        return true;
-    }
+  @Override
+  public boolean startInWriteAction() {
+    return true;
+  }
 }

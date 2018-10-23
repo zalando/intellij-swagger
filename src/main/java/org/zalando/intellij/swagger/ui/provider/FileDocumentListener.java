@@ -13,24 +13,24 @@ import org.zalando.intellij.swagger.service.SwaggerFileService;
 
 public class FileDocumentListener extends FileDocumentManagerAdapter {
 
-    private final FileDetector fileDetector = new FileDetector();
+  private final FileDetector fileDetector = new FileDetector();
 
-    @Override
-    public void beforeDocumentSaving(@NotNull final Document document) {
-        SwaggerFileService swaggerFileService = ServiceManager.getService(SwaggerFileService.class);
-        final Project[] openProjects = ProjectManager.getInstance().getOpenProjects();
+  @Override
+  public void beforeDocumentSaving(@NotNull final Document document) {
+    SwaggerFileService swaggerFileService = ServiceManager.getService(SwaggerFileService.class);
+    final Project[] openProjects = ProjectManager.getInstance().getOpenProjects();
 
-        if (openProjects.length > 0) {
-            final PsiFile psiFile = PsiDocumentManager.getInstance(openProjects[0]).getPsiFile(document);
+    if (openProjects.length > 0) {
+      final PsiFile psiFile = PsiDocumentManager.getInstance(openProjects[0]).getPsiFile(document);
 
-            if (psiFile != null) {
-                final boolean swaggerFile = fileDetector.isMainSwaggerFile(psiFile) || fileDetector.isMainOpenApiFile(psiFile);
+      if (psiFile != null) {
+        final boolean swaggerFile =
+            fileDetector.isMainSwaggerFile(psiFile) || fileDetector.isMainOpenApiFile(psiFile);
 
-                if (swaggerFile) {
-                    swaggerFileService.convertSwaggerToHtmlAsync(psiFile);
-                }
-            }
+        if (swaggerFile) {
+          swaggerFileService.convertSwaggerToHtmlAsync(psiFile);
         }
+      }
     }
-
+  }
 }

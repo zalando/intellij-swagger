@@ -7,12 +7,13 @@ import org.zalando.intellij.swagger.completion.field.model.swagger.SwaggerFields
 
 class HeaderCompletion extends FieldCompletion {
 
-    HeaderCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
-        super(completionHelper, completionResultSet);
-    }
+  HeaderCompletion(
+      final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    super(completionHelper, completionResultSet);
+  }
 
-    @Override
-    public void fill() {
-        SwaggerFields.header().forEach(this::addUnique);
-    }
+  @Override
+  public void fill() {
+    SwaggerFields.header().forEach(this::addUnique);
+  }
 }

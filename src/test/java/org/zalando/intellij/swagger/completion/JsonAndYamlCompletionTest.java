@@ -8,37 +8,37 @@ import org.zalando.intellij.swagger.fixture.SwaggerFixture;
 
 public abstract class JsonAndYamlCompletionTest {
 
-    private final SwaggerFixture myFixture;
-    private final Format myFormat;
+  private final SwaggerFixture myFixture;
+  private final Format myFormat;
 
-    protected JsonAndYamlCompletionTest(@NotNull Format format, @NotNull String testDataFolder) {
-        myFormat = format;
-        myFixture = SwaggerFixture.forResourceFolder(testDataFolder);
-    }
+  protected JsonAndYamlCompletionTest(@NotNull Format format, @NotNull String testDataFolder) {
+    myFormat = format;
+    myFixture = SwaggerFixture.forResourceFolder(testDataFolder);
+  }
 
-    @After
-    public void tearDownAfter() throws Exception {
-        myFixture.tearDown();
-    }
+  @After
+  public void tearDownAfter() throws Exception {
+    myFixture.tearDown();
+  }
 
-    @NotNull
-    protected final AssertableList getCaretCompletions(@NotNull String testFileNoExt) {
-        return myFixture.getCompletions(testFileNoExt, myFormat);
-    }
+  @NotNull
+  protected final AssertableList getCaretCompletions(@NotNull String testFileNoExt) {
+    return myFixture.getCompletions(testFileNoExt, myFormat);
+  }
 
-    protected final void completeAndCheckResultsByFile(@NotNull String inputFileNoExt) {
-        String afterFileName = getAfterFileName(inputFileNoExt);
-        completeAndCheckResultsByFile(inputFileNoExt, afterFileName);
-    }
+  protected final void completeAndCheckResultsByFile(@NotNull String inputFileNoExt) {
+    String afterFileName = getAfterFileName(inputFileNoExt);
+    completeAndCheckResultsByFile(inputFileNoExt, afterFileName);
+  }
 
-    protected final void completeAndCheckResultsByFile(@NotNull String inputFileNoExt, @NotNull String afterFileNoExt) {
-        myFixture.complete(inputFileNoExt, myFormat);
-        myFixture.checkResultByFile(afterFileNoExt, myFormat);
-    }
+  protected final void completeAndCheckResultsByFile(
+      @NotNull String inputFileNoExt, @NotNull String afterFileNoExt) {
+    myFixture.complete(inputFileNoExt, myFormat);
+    myFixture.checkResultByFile(afterFileNoExt, myFormat);
+  }
 
-    @NotNull
-    private String getAfterFileName(final @NotNull String beforeFile) {
-        return beforeFile + "_after";
-    }
-
+  @NotNull
+  private String getAfterFileName(final @NotNull String beforeFile) {
+    return beforeFile + "_after";
+  }
 }

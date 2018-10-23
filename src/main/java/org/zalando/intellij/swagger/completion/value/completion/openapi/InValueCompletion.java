@@ -7,13 +7,13 @@ import org.zalando.intellij.swagger.completion.value.model.openapi.OpenApiValues
 
 class InValueCompletion extends ValueCompletion {
 
+  InValueCompletion(
+      final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    super(completionHelper, completionResultSet);
+  }
 
-    InValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
-        super(completionHelper, completionResultSet);
-    }
-
-    @Override
-    public void fill() {
-        OpenApiValues.in().forEach(this::addValue);
-    }
+  @Override
+  public void fill() {
+    OpenApiValues.in().forEach(this::addValue);
+  }
 }

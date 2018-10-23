@@ -7,13 +7,13 @@ import org.zalando.intellij.swagger.completion.value.model.common.CommonValues;
 
 class TypeValueCompletion extends ValueCompletion {
 
+  TypeValueCompletion(
+      final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    super(completionHelper, completionResultSet);
+  }
 
-    TypeValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
-        super(completionHelper, completionResultSet);
-    }
-
-    @Override
-    public void fill() {
-        CommonValues.types().forEach(this::addValue);
-    }
+  @Override
+  public void fill() {
+    CommonValues.types().forEach(this::addValue);
+  }
 }

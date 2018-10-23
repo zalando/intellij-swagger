@@ -7,12 +7,13 @@ import org.zalando.intellij.swagger.completion.value.model.common.CommonValues;
 
 public class BooleanValueCompletion extends ValueCompletion {
 
-    public BooleanValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
-        super(completionHelper, completionResultSet);
-    }
+  public BooleanValueCompletion(
+      final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    super(completionHelper, completionResultSet);
+  }
 
-    @Override
-    public void fill() {
-        CommonValues.booleans().forEach(this::addValue);
-    }
+  @Override
+  public void fill() {
+    CommonValues.booleans().forEach(this::addValue);
+  }
 }

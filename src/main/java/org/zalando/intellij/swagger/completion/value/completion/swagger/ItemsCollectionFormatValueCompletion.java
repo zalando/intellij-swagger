@@ -7,12 +7,13 @@ import org.zalando.intellij.swagger.completion.value.model.swagger.SwaggerValues
 
 class ItemsCollectionFormatValueCompletion extends ValueCompletion {
 
-    ItemsCollectionFormatValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
-        super(completionHelper, completionResultSet);
-    }
+  ItemsCollectionFormatValueCompletion(
+      final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    super(completionHelper, completionResultSet);
+  }
 
-    @Override
-    public void fill() {
-        SwaggerValues.itemsCollectionFormat().forEach(this::addValue);
-    }
+  @Override
+  public void fill() {
+    SwaggerValues.itemsCollectionFormat().forEach(this::addValue);
+  }
 }

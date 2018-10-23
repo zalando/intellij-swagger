@@ -7,12 +7,12 @@ import org.zalando.intellij.swagger.completion.field.model.swagger.SwaggerFields
 
 class ParameterItemsCompletion extends FieldCompletion {
 
-    ParameterItemsCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
-        super(completionHelper, completionResultSet);
-    }
+  ParameterItemsCompletion(
+      final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    super(completionHelper, completionResultSet);
+  }
 
-    public void fill() {
-        SwaggerFields.parameterItems().forEach(this::addUnique);
-    }
-
+  public void fill() {
+    SwaggerFields.parameterItems().forEach(this::addUnique);
+  }
 }

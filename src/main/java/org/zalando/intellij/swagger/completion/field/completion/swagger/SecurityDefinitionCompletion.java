@@ -7,11 +7,12 @@ import org.zalando.intellij.swagger.completion.field.model.swagger.SwaggerFields
 
 class SecurityDefinitionCompletion extends FieldCompletion {
 
-    SecurityDefinitionCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
-        super(completionHelper, completionResultSet);
-    }
+  SecurityDefinitionCompletion(
+      final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    super(completionHelper, completionResultSet);
+  }
 
-    public void fill() {
-        SwaggerFields.securityDefinitions().forEach(this::addUnique);
-    }
+  public void fill() {
+    SwaggerFields.securityDefinitions().forEach(this::addUnique);
+  }
 }
