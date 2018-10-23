@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>org.zalando.intellij.swagger.examples.extensions.zalando</id>
     <name>Swagger Plugin [Zalando Extensions]</name>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <vendor email="sebastian.monte@zalando.de" url="https://tech.zalando.com/">Zalando SE</vendor>
 
     <depends>org.zalando.intellij.swagger</depends>
