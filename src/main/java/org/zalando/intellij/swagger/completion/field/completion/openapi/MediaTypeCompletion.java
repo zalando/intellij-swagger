@@ -7,12 +7,12 @@ import org.zalando.intellij.swagger.completion.field.model.openapi.OpenApiFields
 
 class MediaTypeCompletion extends FieldCompletion {
 
-    MediaTypeCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
-        super(completionHelper, completionResultSet);
-    }
+  MediaTypeCompletion(
+      final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    super(completionHelper, completionResultSet);
+  }
 
-    public void fill() {
-        OpenApiFields.mediaType().forEach(this::addUnique);
-    }
-
+  public void fill() {
+    OpenApiFields.mediaType().forEach(this::addUnique);
+  }
 }

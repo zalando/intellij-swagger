@@ -4,8 +4,8 @@ import com.intellij.psi.PsiElement;
 
 public class LinkPathResolver implements PathResolver {
 
-    @Override
-    public final boolean childOfLink(final PsiElement psiElement) {
-        return hasPath(psiElement, "$");
-    }
+  @Override
+  public final boolean childOfLink(final PsiElement psiElement) {
+    return hasPath(psiElement, "$");
+  }
 }

@@ -13,19 +13,21 @@ import org.zalando.intellij.swagger.validator.field.UnknownYamlKeyValidator;
 
 public class YamlValidKeyAnnotator implements Annotator {
 
-    @Override
-    public void annotate(@NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
+  @Override
+  public void annotate(
+      @NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
 
-        if (new FileDetector().isMainSwaggerYamlFile(psiElement.getContainingFile())) {
-            final YamlTraversal yamlTraversal = new YamlTraversal();
+    if (new FileDetector().isMainSwaggerYamlFile(psiElement.getContainingFile())) {
+      final YamlTraversal yamlTraversal = new YamlTraversal();
 
-            final FieldsValidator fieldsValidator = new FieldsValidator(
-                    yamlTraversal,
-                    new MainPathResolver(),
-                    new UnknownYamlKeyValidator(new RemoveYamlFieldIntentionAction(psiElement), yamlTraversal)
-            );
+      final FieldsValidator fieldsValidator =
+          new FieldsValidator(
+              yamlTraversal,
+              new MainPathResolver(),
+              new UnknownYamlKeyValidator(
+                  new RemoveYamlFieldIntentionAction(psiElement), yamlTraversal));
 
-            fieldsValidator.validate(psiElement, annotationHolder);
-        }
+      fieldsValidator.validate(psiElement, annotationHolder);
     }
+  }
 }

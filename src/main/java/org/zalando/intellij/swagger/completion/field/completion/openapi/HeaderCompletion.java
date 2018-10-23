@@ -7,12 +7,12 @@ import org.zalando.intellij.swagger.completion.field.model.openapi.OpenApiFields
 
 class HeaderCompletion extends FieldCompletion {
 
-    HeaderCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
-        super(completionHelper, completionResultSet);
-    }
+  HeaderCompletion(
+      final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    super(completionHelper, completionResultSet);
+  }
 
-    public void fill() {
-        OpenApiFields.header().forEach(this::addUnique);
-    }
-
+  public void fill() {
+    OpenApiFields.header().forEach(this::addUnique);
+  }
 }

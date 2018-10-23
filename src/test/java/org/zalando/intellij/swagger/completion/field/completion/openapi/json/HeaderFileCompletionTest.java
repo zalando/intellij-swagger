@@ -4,27 +4,37 @@ import org.zalando.intellij.swagger.assertion.AssertableList;
 
 public class HeaderFileCompletionTest extends PartialFileCompletionTest {
 
+  public void testThatSingleHeaderFileIsAutoCompleted() {
+    withSpecFiles("pet.json", "header.json");
 
-    public void testThatSingleHeaderFileIsAutoCompleted() {
-        withSpecFiles("pet.json", "header.json");
+    final AssertableList completions = new AssertableList(geCompletions("pet.json"));
 
-        final AssertableList completions = new AssertableList(geCompletions("pet.json"));
+    assertHeaderCompletions(completions);
+  }
 
-        assertHeaderCompletions(completions);
-    }
+  public void testThatHeadersFileIsAutoCompleted() {
+    withSpecFiles("components.json", "headers.json");
 
-    public void testThatHeadersFileIsAutoCompleted() {
-        withSpecFiles("components.json", "headers.json");
+    final AssertableList completions = new AssertableList(geCompletions("components.json"));
 
-        final AssertableList completions = new AssertableList(geCompletions("components.json"));
+    assertHeaderCompletions(completions);
+  }
 
-        assertHeaderCompletions(completions);
-    }
-
-    private void assertHeaderCompletions(final AssertableList completions) {
-        completions
-                .assertContains("$ref", "description", "required", "deprecated", "allowEmptyValue",
-                        "style", "explode", "allowReserved", "schema", "example", "examples", "content")
-                .isOfSize(12);
-    }
+  private void assertHeaderCompletions(final AssertableList completions) {
+    completions
+        .assertContains(
+            "$ref",
+            "description",
+            "required",
+            "deprecated",
+            "allowEmptyValue",
+            "style",
+            "explode",
+            "allowReserved",
+            "schema",
+            "example",
+            "examples",
+            "content")
+        .isOfSize(12);
+  }
 }

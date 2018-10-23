@@ -19,50 +19,56 @@ import org.zalando.intellij.swagger.traversal.path.openapi.PathResolverFactory;
 
 public class OpenApiJsonCompletionContributor extends CompletionContributor {
 
-    private final JsonTraversal jsonTraversal;
-    private final OpenApiIndexService openApiIndexService;
+  private final JsonTraversal jsonTraversal;
+  private final OpenApiIndexService openApiIndexService;
 
-    public OpenApiJsonCompletionContributor() {
-        this(new JsonTraversal(), new OpenApiIndexService());
+  public OpenApiJsonCompletionContributor() {
+    this(new JsonTraversal(), new OpenApiIndexService());
+  }
+
+  private OpenApiJsonCompletionContributor(
+      final JsonTraversal jsonTraversal, final OpenApiIndexService openApiIndexService) {
+    this.jsonTraversal = jsonTraversal;
+    this.openApiIndexService = openApiIndexService;
+  }
+
+  @Override
+  public void fillCompletionVariants(
+      @NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
+    final boolean isMainOpenApiFile =
+        openApiIndexService.isMainOpenApiFile(
+            parameters.getOriginalFile().getVirtualFile(),
+            parameters.getOriginalFile().getProject());
+
+    final boolean isPartialOpenApiFile =
+        openApiIndexService.isPartialOpenApiFile(
+            parameters.getOriginalFile().getVirtualFile(),
+            parameters.getOriginalFile().getProject());
+
+    if (isMainOpenApiFile || isPartialOpenApiFile) {
+      final PsiElement psiElement = parameters.getPosition();
+      final OpenApiFileType openApiFileType =
+          isMainOpenApiFile
+              ? OpenApiFileType.MAIN
+              : openApiIndexService.getOpenApiFileType(
+                  parameters.getOriginalFile().getVirtualFile(),
+                  parameters.getOriginalFile().getProject());
+
+      final PathResolver pathResolver = PathResolverFactory.fromOpenApiFileType(openApiFileType);
+
+      final OpenApiCompletionHelper completionHelper =
+          new OpenApiCompletionHelper(psiElement, jsonTraversal, pathResolver);
+
+      if (jsonTraversal.isKey(psiElement)) {
+        OpenApiFieldCompletionFactory.from(completionHelper, result)
+            .ifPresent(FieldCompletion::fill);
+      } else {
+        OpenApiValueCompletionFactory.from(
+                completionHelper, CompletionResultSetFactory.forValue(parameters, result))
+            .ifPresent(ValueCompletion::fill);
+      }
+
+      result.stopHere();
     }
-
-    private OpenApiJsonCompletionContributor(final JsonTraversal jsonTraversal,
-                                             final OpenApiIndexService openApiIndexService) {
-        this.jsonTraversal = jsonTraversal;
-        this.openApiIndexService = openApiIndexService;
-    }
-
-    @Override
-    public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
-        final boolean isMainOpenApiFile = openApiIndexService.isMainOpenApiFile(
-                parameters.getOriginalFile().getVirtualFile(),
-                parameters.getOriginalFile().getProject());
-
-        final boolean isPartialOpenApiFile = openApiIndexService.isPartialOpenApiFile(
-                parameters.getOriginalFile().getVirtualFile(),
-                parameters.getOriginalFile().getProject());
-
-        if (isMainOpenApiFile || isPartialOpenApiFile) {
-            final PsiElement psiElement = parameters.getPosition();
-            final OpenApiFileType openApiFileType = isMainOpenApiFile
-                    ? OpenApiFileType.MAIN
-                    : openApiIndexService.getOpenApiFileType(parameters.getOriginalFile().getVirtualFile(),
-                    parameters.getOriginalFile().getProject());
-
-            final PathResolver pathResolver = PathResolverFactory.fromOpenApiFileType(openApiFileType);
-
-            final OpenApiCompletionHelper completionHelper = new OpenApiCompletionHelper(psiElement, jsonTraversal, pathResolver);
-
-            if (jsonTraversal.isKey(psiElement)) {
-                OpenApiFieldCompletionFactory.from(completionHelper, result)
-                        .ifPresent(FieldCompletion::fill);
-            } else {
-                OpenApiValueCompletionFactory.from(completionHelper, CompletionResultSetFactory.forValue(parameters, result))
-                        .ifPresent(ValueCompletion::fill);
-            }
-
-            result.stopHere();
-        }
-    }
-
+  }
 }

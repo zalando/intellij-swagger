@@ -4,26 +4,23 @@ import org.zalando.intellij.swagger.assertion.AssertableList;
 
 public class RequestBodyFileCompletionTest extends PartialFileCompletionTest {
 
+  public void testThatSingleRequestBodyFileIsAutoCompleted() {
+    withSpecFiles("pet.json", "request_body.json");
 
-    public void testThatSingleRequestBodyFileIsAutoCompleted() {
-        withSpecFiles("pet.json", "request_body.json");
+    final AssertableList completions = new AssertableList(geCompletions("pet.json"));
 
-        final AssertableList completions = new AssertableList(geCompletions("pet.json"));
+    assertRequestBodyCompletions(completions);
+  }
 
-        assertRequestBodyCompletions(completions);
-    }
+  public void testThatRequestBodiesFileIsAutoCompleted() {
+    withSpecFiles("components.json", "request_bodies.json");
 
-    public void testThatRequestBodiesFileIsAutoCompleted() {
-        withSpecFiles("components.json", "request_bodies.json");
+    final AssertableList completions = new AssertableList(geCompletions("components.json"));
 
-        final AssertableList completions = new AssertableList(geCompletions("components.json"));
+    assertRequestBodyCompletions(completions);
+  }
 
-        assertRequestBodyCompletions(completions);
-    }
-
-    private void assertRequestBodyCompletions(final AssertableList completions) {
-        completions
-                .assertContains("$ref", "description", "content", "required")
-                .isOfSize(4);
-    }
+  private void assertRequestBodyCompletions(final AssertableList completions) {
+    completions.assertContains("$ref", "description", "content", "required").isOfSize(4);
+  }
 }

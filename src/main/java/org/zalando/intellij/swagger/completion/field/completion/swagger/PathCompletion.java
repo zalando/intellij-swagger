@@ -7,12 +7,12 @@ import org.zalando.intellij.swagger.completion.field.model.swagger.SwaggerFields
 
 class PathCompletion extends FieldCompletion {
 
-    PathCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
-        super(completionHelper, completionResultSet);
-    }
+  PathCompletion(
+      final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    super(completionHelper, completionResultSet);
+  }
 
-    public void fill() {
-        SwaggerFields.path().forEach(this::addUnique);
-    }
-
+  public void fill() {
+    SwaggerFields.path().forEach(this::addUnique);
+  }
 }

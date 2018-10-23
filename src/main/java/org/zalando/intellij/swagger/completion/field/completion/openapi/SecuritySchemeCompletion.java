@@ -7,12 +7,12 @@ import org.zalando.intellij.swagger.completion.field.model.openapi.OpenApiFields
 
 class SecuritySchemeCompletion extends FieldCompletion {
 
-    SecuritySchemeCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
-        super(completionHelper, completionResultSet);
-    }
+  SecuritySchemeCompletion(
+      final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    super(completionHelper, completionResultSet);
+  }
 
-    public void fill() {
-        OpenApiFields.securityScheme().forEach(this::addUnique);
-    }
-
+  public void fill() {
+    OpenApiFields.securityScheme().forEach(this::addUnique);
+  }
 }

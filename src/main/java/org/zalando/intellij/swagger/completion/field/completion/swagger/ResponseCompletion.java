@@ -7,12 +7,12 @@ import org.zalando.intellij.swagger.completion.field.model.swagger.SwaggerFields
 
 class ResponseCompletion extends FieldCompletion {
 
-    ResponseCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
-        super(completionHelper, completionResultSet);
-    }
+  ResponseCompletion(
+      final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    super(completionHelper, completionResultSet);
+  }
 
-    public void fill() {
-        SwaggerFields.response().forEach(this::addUnique);
-    }
-
+  public void fill() {
+    SwaggerFields.response().forEach(this::addUnique);
+  }
 }

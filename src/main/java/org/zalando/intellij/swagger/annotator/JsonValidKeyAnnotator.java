@@ -13,15 +13,18 @@ import org.zalando.intellij.swagger.validator.field.UnknownJsonKeyValidator;
 
 public class JsonValidKeyAnnotator implements Annotator {
 
-    @Override
-    public void annotate(@NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
+  @Override
+  public void annotate(
+      @NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
 
-        if (new FileDetector().isMainSwaggerJsonFile(psiElement.getContainingFile())) {
-            final FieldsValidator fieldsValidator = new FieldsValidator(new JsonTraversal(),
-                    new MainPathResolver(),
-                    new UnknownJsonKeyValidator(new RemoveJsonFieldIntentionAction(psiElement)));
+    if (new FileDetector().isMainSwaggerJsonFile(psiElement.getContainingFile())) {
+      final FieldsValidator fieldsValidator =
+          new FieldsValidator(
+              new JsonTraversal(),
+              new MainPathResolver(),
+              new UnknownJsonKeyValidator(new RemoveJsonFieldIntentionAction(psiElement)));
 
-            fieldsValidator.validate(psiElement, annotationHolder);
-        }
+      fieldsValidator.validate(psiElement, annotationHolder);
     }
+  }
 }

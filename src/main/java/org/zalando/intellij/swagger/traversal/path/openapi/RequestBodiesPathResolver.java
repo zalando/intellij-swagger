@@ -4,8 +4,8 @@ import com.intellij.psi.PsiElement;
 
 public class RequestBodiesPathResolver implements PathResolver {
 
-    @Override
-    public final boolean childOfRequestBody(final PsiElement psiElement) {
-        return hasPath(psiElement, "$.*");
-    }
+  @Override
+  public final boolean childOfRequestBody(final PsiElement psiElement) {
+    return hasPath(psiElement, "$.*");
+  }
 }

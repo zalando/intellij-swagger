@@ -7,12 +7,12 @@ import org.zalando.intellij.swagger.completion.field.model.common.CommonFields;
 
 class LicenseCompletion extends FieldCompletion {
 
-    LicenseCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
-        super(completionHelper, completionResultSet);
-    }
+  LicenseCompletion(
+      final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    super(completionHelper, completionResultSet);
+  }
 
-    public void fill() {
-        CommonFields.license().forEach(this::addUnique);
-    }
-
+  public void fill() {
+    CommonFields.license().forEach(this::addUnique);
+  }
 }

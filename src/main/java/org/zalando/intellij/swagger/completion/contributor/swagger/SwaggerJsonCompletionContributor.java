@@ -21,57 +21,64 @@ import org.zalando.intellij.swagger.traversal.path.swagger.PathResolverFactory;
 
 public class SwaggerJsonCompletionContributor extends CompletionContributor {
 
-    private final JsonTraversal jsonTraversal;
-    private final SwaggerIndexService swaggerIndexService;
+  private final JsonTraversal jsonTraversal;
+  private final SwaggerIndexService swaggerIndexService;
 
-    public SwaggerJsonCompletionContributor() {
-        this(new JsonTraversal(), new SwaggerIndexService());
-    }
+  public SwaggerJsonCompletionContributor() {
+    this(new JsonTraversal(), new SwaggerIndexService());
+  }
 
-    private SwaggerJsonCompletionContributor(final JsonTraversal jsonTraversal,
-                                             final SwaggerIndexService swaggerIndexService) {
-        this.jsonTraversal = jsonTraversal;
-        this.swaggerIndexService = swaggerIndexService;
-    }
+  private SwaggerJsonCompletionContributor(
+      final JsonTraversal jsonTraversal, final SwaggerIndexService swaggerIndexService) {
+    this.jsonTraversal = jsonTraversal;
+    this.swaggerIndexService = swaggerIndexService;
+  }
 
-    @Override
-    public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
-        final boolean isMainSwaggerFile = swaggerIndexService.isMainSwaggerFile(
-                parameters.getOriginalFile().getVirtualFile(),
-                parameters.getOriginalFile().getProject());
+  @Override
+  public void fillCompletionVariants(
+      @NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
+    final boolean isMainSwaggerFile =
+        swaggerIndexService.isMainSwaggerFile(
+            parameters.getOriginalFile().getVirtualFile(),
+            parameters.getOriginalFile().getProject());
 
-        final boolean isPartialSwaggerFile = swaggerIndexService.isPartialSwaggerFile(
-                parameters.getOriginalFile().getVirtualFile(),
-                parameters.getOriginalFile().getProject());
+    final boolean isPartialSwaggerFile =
+        swaggerIndexService.isPartialSwaggerFile(
+            parameters.getOriginalFile().getVirtualFile(),
+            parameters.getOriginalFile().getProject());
 
-        if (isMainSwaggerFile || isPartialSwaggerFile) {
-            final PsiElement psiElement = parameters.getPosition();
-            final SwaggerFileType swaggerFileType = isMainSwaggerFile
-                    ? SwaggerFileType.MAIN
-                    : swaggerIndexService.getSwaggerFileType(parameters.getOriginalFile().getVirtualFile(),
-                    parameters.getOriginalFile().getProject());
+    if (isMainSwaggerFile || isPartialSwaggerFile) {
+      final PsiElement psiElement = parameters.getPosition();
+      final SwaggerFileType swaggerFileType =
+          isMainSwaggerFile
+              ? SwaggerFileType.MAIN
+              : swaggerIndexService.getSwaggerFileType(
+                  parameters.getOriginalFile().getVirtualFile(),
+                  parameters.getOriginalFile().getProject());
 
-            final PathResolver pathResolver = PathResolverFactory.fromSwaggerFileType(swaggerFileType);
+      final PathResolver pathResolver = PathResolverFactory.fromSwaggerFileType(swaggerFileType);
 
-            final SwaggerCompletionHelper completionHelper = new SwaggerCompletionHelper(psiElement, jsonTraversal, pathResolver);
+      final SwaggerCompletionHelper completionHelper =
+          new SwaggerCompletionHelper(psiElement, jsonTraversal, pathResolver);
 
-            if (jsonTraversal.isKey(psiElement)) {
-                SwaggerFieldCompletionFactory.from(completionHelper, result)
-                        .ifPresent(FieldCompletion::fill);
-                for (SwaggerCustomFieldCompletionFactory ep : SwaggerCustomFieldCompletionFactory.EP_NAME.getExtensions()) {
-                    ep.from(completionHelper, result)
-                            .ifPresent(FieldCompletion::fill);
-                }
-            } else {
-                SwaggerValueCompletionFactory.from(completionHelper, CompletionResultSetFactory.forValue(parameters, result))
-                        .ifPresent(ValueCompletion::fill);
-                for (SwaggerCustomValueCompletionFactory ep : SwaggerCustomValueCompletionFactory.EP_NAME.getExtensions()) {
-                    ep.from(completionHelper, result)
-                            .ifPresent(ValueCompletion::fill);
-                }
-            }
-
-            result.stopHere();
+      if (jsonTraversal.isKey(psiElement)) {
+        SwaggerFieldCompletionFactory.from(completionHelper, result)
+            .ifPresent(FieldCompletion::fill);
+        for (SwaggerCustomFieldCompletionFactory ep :
+            SwaggerCustomFieldCompletionFactory.EP_NAME.getExtensions()) {
+          ep.from(completionHelper, result).ifPresent(FieldCompletion::fill);
         }
+      } else {
+        SwaggerValueCompletionFactory.from(
+                completionHelper, CompletionResultSetFactory.forValue(parameters, result))
+            .ifPresent(ValueCompletion::fill);
+        for (SwaggerCustomValueCompletionFactory ep :
+            SwaggerCustomValueCompletionFactory.EP_NAME.getExtensions()) {
+          ep.from(completionHelper, result).ifPresent(ValueCompletion::fill);
+        }
+      }
+
+      result.stopHere();
     }
+  }
 }

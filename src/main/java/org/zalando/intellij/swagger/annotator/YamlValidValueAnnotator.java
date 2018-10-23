@@ -15,16 +15,20 @@ import org.zalando.intellij.swagger.validator.value.ValuesValidator;
 
 public class YamlValidValueAnnotator implements Annotator {
 
-    @Override
-    public void annotate(@NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
-        if (new FileDetector().isMainSwaggerYamlFile(psiElement.getContainingFile())) {
-            final ValuesValidator valuesValidator = new ValuesValidator(new YamlTraversal(),
-                    new MainPathResolver(),
-                    new ReferenceValidator(
-                            new CreateYamlReferenceIntentionAction(StringUtils.removeAllQuotes(psiElement.getText()))),
-                    new SchemesValidator());
+  @Override
+  public void annotate(
+      @NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
+    if (new FileDetector().isMainSwaggerYamlFile(psiElement.getContainingFile())) {
+      final ValuesValidator valuesValidator =
+          new ValuesValidator(
+              new YamlTraversal(),
+              new MainPathResolver(),
+              new ReferenceValidator(
+                  new CreateYamlReferenceIntentionAction(
+                      StringUtils.removeAllQuotes(psiElement.getText()))),
+              new SchemesValidator());
 
-            valuesValidator.validate(psiElement, annotationHolder);
-        }
+      valuesValidator.validate(psiElement, annotationHolder);
     }
+  }
 }

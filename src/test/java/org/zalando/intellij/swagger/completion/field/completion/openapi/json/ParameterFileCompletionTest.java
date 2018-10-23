@@ -4,26 +4,39 @@ import org.zalando.intellij.swagger.assertion.AssertableList;
 
 public class ParameterFileCompletionTest extends PartialFileCompletionTest {
 
-    public void testThatSingleParameterFileIsAutoCompleted() {
-        withSpecFiles("pet.json", "parameter.json");
+  public void testThatSingleParameterFileIsAutoCompleted() {
+    withSpecFiles("pet.json", "parameter.json");
 
-        final AssertableList completions = new AssertableList(geCompletions("pet.json"));
+    final AssertableList completions = new AssertableList(geCompletions("pet.json"));
 
-        assertParameterCompletions(completions);
-    }
+    assertParameterCompletions(completions);
+  }
 
-    public void testThatParametersFileIsAutoCompleted() {
-        withSpecFiles("components.json", "parameters.json");
+  public void testThatParametersFileIsAutoCompleted() {
+    withSpecFiles("components.json", "parameters.json");
 
-        final AssertableList completions = new AssertableList(geCompletions("components.json"));
+    final AssertableList completions = new AssertableList(geCompletions("components.json"));
 
-        assertParameterCompletions(completions);
-    }
+    assertParameterCompletions(completions);
+  }
 
-    private void assertParameterCompletions(final AssertableList completions) {
-        completions
-                .assertContains("$ref", "name", "in", "description", "required", "deprecated", "allowEmptyValue",
-                        "style", "explode", "allowReserved", "schema", "example", "examples", "content")
-                .isOfSize(14);
-    }
+  private void assertParameterCompletions(final AssertableList completions) {
+    completions
+        .assertContains(
+            "$ref",
+            "name",
+            "in",
+            "description",
+            "required",
+            "deprecated",
+            "allowEmptyValue",
+            "style",
+            "explode",
+            "allowReserved",
+            "schema",
+            "example",
+            "examples",
+            "content")
+        .isOfSize(14);
+  }
 }

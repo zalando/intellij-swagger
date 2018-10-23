@@ -7,12 +7,13 @@ import org.zalando.intellij.swagger.completion.field.model.common.CommonFields;
 
 class ExternalDocsCompletion extends FieldCompletion {
 
-    ExternalDocsCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
-        super(completionHelper, completionResultSet);
-    }
+  ExternalDocsCompletion(
+      final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    super(completionHelper, completionResultSet);
+  }
 
-    @Override
-    public void fill() {
-        CommonFields.externalDocs().forEach(this::addUnique);
-    }
+  @Override
+  public void fill() {
+    CommonFields.externalDocs().forEach(this::addUnique);
+  }
 }

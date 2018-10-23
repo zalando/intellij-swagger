@@ -7,12 +7,13 @@ import org.zalando.intellij.swagger.completion.value.model.swagger.SwaggerValues
 
 class MimeValueCompletion extends ValueCompletion {
 
-    MimeValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
-        super(completionHelper, completionResultSet);
-    }
+  MimeValueCompletion(
+      final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    super(completionHelper, completionResultSet);
+  }
 
-    @Override
-    public void fill() {
-        SwaggerValues.mimeTypes().forEach(this::addValue);
-    }
+  @Override
+  public void fill() {
+    SwaggerValues.mimeTypes().forEach(this::addValue);
+  }
 }

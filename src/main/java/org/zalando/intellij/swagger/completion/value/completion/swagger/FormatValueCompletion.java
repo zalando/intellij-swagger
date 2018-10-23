@@ -7,12 +7,13 @@ import org.zalando.intellij.swagger.completion.value.model.common.CommonValues;
 
 class FormatValueCompletion extends ValueCompletion {
 
-    FormatValueCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
-        super(completionHelper, completionResultSet);
-    }
+  FormatValueCompletion(
+      final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    super(completionHelper, completionResultSet);
+  }
 
-    @Override
-    public void fill() {
-        CommonValues.formats().forEach(this::addValue);
-    }
+  @Override
+  public void fill() {
+    CommonValues.formats().forEach(this::addValue);
+  }
 }
