@@ -2,37 +2,38 @@ package org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally
 
 public class Violation {
 
-    final private String title;
-    final private String description;
-    final private String violationType;
-    final private String ruleLink;
-    final private String pointer;
+  private final String title;
+  private final String description;
+  private final String violationType;
+  private final String ruleLink;
+  private final String pointer;
 
-    public Violation(String title, String description, String violationType, String ruleLink, String pointer) {
-        this.title = title;
-        this.description = description;
-        this.violationType = violationType;
-        this.ruleLink = ruleLink;
-        this.pointer = pointer;
-    }
+  public Violation(
+      String title, String description, String violationType, String ruleLink, String pointer) {
+    this.title = title;
+    this.description = description;
+    this.violationType = violationType;
+    this.ruleLink = ruleLink;
+    this.pointer = pointer;
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  public String getTitle() {
+    return title;
+  }
 
-    public String getViolationType() {
-        return violationType;
-    }
+  public String getViolationType() {
+    return violationType;
+  }
 
-    public String getRuleLink() {
-        return ruleLink;
-    }
+  public String getRuleLink() {
+    return ruleLink;
+  }
 
-    public String getPointer() {
-        return pointer;
-    }
+  public String getPointer() {
+    return pointer;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getDescription() {
+    return description;
+  }
 }

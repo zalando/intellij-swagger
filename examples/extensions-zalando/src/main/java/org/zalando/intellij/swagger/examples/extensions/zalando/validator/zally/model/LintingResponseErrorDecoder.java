@@ -5,7 +5,8 @@ import feign.codec.ErrorDecoder;
 
 public class LintingResponseErrorDecoder implements ErrorDecoder {
 
-    @Override
-    public Exception decode(String methodKey, Response response) {
-        return new ZallyClientError(response.reason());
-    }}
+  @Override
+  public Exception decode(String methodKey, Response response) {
+    return new ZallyClientError(response.reason());
+  }
+}

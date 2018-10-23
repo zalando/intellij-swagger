@@ -6,12 +6,12 @@ import org.zalando.intellij.swagger.completion.field.FieldCompletion;
 
 public class InfoCompletion extends FieldCompletion {
 
-    public InfoCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
-        super(completionHelper, completionResultSet);
-    }
+  public InfoCompletion(
+      final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
+    super(completionHelper, completionResultSet);
+  }
 
-    public void fill() {
-        SwaggerFields.info().forEach(this::addUnique);
-    }
-
+  public void fill() {
+    SwaggerFields.info().forEach(this::addUnique);
+  }
 }
