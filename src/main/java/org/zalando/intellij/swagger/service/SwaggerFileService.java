@@ -40,18 +40,19 @@ public class SwaggerFileService {
 
   public void convertSwaggerToHtmlAsync(@NotNull final PsiFile file) {
     executorService.submit(
-        () -> ApplicationManager.getApplication()
-            .runReadAction(
-                () -> {
-                  try {
-                    convertSwaggerToHtmlWithCache(file, convertToJsonIfNecessary(file));
-                  } catch (Exception e) {
-                    // This is a no-op; we don't want to notify the user if the
-                    // Swagger UI generation fails on file save. A user may
-                    // edit a spec file that is invalid on multiple saves, and
-                    // this would result in a large number of notifications.
-                  }
-                }));
+        () ->
+            ApplicationManager.getApplication()
+                .runReadAction(
+                    () -> {
+                      try {
+                        convertSwaggerToHtmlWithCache(file, convertToJsonIfNecessary(file));
+                      } catch (Exception e) {
+                        // This is a no-op; we don't want to notify the user if the
+                        // Swagger UI generation fails on file save. A user may
+                        // edit a spec file that is invalid on multiple saves, and
+                        // this would result in a large number of notifications.
+                      }
+                    }));
   }
 
   private void notifyFailure(final Exception exception) {
