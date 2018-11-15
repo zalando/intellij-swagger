@@ -152,45 +152,7 @@ public class OpenApiCompletionTest extends JsonAndYamlCompletionTest {
 
   @Test
   public void thatMediaTypeSchemaKeysAreSuggested() {
-    getCaretCompletions("media_type_schema")
-        .assertContains(
-            "title",
-            "multipleOf",
-            "maximum",
-            "exclusiveMaximum",
-            "minimum",
-            "exclusiveMinimum",
-            "maxLength",
-            "minLength",
-            "pattern",
-            "maxItems",
-            "minItems",
-            "uniqueItems",
-            "maxProperties",
-            "minProperties",
-            "required",
-            "enum",
-            "type",
-            "allOf",
-            "oneOf",
-            "anyOf",
-            "not",
-            "items",
-            "properties",
-            "additionalProperties",
-            "description",
-            "format",
-            "default",
-            "$ref",
-            "nullable",
-            "discriminator",
-            "readOnly",
-            "writeOnly",
-            "xml",
-            "externalDocs",
-            "example",
-            "deprecated")
-        .isOfSize(36);
+    verifySchemaIsSuggested("media_type_schema");
   }
 
   @Test
@@ -274,45 +236,7 @@ public class OpenApiCompletionTest extends JsonAndYamlCompletionTest {
 
   @Test
   public void thatSchemaDefinitionKeysAreSuggested() {
-    getCaretCompletions("component_schema")
-        .assertContains(
-            "title",
-            "multipleOf",
-            "maximum",
-            "exclusiveMaximum",
-            "minimum",
-            "exclusiveMinimum",
-            "maxLength",
-            "minLength",
-            "pattern",
-            "maxItems",
-            "minItems",
-            "uniqueItems",
-            "maxProperties",
-            "minProperties",
-            "required",
-            "enum",
-            "type",
-            "allOf",
-            "oneOf",
-            "anyOf",
-            "not",
-            "items",
-            "properties",
-            "additionalProperties",
-            "description",
-            "format",
-            "default",
-            "$ref",
-            "nullable",
-            "discriminator",
-            "readOnly",
-            "writeOnly",
-            "xml",
-            "externalDocs",
-            "example",
-            "deprecated")
-        .isOfSize(36);
+    verifySchemaIsSuggested("component_schema");
   }
 
   @Test
@@ -441,5 +365,77 @@ public class OpenApiCompletionTest extends JsonAndYamlCompletionTest {
     getCaretCompletions("example")
         .assertContains("$ref", "summary", "description", "value", "externalValue")
         .isOfSize(5);
+  }
+
+  @Test
+  public void thatAllOfSchemaIsSuggested() {
+    verifySchemaIsSuggested("schema_all_of");
+  }
+
+  @Test
+  public void thatAnyOfSchemaIsSuggested() {
+    verifySchemaIsSuggested("schema_any_of");
+  }
+
+  @Test
+  public void thatItemsSchemaIsSuggested() {
+    verifySchemaIsSuggested("schema_items");
+  }
+
+  @Test
+  public void thatNotSchemaIsSuggested() {
+    verifySchemaIsSuggested("schema_not");
+  }
+
+  @Test
+  public void thatOneOfSchemaIsSuggested() {
+    verifySchemaIsSuggested("schema_one_of");
+  }
+
+  @Test
+  public void thatPropertiesSchemaIsSuggested() {
+    verifySchemaIsSuggested("schema_properties");
+  }
+
+  private void verifySchemaIsSuggested(String file) {
+    getCaretCompletions(file)
+        .assertContains(
+            "title",
+            "multipleOf",
+            "maximum",
+            "exclusiveMaximum",
+            "minimum",
+            "exclusiveMinimum",
+            "maxLength",
+            "minLength",
+            "pattern",
+            "maxItems",
+            "minItems",
+            "uniqueItems",
+            "maxProperties",
+            "minProperties",
+            "required",
+            "enum",
+            "type",
+            "allOf",
+            "oneOf",
+            "anyOf",
+            "not",
+            "items",
+            "properties",
+            "additionalProperties",
+            "description",
+            "format",
+            "default",
+            "$ref",
+            "nullable",
+            "discriminator",
+            "readOnly",
+            "writeOnly",
+            "xml",
+            "externalDocs",
+            "example",
+            "deprecated")
+        .isOfSize(36);
   }
 }
