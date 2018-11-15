@@ -74,7 +74,14 @@ public class MainPathResolver implements PathResolver {
 
   @Override
   public final boolean childOfSchema(final PsiElement psiElement) {
-    return hasPath(psiElement, "$.**.schema") || hasPath(psiElement, "$.components.schemas.*");
+    return hasPath(psiElement, "$.**.schema")
+        || hasPath(psiElement, "$.**.items")
+        || hasPath(psiElement, "$.components.schemas.*")
+        || hasPath(psiElement, "$.**.properties.*")
+        || hasPath(psiElement, "$.**.allOf")
+        || hasPath(psiElement, "$.**.oneOf")
+        || hasPath(psiElement, "$.**.anyOf")
+        || hasPath(psiElement, "$.**.not");
   }
 
   @Override
