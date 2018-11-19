@@ -1,0 +1,8 @@
+openapi: 3.0.0
+components:
+  schemas:
+    Schema1:
+      properties:
+        prop1:
+          $ref: <caret>
+    Schema2:

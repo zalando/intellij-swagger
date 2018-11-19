@@ -1,0 +1,15 @@
+{
+  "openapi": "3.0.0",
+  "components": {
+    "schemas": {
+      "Schema1": {
+        "oneOf": [
+          {
+            "$ref": "<caret>"
+          }
+        ]
+      },
+      "Schema2": {}
+    }
+  }
+}

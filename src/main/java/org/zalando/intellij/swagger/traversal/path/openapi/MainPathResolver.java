@@ -86,7 +86,9 @@ public class MainPathResolver implements PathResolver {
 
   @Override
   public final boolean isSchemaRefValue(final PsiElement psiElement) {
-    return hasPath(psiElement, "$.**.schema.$ref") || hasPath(psiElement, "$.**.items.$ref");
+    return hasPath(psiElement, "$.**.schema.$ref")
+        || hasPath(psiElement, "$.**.items.$ref")
+        || hasPath(psiElement, "$.components.schemas.**.$ref");
   }
 
   @Override
