@@ -108,4 +108,34 @@ public class CompletionTest extends JsonAndYamlCompletionTest {
             "matrix", "label", "form", "simple", "spaceDelimited", "pipeDelimited", "deepObject")
         .isOfSize(7);
   }
+
+  @Test
+  public void thatAllOfRefValueIsSuggested() {
+    getCaretCompletions("ref_all_of").assertContains("#/components/schemas/Schema2");
+  }
+
+  @Test
+  public void thatAnyOfRefValueIsSuggested() {
+    getCaretCompletions("ref_any_of").assertContains("#/components/schemas/Schema2");
+  }
+
+  @Test
+  public void thatItemsRefValueIsSuggested() {
+    getCaretCompletions("ref_items").assertContains("#/components/schemas/Schema2");
+  }
+
+  @Test
+  public void thatNotRefValueIsSuggested() {
+    getCaretCompletions("ref_not").assertContains("#/components/schemas/Schema2");
+  }
+
+  @Test
+  public void thatOneOfRefValueIsSuggested() {
+    getCaretCompletions("ref_one_of").assertContains("#/components/schemas/Schema2");
+  }
+
+  @Test
+  public void thatPropertiesRefValueIsSuggested() {
+    getCaretCompletions("ref_properties").assertContains("#/components/schemas/Schema2");
+  }
 }

@@ -1,0 +1,7 @@
+openapi: 3.0.0
+components:
+  schemas:
+    Schema1:
+      anyOf:
+        - $ref: <caret>
+    Schema2:
