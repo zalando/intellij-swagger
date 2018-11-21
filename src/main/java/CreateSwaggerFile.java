@@ -5,6 +5,7 @@ import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDirectory;
 import org.jetbrains.yaml.YAMLFileType;
+import org.zalando.intellij.swagger.file.icon.Icons;
 
 public class CreateSwaggerFile extends CreateFileFromTemplateAction implements DumbAware {
 
@@ -12,7 +13,7 @@ public class CreateSwaggerFile extends CreateFileFromTemplateAction implements D
     super(
         "Swagger/OpenAPI File",
         "Create a Swagger or an OpenAPI file from the specified template",
-        null);
+        Icons.SWAGGER_API_ICON);
   }
 
   @Override

@@ -54,6 +54,9 @@
         <internalFileTemplate name="Swagger File (YAML)"/>
         <internalFileTemplate name="OpenAPI File (JSON)"/>
         <internalFileTemplate name="OpenAPI File (YAML)"/>
+
+        <iconProvider implementation="org.zalando.intellij.swagger.file.icon.OpenApiIconProvider" id="openApiIconProvider" />
+        <iconProvider implementation="org.zalando.intellij.swagger.file.icon.SwaggerIconProvider" id="swaggerIconProvider" />
     </extensions>
     <actions>
         <action id="SwaggerPlugin.CreateSwaggerFile" class="CreateSwaggerFile" text="Swagger/OpenAPI File"
