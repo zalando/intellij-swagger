@@ -1,10 +1,8 @@
 import com.intellij.ide.actions.CreateFileFromTemplateAction;
 import com.intellij.ide.actions.CreateFileFromTemplateDialog;
-import com.intellij.json.JsonFileType;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDirectory;
-import org.jetbrains.yaml.YAMLFileType;
 import org.zalando.intellij.swagger.file.icon.Icons;
 
 public class CreateSwaggerFile extends CreateFileFromTemplateAction implements DumbAware {
@@ -21,11 +19,10 @@ public class CreateSwaggerFile extends CreateFileFromTemplateAction implements D
       Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder) {
     builder
         .setTitle("New API Specification")
-        .addKind("Swagger file (YAML)", YAMLFileType.YML.getIcon(), "Swagger File (YAML).yaml")
-        .addKind("Swagger file (JSON)", JsonFileType.INSTANCE.getIcon(), "Swagger File (JSON).json")
-        .addKind("OpenAPI file (YAML)", YAMLFileType.YML.getIcon(), "OpenAPI File (YAML).yaml")
-        .addKind(
-            "OpenAPI file (JSON)", JsonFileType.INSTANCE.getIcon(), "OpenAPI File (JSON).json");
+        .addKind("Swagger file (YAML)", Icons.SWAGGER_API_ICON, "Swagger File (YAML).yaml")
+        .addKind("Swagger file (JSON)", Icons.SWAGGER_API_ICON, "Swagger File (JSON).json")
+        .addKind("OpenAPI file (YAML)", Icons.OPEN_API_ICON, "OpenAPI File (YAML).yaml")
+        .addKind("OpenAPI file (JSON)", Icons.OPEN_API_ICON, "OpenAPI File (JSON).json");
   }
 
   @Override
