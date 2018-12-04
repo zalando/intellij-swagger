@@ -1,0 +1,21 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/pets": {
+      "get": {
+        "parameters": [
+          {
+            "$ref": "<caret>#/parameters/Parameter"
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "Parameter": {
+      "name": "parameter_name",
+      "in": "query",
+      "description": "Description"
+    }
+  }
+}

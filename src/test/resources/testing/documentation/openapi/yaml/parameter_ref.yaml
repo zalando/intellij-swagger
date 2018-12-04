@@ -1,0 +1,12 @@
+openapi: 3.0.0
+paths:
+  /pathA:
+    get:
+      parameters:
+        - $ref: '<caret>#/components/parameters/Parameter'
+components:
+  parameters:
+    Parameter:
+      name: parameter_name
+      in: query
+      description: Description

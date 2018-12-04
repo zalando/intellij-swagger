@@ -1,0 +1,21 @@
+{
+  "openapi": "3.0.1",
+  "paths": {
+    "/users": {
+      "get": {
+        "responses": {
+          "200": {
+            "$ref": "<caret>#/components/responses/Response"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "Response": {
+        "description": "Description"
+      }
+    }
+  }
+}
