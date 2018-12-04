@@ -1,0 +1,27 @@
+{
+  "openapi": "3.0.1",
+  "paths": {
+    "/users": {
+      "get": {
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "<caret>#/components/schemas/Example"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Example": {
+        "type": "object"
+      }
+    }
+  }
+}

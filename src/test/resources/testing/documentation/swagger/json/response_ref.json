@@ -1,0 +1,19 @@
+{
+  "swagger": "2.0",
+  "paths": {
+    "/path": {
+      "get": {
+        "responses": {
+          "200": {
+            "$ref": "<caret>#/responses/Response"
+          }
+        }
+      }
+    }
+  },
+  "responses": {
+    "Response": {
+      "description": "description"
+    }
+  }
+}

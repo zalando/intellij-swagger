@@ -1,0 +1,16 @@
+openapi: "3.0.0"
+paths:
+  /:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                foo:
+                  $ref: '<caret>#/components/examples/Example'
+components:
+  examples:
+    Example:
+      summary: Summary
+      description: Description

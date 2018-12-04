@@ -57,6 +57,9 @@
 
         <iconProvider implementation="org.zalando.intellij.swagger.file.icon.OpenApiIconProvider" id="openApiIconProvider" />
         <iconProvider implementation="org.zalando.intellij.swagger.file.icon.SwaggerIconProvider" id="swaggerIconProvider" />
+
+        <documentationProvider implementation="org.zalando.intellij.swagger.documentation.openapi.OpenApiDocumentationProvider"/>
+        <documentationProvider implementation="org.zalando.intellij.swagger.documentation.swagger.SwaggerDocumentationProvider"/>
     </extensions>
     <actions>
         <action id="SwaggerPlugin.CreateSwaggerFile" class="CreateSwaggerFile" text="Swagger/OpenAPI File"
