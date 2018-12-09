@@ -113,6 +113,10 @@ public interface PathResolver {
     return false;
   }
 
+  default boolean childOfDiscriminator(PsiElement psiElement) {
+    return hasPath(psiElement, "$.**.discriminator");
+  }
+
   default boolean isExampleRefValue(PsiElement psiElement) {
     return false;
   }
@@ -131,6 +135,10 @@ public interface PathResolver {
 
   default boolean isCallbackRefValue(PsiElement psiElement) {
     return false;
+  }
+
+  default boolean isMappingRefValue(PsiElement psiElement) {
+    return hasPath(psiElement, "$.**.discriminator.mapping.*");
   }
 
   default boolean isBooleanValue(PsiElement psiElement) {

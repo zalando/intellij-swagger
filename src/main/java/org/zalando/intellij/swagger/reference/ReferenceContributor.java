@@ -36,6 +36,23 @@ abstract class ReferenceContributor extends PsiReferenceContributor {
     };
   }
 
+  PsiReferenceProvider createSchemaNameReferenceProvider() {
+    return new PsiReferenceProvider() {
+      @NotNull
+      @Override
+      public PsiReference[] getReferencesByElement(
+          @NotNull PsiElement element, @NotNull ProcessingContext context) {
+        return Optional.ofNullable(element.getText())
+            .map(
+                text ->
+                    new PsiReference[] {
+                      new SchemaNameReference(element, StringUtils.removeAllQuotes(text))
+                    })
+            .orElse(SchemaNameReference.EMPTY_ARRAY);
+      }
+    };
+  }
+
   PsiReferenceProvider createFileReferenceProvider() {
     return new PsiReferenceProvider() {
       @NotNull

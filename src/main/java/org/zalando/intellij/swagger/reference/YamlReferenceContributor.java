@@ -23,6 +23,8 @@ public class YamlReferenceContributor extends ReferenceContributor {
   @Override
   public void registerReferenceProviders(@NotNull final PsiReferenceRegistrar registrar) {
     registrar.registerReferenceProvider(localDefinitionsPattern(), createLocalReferenceProvider());
+    registrar.registerReferenceProvider(
+        mappingSchemaNamePattern(), createSchemaNameReferenceProvider());
 
     registrar.registerReferenceProvider(filePattern(), createFileReferenceProvider());
     registrar.registerReferenceProvider(tagsPattern(), createTagsReferenceProvider());
@@ -30,8 +32,19 @@ public class YamlReferenceContributor extends ReferenceContributor {
 
   private PsiElementPattern.Capture<YAMLQuotedText> localDefinitionsPattern() {
     return psiElement(YAMLQuotedText.class)
-        .withParent(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.REF_KEY))
+        .andOr(
+            psiElement()
+                .withParent(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.REF_KEY)),
+            psiElement().withSuperParent(3, psiElement(YAMLKeyValue.class).withName("mapping")))
         .withText(StandardPatterns.string().contains(SwaggerConstants.REFERENCE_PREFIX))
+        .andNot(StandardPatterns.string().matches(".ya?ml"))
+        .withLanguage(YAMLLanguage.INSTANCE);
+  }
+
+  private PsiElementPattern.Capture<YAMLQuotedText> mappingSchemaNamePattern() {
+    return psiElement(YAMLQuotedText.class)
+        .withSuperParent(3, psiElement(YAMLKeyValue.class).withName("mapping"))
+        .andNot(StandardPatterns.string().contains(SwaggerConstants.REFERENCE_PREFIX))
         .andNot(StandardPatterns.string().matches(".ya?ml"))
         .withLanguage(YAMLLanguage.INSTANCE);
   }

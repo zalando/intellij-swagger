@@ -138,4 +138,10 @@ public class CompletionTest extends JsonAndYamlCompletionTest {
   public void thatPropertiesRefValueIsSuggested() {
     getCaretCompletions("ref_properties").assertContains("#/components/schemas/Schema2");
   }
+
+  @Test
+  public void thatMappingRefValueIsSuggested() {
+    getCaretCompletions("mapping_ref")
+        .assertContains("#/components/schemas/Pet", "#/components/schemas/Dog");
+  }
 }

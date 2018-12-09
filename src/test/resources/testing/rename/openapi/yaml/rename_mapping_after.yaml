@@ -1,0 +1,8 @@
+openapi: 3.0.0
+components:
+  schemas:
+    Pet:
+      discriminator:
+        mapping:
+          cachorro: '#/components/schemas/NewPet'
+    <caret>NewPet:

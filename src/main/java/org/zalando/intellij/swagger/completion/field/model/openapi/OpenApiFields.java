@@ -215,6 +215,10 @@ public class OpenApiFields {
         new StringField("openIdConnectUrl", true));
   }
 
+  public static List<Field> discriminator() {
+    return ImmutableList.of(new StringField("propertyName", true), new ObjectField("mapping"));
+  }
+
   public static List<Field> callback() {
     return path();
   }

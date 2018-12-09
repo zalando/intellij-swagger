@@ -397,6 +397,11 @@ public class OpenApiCompletionTest extends JsonAndYamlCompletionTest {
     verifySchemaIsSuggested("schema_properties");
   }
 
+  @Test
+  public void thatDiscriminatorKeysAreSuggested() {
+    getCaretCompletions("discriminator").assertContains("propertyName", "mapping").isOfSize(2);
+  }
+
   private void verifySchemaIsSuggested(String file) {
     getCaretCompletions(file)
         .assertContains(
