@@ -94,6 +94,10 @@ public class OpenApiCompletionHelper extends CompletionHelper {
     return pathResolver.isCallbackRefValue(psiElement);
   }
 
+  public boolean completeMappingRefValue() {
+    return pathResolver.isMappingRefValue(psiElement);
+  }
+
   public boolean completeBooleanValue() {
     return pathResolver.isBooleanValue(psiElement);
   }
@@ -160,5 +164,9 @@ public class OpenApiCompletionHelper extends CompletionHelper {
 
   public boolean completeContentKey() {
     return pathResolver.childOfContent(psiElement);
+  }
+
+  public boolean completeDiscriminatorKey() {
+    return pathResolver.childOfDiscriminator(psiElement);
   }
 }

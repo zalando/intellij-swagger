@@ -24,6 +24,8 @@ public class JsonReferenceContributor extends ReferenceContributor {
   @Override
   public void registerReferenceProviders(@NotNull final PsiReferenceRegistrar registrar) {
     registrar.registerReferenceProvider(localDefinitionsPattern(), createLocalReferenceProvider());
+    registrar.registerReferenceProvider(
+        mappingSchemaNamePattern(), createSchemaNameReferenceProvider());
 
     registrar.registerReferenceProvider(filePattern(), createFileReferenceProvider());
     registrar.registerReferenceProvider(tagsPattern(), createTagsReferenceProvider());
@@ -31,8 +33,19 @@ public class JsonReferenceContributor extends ReferenceContributor {
 
   private PsiElementPattern.Capture<JsonLiteral> localDefinitionsPattern() {
     return psiElement(JsonLiteral.class)
-        .withParent(psiElement(JsonProperty.class).withName(SwaggerConstants.REF_KEY))
+        .andOr(
+            psiElement()
+                .withParent(psiElement(JsonProperty.class).withName(SwaggerConstants.REF_KEY)),
+            psiElement().withSuperParent(3, psiElement(JsonProperty.class).withName("mapping")))
         .withText(StandardPatterns.string().contains(SwaggerConstants.REFERENCE_PREFIX))
+        .andNot(StandardPatterns.string().contains(FileConstants.JSON_FILE_NAME_SUFFIX))
+        .withLanguage(JsonLanguage.INSTANCE);
+  }
+
+  private PsiElementPattern.Capture<JsonLiteral> mappingSchemaNamePattern() {
+    return psiElement(JsonLiteral.class)
+        .withSuperParent(3, psiElement(JsonProperty.class).withName("mapping"))
+        .andNot(StandardPatterns.string().contains(SwaggerConstants.REFERENCE_PREFIX))
         .andNot(StandardPatterns.string().contains(FileConstants.JSON_FILE_NAME_SUFFIX))
         .withLanguage(JsonLanguage.INSTANCE);
   }

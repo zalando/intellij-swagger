@@ -1,0 +1,16 @@
+{
+  "openapi": "3.0.0",
+  "components": {
+    "schemas": {
+      "Pet": {
+        "discriminator": {
+          "mapping": {
+            "cachorro": "NewPet"
+          }
+        }
+      },
+      "<caret>NewPet": {
+      }
+    }
+  }
+}

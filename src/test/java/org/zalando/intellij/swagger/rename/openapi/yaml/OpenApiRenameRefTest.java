@@ -58,6 +58,17 @@ public class OpenApiRenameRefTest extends SwaggerLightCodeInsightFixtureTestCase
         "rename_component_with_dot_in_key_after.yaml");
   }
 
+  public void testRenameLocalMappingReference() {
+    testRename("NewPet", "rename_mapping.yaml", "rename_mapping_after.yaml");
+  }
+
+  public void testRenameLocalMappingSchemaNameReference() {
+    testRename(
+        "NewPet",
+        "rename_mapping_local_schema_name.yaml",
+        "rename_mapping_local_schema_name_after.yaml");
+  }
+
   public void testRenameFileReference() {
     myFixture.copyFileToProject(getSourceFile("pet.yaml"), "pet.yaml");
 

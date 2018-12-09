@@ -59,6 +59,8 @@ public class OpenApiFieldCompletionFactory {
       return Optional.of(new ExternalDocsCompletion(completionHelper, completionResultSet));
     } else if (completionHelper.completeContentKey()) {
       return Optional.of(new ContentCompletion(completionHelper, completionResultSet));
+    } else if (completionHelper.completeDiscriminatorKey()) {
+      return Optional.of(new DiscriminatorCompletion(completionHelper, completionResultSet));
     } else {
       return Optional.empty();
     }

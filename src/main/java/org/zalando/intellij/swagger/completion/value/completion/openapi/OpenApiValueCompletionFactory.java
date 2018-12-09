@@ -36,6 +36,9 @@ public class OpenApiValueCompletionFactory {
     } else if (completionHelper.completeCallbackRefValue()) {
       return Optional.of(
           new ComponentRefValueCompletion(completionHelper, completionResultSet, "callbacks"));
+    } else if (completionHelper.completeMappingRefValue()) {
+      return Optional.of(
+          new ComponentRefValueCompletion(completionHelper, completionResultSet, "schemas"));
     } else if (completionHelper.completeBooleanValue()) {
       return Optional.of(new BooleanValueCompletion(completionHelper, completionResultSet));
     } else if (completionHelper.completeTypeValue()) {
