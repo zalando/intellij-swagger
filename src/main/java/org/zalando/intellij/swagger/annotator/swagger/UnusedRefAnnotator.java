@@ -4,19 +4,16 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.searches.ReferencesSearch;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.file.SwaggerFileType;
 import org.zalando.intellij.swagger.index.swagger.SwaggerIndexService;
 import org.zalando.intellij.swagger.traversal.Traversal;
 import org.zalando.intellij.swagger.traversal.path.swagger.PathResolver;
 import org.zalando.intellij.swagger.traversal.path.swagger.PathResolverFactory;
-
-import java.util.Optional;
 
 public abstract class UnusedRefAnnotator implements Annotator {
 

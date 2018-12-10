@@ -35,7 +35,8 @@ public class OpenApiIndexService {
     return partialOpenApiFiles.contains(virtualFile);
   }
 
-  private OpenApiFileType getPartialOpenApiFileType(final VirtualFile virtualFile, final Project project) {
+  private OpenApiFileType getPartialOpenApiFileType(
+      final VirtualFile virtualFile, final Project project) {
     final Set<String> partialOpenApiFilesWithTypeInfo = getPartialOpenApiFilesWithTypeInfo(project);
 
     final Collection<VirtualFile> mainOpenApiFiles =
@@ -116,13 +117,16 @@ public class OpenApiIndexService {
     return getOpenApiFileType(project, virtualFile);
   }
 
-  private Optional<OpenApiFileType> getOpenApiFileType(final Project project, final VirtualFile virtualFile) {
+  private Optional<OpenApiFileType> getOpenApiFileType(
+      final Project project, final VirtualFile virtualFile) {
     final boolean isMainOpenApiFile = isMainOpenApiFile(virtualFile, project);
     final boolean isPartialOpenApiFile = isPartialOpenApiFile(virtualFile, project);
 
     if (isMainOpenApiFile || isPartialOpenApiFile) {
       final OpenApiFileType fileType =
-              isMainOpenApiFile ? OpenApiFileType.MAIN : getPartialOpenApiFileType(virtualFile, project);
+          isMainOpenApiFile
+              ? OpenApiFileType.MAIN
+              : getPartialOpenApiFileType(virtualFile, project);
 
       return Optional.of(fileType);
     }

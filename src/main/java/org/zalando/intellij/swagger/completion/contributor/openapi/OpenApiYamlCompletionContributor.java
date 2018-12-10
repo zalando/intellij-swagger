@@ -4,6 +4,7 @@ import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.OpenApiCompletionHelper;
 import org.zalando.intellij.swagger.completion.contributor.CompletionResultSetFactory;
@@ -16,8 +17,6 @@ import org.zalando.intellij.swagger.index.openapi.OpenApiIndexService;
 import org.zalando.intellij.swagger.traversal.YamlTraversal;
 import org.zalando.intellij.swagger.traversal.path.openapi.PathResolver;
 import org.zalando.intellij.swagger.traversal.path.openapi.PathResolverFactory;
-
-import java.util.Optional;
 
 public class OpenApiYamlCompletionContributor extends CompletionContributor {
 
@@ -42,8 +41,7 @@ public class OpenApiYamlCompletionContributor extends CompletionContributor {
 
     maybeFileType.ifPresent(
         fileType -> {
-          final PathResolver pathResolver =
-              PathResolverFactory.fromOpenApiFileType(fileType);
+          final PathResolver pathResolver = PathResolverFactory.fromOpenApiFileType(fileType);
 
           final PsiElement psiElement = parameters.getPosition();
 

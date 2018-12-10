@@ -34,7 +34,8 @@ public class SwaggerIndexService {
     return partialSwaggerFiles.contains(virtualFile);
   }
 
-  private SwaggerFileType getPartialSwaggerFileType(final VirtualFile virtualFile, final Project project) {
+  private SwaggerFileType getPartialSwaggerFileType(
+      final VirtualFile virtualFile, final Project project) {
     final Set<String> partialSwaggerFilesWithTypeInfo = getPartialSwaggerFilesWithTypeInfo(project);
 
     final Collection<VirtualFile> mainSwaggerFiles =
@@ -115,18 +116,20 @@ public class SwaggerIndexService {
     return getSwaggerFileType(project, virtualFile);
   }
 
-  private Optional<SwaggerFileType> getSwaggerFileType(final Project project, final VirtualFile virtualFile) {
+  private Optional<SwaggerFileType> getSwaggerFileType(
+      final Project project, final VirtualFile virtualFile) {
     final boolean isMainSwaggerFile = isMainSwaggerFile(virtualFile, project);
     final boolean isPartialSwaggerFile = isPartialSwaggerFile(virtualFile, project);
 
     if (isMainSwaggerFile || isPartialSwaggerFile) {
       final SwaggerFileType fileType =
-              isMainSwaggerFile ? SwaggerFileType.MAIN : getPartialSwaggerFileType(virtualFile, project);
+          isMainSwaggerFile
+              ? SwaggerFileType.MAIN
+              : getPartialSwaggerFileType(virtualFile, project);
 
       return Optional.of(fileType);
     }
 
     return Optional.empty();
   }
-
 }

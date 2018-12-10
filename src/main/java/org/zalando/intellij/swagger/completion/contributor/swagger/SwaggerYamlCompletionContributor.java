@@ -4,6 +4,7 @@ import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.completion.SwaggerCompletionHelper;
 import org.zalando.intellij.swagger.completion.contributor.CompletionResultSetFactory;
@@ -18,8 +19,6 @@ import org.zalando.intellij.swagger.index.swagger.SwaggerIndexService;
 import org.zalando.intellij.swagger.traversal.YamlTraversal;
 import org.zalando.intellij.swagger.traversal.path.swagger.PathResolver;
 import org.zalando.intellij.swagger.traversal.path.swagger.PathResolverFactory;
-
-import java.util.Optional;
 
 public class SwaggerYamlCompletionContributor extends CompletionContributor {
 
