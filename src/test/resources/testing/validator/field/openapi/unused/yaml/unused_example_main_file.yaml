@@ -1,0 +1,4 @@
+openapi: 3.0.0
+components:
+  examples:
+    <weak_warning descr="Example is never used">Example1:</weak_warning>

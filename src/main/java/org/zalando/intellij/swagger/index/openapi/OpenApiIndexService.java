@@ -5,11 +5,13 @@ import static org.apache.commons.lang.StringUtils.substringBeforeLast;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.indexing.FileBasedIndex;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.zalando.intellij.swagger.file.OpenApiFileType;
@@ -97,5 +99,22 @@ public class OpenApiIndexService {
         .stream()
         .flatMap(Set::stream)
         .collect(Collectors.toSet());
+  }
+
+  public Optional<OpenApiFileType> getFileType(final PsiElement psiElement) {
+    final Project project = psiElement.getProject();
+    final VirtualFile virtualFile = psiElement.getContainingFile().getVirtualFile();
+
+    final boolean isMainOpenApiFile = isMainOpenApiFile(virtualFile, project);
+    final boolean isPartialOpenApiFile = isPartialOpenApiFile(virtualFile, project);
+
+    if (isMainOpenApiFile || isPartialOpenApiFile) {
+      final OpenApiFileType fileType =
+          isMainOpenApiFile ? OpenApiFileType.MAIN : getOpenApiFileType(virtualFile, project);
+
+      return Optional.of(fileType);
+    }
+
+    return Optional.empty();
   }
 }

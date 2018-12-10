@@ -8,4 +8,9 @@ public class SchemasPathResolver implements PathResolver {
   public final boolean childOfSchema(final PsiElement psiElement) {
     return hasPath(psiElement, "$.*");
   }
+
+  @Override
+  public boolean isSchema(final PsiElement psiElement) {
+    return hasPath(psiElement, "$");
+  }
 }

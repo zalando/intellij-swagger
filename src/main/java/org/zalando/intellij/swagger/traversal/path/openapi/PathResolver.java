@@ -161,6 +161,38 @@ public interface PathResolver {
     return false;
   }
 
+  default boolean isSchema(PsiElement psiElement) {
+    return false;
+  }
+
+  default boolean isResponse(PsiElement psiElement) {
+    return false;
+  }
+
+  default boolean isParameter(PsiElement psiElement) {
+    return false;
+  }
+
+  default boolean isExample(PsiElement psiElement) {
+    return false;
+  }
+
+  default boolean isRequestBody(PsiElement psiElement) {
+    return false;
+  }
+
+  default boolean isHeader(PsiElement psiElement) {
+    return false;
+  }
+
+  default boolean isLink(PsiElement psiElement) {
+    return false;
+  }
+
+  default boolean isCallback(PsiElement psiElement) {
+    return false;
+  }
+
   default boolean hasPath(final PsiElement psiElement, final String pathExpression) {
     return new PathFinder().isInsidePath(psiElement, pathExpression);
   }

@@ -8,4 +8,9 @@ public class CallbacksPathResolver implements PathResolver {
   public final boolean childOfCallback(final PsiElement psiElement) {
     return hasPath(psiElement, "$.*");
   }
+
+  @Override
+  public final boolean isCallback(final PsiElement psiElement) {
+    return hasPath(psiElement, "$");
+  }
 }

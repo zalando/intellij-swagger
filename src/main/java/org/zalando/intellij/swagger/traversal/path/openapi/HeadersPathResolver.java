@@ -8,4 +8,9 @@ public class HeadersPathResolver implements PathResolver {
   public final boolean childOfHeader(final PsiElement psiElement) {
     return hasPath(psiElement, "$.*");
   }
+
+  @Override
+  public final boolean isHeader(final PsiElement psiElement) {
+    return hasPath(psiElement, "$");
+  }
 }

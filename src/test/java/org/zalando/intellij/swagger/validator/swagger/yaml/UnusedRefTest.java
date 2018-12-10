@@ -1,4 +1,4 @@
-package org.zalando.intellij.swagger.validator.yaml;
+package org.zalando.intellij.swagger.validator.swagger.yaml;
 
 import com.intellij.openapi.vfs.VirtualFile;
 import org.zalando.intellij.swagger.SwaggerLightCodeInsightFixtureTestCase;

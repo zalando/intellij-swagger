@@ -1,0 +1,8 @@
+{
+  "openapi": "3.0.0",
+  "components": {
+    "headers": {
+      <weak_warning descr="Header is never used">"Header1"</weak_warning>:{}
+    }
+  }
+}
