@@ -17,6 +17,8 @@ import org.zalando.intellij.swagger.traversal.JsonTraversal;
 import org.zalando.intellij.swagger.traversal.path.openapi.PathResolver;
 import org.zalando.intellij.swagger.traversal.path.openapi.PathResolverFactory;
 
+import java.util.Optional;
+
 public class OpenApiJsonCompletionContributor extends CompletionContributor {
 
   private final JsonTraversal jsonTraversal;
@@ -35,40 +37,28 @@ public class OpenApiJsonCompletionContributor extends CompletionContributor {
   @Override
   public void fillCompletionVariants(
       @NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
-    final boolean isMainOpenApiFile =
-        openApiIndexService.isMainOpenApiFile(
-            parameters.getOriginalFile().getVirtualFile(),
-            parameters.getOriginalFile().getProject());
 
-    final boolean isPartialOpenApiFile =
-        openApiIndexService.isPartialOpenApiFile(
-            parameters.getOriginalFile().getVirtualFile(),
-            parameters.getOriginalFile().getProject());
+    final Optional<OpenApiFileType> maybeFileType = openApiIndexService.getFileType(parameters);
 
-    if (isMainOpenApiFile || isPartialOpenApiFile) {
-      final PsiElement psiElement = parameters.getPosition();
-      final OpenApiFileType openApiFileType =
-          isMainOpenApiFile
-              ? OpenApiFileType.MAIN
-              : openApiIndexService.getOpenApiFileType(
-                  parameters.getOriginalFile().getVirtualFile(),
-                  parameters.getOriginalFile().getProject());
+    maybeFileType.ifPresent(
+        fileType -> {
+          final PathResolver pathResolver = PathResolverFactory.fromOpenApiFileType(fileType);
 
-      final PathResolver pathResolver = PathResolverFactory.fromOpenApiFileType(openApiFileType);
+          final PsiElement psiElement = parameters.getPosition();
 
-      final OpenApiCompletionHelper completionHelper =
-          new OpenApiCompletionHelper(psiElement, jsonTraversal, pathResolver);
+          final OpenApiCompletionHelper completionHelper =
+              new OpenApiCompletionHelper(psiElement, jsonTraversal, pathResolver);
 
-      if (jsonTraversal.isKey(psiElement)) {
-        OpenApiFieldCompletionFactory.from(completionHelper, result)
-            .ifPresent(FieldCompletion::fill);
-      } else {
-        OpenApiValueCompletionFactory.from(
-                completionHelper, CompletionResultSetFactory.forValue(parameters, result))
-            .ifPresent(ValueCompletion::fill);
-      }
+          if (jsonTraversal.isKey(psiElement)) {
+            OpenApiFieldCompletionFactory.from(completionHelper, result)
+                .ifPresent(FieldCompletion::fill);
+          } else {
+            OpenApiValueCompletionFactory.from(
+                    completionHelper, CompletionResultSetFactory.forValue(parameters, result))
+                .ifPresent(ValueCompletion::fill);
+          }
 
-      result.stopHere();
-    }
+          result.stopHere();
+        });
   }
 }

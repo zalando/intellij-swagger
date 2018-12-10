@@ -16,6 +16,8 @@ import org.zalando.intellij.swagger.traversal.Traversal;
 import org.zalando.intellij.swagger.traversal.path.swagger.PathResolver;
 import org.zalando.intellij.swagger.traversal.path.swagger.PathResolverFactory;
 
+import java.util.Optional;
+
 public abstract class UnusedRefAnnotator implements Annotator {
 
   private final Traversal traversal;
@@ -32,50 +34,41 @@ public abstract class UnusedRefAnnotator implements Annotator {
   @Override
   public void annotate(
       @NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
-    final Project project = psiElement.getProject();
-    final VirtualFile virtualFile = psiElement.getContainingFile().getVirtualFile();
 
-    final boolean isMainSwaggerFile = swaggerIndexService.isMainSwaggerFile(virtualFile, project);
+    final Optional<SwaggerFileType> maybeFileType = swaggerIndexService.getFileType(psiElement);
 
-    final boolean isPartialSwaggerFile =
-        swaggerIndexService.isPartialSwaggerFile(virtualFile, project);
+    maybeFileType.ifPresent(
+        fileType -> {
+          final PathResolver pathResolver = PathResolverFactory.fromSwaggerFileType(fileType);
 
-    if (isMainSwaggerFile || isPartialSwaggerFile) {
-      final SwaggerFileType swaggerFileType =
-          isMainSwaggerFile
-              ? SwaggerFileType.MAIN
-              : swaggerIndexService.getSwaggerFileType(virtualFile, project);
+          traversal
+              .getKeyNameIfKey(psiElement)
+              .ifPresent(
+                  keyName -> {
+                    final PsiElement currentElement = getPsiElement(psiElement);
+                    PsiElement searchableCurrentElement = getSearchablePsiElement(psiElement);
 
-      final PathResolver pathResolver = PathResolverFactory.fromSwaggerFileType(swaggerFileType);
-
-      traversal
-          .getKeyNameIfKey(psiElement)
-          .ifPresent(
-              keyName -> {
-                final PsiElement currentElement = getPsiElement(psiElement);
-                PsiElement searchableCurrentElement = getSearchablePsiElement(psiElement);
-
-                if (pathResolver.isDefinition(currentElement)) {
-                  warn(
-                      psiElement,
-                      annotationHolder,
-                      searchableCurrentElement,
-                      "Definition is never used");
-                } else if (pathResolver.isParameter(currentElement)) {
-                  warn(
-                      psiElement,
-                      annotationHolder,
-                      searchableCurrentElement,
-                      "Parameter is never used");
-                } else if (pathResolver.isResponse(currentElement)) {
-                  warn(
-                      psiElement,
-                      annotationHolder,
-                      searchableCurrentElement,
-                      "Response is never used");
-                }
-              });
-    }
+                    if (pathResolver.isDefinition(currentElement)) {
+                      warn(
+                          psiElement,
+                          annotationHolder,
+                          searchableCurrentElement,
+                          "Definition is never used");
+                    } else if (pathResolver.isParameter(currentElement)) {
+                      warn(
+                          psiElement,
+                          annotationHolder,
+                          searchableCurrentElement,
+                          "Parameter is never used");
+                    } else if (pathResolver.isResponse(currentElement)) {
+                      warn(
+                          psiElement,
+                          annotationHolder,
+                          searchableCurrentElement,
+                          "Response is never used");
+                    }
+                  });
+        });
   }
 
   private void warn(

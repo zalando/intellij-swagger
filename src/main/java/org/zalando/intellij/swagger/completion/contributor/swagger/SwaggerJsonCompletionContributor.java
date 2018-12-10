@@ -19,6 +19,8 @@ import org.zalando.intellij.swagger.traversal.JsonTraversal;
 import org.zalando.intellij.swagger.traversal.path.swagger.PathResolver;
 import org.zalando.intellij.swagger.traversal.path.swagger.PathResolverFactory;
 
+import java.util.Optional;
+
 public class SwaggerJsonCompletionContributor extends CompletionContributor {
 
   private final JsonTraversal jsonTraversal;
@@ -37,48 +39,36 @@ public class SwaggerJsonCompletionContributor extends CompletionContributor {
   @Override
   public void fillCompletionVariants(
       @NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
-    final boolean isMainSwaggerFile =
-        swaggerIndexService.isMainSwaggerFile(
-            parameters.getOriginalFile().getVirtualFile(),
-            parameters.getOriginalFile().getProject());
 
-    final boolean isPartialSwaggerFile =
-        swaggerIndexService.isPartialSwaggerFile(
-            parameters.getOriginalFile().getVirtualFile(),
-            parameters.getOriginalFile().getProject());
+    final Optional<SwaggerFileType> maybeFileType = swaggerIndexService.getFileType(parameters);
 
-    if (isMainSwaggerFile || isPartialSwaggerFile) {
-      final PsiElement psiElement = parameters.getPosition();
-      final SwaggerFileType swaggerFileType =
-          isMainSwaggerFile
-              ? SwaggerFileType.MAIN
-              : swaggerIndexService.getSwaggerFileType(
-                  parameters.getOriginalFile().getVirtualFile(),
-                  parameters.getOriginalFile().getProject());
+    maybeFileType.ifPresent(
+        fileType -> {
+          final PathResolver pathResolver = PathResolverFactory.fromSwaggerFileType(fileType);
 
-      final PathResolver pathResolver = PathResolverFactory.fromSwaggerFileType(swaggerFileType);
+          final PsiElement psiElement = parameters.getPosition();
 
-      final SwaggerCompletionHelper completionHelper =
-          new SwaggerCompletionHelper(psiElement, jsonTraversal, pathResolver);
+          final SwaggerCompletionHelper completionHelper =
+              new SwaggerCompletionHelper(psiElement, jsonTraversal, pathResolver);
 
-      if (jsonTraversal.isKey(psiElement)) {
-        SwaggerFieldCompletionFactory.from(completionHelper, result)
-            .ifPresent(FieldCompletion::fill);
-        for (SwaggerCustomFieldCompletionFactory ep :
-            SwaggerCustomFieldCompletionFactory.EP_NAME.getExtensions()) {
-          ep.from(completionHelper, result).ifPresent(FieldCompletion::fill);
-        }
-      } else {
-        SwaggerValueCompletionFactory.from(
-                completionHelper, CompletionResultSetFactory.forValue(parameters, result))
-            .ifPresent(ValueCompletion::fill);
-        for (SwaggerCustomValueCompletionFactory ep :
-            SwaggerCustomValueCompletionFactory.EP_NAME.getExtensions()) {
-          ep.from(completionHelper, result).ifPresent(ValueCompletion::fill);
-        }
-      }
+          if (jsonTraversal.isKey(psiElement)) {
+            SwaggerFieldCompletionFactory.from(completionHelper, result)
+                .ifPresent(FieldCompletion::fill);
+            for (SwaggerCustomFieldCompletionFactory ep :
+                SwaggerCustomFieldCompletionFactory.EP_NAME.getExtensions()) {
+              ep.from(completionHelper, result).ifPresent(FieldCompletion::fill);
+            }
+          } else {
+            SwaggerValueCompletionFactory.from(
+                    completionHelper, CompletionResultSetFactory.forValue(parameters, result))
+                .ifPresent(ValueCompletion::fill);
+            for (SwaggerCustomValueCompletionFactory ep :
+                SwaggerCustomValueCompletionFactory.EP_NAME.getExtensions()) {
+              ep.from(completionHelper, result).ifPresent(ValueCompletion::fill);
+            }
+          }
 
-      result.stopHere();
-    }
+          result.stopHere();
+        });
   }
 }

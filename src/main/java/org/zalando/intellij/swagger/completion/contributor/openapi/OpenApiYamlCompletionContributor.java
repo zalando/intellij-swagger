@@ -17,6 +17,8 @@ import org.zalando.intellij.swagger.traversal.YamlTraversal;
 import org.zalando.intellij.swagger.traversal.path.openapi.PathResolver;
 import org.zalando.intellij.swagger.traversal.path.openapi.PathResolverFactory;
 
+import java.util.Optional;
+
 public class OpenApiYamlCompletionContributor extends CompletionContributor {
 
   private final YamlTraversal yamlTraversal;
@@ -35,37 +37,27 @@ public class OpenApiYamlCompletionContributor extends CompletionContributor {
   @Override
   public void fillCompletionVariants(
       @NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
-    final boolean isMainOpenApiFile =
-        openApiIndexService.isMainOpenApiFile(
-            parameters.getOriginalFile().getVirtualFile(),
-            parameters.getOriginalFile().getProject());
 
-    final boolean isPartialOpenApiFile =
-        openApiIndexService.isPartialOpenApiFile(
-            parameters.getOriginalFile().getVirtualFile(),
-            parameters.getOriginalFile().getProject());
+    final Optional<OpenApiFileType> maybeFileType = openApiIndexService.getFileType(parameters);
 
-    if (isMainOpenApiFile || isPartialOpenApiFile) {
-      final PsiElement psiElement = parameters.getPosition();
-      final OpenApiFileType openApiFileType =
-          isMainOpenApiFile
-              ? OpenApiFileType.MAIN
-              : openApiIndexService.getOpenApiFileType(
-                  parameters.getOriginalFile().getVirtualFile(),
-                  parameters.getOriginalFile().getProject());
+    maybeFileType.ifPresent(
+        fileType -> {
+          final PathResolver pathResolver =
+              PathResolverFactory.fromOpenApiFileType(fileType);
 
-      final PathResolver pathResolver = PathResolverFactory.fromOpenApiFileType(openApiFileType);
+          final PsiElement psiElement = parameters.getPosition();
 
-      final OpenApiCompletionHelper completionHelper =
-          new OpenApiCompletionHelper(psiElement, yamlTraversal, pathResolver);
+          final OpenApiCompletionHelper completionHelper =
+              new OpenApiCompletionHelper(psiElement, yamlTraversal, pathResolver);
 
-      OpenApiFieldCompletionFactory.from(completionHelper, result).ifPresent(FieldCompletion::fill);
+          OpenApiFieldCompletionFactory.from(completionHelper, result)
+              .ifPresent(FieldCompletion::fill);
 
-      OpenApiValueCompletionFactory.from(
-              completionHelper, CompletionResultSetFactory.forValue(parameters, result))
-          .ifPresent(ValueCompletion::fill);
+          OpenApiValueCompletionFactory.from(
+                  completionHelper, CompletionResultSetFactory.forValue(parameters, result))
+              .ifPresent(ValueCompletion::fill);
 
-      result.stopHere();
-    }
+          result.stopHere();
+        });
   }
 }

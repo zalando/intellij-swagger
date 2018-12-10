@@ -3,13 +3,16 @@ package org.zalando.intellij.swagger.index.swagger;
 import static org.apache.commons.lang.StringUtils.substringAfterLast;
 import static org.apache.commons.lang.StringUtils.substringBeforeLast;
 
+import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.indexing.FileBasedIndex;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.zalando.intellij.swagger.file.SwaggerFileType;
@@ -31,7 +34,7 @@ public class SwaggerIndexService {
     return partialSwaggerFiles.contains(virtualFile);
   }
 
-  public SwaggerFileType getSwaggerFileType(final VirtualFile virtualFile, final Project project) {
+  private SwaggerFileType getPartialSwaggerFileType(final VirtualFile virtualFile, final Project project) {
     final Set<String> partialSwaggerFilesWithTypeInfo = getPartialSwaggerFilesWithTypeInfo(project);
 
     final Collection<VirtualFile> mainSwaggerFiles =
@@ -97,4 +100,33 @@ public class SwaggerIndexService {
         .flatMap(Set::stream)
         .collect(Collectors.toSet());
   }
+
+  public Optional<SwaggerFileType> getFileType(final PsiElement psiElement) {
+    final Project project = psiElement.getProject();
+    final VirtualFile virtualFile = psiElement.getContainingFile().getVirtualFile();
+
+    return getSwaggerFileType(project, virtualFile);
+  }
+
+  public Optional<SwaggerFileType> getFileType(final CompletionParameters parameters) {
+    final Project project = parameters.getOriginalFile().getProject();
+    final VirtualFile virtualFile = parameters.getOriginalFile().getVirtualFile();
+
+    return getSwaggerFileType(project, virtualFile);
+  }
+
+  private Optional<SwaggerFileType> getSwaggerFileType(final Project project, final VirtualFile virtualFile) {
+    final boolean isMainSwaggerFile = isMainSwaggerFile(virtualFile, project);
+    final boolean isPartialSwaggerFile = isPartialSwaggerFile(virtualFile, project);
+
+    if (isMainSwaggerFile || isPartialSwaggerFile) {
+      final SwaggerFileType fileType =
+              isMainSwaggerFile ? SwaggerFileType.MAIN : getPartialSwaggerFileType(virtualFile, project);
+
+      return Optional.of(fileType);
+    }
+
+    return Optional.empty();
+  }
+
 }
