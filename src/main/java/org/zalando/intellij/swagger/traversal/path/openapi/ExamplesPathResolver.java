@@ -8,4 +8,9 @@ public class ExamplesPathResolver implements PathResolver {
   public final boolean childOfExample(final PsiElement psiElement) {
     return hasPath(psiElement, "$.*");
   }
+
+  @Override
+  public final boolean isExample(final PsiElement psiElement) {
+    return hasPath(psiElement, "$");
+  }
 }

@@ -220,4 +220,44 @@ public class MainPathResolver implements PathResolver {
   public boolean childOfContent(PsiElement psiElement) {
     return hasPath(psiElement, "$.**.content");
   }
+
+  @Override
+  public boolean isSchema(PsiElement psiElement) {
+    return hasPath(psiElement, "$.components.schemas");
+  }
+
+  @Override
+  public boolean isResponse(PsiElement psiElement) {
+    return hasPath(psiElement, "$.components.responses");
+  }
+
+  @Override
+  public boolean isParameter(PsiElement psiElement) {
+    return hasPath(psiElement, "$.components.parameters");
+  }
+
+  @Override
+  public boolean isExample(PsiElement psiElement) {
+    return hasPath(psiElement, "$.components.examples");
+  }
+
+  @Override
+  public boolean isRequestBody(PsiElement psiElement) {
+    return hasPath(psiElement, "$.components.requestBodies");
+  }
+
+  @Override
+  public boolean isHeader(PsiElement psiElement) {
+    return hasPath(psiElement, "$.components.headers");
+  }
+
+  @Override
+  public boolean isLink(PsiElement psiElement) {
+    return hasPath(psiElement, "$.components.links");
+  }
+
+  @Override
+  public boolean isCallback(PsiElement psiElement) {
+    return hasPath(psiElement, "$.components.callbacks");
+  }
 }

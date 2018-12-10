@@ -1,0 +1,8 @@
+{
+  "openapi": "3.0.0",
+  "components": {
+    "schemas": {
+      <weak_warning descr="Schema is never used">"Schema1"</weak_warning>:{}
+    }
+  }
+}

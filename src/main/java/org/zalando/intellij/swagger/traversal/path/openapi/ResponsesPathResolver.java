@@ -8,4 +8,9 @@ public class ResponsesPathResolver implements PathResolver {
   public final boolean childOfResponse(final PsiElement psiElement) {
     return hasPath(psiElement, "$.*");
   }
+
+  @Override
+  public final boolean isResponse(final PsiElement psiElement) {
+    return hasPath(psiElement, "$");
+  }
 }

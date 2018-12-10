@@ -8,4 +8,9 @@ public class RequestBodiesPathResolver implements PathResolver {
   public final boolean childOfRequestBody(final PsiElement psiElement) {
     return hasPath(psiElement, "$.*");
   }
+
+  @Override
+  public final boolean isRequestBody(final PsiElement psiElement) {
+    return hasPath(psiElement, "$");
+  }
 }

@@ -8,4 +8,9 @@ public class LinksPathResolver implements PathResolver {
   public final boolean childOfLink(final PsiElement psiElement) {
     return hasPath(psiElement, "$.*");
   }
+
+  @Override
+  public final boolean isLink(final PsiElement psiElement) {
+    return hasPath(psiElement, "$");
+  }
 }

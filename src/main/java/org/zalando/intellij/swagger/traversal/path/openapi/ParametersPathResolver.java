@@ -8,4 +8,9 @@ public class ParametersPathResolver implements PathResolver {
   public final boolean childOfParameters(final PsiElement psiElement) {
     return hasPath(psiElement, "$.*");
   }
+
+  @Override
+  public final boolean isParameter(final PsiElement psiElement) {
+    return hasPath(psiElement, "$");
+  }
 }

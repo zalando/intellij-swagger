@@ -1,4 +1,4 @@
-package org.zalando.intellij.swagger.validator;
+package org.zalando.intellij.swagger.validator.swagger;
 
 import org.zalando.intellij.swagger.SwaggerLightCodeInsightFixtureTestCase;
 
