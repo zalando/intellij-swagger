@@ -3,6 +3,7 @@ package org.zalando.intellij.swagger.index.openapi;
 import static org.apache.commons.lang.StringUtils.substringAfterLast;
 import static org.apache.commons.lang.StringUtils.substringBeforeLast;
 
+import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -34,7 +35,7 @@ public class OpenApiIndexService {
     return partialOpenApiFiles.contains(virtualFile);
   }
 
-  public OpenApiFileType getOpenApiFileType(final VirtualFile virtualFile, final Project project) {
+  private OpenApiFileType getPartialOpenApiFileType(final VirtualFile virtualFile, final Project project) {
     final Set<String> partialOpenApiFilesWithTypeInfo = getPartialOpenApiFilesWithTypeInfo(project);
 
     final Collection<VirtualFile> mainOpenApiFiles =
@@ -105,12 +106,23 @@ public class OpenApiIndexService {
     final Project project = psiElement.getProject();
     final VirtualFile virtualFile = psiElement.getContainingFile().getVirtualFile();
 
+    return getOpenApiFileType(project, virtualFile);
+  }
+
+  public Optional<OpenApiFileType> getFileType(final CompletionParameters parameters) {
+    final Project project = parameters.getOriginalFile().getProject();
+    final VirtualFile virtualFile = parameters.getOriginalFile().getVirtualFile();
+
+    return getOpenApiFileType(project, virtualFile);
+  }
+
+  private Optional<OpenApiFileType> getOpenApiFileType(final Project project, final VirtualFile virtualFile) {
     final boolean isMainOpenApiFile = isMainOpenApiFile(virtualFile, project);
     final boolean isPartialOpenApiFile = isPartialOpenApiFile(virtualFile, project);
 
     if (isMainOpenApiFile || isPartialOpenApiFile) {
       final OpenApiFileType fileType =
-          isMainOpenApiFile ? OpenApiFileType.MAIN : getOpenApiFileType(virtualFile, project);
+              isMainOpenApiFile ? OpenApiFileType.MAIN : getPartialOpenApiFileType(virtualFile, project);
 
       return Optional.of(fileType);
     }
