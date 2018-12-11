@@ -13,26 +13,33 @@ import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.zalando.intellij.swagger.examples.extensions.zalando.validator.ZallySettings;
 import org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.model.LintingResponse;
 import org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.model.Violation;
+import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.traversal.path.PathFinder;
 
-public abstract class ZallyYamlFileValidator extends LocalInspectionTool {
+public class ZallyYamlFileValidator extends LocalInspectionTool {
 
   private static final Logger LOG = Logger.getInstance(ZallyYamlFileValidator.class);
 
   private final ZallyService zallyService;
-  protected final PathFinder pathFinder;
+  private final PathFinder pathFinder;
+  private final FileDetector fileDetector;
 
-  ZallyYamlFileValidator(ZallyService zallyService, PathFinder pathFinder) {
-    this.zallyService = zallyService;
-    this.pathFinder = pathFinder;
+  public ZallyYamlFileValidator() {
+    this(ServiceManager.getService(ZallyService.class), new PathFinder(), new FileDetector());
   }
 
-  abstract boolean supportsFile(PsiFile file);
+  private ZallyYamlFileValidator(
+      final ZallyService zallyService,
+      final PathFinder pathFinder,
+      final FileDetector fileDetector) {
+    this.zallyService = zallyService;
+    this.pathFinder = pathFinder;
+    this.fileDetector = fileDetector;
+  }
 
-  abstract Optional<PsiElement> getRootElement(PsiFile file);
-
-  ProblemDescriptor[] checkViolations(
-      final PsiFile file, final InspectionManager manager, final boolean isOnTheFly) {
+  @Override
+  public ProblemDescriptor[] checkFile(
+      @NotNull PsiFile file, @NotNull InspectionManager manager, boolean isOnTheFly) {
     if (canLint(file)) {
       final LintingResponse lintingResponse = lint(file);
       return createProblems(manager, isOnTheFly, lintingResponse, file);
@@ -53,6 +60,10 @@ public abstract class ZallyYamlFileValidator extends LocalInspectionTool {
 
   private boolean canLint(final PsiFile file) {
     return hasZallyUrl() && supportsFile(file);
+  }
+
+  private boolean supportsFile(final PsiFile file) {
+    return fileDetector.isMainOpenApiYamlFile(file) || fileDetector.isMainSwaggerFile(file);
   }
 
   private boolean hasZallyUrl() {
@@ -121,5 +132,13 @@ public abstract class ZallyYamlFileValidator extends LocalInspectionTool {
     }
 
     return getRootElement(file);
+  }
+
+  private Optional<PsiElement> getRootElement(final PsiFile file) {
+    if (fileDetector.isMainOpenApiFile(file)) {
+      return pathFinder.findByPathFrom("$.openapi", file);
+    } else {
+      return pathFinder.findByPathFrom("$.swagger", file);
+    }
   }
 }

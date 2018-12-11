@@ -6,7 +6,7 @@ import org.zalando.intellij.swagger.examples.extensions.zalando.SwaggerLightCode
 public class SwaggerYamlFileValidatorTest extends SwaggerLightCodeInsightFixtureTestCase {
 
   public void testZallyViolationsAreReported() {
-    final SwaggerYamlFileValidator swaggerYamlFileValidator = new SwaggerYamlFileValidator();
+    final ZallyYamlFileValidator swaggerYamlFileValidator = new ZallyYamlFileValidator();
 
     myFixture.enableInspections(swaggerYamlFileValidator);
 
