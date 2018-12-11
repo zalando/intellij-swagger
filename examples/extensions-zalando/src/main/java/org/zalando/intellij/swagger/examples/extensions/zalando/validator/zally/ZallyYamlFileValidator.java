@@ -40,9 +40,9 @@ public class ZallyYamlFileValidator extends LocalInspectionTool {
   @Override
   public ProblemDescriptor[] checkFile(
       @NotNull PsiFile file, @NotNull InspectionManager manager, boolean isOnTheFly) {
-    if (canLint(file)) {
+    if (canLint(file) && !isOnTheFly) {
       final LintingResponse lintingResponse = lint(file);
-      return createProblems(manager, isOnTheFly, lintingResponse, file);
+      return createProblems(manager, lintingResponse, file);
     }
 
     return ProblemDescriptor.EMPTY_ARRAY;
@@ -74,10 +74,7 @@ public class ZallyYamlFileValidator extends LocalInspectionTool {
 
   @NotNull
   private ProblemDescriptor[] createProblems(
-      final InspectionManager manager,
-      final boolean isOnTheFly,
-      final LintingResponse lintingResponse,
-      final PsiFile file) {
+      final InspectionManager manager, final LintingResponse lintingResponse, final PsiFile file) {
     final List<ProblemDescriptor> problems = Lists.newArrayList();
 
     final List<Violation> violations = lintingResponse.getViolations();
@@ -99,7 +96,7 @@ public class ZallyYamlFileValidator extends LocalInspectionTool {
                   manager.createProblemDescriptor(
                       key,
                       descriptionTemplate,
-                      isOnTheFly,
+                      false,
                       LocalQuickFix.EMPTY_ARRAY,
                       ProblemHighlightType.GENERIC_ERROR));
             }
