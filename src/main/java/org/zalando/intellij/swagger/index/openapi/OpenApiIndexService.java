@@ -117,7 +117,7 @@ public class OpenApiIndexService {
     return getOpenApiFileType(project, virtualFile);
   }
 
-  private Optional<OpenApiFileType> getOpenApiFileType(
+  public Optional<OpenApiFileType> getOpenApiFileType(
       final Project project, final VirtualFile virtualFile) {
     final boolean isMainOpenApiFile = isMainOpenApiFile(virtualFile, project);
     final boolean isPartialOpenApiFile = isPartialOpenApiFile(virtualFile, project);

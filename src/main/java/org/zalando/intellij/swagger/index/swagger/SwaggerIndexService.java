@@ -106,17 +106,17 @@ public class SwaggerIndexService {
     final Project project = psiElement.getProject();
     final VirtualFile virtualFile = psiElement.getContainingFile().getVirtualFile();
 
-    return getSwaggerFileType(project, virtualFile);
+    return getFileType(project, virtualFile);
   }
 
   public Optional<SwaggerFileType> getFileType(final CompletionParameters parameters) {
     final Project project = parameters.getOriginalFile().getProject();
     final VirtualFile virtualFile = parameters.getOriginalFile().getVirtualFile();
 
-    return getSwaggerFileType(project, virtualFile);
+    return getFileType(project, virtualFile);
   }
 
-  private Optional<SwaggerFileType> getSwaggerFileType(
+  public Optional<SwaggerFileType> getFileType(
       final Project project, final VirtualFile virtualFile) {
     final boolean isMainSwaggerFile = isMainSwaggerFile(virtualFile, project);
     final boolean isPartialSwaggerFile = isPartialSwaggerFile(virtualFile, project);
