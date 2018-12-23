@@ -29,44 +29,35 @@ public class OpenApiDocumentationProvider extends ApiDocumentProvider {
     final Optional<Project> maybeProject = psiFile.map(PsiFile::getProject);
 
     return maybeVirtualFile
-        .map(
+        .flatMap(
             virtualFile -> {
               final Project project = maybeProject.get();
 
-              final boolean isMainOpenApiFile =
-                  openApiIndexService.isMainOpenApiFile(virtualFile, project);
+              final Optional<OpenApiFileType> maybeFileType =
+                  openApiIndexService.getOpenApiFileType(project, virtualFile);
 
-              final boolean isPartialOpenApiFile =
-                  openApiIndexService.isPartialOpenApiFile(virtualFile, project);
+              return maybeFileType.map(
+                  openApiFileType -> {
+                    final PathResolver pathResolver =
+                        PathResolverFactory.fromOpenApiFileType(openApiFileType);
 
-              if (isMainOpenApiFile || isPartialOpenApiFile) {
-
-                final OpenApiFileType openApiFileType =
-                    isMainOpenApiFile
-                        ? OpenApiFileType.MAIN
-                        : openApiIndexService.getOpenApiFileType(virtualFile, project);
-
-                final PathResolver pathResolver =
-                    PathResolverFactory.fromOpenApiFileType(openApiFileType);
-
-                if (pathResolver.childOfSchema(targetElement)) {
-                  return handleSchemaReference(targetElement, originalElement);
-                } else if (pathResolver.childOfResponse(targetElement)) {
-                  return handleResponseReference(targetElement);
-                } else if (pathResolver.childOfParameters(targetElement)) {
-                  return handleParameterReference(targetElement);
-                } else if (pathResolver.childOfExample(targetElement)) {
-                  return handleExampleReference(targetElement);
-                } else if (pathResolver.childOfRequestBody(targetElement)) {
-                  return handleRequestBodyReference(targetElement);
-                } else if (pathResolver.childOfHeader(targetElement)) {
-                  return handleHeaderReference(targetElement);
-                } else if (pathResolver.childOfLink(targetElement)) {
-                  return handleLinkReference(targetElement);
-                }
-              }
-
-              return null;
+                    if (pathResolver.childOfSchema(targetElement)) {
+                      return handleSchemaReference(targetElement, originalElement);
+                    } else if (pathResolver.childOfResponse(targetElement)) {
+                      return handleResponseReference(targetElement);
+                    } else if (pathResolver.childOfParameters(targetElement)) {
+                      return handleParameterReference(targetElement);
+                    } else if (pathResolver.childOfExample(targetElement)) {
+                      return handleExampleReference(targetElement);
+                    } else if (pathResolver.childOfRequestBody(targetElement)) {
+                      return handleRequestBodyReference(targetElement);
+                    } else if (pathResolver.childOfHeader(targetElement)) {
+                      return handleHeaderReference(targetElement);
+                    } else if (pathResolver.childOfLink(targetElement)) {
+                      return handleLinkReference(targetElement);
+                    }
+                    return null;
+                  });
             })
         .orElse(null);
   }

@@ -27,35 +27,27 @@ public class SwaggerDocumentationProvider extends ApiDocumentProvider {
     final Optional<Project> maybeProject = psiFile.map(PsiFile::getProject);
 
     return maybeVirtualFile
-        .map(
+        .flatMap(
             virtualFile -> {
               final Project project = maybeProject.get();
 
-              final boolean isMainSwaggerFile =
-                  swaggerIndexService.isMainSwaggerFile(virtualFile, project);
+              final Optional<SwaggerFileType> maybeFileType =
+                  swaggerIndexService.getFileType(project, virtualFile);
 
-              final boolean isPartialSwaggerFile =
-                  swaggerIndexService.isPartialSwaggerFile(virtualFile, project);
+              return maybeFileType.map(
+                  swaggerFileType -> {
+                    final PathResolver pathResolver =
+                        PathResolverFactory.fromSwaggerFileType(swaggerFileType);
 
-              if (isMainSwaggerFile || isPartialSwaggerFile) {
-
-                final SwaggerFileType swaggerFileType =
-                    isMainSwaggerFile
-                        ? SwaggerFileType.MAIN
-                        : swaggerIndexService.getSwaggerFileType(virtualFile, project);
-
-                final PathResolver pathResolver =
-                    PathResolverFactory.fromSwaggerFileType(swaggerFileType);
-
-                if (pathResolver.childOfSchema(targetElement)) {
-                  return handleSchemaReference(targetElement, originalElement);
-                } else if (pathResolver.childOfResponseDefinition(targetElement)) {
-                  return handleResponseReference(targetElement);
-                } else if (pathResolver.childOfParameterDefinition(targetElement)) {
-                  return handleParameterReference(targetElement);
-                }
-              }
-              return null;
+                    if (pathResolver.childOfSchema(targetElement)) {
+                      return handleSchemaReference(targetElement, originalElement);
+                    } else if (pathResolver.childOfResponseDefinition(targetElement)) {
+                      return handleResponseReference(targetElement);
+                    } else if (pathResolver.childOfParameterDefinition(targetElement)) {
+                      return handleParameterReference(targetElement);
+                    }
+                    return null;
+                  });
             })
         .orElse(null);
   }
