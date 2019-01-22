@@ -5,7 +5,7 @@ buildscript {
 }
 
 plugins {
-    id "org.jetbrains.intellij" version "0.1.10"
+    id "org.jetbrains.intellij" version "0.4.1"
     id 'jacoco'
     id 'com.github.kt3k.coveralls' version '2.7.1'
     id "com.diffplug.gradle.spotless" version "3.15.0"
@@ -15,15 +15,11 @@ apply plugin: 'idea'
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.12'
-}
-
 intellij {
     plugins 'yaml' //Bundled plugin dependencies
     pluginName 'intellij-swagger'
     updateSinceUntilBuild false
-    version '2016.2'
+    version '2018.2'
 }
 
 group 'org.zalando.intellij'
