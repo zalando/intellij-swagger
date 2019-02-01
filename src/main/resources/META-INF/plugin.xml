@@ -63,6 +63,8 @@
 
         <documentationProvider implementation="org.zalando.intellij.swagger.documentation.openapi.OpenApiDocumentationProvider"/>
         <documentationProvider implementation="org.zalando.intellij.swagger.documentation.swagger.SwaggerDocumentationProvider"/>
+
+        <json.catalog.exclusion implementation="org.zalando.intellij.swagger.SwaggerJsonCatalogExclusion" />
     </extensions>
     <actions>
         <action id="SwaggerPlugin.CreateSwaggerFile" class="CreateSwaggerFile" text="Swagger/OpenAPI File"
