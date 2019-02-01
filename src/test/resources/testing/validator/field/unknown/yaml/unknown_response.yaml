@@ -4,4 +4,4 @@ paths:
     get:
       responses:
         200:
-          <error descr="Invalid key">unknown:</error>
+          <error descr="Invalid key">unknown</error>:

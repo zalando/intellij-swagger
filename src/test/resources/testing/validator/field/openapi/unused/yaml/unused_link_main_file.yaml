@@ -1,4 +1,4 @@
 openapi: 3.0.0
 components:
   links:
-    <weak_warning descr="Link is never used">Link1:</weak_warning>
+    <weak_warning descr="Link is never used">Link1</weak_warning>:

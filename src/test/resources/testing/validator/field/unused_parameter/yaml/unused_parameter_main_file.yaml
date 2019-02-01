@@ -6,4 +6,4 @@ paths:
         - $ref: '#/parameters/Dog'
 parameters:
   Dog:
-  <weak_warning descr="Parameter is never used">Cat:</weak_warning>
+  <weak_warning descr="Parameter is never used">Cat</weak_warning>:

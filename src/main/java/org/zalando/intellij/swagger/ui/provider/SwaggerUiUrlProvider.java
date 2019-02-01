@@ -27,8 +27,7 @@ public class SwaggerUiUrlProvider extends BuiltInWebBrowserUrlProvider implement
 
   @Nullable
   @Override
-  protected Url getUrl(@NotNull OpenInBrowserRequest request, @NotNull VirtualFile file)
-      throws BrowserException {
+  protected Url getUrl(@NotNull OpenInBrowserRequest request, @NotNull VirtualFile file) {
     SwaggerFileService swaggerFileService = ServiceManager.getService(SwaggerFileService.class);
     Optional<Path> swaggerHTMLFolder = swaggerFileService.convertSwaggerToHtml(request.getFile());
 

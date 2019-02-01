@@ -1,4 +1,4 @@
 swagger: '2.0'
 securityDefinitions:
   api_key:
-    <error descr="Invalid key">unknown:</error>
+    <error descr="Invalid key">unknown</error>:

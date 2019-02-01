@@ -5,4 +5,4 @@ paths:
       parameters:
         - name:
           items:
-            <error descr="Invalid key">unknown:</error>
+            <error descr="Invalid key">unknown</error>:

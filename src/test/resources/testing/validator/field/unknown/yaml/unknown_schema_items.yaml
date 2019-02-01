@@ -7,4 +7,4 @@ paths:
           schema:
             type: array
             items:
-              <error descr="Invalid key">unknown:</error>
+              <error descr="Invalid key">unknown</error>:

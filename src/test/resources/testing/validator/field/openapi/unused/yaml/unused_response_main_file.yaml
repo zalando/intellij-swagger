@@ -1,4 +1,4 @@
 openapi: 3.0.0
 components:
   responses:
-    <weak_warning descr="Response is never used">Response1:</weak_warning>
+    <weak_warning descr="Response is never used">Response1</weak_warning>:
