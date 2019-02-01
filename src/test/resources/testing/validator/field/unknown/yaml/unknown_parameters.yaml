@@ -3,4 +3,4 @@ paths:
   /pathA:
     get:
       parameters:
-        - <error descr="Invalid key">unknown:</error>
+        - <error descr="Invalid key">unknown</error>:

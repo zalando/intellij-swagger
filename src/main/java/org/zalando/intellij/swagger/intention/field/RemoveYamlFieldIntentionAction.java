@@ -60,7 +60,15 @@ public class RemoveYamlFieldIntentionAction implements IntentionAction {
   }
 
   private void deleteField(final Editor editor) {
-    psiElement.getParent().delete();
+    boolean onlyChild = psiElement.getParent().getParent().getChildren().length == 1;
+
+    if (onlyChild) {
+      // Deletes YAML Mapping in addition to the key-value pair
+      psiElement.getParent().getParent().delete();
+    } else {
+      // Deletes only key-value pair
+      psiElement.getParent().delete();
+    }
 
     //noinspection ConstantConditions
     PsiDocumentManager.getInstance(editor.getProject())

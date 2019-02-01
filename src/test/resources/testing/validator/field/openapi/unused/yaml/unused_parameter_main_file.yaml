@@ -1,4 +1,4 @@
 openapi: 3.0.0
 components:
   parameters:
-    <weak_warning descr="Parameter is never used">Parameter1:</weak_warning>
+    <weak_warning descr="Parameter is never used">Parameter1</weak_warning>:

@@ -18,11 +18,9 @@ public abstract class DocumentationTest extends SwaggerLightCodeInsightFixtureTe
     final PsiFile psiFile = myFixture.configureByFile(filesPath + fileName);
 
     final PsiElement originalElement =
-        psiFile.findElementAt(myFixture.getEditor().getCaretModel().getOffset());
+        psiFile.findElementAt(myFixture.getEditor().getCaretModel().getOffset()).getParent();
 
-    final PsiElement targetElement =
-        DocumentationManager.getInstance(getProject())
-            .findTargetElement(myFixture.getEditor(), psiFile, originalElement);
+    final PsiElement targetElement = originalElement.getReferences()[0].resolve();
 
     final DocumentationProvider documentationProvider =
         DocumentationManager.getProviderFromElement(targetElement);

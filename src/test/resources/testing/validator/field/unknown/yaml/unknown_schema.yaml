@@ -5,4 +5,4 @@ paths:
       responses:
         200:
           schema:
-            <error descr="Invalid key">unknown:</error>
+            <error descr="Invalid key">unknown</error>:

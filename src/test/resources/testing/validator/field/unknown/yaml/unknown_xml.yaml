@@ -6,4 +6,4 @@ paths:
         200:
           schema:
             xml:
-              <error descr="Invalid key">unknown:</error>
+              <error descr="Invalid key">unknown</error>:
