@@ -14,14 +14,13 @@ import com.jetbrains.jsonSchema.ide.JsonSchemaService;
 import com.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions;
 import com.jetbrains.jsonSchema.impl.JsonSchemaComplianceChecker;
 import com.jetbrains.jsonSchema.impl.JsonSchemaObject;
+import java.net.URL;
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.psi.YAMLDocument;
 import org.jetbrains.yaml.psi.YAMLFile;
 import org.jetbrains.yaml.psi.YamlPsiElementVisitor;
 import org.zalando.intellij.swagger.file.FileDetector;
-
-import java.net.URL;
-import java.util.List;
 
 public class YamlSchemaInspection extends LocalInspectionTool {
 
@@ -72,8 +71,7 @@ public class YamlSchemaInspection extends LocalInspectionTool {
 
         JsonComplianceCheckerOptions options = new JsonComplianceCheckerOptions(false);
 
-        new JsonSchemaComplianceChecker(schema, holder, walker, session,  options)
-            .annotate(element);
+        new JsonSchemaComplianceChecker(schema, holder, walker, session, options).annotate(element);
       }
     };
   }
