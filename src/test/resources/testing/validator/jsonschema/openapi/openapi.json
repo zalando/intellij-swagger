@@ -1,11 +1,11 @@
 {
   "openapi": "3.0.0",
-  "info": {
+  "info": <error descr="Missing required property 'version'">{
     "title": "Swagger Petstore",
     "license": {
-      "name": "MIT</error>"
+      "name": "MIT"
     }
-  },
+  }</error>,
   "servers": [
     {
       "url": "http://petstore.swagger.io/v1"
