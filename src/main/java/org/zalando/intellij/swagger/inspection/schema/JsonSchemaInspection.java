@@ -18,10 +18,9 @@ import com.jetbrains.jsonSchema.ide.JsonSchemaService;
 import com.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions;
 import com.jetbrains.jsonSchema.impl.JsonSchemaComplianceChecker;
 import com.jetbrains.jsonSchema.impl.JsonSchemaObject;
+import java.net.URL;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.file.FileDetector;
-
-import java.net.URL;
 
 public class JsonSchemaInspection extends LocalInspectionTool {
 
@@ -73,11 +72,10 @@ public class JsonSchemaInspection extends LocalInspectionTool {
 
           JsonComplianceCheckerOptions options = new JsonComplianceCheckerOptions(false);
 
-          new JsonSchemaComplianceChecker(schema, holder, walker, session,  options)
-                  .annotate(element);
+          new JsonSchemaComplianceChecker(schema, holder, walker, session, options)
+              .annotate(element);
         }
       }
     };
-
   }
 }

@@ -18,5 +18,4 @@ public class JsonSchemaTest extends SwaggerLightCodeInsightFixtureTestCase {
   public void testOpenApiFile() {
     doTest("openapi/openapi.json");
   }
-
 }
