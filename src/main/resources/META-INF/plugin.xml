@@ -14,7 +14,7 @@
     ]]></description>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="182.3684" until-build="183.*"/>
+    <idea-version since-build="183" until-build="183.*"/>
 
     <extensionPoints>
         <extensionPoint qualifiedName="org.zalando.intellij.swagger.customFieldFactory" interface="org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomFieldCompletionFactory"/>
@@ -65,6 +65,18 @@
         <documentationProvider implementation="org.zalando.intellij.swagger.documentation.swagger.SwaggerDocumentationProvider"/>
 
         <json.catalog.exclusion implementation="org.zalando.intellij.swagger.SwaggerJsonCatalogExclusion" />
+
+        <localInspection language="yaml" displayName="Swagger/OpenAPI JSON Schema (YAML)"
+                         groupName="Swagger/OpenAPI Inspections"
+                         enabledByDefault="true"
+                         level="ERROR"
+                         implementationClass="org.zalando.intellij.swagger.inspection.schema.YamlSchemaInspection"/>
+
+        <localInspection language="JSON" displayName="Swagger/OpenAPI JSON Schema (JSON)"
+                         groupName="Swagger/OpenAPI Inspections"
+                         enabledByDefault="true"
+                         level="ERROR"
+                         implementationClass="org.zalando.intellij.swagger.inspection.schema.JsonSchemaInspection"/>
     </extensions>
     <actions>
         <action id="SwaggerPlugin.CreateSwaggerFile" class="CreateSwaggerFile" text="Swagger/OpenAPI File"

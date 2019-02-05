@@ -19,7 +19,7 @@ intellij {
     plugins 'yaml' //Bundled plugin dependencies
     pluginName 'intellij-swagger'
     updateSinceUntilBuild false
-    version '2018.2'
+    version '2018.3'
 }
 
 group 'org.zalando.intellij'
