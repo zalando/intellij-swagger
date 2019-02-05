@@ -8,7 +8,7 @@
     }
   },
   "host": "petstore.swagger.io",
-  "basePath": "v1",
+  "basePath": <error descr="String is violating the pattern: '^/'">"v1"</error>,
   "schemes": [
     "http"
   ],
