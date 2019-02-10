@@ -4,9 +4,18 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.util.LocalFileUrl;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Collections;
 import org.jetbrains.annotations.NotNull;
 
 public class SwaggerUiCreator {
@@ -36,11 +45,9 @@ public class SwaggerUiCreator {
 
   @NotNull
   private File copySwaggerUiToTempDir() throws IOException, URISyntaxException {
-    final ClassLoader classLoader = getClass().getClassLoader();
-    final File file = new File(classLoader.getResource(SWAGGER_UI_FOLDER_NAME).toURI());
     final File tempSwaggerUiDir = FileUtil.createTempDirectory(SWAGGER_UI_FOLDER_NAME, "", true);
 
-    FileUtil.copyDirContent(file, tempSwaggerUiDir);
+    copyFromJar(Paths.get(tempSwaggerUiDir.toURI()));
 
     return tempSwaggerUiDir;
   }
@@ -48,5 +55,38 @@ public class SwaggerUiCreator {
   private void setSwaggerConfigurationValues(
       final File indexFile, final String specificationContent) {
     fileContentManipulator.setJsonToIndexFile(specificationContent, indexFile);
+  }
+
+  private void copyFromJar(final Path target) throws URISyntaxException, IOException {
+    URI resource = getClass().getResource("").toURI();
+    FileSystem fileSystem =
+        FileSystems.newFileSystem(resource, Collections.<String, String>emptyMap());
+
+    final Path jarPath = fileSystem.getPath("/" + SWAGGER_UI_FOLDER_NAME);
+
+    Files.walkFileTree(
+        jarPath,
+        new SimpleFileVisitor<Path>() {
+
+          @Override
+          public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+              throws IOException {
+            final Path currentTarget = target.resolve(jarPath.relativize(dir).toString());
+            Files.createDirectories(currentTarget);
+            return FileVisitResult.CONTINUE;
+          }
+
+          @Override
+          public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+              throws IOException {
+            Files.copy(
+                file,
+                target.resolve(jarPath.relativize(file).toString()),
+                StandardCopyOption.REPLACE_EXISTING);
+            return FileVisitResult.CONTINUE;
+          }
+        });
+
+    fileSystem.close();
   }
 }
