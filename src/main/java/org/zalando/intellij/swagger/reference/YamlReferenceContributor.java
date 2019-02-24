@@ -37,15 +37,15 @@ public class YamlReferenceContributor extends ReferenceContributor {
                 .withParent(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.REF_KEY)),
             psiElement().withSuperParent(3, psiElement(YAMLKeyValue.class).withName("mapping")))
         .withText(StandardPatterns.string().contains(SwaggerConstants.REFERENCE_PREFIX))
-        .andNot(StandardPatterns.string().matches(".ya?ml"))
+        .withoutText(StandardPatterns.string().matches("(.)*.ya?ml(.)*"))
         .withLanguage(YAMLLanguage.INSTANCE);
   }
 
   private PsiElementPattern.Capture<YAMLQuotedText> mappingSchemaNamePattern() {
     return psiElement(YAMLQuotedText.class)
         .withSuperParent(3, psiElement(YAMLKeyValue.class).withName("mapping"))
-        .andNot(StandardPatterns.string().contains(SwaggerConstants.REFERENCE_PREFIX))
-        .andNot(StandardPatterns.string().matches(".ya?ml"))
+        .withoutText(StandardPatterns.string().contains(SwaggerConstants.REFERENCE_PREFIX))
+        .withoutText(StandardPatterns.string().matches("(.)*.ya?ml(.)*"))
         .withLanguage(YAMLLanguage.INSTANCE);
   }
 

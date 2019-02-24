@@ -5,7 +5,7 @@
       "get": {
         "parameters": [
           {
-            "$ref": <error descr="Parameter not found">"#/parameters/Unknown"</error>
+            "$ref": "<error descr="Can not resolve reference \"#/parameters/Unknown\"">#/parameters/Unknown</error>"
           }
         ]
       }

@@ -77,6 +77,18 @@
                          enabledByDefault="true"
                          level="ERROR"
                          implementationClass="org.zalando.intellij.swagger.inspection.schema.JsonSchemaInspection"/>
+
+        <localInspection language="yaml" displayName="Swagger/OpenAPI References (YAML)"
+                         groupName="Swagger/OpenAPI Inspections"
+                         enabledByDefault="true"
+                         level="ERROR"
+                         implementationClass="org.zalando.intellij.swagger.inspection.reference.YamlReferenceInspection"/>
+
+        <localInspection language="JSON" displayName="Swagger/OpenAPI References (JSON)"
+                         groupName="Swagger/OpenAPI Inspections"
+                         enabledByDefault="true"
+                         level="ERROR"
+                         implementationClass="org.zalando.intellij.swagger.inspection.reference.JsonReferenceInspection"/>
     </extensions>
     <actions>
         <action id="SwaggerPlugin.CreateSwaggerFile" class="CreateSwaggerFile" text="Swagger/OpenAPI File"
