@@ -6,7 +6,7 @@
         "responses": {
           "200": {
             "schema": {
-              "$ref": <error descr="Definition not found">"#/definitions/Unknown"</error>
+              "$ref": "<error descr="Can not resolve reference \"#/definitions/Unknown\"">#/definitions/Unknown</error>"
             }
           }
         }

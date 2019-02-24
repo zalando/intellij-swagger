@@ -38,15 +38,15 @@ public class JsonReferenceContributor extends ReferenceContributor {
                 .withParent(psiElement(JsonProperty.class).withName(SwaggerConstants.REF_KEY)),
             psiElement().withSuperParent(3, psiElement(JsonProperty.class).withName("mapping")))
         .withText(StandardPatterns.string().contains(SwaggerConstants.REFERENCE_PREFIX))
-        .andNot(StandardPatterns.string().contains(FileConstants.JSON_FILE_NAME_SUFFIX))
+        .withoutText(StandardPatterns.string().contains(FileConstants.JSON_FILE_NAME_SUFFIX))
         .withLanguage(JsonLanguage.INSTANCE);
   }
 
   private PsiElementPattern.Capture<JsonLiteral> mappingSchemaNamePattern() {
     return psiElement(JsonLiteral.class)
         .withSuperParent(3, psiElement(JsonProperty.class).withName("mapping"))
-        .andNot(StandardPatterns.string().contains(SwaggerConstants.REFERENCE_PREFIX))
-        .andNot(StandardPatterns.string().contains(FileConstants.JSON_FILE_NAME_SUFFIX))
+        .withoutText(StandardPatterns.string().contains(SwaggerConstants.REFERENCE_PREFIX))
+        .withoutText(StandardPatterns.string().contains(FileConstants.JSON_FILE_NAME_SUFFIX))
         .withLanguage(JsonLanguage.INSTANCE);
   }
 

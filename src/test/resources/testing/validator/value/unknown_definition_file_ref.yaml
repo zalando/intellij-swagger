@@ -5,6 +5,6 @@ paths:
       responses:
         200:
           schema:
-            $ref: 'Pet.yaml'
+            $ref: <error descr="Can not resolve reference Pet.yaml">Pet.yaml</error>
 definitions:
   Pet:

@@ -1,8 +1,0 @@
-swagger: '2.0'
-paths:
-  /pets:
-    get:
-      parameters:
-        - $ref: Pet.yaml
-parameters:
-  Pet:
