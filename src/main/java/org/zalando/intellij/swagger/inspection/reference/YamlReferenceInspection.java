@@ -44,7 +44,9 @@ public class YamlReferenceInspection extends ReferenceInspection {
 
           final String unquotedValue = StringUtil.unquoteString(value.getText());
 
-          doCheck(holder, value, new CreateYamlReferenceIntentionAction(unquotedValue));
+          if (!unquotedValue.startsWith("http")) {
+            doCheck(holder, value, new CreateYamlReferenceIntentionAction(unquotedValue));
+          }
         }
         super.visitKeyValue(keyValue);
       }
