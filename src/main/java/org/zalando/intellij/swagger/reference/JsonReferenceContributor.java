@@ -28,7 +28,6 @@ public class JsonReferenceContributor extends ReferenceContributor {
         mappingSchemaNamePattern(), createSchemaNameReferenceProvider());
 
     registrar.registerReferenceProvider(filePattern(), createFileReferenceProvider());
-    registrar.registerReferenceProvider(tagsPattern(), createTagsReferenceProvider());
   }
 
   private PsiElementPattern.Capture<JsonLiteral> localDefinitionsPattern() {
@@ -54,13 +53,6 @@ public class JsonReferenceContributor extends ReferenceContributor {
     return psiElement(JsonLiteral.class)
         .withText(StandardPatterns.string().matches("(.)*.json(.)*"))
         .withLanguage(JsonLanguage.INSTANCE);
-  }
-
-  private PsiElementPattern.Capture<JsonValue> tagsPattern() {
-    return swagger(
-        psiElement(JsonValue.class)
-            .inside(psiElement(JsonProperty.class).withName(SwaggerConstants.TAGS_KEY))
-            .withLanguage(JsonLanguage.INSTANCE));
   }
 
   private <T extends PsiElement> PsiElementPattern.Capture<T> swagger(

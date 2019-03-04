@@ -27,7 +27,6 @@ public class YamlReferenceContributor extends ReferenceContributor {
         mappingSchemaNamePattern(), createSchemaNameReferenceProvider());
 
     registrar.registerReferenceProvider(filePattern(), createFileReferenceProvider());
-    registrar.registerReferenceProvider(tagsPattern(), createTagsReferenceProvider());
   }
 
   private PsiElementPattern.Capture<YAMLQuotedText> localDefinitionsPattern() {
@@ -53,13 +52,6 @@ public class YamlReferenceContributor extends ReferenceContributor {
     return psiElement(YAMLValue.class)
         .withText(StandardPatterns.string().matches("(.)*.ya?ml(.)*"))
         .withLanguage(YAMLLanguage.INSTANCE);
-  }
-
-  private PsiElementPattern.Capture<YAMLValue> tagsPattern() {
-    return swagger(
-        psiElement(YAMLValue.class)
-            .inside(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.TAGS_KEY))
-            .withLanguage(YAMLLanguage.INSTANCE));
   }
 
   private <T extends PsiElement> PsiElementPattern.Capture<T> swagger(

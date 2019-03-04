@@ -5,11 +5,11 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceContributor;
 import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.util.ProcessingContext;
-import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.StringUtils;
-import org.zalando.intellij.swagger.reference.swagger.*;
 import org.zalando.intellij.swagger.traversal.Traversal;
+
+import java.util.Optional;
 
 abstract class ReferenceContributor extends PsiReferenceContributor {
 
@@ -66,21 +66,6 @@ abstract class ReferenceContributor extends PsiReferenceContributor {
                       new FileReference(element, StringUtils.removeAllQuotes(text))
                     })
             .orElse(FileReference.EMPTY_ARRAY);
-      }
-    };
-  }
-
-  PsiReferenceProvider createTagsReferenceProvider() {
-    return new PsiReferenceProvider() {
-      @NotNull
-      @Override
-      public PsiReference[] getReferencesByElement(
-          @NotNull PsiElement element, @NotNull ProcessingContext context) {
-        return Optional.ofNullable(element.getText())
-            .map(
-                text ->
-                    new PsiReference[] {new TagReference(element, element.getText(), traversal)})
-            .orElse(TagReference.EMPTY_ARRAY);
       }
     };
   }
