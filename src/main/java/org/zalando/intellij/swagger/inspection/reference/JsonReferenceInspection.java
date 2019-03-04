@@ -44,7 +44,9 @@ public class JsonReferenceInspection extends ReferenceInspection {
 
           final String unquotedValue = StringUtil.unquoteString(value.getText());
 
-          doCheck(holder, value, new CreateJsonReferenceIntentionAction(unquotedValue));
+          if (!unquotedValue.startsWith("http")) {
+            doCheck(holder, value, new CreateJsonReferenceIntentionAction(unquotedValue));
+          }
         }
         super.visitProperty(o);
       }
