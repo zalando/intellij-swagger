@@ -1,26 +1,15 @@
 package org.zalando.intellij.swagger.inspection.reference;
 
-import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.LocalInspectionToolSession;
-import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.json.JsonBundle;
 import com.intellij.json.psi.JsonElementVisitor;
-import com.intellij.json.psi.JsonObject;
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.json.psi.JsonStringLiteral;
 import com.intellij.json.psi.JsonValue;
-import com.intellij.openapi.paths.WebReference;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
-import com.jetbrains.jsonSchema.impl.JsonPointerReferenceProvider;
-
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.index.openapi.OpenApiIndexService;
 import org.zalando.intellij.swagger.index.swagger.SwaggerIndexService;
 import org.zalando.intellij.swagger.intention.reference.CreateJsonReferenceIntentionAction;

@@ -1,5 +1,7 @@
 package org.zalando.intellij.swagger.reference;
 
+import static com.intellij.patterns.PlatformPatterns.psiElement;
+
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.StandardPatterns;
 import com.intellij.psi.PsiReferenceRegistrar;
@@ -9,8 +11,6 @@ import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.jetbrains.yaml.psi.YAMLQuotedText;
 import org.jetbrains.yaml.psi.YAMLValue;
 import org.zalando.intellij.swagger.traversal.YamlTraversal;
-
-import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class YamlReferenceContributor extends ReferenceContributor {
 
@@ -35,7 +35,7 @@ public class YamlReferenceContributor extends ReferenceContributor {
             psiElement().withSuperParent(3, psiElement(YAMLKeyValue.class).withName("mapping")))
         .withText(StandardPatterns.string().contains(SwaggerConstants.REFERENCE_PREFIX))
         .withoutText(StandardPatterns.string().matches("(.)*.ya?ml(.)*"))
-            .withoutText(StandardPatterns.string().matches("^(\"|\')?https://(.)*"))
+        .withoutText(StandardPatterns.string().matches("^(\"|\')?https://(.)*"))
         .withLanguage(YAMLLanguage.INSTANCE);
   }
 
@@ -44,14 +44,14 @@ public class YamlReferenceContributor extends ReferenceContributor {
         .withSuperParent(3, psiElement(YAMLKeyValue.class).withName("mapping"))
         .withoutText(StandardPatterns.string().contains(SwaggerConstants.REFERENCE_PREFIX))
         .withoutText(StandardPatterns.string().matches("(.)*.ya?ml(.)*"))
-            .withoutText(StandardPatterns.string().matches("^(\"|\')?https://(.)*"))
+        .withoutText(StandardPatterns.string().matches("^(\"|\')?https://(.)*"))
         .withLanguage(YAMLLanguage.INSTANCE);
   }
 
   private PsiElementPattern.Capture<YAMLValue> filePattern() {
     return psiElement(YAMLValue.class)
         .withText(StandardPatterns.string().matches("(.)*.ya?ml(.)*"))
-            .withoutText(StandardPatterns.string().matches("^(\"|\')?https://(.)*"))
+        .withoutText(StandardPatterns.string().matches("^(\"|\')?https://(.)*"))
         .withLanguage(YAMLLanguage.INSTANCE);
   }
 }

@@ -1,18 +1,14 @@
 package org.zalando.intellij.swagger.inspection.reference;
 
+import static com.intellij.codeInspection.ExternalAnnotatorInspectionVisitor.LocalQuickFixBackedByIntentionAction;
+
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import org.zalando.intellij.swagger.intention.reference.CreateYamlReferenceIntentionAction;
 import org.zalando.intellij.swagger.reference.LocalReference;
-
-import java.util.function.Supplier;
-
-import static com.intellij.codeInspection.ExternalAnnotatorInspectionVisitor.LocalQuickFixBackedByIntentionAction;
 
 abstract class ReferenceInspection extends LocalInspectionTool {
 

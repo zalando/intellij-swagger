@@ -24,7 +24,7 @@ public class ValuesValidator {
   public void validate(
       @NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
     if (traversal.isValue(psiElement)) {
-      //handleKeyValue(psiElement, annotationHolder);
+      // handleKeyValue(psiElement, annotationHolder);
     } else if (traversal.isArrayStringElement(psiElement)) {
       handleArrayStringValue(psiElement, annotationHolder);
     }

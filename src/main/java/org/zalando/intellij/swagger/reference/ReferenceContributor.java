@@ -5,11 +5,10 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceContributor;
 import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.util.ProcessingContext;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.StringUtils;
 import org.zalando.intellij.swagger.traversal.Traversal;
-
-import java.util.Optional;
 
 abstract class ReferenceContributor extends PsiReferenceContributor {
 
