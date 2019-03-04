@@ -17,10 +17,7 @@ public class JsonValidValueAnnotator implements Annotator {
       @NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
     if (new FileDetector().isMainSwaggerJsonFile(psiElement.getContainingFile())) {
       final ValuesValidator valuesValidator =
-          new ValuesValidator(
-              new JsonTraversal(),
-              new MainPathResolver(),
-              new SchemesValidator());
+          new ValuesValidator(new JsonTraversal(), new MainPathResolver(), new SchemesValidator());
 
       valuesValidator.validate(psiElement, annotationHolder);
     }

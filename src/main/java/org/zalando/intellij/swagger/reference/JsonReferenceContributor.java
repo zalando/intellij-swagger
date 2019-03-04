@@ -1,5 +1,7 @@
 package org.zalando.intellij.swagger.reference;
 
+import static com.intellij.patterns.PlatformPatterns.psiElement;
+
 import com.intellij.json.JsonLanguage;
 import com.intellij.json.psi.JsonLiteral;
 import com.intellij.json.psi.JsonProperty;
@@ -9,8 +11,6 @@ import com.intellij.psi.PsiReferenceRegistrar;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.file.FileConstants;
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
-
-import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class JsonReferenceContributor extends ReferenceContributor {
 

@@ -17,11 +17,7 @@ public class YamlValidValueAnnotator implements Annotator {
       @NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
     if (new FileDetector().isMainSwaggerYamlFile(psiElement.getContainingFile())) {
       final ValuesValidator valuesValidator =
-          new ValuesValidator(
-
-              new YamlTraversal(),
-              new MainPathResolver(),
-              new SchemesValidator());
+          new ValuesValidator(new YamlTraversal(), new MainPathResolver(), new SchemesValidator());
 
       valuesValidator.validate(psiElement, annotationHolder);
     }

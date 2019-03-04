@@ -1,7 +1,6 @@
 package org.zalando.intellij.swagger.validator.swagger.yaml;
 
 import org.zalando.intellij.swagger.SwaggerLightCodeInsightFixtureTestCase;
-import org.zalando.intellij.swagger.inspection.reference.JsonReferenceInspection;
 import org.zalando.intellij.swagger.inspection.reference.YamlReferenceInspection;
 
 public class UnknownRefTest extends SwaggerLightCodeInsightFixtureTestCase {

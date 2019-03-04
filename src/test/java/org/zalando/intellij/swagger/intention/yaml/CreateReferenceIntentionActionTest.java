@@ -14,7 +14,6 @@ public class CreateReferenceIntentionActionTest extends IntentionActionTest {
     return new LocalInspectionTool[] {new YamlReferenceInspection()};
   }
 
-
   public void test() {
     doAllTests();
   }
