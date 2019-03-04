@@ -11,6 +11,7 @@ import com.intellij.json.psi.JsonProperty;
 import com.intellij.json.psi.JsonStringLiteral;
 import com.intellij.json.psi.JsonValue;
 import com.intellij.openapi.paths.WebReference;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiFile;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.index.openapi.OpenApiIndexService;
 import org.zalando.intellij.swagger.index.swagger.SwaggerIndexService;
+import org.zalando.intellij.swagger.intention.reference.CreateJsonReferenceIntentionAction;
 
 public class JsonReferenceInspection extends ReferenceInspection {
 
@@ -51,7 +53,9 @@ public class JsonReferenceInspection extends ReferenceInspection {
             return;
           }
 
-          doCheck(holder, value);
+          final String unquotedValue = StringUtil.unquoteString(value.getText());
+
+          doCheck(holder, value, new CreateJsonReferenceIntentionAction(unquotedValue));
         }
         super.visitProperty(o);
       }

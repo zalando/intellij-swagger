@@ -37,6 +37,7 @@ public class YamlReferenceContributor extends ReferenceContributor {
             psiElement().withSuperParent(3, psiElement(YAMLKeyValue.class).withName("mapping")))
         .withText(StandardPatterns.string().contains(SwaggerConstants.REFERENCE_PREFIX))
         .withoutText(StandardPatterns.string().matches("(.)*.ya?ml(.)*"))
+            .withoutText(StandardPatterns.string().matches("^(\"|\')?https://(.)*"))
         .withLanguage(YAMLLanguage.INSTANCE);
   }
 
@@ -45,12 +46,14 @@ public class YamlReferenceContributor extends ReferenceContributor {
         .withSuperParent(3, psiElement(YAMLKeyValue.class).withName("mapping"))
         .withoutText(StandardPatterns.string().contains(SwaggerConstants.REFERENCE_PREFIX))
         .withoutText(StandardPatterns.string().matches("(.)*.ya?ml(.)*"))
+            .withoutText(StandardPatterns.string().matches("^(\"|\')?https://(.)*"))
         .withLanguage(YAMLLanguage.INSTANCE);
   }
 
   private PsiElementPattern.Capture<YAMLValue> filePattern() {
     return psiElement(YAMLValue.class)
         .withText(StandardPatterns.string().matches("(.)*.ya?ml(.)*"))
+            .withoutText(StandardPatterns.string().matches("^(\"|\')?https://(.)*"))
         .withLanguage(YAMLLanguage.INSTANCE);
   }
 
