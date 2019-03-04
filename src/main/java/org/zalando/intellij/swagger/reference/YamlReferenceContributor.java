@@ -1,18 +1,16 @@
 package org.zalando.intellij.swagger.reference;
 
-import static com.intellij.patterns.PlatformPatterns.psiElement;
-
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.StandardPatterns;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceRegistrar;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.YAMLLanguage;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
-import org.jetbrains.yaml.psi.YAMLMapping;
 import org.jetbrains.yaml.psi.YAMLQuotedText;
 import org.jetbrains.yaml.psi.YAMLValue;
 import org.zalando.intellij.swagger.traversal.YamlTraversal;
+
+import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class YamlReferenceContributor extends ReferenceContributor {
 
@@ -55,11 +53,5 @@ public class YamlReferenceContributor extends ReferenceContributor {
         .withText(StandardPatterns.string().matches("(.)*.ya?ml(.)*"))
             .withoutText(StandardPatterns.string().matches("^(\"|\')?https://(.)*"))
         .withLanguage(YAMLLanguage.INSTANCE);
-  }
-
-  private <T extends PsiElement> PsiElementPattern.Capture<T> swagger(
-      final PsiElementPattern.Capture<T> pattern) {
-    return pattern.inside(
-        psiElement(YAMLMapping.class).withChild(psiElement().withName(SwaggerConstants.SWAGGER)));
   }
 }
