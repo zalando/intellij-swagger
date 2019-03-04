@@ -23,7 +23,7 @@ public class UnknownRefTest extends SwaggerLightCodeInsightFixtureTestCase {
     doTest("unknown_response_ref.yaml");
   }
 
-  public void testUnknownFileRef() {
+  public void testUnknownYamlFileRef() {
     doTest("unknown_definition_file_ref.yaml");
   }
 
@@ -41,5 +41,9 @@ public class UnknownRefTest extends SwaggerLightCodeInsightFixtureTestCase {
 
   public void testUrlReferenceDoubleQuoteShouldNotBeReportedAsError() {
     doTest("url_ref_double_quote.yaml");
+  }
+
+  public void testUnknownFileRef() {
+    doTest("unknown_file_format.yaml");
   }
 }

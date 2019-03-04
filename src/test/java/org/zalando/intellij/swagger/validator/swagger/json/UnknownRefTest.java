@@ -23,8 +23,12 @@ public class UnknownRefTest extends SwaggerLightCodeInsightFixtureTestCase {
     doTest("unknown_response_ref.json");
   }
 
-  public void testUnknownFileRef() {
+  public void testUnknownJsonFileRef() {
     doTest("unknown_definition_file_ref.json");
+  }
+
+  public void testUnknownFileRef() {
+    doTest("unknown_file_format.json");
   }
 
   public void testUnknownScheme() {
