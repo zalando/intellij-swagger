@@ -1,9 +1,0 @@
-swagger: '2.0'
-paths:
-  /pathA:
-    get:
-      tags:
-        - t<caret>ag1
-tags:
-  - name: tag1
-  - name: tag2
