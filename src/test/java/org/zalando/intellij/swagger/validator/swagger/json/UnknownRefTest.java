@@ -30,4 +30,8 @@ public class UnknownRefTest extends SwaggerLightCodeInsightFixtureTestCase {
   public void testUnknownScheme() {
     doTest("unknown_scheme.json");
   }
+
+  public void testUrlReferenceShouldNotBeReportedAsError() {
+    doTest("url_ref.json");
+  }
 }

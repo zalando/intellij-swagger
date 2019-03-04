@@ -38,6 +38,7 @@ public class JsonReferenceContributor extends ReferenceContributor {
             psiElement().withSuperParent(3, psiElement(JsonProperty.class).withName("mapping")))
         .withText(StandardPatterns.string().contains(SwaggerConstants.REFERENCE_PREFIX))
         .withoutText(StandardPatterns.string().contains(FileConstants.JSON_FILE_NAME_SUFFIX))
+        .withoutText(StandardPatterns.string().matches("^\"https://(.)*"))
         .withLanguage(JsonLanguage.INSTANCE);
   }
 
@@ -46,12 +47,14 @@ public class JsonReferenceContributor extends ReferenceContributor {
         .withSuperParent(3, psiElement(JsonProperty.class).withName("mapping"))
         .withoutText(StandardPatterns.string().contains(SwaggerConstants.REFERENCE_PREFIX))
         .withoutText(StandardPatterns.string().contains(FileConstants.JSON_FILE_NAME_SUFFIX))
+        .withoutText(StandardPatterns.string().matches("^\"https://(.)*"))
         .withLanguage(JsonLanguage.INSTANCE);
   }
 
   private PsiElementPattern.Capture<JsonLiteral> filePattern() {
     return psiElement(JsonLiteral.class)
         .withText(StandardPatterns.string().matches("(.)*.json(.)*"))
+        .withoutText(StandardPatterns.string().matches("^\"https://(.)*"))
         .withLanguage(JsonLanguage.INSTANCE);
   }
 

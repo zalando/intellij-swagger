@@ -5,6 +5,6 @@ paths:
       responses:
         200:
           schema:
-            $ref: '<error descr="Can not resolve reference '#/definitions/Unknown'">#/definitions/Unknown</error>'
+            $ref: <error descr="Can not resolve reference '#/definitions/Unknown'">'#/definitions/Unknown'</error>
 definitions:
   Pet:

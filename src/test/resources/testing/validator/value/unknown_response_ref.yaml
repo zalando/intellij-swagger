@@ -4,6 +4,6 @@ paths:
     get:
       responses:
         200:
-          $ref: '<error descr="Can not resolve reference '#/responses/Unknown'">#/responses/Unknown</error>'
+          $ref: <error descr="Can not resolve reference '#/responses/Unknown'">'#/responses/Unknown'</error>
 responses:
   DefaultResponse:

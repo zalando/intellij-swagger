@@ -2,6 +2,7 @@ package org.zalando.intellij.swagger.intention.reference;
 
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
@@ -40,6 +41,8 @@ public class CreateYamlReferenceIntentionAction implements IntentionAction {
 
   @Override
   public void invoke(@NotNull final Project project, final Editor editor, final PsiFile psiFile) {
+    final Editor activeEditor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+
     final String referenceType = ReferenceValueExtractor.extractType(referenceValueWithPrefix);
     final String referenceValueWithoutPrefix =
         ReferenceValueExtractor.extractValue(referenceValueWithPrefix);
@@ -47,9 +50,9 @@ public class CreateYamlReferenceIntentionAction implements IntentionAction {
     new ReferenceCreator(referenceValueWithoutPrefix, referenceType, psiFile, new YamlTraversal())
         .create();
     PsiDocumentManager.getInstance(psiFile.getProject())
-        .doPostponedOperationsAndUnblockDocument(editor.getDocument());
+        .doPostponedOperationsAndUnblockDocument(activeEditor.getDocument());
 
-    forceDocumentUpdate(editor, psiFile);
+    forceDocumentUpdate(activeEditor, psiFile);
   }
 
   private void forceDocumentUpdate(final Editor editor, final PsiFile psiFile) {
