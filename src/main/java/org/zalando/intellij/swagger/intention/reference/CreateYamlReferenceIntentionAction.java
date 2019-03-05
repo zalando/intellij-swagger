@@ -4,11 +4,11 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.reference.ReferenceValueExtractor;
+import org.jetbrains.yaml.psi.YAMLFile;
 import org.zalando.intellij.swagger.traversal.YamlTraversal;
 
 public class CreateYamlReferenceIntentionAction implements IntentionAction {
@@ -43,22 +43,10 @@ public class CreateYamlReferenceIntentionAction implements IntentionAction {
   public void invoke(@NotNull final Project project, final Editor editor, final PsiFile psiFile) {
     final Editor activeEditor = FileEditorManager.getInstance(project).getSelectedTextEditor();
 
-    final String referenceType = ReferenceValueExtractor.extractType(referenceValueWithPrefix);
-    final String referenceValueWithoutPrefix =
-        ReferenceValueExtractor.extractValue(referenceValueWithPrefix);
+    final String path = StringUtils.substringAfter(referenceValueWithPrefix, "#/");
 
-    new ReferenceCreator(referenceValueWithoutPrefix, referenceType, psiFile, new YamlTraversal())
+    new ReferenceCreator(path, ((YAMLFile) psiFile).getDocuments().get(0), new YamlTraversal())
         .create();
-    PsiDocumentManager.getInstance(psiFile.getProject())
-        .doPostponedOperationsAndUnblockDocument(activeEditor.getDocument());
-
-    forceDocumentUpdate(activeEditor, psiFile);
-  }
-
-  private void forceDocumentUpdate(final Editor editor, final PsiFile psiFile) {
-    editor.getDocument().insertString(0, " ");
-    PsiDocumentManager.getInstance(psiFile.getProject()).commitDocument(editor.getDocument());
-    editor.getDocument().deleteString(0, 1);
   }
 
   @Override

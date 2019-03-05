@@ -41,8 +41,7 @@ public abstract class Traversal {
 
   public abstract PsiElement extractObjectForValidation(final PsiElement psiElement);
 
-  public abstract void addReferenceDefinition(
-      final String definitions, final String referenceValue, final PsiFile psiFile);
+  public abstract void addReferenceDefinition(final String path, final PsiElement anchorPsiElement);
 
   <T extends PsiElement> Optional<T> getNthOfType(
       final PsiElement psiElement, int nth, Class<T> targetType) {

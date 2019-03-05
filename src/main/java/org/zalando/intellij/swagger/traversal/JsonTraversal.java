@@ -14,6 +14,7 @@ import org.zalando.intellij.swagger.completion.field.model.common.Field;
 import org.zalando.intellij.swagger.completion.value.model.common.Value;
 import org.zalando.intellij.swagger.insert.JsonInsertFieldHandler;
 import org.zalando.intellij.swagger.insert.JsonInsertValueHandler;
+import org.zalando.intellij.swagger.traversal.path.PathFinder;
 
 public class JsonTraversal extends Traversal {
 
@@ -230,30 +231,44 @@ public class JsonTraversal extends Traversal {
   }
 
   @Override
-  public void addReferenceDefinition(
-      final String referenceType, final String referenceValueWithoutPrefix, final PsiFile psiFile) {
-    if (hasRootKey(referenceType, psiFile)) {
-      getRootChildByName(referenceType, psiFile)
-          .map(el -> el.getChildren()[1])
-          .filter(el -> el instanceof JsonObject)
-          .map(JsonObject.class::cast)
-          .ifPresent(
-              jsonObject ->
-                  JsonPsiUtil.addProperty(
-                      jsonObject,
-                      new JsonElementGenerator(psiFile.getProject())
-                          .createProperty(referenceValueWithoutPrefix, "{}"),
-                      false));
+  public void addReferenceDefinition(final String path, PsiElement anchorPsiElement) {
+    if (path.isEmpty()) return;
+
+    final String current = org.apache.commons.lang.StringUtils.substringBefore(path, "/");
+
+    final Optional<PsiElement> found =
+        new PathFinder().findByPathFrom("$." + current, anchorPsiElement);
+
+    if (found.isPresent()) {
+      anchorPsiElement = found.get();
     } else {
-      getRootObject(psiFile)
-          .ifPresent(
-              jsonObject ->
-                  JsonPsiUtil.addProperty(
-                      jsonObject,
-                      new JsonElementGenerator(psiFile.getProject())
-                          .createProperty(
-                              referenceType, "{\"" + referenceValueWithoutPrefix + "\": {}}"),
-                      false));
+      final JsonProperty jsonProperty =
+          new JsonElementGenerator(anchorPsiElement.getProject()).createProperty(current, "{}");
+
+      final Optional<JsonObject> jsonObject = getJsonObject(anchorPsiElement);
+
+      if (jsonObject.isPresent()) {
+        anchorPsiElement = JsonPsiUtil.addProperty(jsonObject.get(), jsonProperty, false);
+      } else {
+        return;
+      }
     }
+
+    final String remaining = org.apache.commons.lang.StringUtils.substringAfter(path, "/");
+    addReferenceDefinition(remaining, anchorPsiElement);
+  }
+
+  private Optional<JsonObject> getJsonObject(final PsiElement psiElement) {
+    final List<PsiElement> children =
+        Optional.of(psiElement)
+            .map(PsiElement::getChildren)
+            .map(Arrays::asList)
+            .orElse(new ArrayList<>());
+
+    return children
+        .stream()
+        .filter(child -> child instanceof JsonObject)
+        .map(JsonObject.class::cast)
+        .findFirst();
   }
 }

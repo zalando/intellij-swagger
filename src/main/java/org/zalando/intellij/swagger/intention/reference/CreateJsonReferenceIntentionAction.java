@@ -4,9 +4,9 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.reference.ReferenceValueExtractor;
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
 
 public class CreateJsonReferenceIntentionAction implements IntentionAction {
@@ -39,12 +39,9 @@ public class CreateJsonReferenceIntentionAction implements IntentionAction {
 
   @Override
   public void invoke(@NotNull final Project project, final Editor editor, final PsiFile psiFile) {
-    final String referenceType = ReferenceValueExtractor.extractType(referenceValueWithPrefix);
-    final String referenceValueWithoutPrefix =
-        ReferenceValueExtractor.extractValue(referenceValueWithPrefix);
+    final String path = StringUtils.substringAfter(referenceValueWithPrefix, "#/");
 
-    new ReferenceCreator(referenceValueWithoutPrefix, referenceType, psiFile, new JsonTraversal())
-        .create();
+    new ReferenceCreator(path, psiFile, new JsonTraversal()).create();
   }
 
   @Override

@@ -10,6 +10,7 @@ import com.intellij.util.containers.ContainerUtil;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.jetbrains.yaml.YAMLElementGenerator;
+import org.jetbrains.yaml.YAMLUtil;
 import org.jetbrains.yaml.psi.*;
 import org.jetbrains.yaml.psi.impl.YAMLPlainTextImpl;
 import org.zalando.intellij.swagger.StringUtils;
@@ -107,38 +108,23 @@ public class YamlTraversal extends Traversal {
   }
 
   @Override
-  public void addReferenceDefinition(
-      final String referenceType, final String referenceValueWithoutPrefix, final PsiFile psiFile) {
-    if (hasRootKey(referenceType, psiFile)) {
-      getRootChildByName(referenceType, psiFile)
-          .ifPresent(
-              referenceElement -> {
-                referenceElement.add(new YAMLElementGenerator(psiFile.getProject()).createEol());
-                referenceElement.add(
-                    new YAMLElementGenerator(psiFile.getProject()).createIndent(2));
-                referenceElement.add(
-                    new YAMLElementGenerator(psiFile.getProject())
-                        .createYamlKeyValue(referenceValueWithoutPrefix, ""));
-              });
-    } else {
-      getRootMapping(psiFile)
-          .ifPresent(
-              yamlMapping ->
-                  addProperty(
-                          yamlMapping,
-                          new YAMLElementGenerator(psiFile.getProject())
-                              .createYamlKeyValue(referenceType, ""))
-                      .ifPresent(
-                          addedKeyValue -> {
-                            addedKeyValue.add(
-                                new YAMLElementGenerator(psiFile.getProject()).createEol());
-                            addedKeyValue.add(
-                                new YAMLElementGenerator(psiFile.getProject()).createIndent(2));
-                            addedKeyValue.add(
-                                new YAMLElementGenerator(psiFile.getProject())
-                                    .createYamlKeyValue(referenceValueWithoutPrefix, ""));
-                          }));
-    }
+  public void addReferenceDefinition(final String path, PsiElement anchorPsiElement) {
+    YAMLUtil.createI18nRecord(
+        ((YAMLFile) anchorPsiElement.getContainingFile()), path.split("/"), "");
+  }
+
+  private Optional<YAMLMapping> getYamlMapping(final PsiElement psiElement) {
+    final List<PsiElement> children =
+        Optional.of(psiElement)
+            .map(PsiElement::getChildren)
+            .map(Arrays::asList)
+            .orElse(new ArrayList<>());
+
+    return children
+        .stream()
+        .filter(child -> child instanceof YAMLMapping)
+        .map(YAMLMapping.class::cast)
+        .findFirst();
   }
 
   private Optional<YAMLMapping> getRootMapping(final PsiFile psiFile) {

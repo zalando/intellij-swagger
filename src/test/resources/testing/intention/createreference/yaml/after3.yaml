@@ -6,6 +6,6 @@ paths:
     get:
       responses:
         200:
-          $ref: "#/responses/responseName<caret>"
+          $ref: "#/responses/responseName"
 responses:
-  responseName:
+  responseName: 
