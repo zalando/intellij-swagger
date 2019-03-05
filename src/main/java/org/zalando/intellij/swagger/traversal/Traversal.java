@@ -27,8 +27,6 @@ public abstract class Traversal {
 
   public abstract boolean isUniqueArrayStringValue(String value, final PsiElement psiElement);
 
-  public abstract boolean isArrayStringElement(final PsiElement psiElement);
-
   public abstract Optional<String> extractSecurityNameFromSecurityItem(final PsiElement psiElement);
 
   public abstract InsertHandler<LookupElement> createInsertFieldHandler(Field field);
@@ -36,8 +34,6 @@ public abstract class Traversal {
   public abstract InsertHandler<LookupElement> createInsertValueHandler(final Value value);
 
   public abstract List<String> getSecurityScopesIfOAuth2(final PsiElement securityDefinitionItem);
-
-  public abstract PsiElement extractObjectForValidation(final PsiElement psiElement);
 
   public abstract void addReferenceDefinition(final String path, final PsiElement anchorPsiElement);
 

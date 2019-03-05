@@ -27,10 +27,6 @@ public class UnknownRefTest extends SwaggerLightCodeInsightFixtureTestCase {
     doTest("unknown_definition_file_ref.yaml");
   }
 
-  public void testUnknownScheme() {
-    doTest("unknown_scheme.yaml");
-  }
-
   public void testUrlReferenceShouldNotBeReportedAsError() {
     doTest("url_ref.yaml");
   }

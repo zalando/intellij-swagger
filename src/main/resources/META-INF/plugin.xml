@@ -33,12 +33,6 @@
 
         <lang.findUsagesProvider language="yaml" implementationClass="org.zalando.intellij.swagger.reference.usage.YamlFindUsagesProvider"/>
 
-        <annotator language="JSON" implementationClass="org.zalando.intellij.swagger.annotator.JsonValidKeyAnnotator"/>
-        <annotator language="yaml" implementationClass="org.zalando.intellij.swagger.annotator.YamlValidKeyAnnotator"/>
-
-        <annotator language="JSON" implementationClass="org.zalando.intellij.swagger.annotator.JsonValidValueAnnotator"/>
-        <annotator language="yaml" implementationClass="org.zalando.intellij.swagger.annotator.YamlValidValueAnnotator"/>
-
         <annotator language="JSON" implementationClass="org.zalando.intellij.swagger.annotator.swagger.JsonUnusedRefAnnotator"/>
         <annotator language="yaml" implementationClass="org.zalando.intellij.swagger.annotator.swagger.YamlUnusedRefAnnotator"/>
 
