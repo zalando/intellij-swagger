@@ -40,18 +40,18 @@
 
       // Build a system
       const ui = SwaggerUIBundle({
-          spec: /*intellij-swagger-spec-start*//*intellij-swagger-spec-end*/,
-          validatorUrl: null,
-          dom_id: '#swagger-ui',
-          deepLinking: true,
-          presets: [
-              SwaggerUIBundle.presets.apis,
-              SwaggerUIStandalonePreset
-          ],
-          plugins: [
-              SwaggerUIBundle.plugins.DownloadUrl
-          ],
-          layout: "StandaloneLayout"
+        spec: /*intellij-swagger-spec-start*//*intellij-swagger-spec-end*/,
+        validatorUrl: null,
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ],
+        plugins: [
+          SwaggerUIBundle.plugins.DownloadUrl
+        ],
+        layout: "StandaloneLayout"
       })
 
       window.ui = ui
