@@ -47,12 +47,6 @@ public class JsonTraversal extends Traversal {
   }
 
   @Override
-  public boolean isArrayStringElement(final PsiElement psiElement) {
-    return psiElement.getParent() instanceof JsonLiteral
-        && psiElement.getParent().getParent() instanceof JsonArray;
-  }
-
-  @Override
   public Optional<String> extractSecurityNameFromSecurityItem(final PsiElement psiElement) {
     return Optional.of(psiElement)
         .map(PsiElement::getChildren)
@@ -150,15 +144,6 @@ public class JsonTraversal extends Traversal {
     }
 
     return ImmutableList.of();
-  }
-
-  @Override
-  public PsiElement extractObjectForValidation(final PsiElement psiElement) {
-    if (psiElement.getParent().getParent().getParent().getParent() instanceof JsonArray) {
-      return psiElement.getParent().getParent().getParent().getParent();
-    }
-
-    return psiElement.getParent().getParent().getParent();
   }
 
   private List<JsonProperty> getChildProperties(final PsiElement element) {

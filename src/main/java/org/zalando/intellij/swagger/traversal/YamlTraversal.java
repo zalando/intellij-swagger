@@ -9,7 +9,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import org.jetbrains.yaml.YAMLUtil;
 import org.jetbrains.yaml.psi.*;
-import org.jetbrains.yaml.psi.impl.YAMLPlainTextImpl;
 import org.zalando.intellij.swagger.StringUtils;
 import org.zalando.intellij.swagger.completion.field.model.common.Field;
 import org.zalando.intellij.swagger.completion.value.model.common.Value;
@@ -21,14 +20,6 @@ public class YamlTraversal extends Traversal {
   @Override
   public Optional<String> getKeyNameIfKey(final PsiElement psiElement) {
     return getAsYamlKeyValue(psiElement).map(YAMLKeyValue::getKeyText);
-  }
-
-  public boolean isAnchorKey(final PsiElement psiElement) {
-    return getAsYamlKeyValue(psiElement)
-        .map(YAMLKeyValue::getValue)
-        .map(YAMLValue::getText)
-        .filter(value -> value.startsWith("&"))
-        .isPresent();
   }
 
   private Optional<YAMLKeyValue> getAsYamlKeyValue(final PsiElement psiElement) {
@@ -167,22 +158,6 @@ public class YamlTraversal extends Traversal {
     return ImmutableList.of();
   }
 
-  @Override
-  public PsiElement extractObjectForValidation(final PsiElement psiElement) {
-    final Optional<PsiElement> thirdParent =
-        Optional.ofNullable(psiElement.getParent())
-            .map(PsiElement::getParent)
-            .map(PsiElement::getParent);
-
-    if (thirdParent.isPresent() && thirdParent.get() instanceof YAMLSequenceItem) {
-      return ((YAMLSequenceItem) thirdParent.get()).getValue();
-    } else if (thirdParent.isPresent() && thirdParent.get() instanceof YAMLKeyValue) {
-      return ((YAMLKeyValue) thirdParent.get()).getKey();
-    } else {
-      return psiElement.getParent();
-    }
-  }
-
   private List<YAMLKeyValue> getChildProperties(final PsiElement element) {
     return toYamlKeyValue(element)
         .map(YAMLKeyValue::getValue)
@@ -205,12 +180,6 @@ public class YamlTraversal extends Traversal {
   }
 
   @Override
-  public boolean isArrayStringElement(final PsiElement psiElement) {
-    return psiElement.getParent() instanceof YAMLPlainTextImpl
-        && psiElement.getParent().getParent() instanceof YAMLSequenceItem;
-  }
-
-  @Override
   public Optional<String> extractSecurityNameFromSecurityItem(final PsiElement psiElement) {
     return Optional.of(psiElement)
         .map(PsiElement::getChildren)
@@ -220,15 +189,5 @@ public class YamlTraversal extends Traversal {
         .filter(el -> el instanceof YAMLKeyValue)
         .map(YAMLKeyValue.class::cast)
         .map(YAMLKeyValue::getName);
-  }
-
-  public boolean isChildOfAnchorKey(final PsiElement psiElement) {
-    if (isAnchorKey(extractObjectForValidation(psiElement))) {
-      return true;
-    }
-
-    final PsiElement parent = psiElement.getParent();
-
-    return parent != null && isChildOfAnchorKey(parent);
   }
 }
