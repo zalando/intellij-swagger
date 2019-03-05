@@ -203,31 +203,31 @@ public class JsonTraversal extends Traversal {
   }
 
   @Override
-  public void addReferenceDefinition(final String path, PsiElement anchorPsiElement) {
-    if (path.isEmpty()) return;
+  public void addReferenceDefinition(final String path, final PsiElement anchorPsiElement) {
+    if (path.isEmpty() || anchorPsiElement == null) return;
 
     final String current = org.apache.commons.lang.StringUtils.substringBefore(path, "/");
 
     final Optional<PsiElement> found =
         new PathFinder().findByPathFrom("$." + current, anchorPsiElement);
 
-    if (found.isPresent()) {
-      anchorPsiElement = found.get();
-    } else {
-      final JsonProperty jsonProperty =
-          new JsonElementGenerator(anchorPsiElement.getProject()).createProperty(current, "{}");
+    final PsiElement nextElement =
+        found.orElseGet(
+            () -> {
+              final JsonProperty jsonProperty =
+                  new JsonElementGenerator(anchorPsiElement.getProject())
+                      .createProperty(current, "{}");
 
-      final Optional<JsonObject> jsonObject = getJsonObject(anchorPsiElement);
+              final Optional<JsonObject> jsonObject = getJsonObject(anchorPsiElement);
 
-      if (jsonObject.isPresent()) {
-        anchorPsiElement = JsonPsiUtil.addProperty(jsonObject.get(), jsonProperty, false);
-      } else {
-        return;
-      }
-    }
+              return jsonObject
+                  .map(o -> JsonPsiUtil.addProperty(o, jsonProperty, false))
+                  .orElse(null);
+            });
 
     final String remaining = org.apache.commons.lang.StringUtils.substringAfter(path, "/");
-    addReferenceDefinition(remaining, anchorPsiElement);
+
+    addReferenceDefinition(remaining, nextElement);
   }
 
   private Optional<JsonObject> getJsonObject(final PsiElement psiElement) {
