@@ -9,7 +9,7 @@ paths:
         schema:
           type: "array"
           items:
-            $ref: "#/definitions/Pet<caret>"
+            $ref: "#/definitions/Pet"
 definitions:
   AnotherPet:
   Pet:

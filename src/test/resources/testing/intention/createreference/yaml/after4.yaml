@@ -5,6 +5,6 @@ paths:
   /pets:
     get:
       parameters:
-          $ref: "#/parameters/Dog<caret>"
+        $ref: "#/parameters/Dog"
 parameters:
-  Dog:
+  Dog: 
