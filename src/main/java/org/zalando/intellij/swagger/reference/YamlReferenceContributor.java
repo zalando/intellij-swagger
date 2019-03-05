@@ -10,13 +10,8 @@ import org.jetbrains.yaml.YAMLLanguage;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.jetbrains.yaml.psi.YAMLQuotedText;
 import org.jetbrains.yaml.psi.YAMLValue;
-import org.zalando.intellij.swagger.traversal.YamlTraversal;
 
 public class YamlReferenceContributor extends ReferenceContributor {
-
-  public YamlReferenceContributor() {
-    super(new YamlTraversal());
-  }
 
   @Override
   public void registerReferenceProviders(@NotNull final PsiReferenceRegistrar registrar) {

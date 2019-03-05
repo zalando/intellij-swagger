@@ -47,19 +47,6 @@ public class JsonTraversal extends Traversal {
   }
 
   @Override
-  public boolean isValue(final PsiElement psiElement) {
-    final PsiElement firstParent = psiElement.getParent();
-    return Optional.ofNullable(firstParent)
-            .map(PsiElement::getParent)
-            .filter(jsonPropertyCandidate -> jsonPropertyCandidate instanceof JsonProperty)
-            .map(JsonProperty.class::cast)
-            .map(JsonProperty::getValue)
-            .filter(nameElement -> nameElement == firstParent)
-            .isPresent()
-        && !(psiElement instanceof JsonProperty);
-  }
-
-  @Override
   public boolean isArrayStringElement(final PsiElement psiElement) {
     return psiElement.getParent() instanceof JsonLiteral
         && psiElement.getParent().getParent() instanceof JsonArray;
@@ -73,20 +60,6 @@ public class JsonTraversal extends Traversal {
         .filter(child -> child instanceof JsonProperty)
         .map(JsonProperty.class::cast)
         .map(JsonProperty::getName);
-  }
-
-  private boolean hasRootKey(final String propertyName, final PsiFile psiFile) {
-    return getRootChildrenOfType(psiFile, JsonProperty.class)
-        .stream()
-        .anyMatch(jsonProperty -> propertyName.equals(jsonProperty.getName()));
-  }
-
-  public Optional<? extends PsiElement> getRootChildByName(
-      final String propertyName, final PsiFile psiFile) {
-    return getRootChildrenOfType(psiFile, JsonProperty.class)
-        .stream()
-        .filter(jsonProperty -> propertyName.equals(jsonProperty.getName()))
-        .findFirst();
   }
 
   private <T extends PsiElement> List<T> getRootChildrenOfType(
@@ -109,8 +82,7 @@ public class JsonTraversal extends Traversal {
         .collect(Collectors.toList());
   }
 
-  @Override
-  public List<PsiElement> getTags(final PsiFile psiFile) {
+  private List<PsiElement> getTags(final PsiFile psiFile) {
     return getRootChildrenOfType(psiFile, JsonProperty.class)
         .stream()
         .filter(jsonProperty -> "tags".equals(jsonProperty.getName()))

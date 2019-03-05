@@ -8,15 +8,8 @@ import com.intellij.util.ProcessingContext;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.StringUtils;
-import org.zalando.intellij.swagger.traversal.Traversal;
 
 abstract class ReferenceContributor extends PsiReferenceContributor {
-
-  final Traversal traversal;
-
-  ReferenceContributor(Traversal traversal) {
-    this.traversal = traversal;
-  }
 
   PsiReferenceProvider createLocalReferenceProvider() {
     return new PsiReferenceProvider() {

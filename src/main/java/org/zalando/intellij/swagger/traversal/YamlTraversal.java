@@ -1,15 +1,12 @@
 package org.zalando.intellij.swagger.traversal;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.util.containers.ContainerUtil;
 import java.util.*;
 import java.util.stream.Collectors;
-import org.jetbrains.yaml.YAMLElementGenerator;
 import org.jetbrains.yaml.YAMLUtil;
 import org.jetbrains.yaml.psi.*;
 import org.jetbrains.yaml.psi.impl.YAMLPlainTextImpl;
@@ -62,8 +59,7 @@ public class YamlTraversal extends Traversal {
     return getTags(psiFile).stream().map(PsiElement::getText).collect(Collectors.toList());
   }
 
-  @Override
-  public List<PsiElement> getTags(final PsiFile psiFile) {
+  private List<PsiElement> getTags(final PsiFile psiFile) {
     return getRootChildrenOfType(psiFile, YAMLKeyValue.class)
         .stream()
         .filter(yamlKeyValue -> "tags".equals(yamlKeyValue.getName()))
@@ -80,20 +76,6 @@ public class YamlTraversal extends Traversal {
         .map(YAMLKeyValue::getValue)
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
-  }
-
-  private boolean hasRootKey(final String keyName, final PsiFile psiFile) {
-    return getRootChildrenOfType(psiFile, YAMLKeyValue.class)
-        .stream()
-        .anyMatch(yamlKeyValue -> keyName.equals(yamlKeyValue.getName()));
-  }
-
-  public Optional<? extends PsiElement> getRootChildByName(
-      final String keyName, final PsiFile psiFile) {
-    return getRootChildrenOfType(psiFile, YAMLKeyValue.class)
-        .stream()
-        .filter(yamlKeyValue -> keyName.equals(yamlKeyValue.getName()))
-        .findFirst();
   }
 
   private <T extends PsiElement> List<T> getRootChildrenOfType(
@@ -113,20 +95,6 @@ public class YamlTraversal extends Traversal {
         ((YAMLFile) anchorPsiElement.getContainingFile()), path.split("/"), "");
   }
 
-  private Optional<YAMLMapping> getYamlMapping(final PsiElement psiElement) {
-    final List<PsiElement> children =
-        Optional.of(psiElement)
-            .map(PsiElement::getChildren)
-            .map(Arrays::asList)
-            .orElse(new ArrayList<>());
-
-    return children
-        .stream()
-        .filter(child -> child instanceof YAMLMapping)
-        .map(YAMLMapping.class::cast)
-        .findFirst();
-  }
-
   private Optional<YAMLMapping> getRootMapping(final PsiFile psiFile) {
     return Arrays.stream(psiFile.getChildren())
         .filter(el -> el instanceof YAMLDocument)
@@ -139,19 +107,6 @@ public class YamlTraversal extends Traversal {
                     .map(YAMLMapping.class::cast)
                     .findFirst()
                     .orElse(null));
-  }
-
-  private Optional<PsiElement> addProperty(YAMLMapping yamlMapping, YAMLKeyValue yamlKeyValue) {
-    final List<YAMLKeyValue> keyValues = Lists.newArrayList(yamlMapping.getKeyValues());
-
-    return Optional.ofNullable(ContainerUtil.getLastItem(keyValues))
-        .map(
-            lastKeyValue -> {
-              final PsiElement addedKeyValue = yamlMapping.addAfter(yamlKeyValue, lastKeyValue);
-              yamlMapping.addBefore(
-                  new YAMLElementGenerator(yamlMapping.getProject()).createEol(), addedKeyValue);
-              return addedKeyValue;
-            });
   }
 
   @Override
@@ -247,18 +202,6 @@ public class YamlTraversal extends Traversal {
     return psiElement instanceof YAMLKeyValue
         ? Optional.of((YAMLKeyValue) psiElement)
         : Optional.empty();
-  }
-
-  @Override
-  public boolean isValue(final PsiElement psiElement) {
-    return !(org.apache.commons.lang.StringUtils.isBlank(psiElement.getText())
-            || psiElement instanceof YAMLKeyValue)
-        && Optional.ofNullable(psiElement.getParent())
-            .map(PsiElement::getParent)
-            .filter(el -> el instanceof YAMLKeyValue)
-            .map(YAMLKeyValue.class::cast)
-            .filter(el -> el.getValue() == psiElement.getParent())
-            .isPresent();
   }
 
   @Override

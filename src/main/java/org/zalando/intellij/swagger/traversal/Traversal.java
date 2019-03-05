@@ -27,8 +27,6 @@ public abstract class Traversal {
 
   public abstract boolean isUniqueArrayStringValue(String value, final PsiElement psiElement);
 
-  public abstract boolean isValue(final PsiElement psiElement);
-
   public abstract boolean isArrayStringElement(final PsiElement psiElement);
 
   public abstract Optional<String> extractSecurityNameFromSecurityItem(final PsiElement psiElement);
@@ -81,6 +79,4 @@ public abstract class Traversal {
         .flatMap(Collection::stream)
         .collect(Collectors.toList());
   }
-
-  public abstract List<PsiElement> getTags(final PsiFile containingFile);
 }
