@@ -2,7 +2,6 @@ package org.zalando.intellij.swagger.intention.reference;
 
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import org.apache.commons.lang.StringUtils;
@@ -41,8 +40,6 @@ public class CreateYamlReferenceIntentionAction implements IntentionAction {
 
   @Override
   public void invoke(@NotNull final Project project, final Editor editor, final PsiFile psiFile) {
-    final Editor activeEditor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-
     final String path = StringUtils.substringAfter(referenceValueWithPrefix, "#/");
 
     new ReferenceCreator(path, ((YAMLFile) psiFile).getDocuments().get(0), new YamlTraversal())

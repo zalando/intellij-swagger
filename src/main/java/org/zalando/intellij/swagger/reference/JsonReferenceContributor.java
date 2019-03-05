@@ -10,13 +10,8 @@ import com.intellij.patterns.StandardPatterns;
 import com.intellij.psi.PsiReferenceRegistrar;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.file.FileConstants;
-import org.zalando.intellij.swagger.traversal.JsonTraversal;
 
 public class JsonReferenceContributor extends ReferenceContributor {
-
-  public JsonReferenceContributor() {
-    super(new JsonTraversal());
-  }
 
   @Override
   public void registerReferenceProviders(@NotNull final PsiReferenceRegistrar registrar) {
