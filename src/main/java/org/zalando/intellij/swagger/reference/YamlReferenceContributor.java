@@ -4,6 +4,7 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.StandardPatterns;
+import com.intellij.patterns.StringPattern;
 import com.intellij.psi.PsiReferenceRegistrar;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.YAMLLanguage;
@@ -12,6 +13,11 @@ import org.jetbrains.yaml.psi.YAMLQuotedText;
 import org.jetbrains.yaml.psi.YAMLValue;
 
 public class YamlReferenceContributor extends ReferenceContributor {
+  private static final StringPattern URL_PATTERN =
+      StandardPatterns.string().matches("^(\"|\')?https://(.)*");
+
+  private static final StringPattern YAML_FILE_NAME_PATTERN =
+      StandardPatterns.string().matches("(.)*.ya?ml(.)*");
 
   @Override
   public void registerReferenceProviders(@NotNull final PsiReferenceRegistrar registrar) {
@@ -29,8 +35,8 @@ public class YamlReferenceContributor extends ReferenceContributor {
                 .withParent(psiElement(YAMLKeyValue.class).withName(SwaggerConstants.REF_KEY)),
             psiElement().withSuperParent(3, psiElement(YAMLKeyValue.class).withName("mapping")))
         .withText(StandardPatterns.string().contains(SwaggerConstants.REFERENCE_PREFIX))
-        .withoutText(StandardPatterns.string().matches("(.)*.ya?ml(.)*"))
-        .withoutText(StandardPatterns.string().matches("^(\"|\')?https://(.)*"))
+        .withoutText(YAML_FILE_NAME_PATTERN)
+        .withoutText(URL_PATTERN)
         .withLanguage(YAMLLanguage.INSTANCE);
   }
 
@@ -38,15 +44,15 @@ public class YamlReferenceContributor extends ReferenceContributor {
     return psiElement(YAMLQuotedText.class)
         .withSuperParent(3, psiElement(YAMLKeyValue.class).withName("mapping"))
         .withoutText(StandardPatterns.string().contains(SwaggerConstants.REFERENCE_PREFIX))
-        .withoutText(StandardPatterns.string().matches("(.)*.ya?ml(.)*"))
-        .withoutText(StandardPatterns.string().matches("^(\"|\')?https://(.)*"))
+        .withoutText(YAML_FILE_NAME_PATTERN)
+        .withoutText(URL_PATTERN)
         .withLanguage(YAMLLanguage.INSTANCE);
   }
 
   private PsiElementPattern.Capture<YAMLValue> filePattern() {
     return psiElement(YAMLValue.class)
-        .withText(StandardPatterns.string().matches("(.)*.ya?ml(.)*"))
-        .withoutText(StandardPatterns.string().matches("^(\"|\')?https://(.)*"))
+        .withText(YAML_FILE_NAME_PATTERN)
+        .withoutText(URL_PATTERN)
         .withLanguage(YAMLLanguage.INSTANCE);
   }
 }
