@@ -8,12 +8,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.containers.HashSet;
 import com.intellij.util.indexing.FileBasedIndex;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+
+import java.util.*;
 import java.util.stream.Collectors;
 import org.zalando.intellij.swagger.file.OpenApiFileType;
 
@@ -52,8 +49,7 @@ public class OpenApiIndexService {
 
     final VirtualFile mainOpenApiFileFolder = mainOpenApiFiles.iterator().next().getParent();
 
-    return partialOpenApiFilesWithTypeInfo
-        .stream()
+    return partialOpenApiFilesWithTypeInfo.stream()
         .filter(
             nameWithTypeInfo -> {
               final VirtualFile foundFile =
@@ -70,6 +66,21 @@ public class OpenApiIndexService {
   private Set<VirtualFile> getPartialOpenApiFiles(final Project project) {
     final Set<String> partialOpenApiFilesWithTypeInfo = getPartialOpenApiFilesWithTypeInfo(project);
 
+    final Optional<VirtualFile> mainOpenApiFolder =
+        getMainOpenApiFile(project).map(VirtualFile::getParent);
+
+    return mainOpenApiFolder
+        .map(
+            specFolder ->
+                partialOpenApiFilesWithTypeInfo.stream()
+                    .map(v -> substringBeforeLast(v, OpenApiDataIndexer.DELIMITER))
+                    .map(specFolder::findFileByRelativePath)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet()))
+        .orElse(Collections.emptySet());
+  }
+
+  public Optional<VirtualFile> getMainOpenApiFile(final Project project) {
     final Collection<VirtualFile> mainOpenApiFiles =
         FileBasedIndex.getInstance()
             .getContainingFiles(
@@ -78,17 +89,10 @@ public class OpenApiIndexService {
                 GlobalSearchScope.allScope(project));
 
     if (mainOpenApiFiles.isEmpty()) {
-      return new HashSet<>();
+      return Optional.empty();
     }
 
-    final VirtualFile mainOpenApiFileFolder = mainOpenApiFiles.iterator().next().getParent();
-
-    return partialOpenApiFilesWithTypeInfo
-        .stream()
-        .map(v -> substringBeforeLast(v, OpenApiDataIndexer.DELIMITER))
-        .map(mainOpenApiFileFolder::findFileByRelativePath)
-        .filter(Objects::nonNull)
-        .collect(Collectors.toSet());
+    return Optional.of(mainOpenApiFiles.iterator().next());
   }
 
   private Set<String> getPartialOpenApiFilesWithTypeInfo(final Project project) {

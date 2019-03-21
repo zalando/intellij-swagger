@@ -1,0 +1,5 @@
+properties:
+  prop1:
+    type: array
+    items:
+      "$ref": Error_4.yaml
