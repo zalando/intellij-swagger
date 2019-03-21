@@ -8,9 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.containers.HashSet;
 import com.intellij.util.indexing.FileBasedIndex;
-
 import java.util.*;
 import java.util.stream.Collectors;
 import org.zalando.intellij.swagger.file.SwaggerFileType;
@@ -49,7 +47,8 @@ public class SwaggerIndexService {
 
     final VirtualFile mainSwaggerFileFolder = mainSwaggerFiles.iterator().next().getParent();
 
-    return partialSwaggerFilesWithTypeInfo.stream()
+    return partialSwaggerFilesWithTypeInfo
+        .stream()
         .filter(
             nameWithTypeInfo -> {
               final VirtualFile foundFile =
@@ -87,7 +86,8 @@ public class SwaggerIndexService {
     return mainSwaggerFolder
         .map(
             specFolder ->
-                partialSwaggerFilesWithTypeInfo.stream()
+                partialSwaggerFilesWithTypeInfo
+                    .stream()
                     .map(v -> substringBeforeLast(v, SwaggerDataIndexer.DELIMITER))
                     .map(specFolder::findFileByRelativePath)
                     .filter(Objects::nonNull)

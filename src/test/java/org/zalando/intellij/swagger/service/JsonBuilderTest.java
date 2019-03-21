@@ -1,18 +1,16 @@
 package org.zalando.intellij.swagger.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
-
 import java.io.File;
 import java.net.URL;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import org.junit.Before;
+import org.junit.Test;
 
 public class JsonBuilderTest {
 
@@ -56,7 +54,8 @@ public class JsonBuilderTest {
 
   @Test
   public void thatFileWithDepthTwoReferenceIsHandled() {
-    when(fakeVirtualFile.findFileByRelativePath("partial/Error_2.json")).thenReturn(fakeVirtualFile2);
+    when(fakeVirtualFile.findFileByRelativePath("partial/Error_2.json"))
+        .thenReturn(fakeVirtualFile2);
     when(fakeVirtualFile2.getPath()).thenReturn(getUrl("partial/Error_2.json").getPath());
 
     when(fakeVirtualFile2.findFileByRelativePath("Error.json")).thenReturn(fakeVirtualFile3);
@@ -114,7 +113,8 @@ public class JsonBuilderTest {
 
   @Test
   public void thatCircularReferenceIsHandled() {
-    when(fakeVirtualFile.findFileByRelativePath("partial/Error_3.json")).thenReturn(fakeVirtualFile2);
+    when(fakeVirtualFile.findFileByRelativePath("partial/Error_3.json"))
+        .thenReturn(fakeVirtualFile2);
 
     when(fakeVirtualFile2.getPath()).thenReturn(getUrl("partial/Error_3.json").getPath());
     when(fakeVirtualFile2.findFileByRelativePath("Error_4.json")).thenReturn(fakeVirtualFile3);
@@ -129,7 +129,6 @@ public class JsonBuilderTest {
     JsonNode expected = getJsonNode("petstore_with_file_ref_5_after.json");
 
     assertEquals(expected, result);
-
   }
 
   @Test
@@ -148,7 +147,8 @@ public class JsonBuilderTest {
 
   @Test
   public void thatYamlFileWithDepthTwoReferenceIsHandled() {
-    when(fakeVirtualFile.findFileByRelativePath("partial/Error_2.yaml")).thenReturn(fakeVirtualFile2);
+    when(fakeVirtualFile.findFileByRelativePath("partial/Error_2.yaml"))
+        .thenReturn(fakeVirtualFile2);
     when(fakeVirtualFile2.getPath()).thenReturn(getUrl("partial/Error_2.yaml").getPath());
 
     when(fakeVirtualFile2.findFileByRelativePath("Error.yaml")).thenReturn(fakeVirtualFile3);
@@ -206,7 +206,8 @@ public class JsonBuilderTest {
 
   @Test
   public void thatCircularYamlReferenceIsHandled() {
-    when(fakeVirtualFile.findFileByRelativePath("partial/Error_3.yaml")).thenReturn(fakeVirtualFile2);
+    when(fakeVirtualFile.findFileByRelativePath("partial/Error_3.yaml"))
+        .thenReturn(fakeVirtualFile2);
 
     when(fakeVirtualFile2.getPath()).thenReturn(getUrl("partial/Error_3.yaml").getPath());
     when(fakeVirtualFile2.findFileByRelativePath("Error_4.yaml")).thenReturn(fakeVirtualFile3);
@@ -221,7 +222,6 @@ public class JsonBuilderTest {
     JsonNode expected = getJsonNode("petstore_with_file_ref_5_after.json");
 
     assertEquals(expected, result);
-
   }
 
   private JsonNode getJsonNode(final String fileName) {

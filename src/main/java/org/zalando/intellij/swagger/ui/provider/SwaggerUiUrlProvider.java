@@ -29,7 +29,8 @@ public class SwaggerUiUrlProvider extends BuiltInWebBrowserUrlProvider implement
   @Override
   protected Url getUrl(@NotNull OpenInBrowserRequest request, @NotNull VirtualFile file) {
     SwaggerFileService swaggerFileService = ServiceManager.getService(SwaggerFileService.class);
-    Optional<Path> swaggerHTMLFolder = swaggerFileService.convertSwaggerToHtml(request.getVirtualFile());
+    Optional<Path> swaggerHTMLFolder =
+        swaggerFileService.convertSwaggerToHtml(request.getVirtualFile());
 
     return swaggerHTMLFolder.map(SwaggerFilesUtils::convertSwaggerLocationToUrl).orElse(null);
   }

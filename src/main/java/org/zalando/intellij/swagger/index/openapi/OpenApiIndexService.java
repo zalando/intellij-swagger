@@ -9,7 +9,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.FileBasedIndex;
-
 import java.util.*;
 import java.util.stream.Collectors;
 import org.zalando.intellij.swagger.file.OpenApiFileType;
@@ -49,7 +48,8 @@ public class OpenApiIndexService {
 
     final VirtualFile mainOpenApiFileFolder = mainOpenApiFiles.iterator().next().getParent();
 
-    return partialOpenApiFilesWithTypeInfo.stream()
+    return partialOpenApiFilesWithTypeInfo
+        .stream()
         .filter(
             nameWithTypeInfo -> {
               final VirtualFile foundFile =
@@ -72,7 +72,8 @@ public class OpenApiIndexService {
     return mainOpenApiFolder
         .map(
             specFolder ->
-                partialOpenApiFilesWithTypeInfo.stream()
+                partialOpenApiFilesWithTypeInfo
+                    .stream()
                     .map(v -> substringBeforeLast(v, OpenApiDataIndexer.DELIMITER))
                     .map(specFolder::findFileByRelativePath)
                     .filter(Objects::nonNull)

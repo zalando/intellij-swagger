@@ -10,16 +10,15 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.impl.LoadTextUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.LocalFileUrl;
-import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.file.FileContentManipulator;
-import org.zalando.intellij.swagger.file.SwaggerUiCreator;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import org.jetbrains.annotations.NotNull;
+import org.zalando.intellij.swagger.file.FileContentManipulator;
+import org.zalando.intellij.swagger.file.SwaggerUiCreator;
 
 public class SwaggerFileService {
 
@@ -47,7 +46,8 @@ public class SwaggerFileService {
                 .runReadAction(
                     () -> {
                       try {
-                        convertSwaggerToHtmlWithCache(virtualFile, convertToJsonIfNecessary(virtualFile));
+                        convertSwaggerToHtmlWithCache(
+                            virtualFile, convertToJsonIfNecessary(virtualFile));
                       } catch (Exception e) {
                         // This is a no-op; we don't want to notify the user if the
                         // Swagger UI generation fails on file save. A user may
