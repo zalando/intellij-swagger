@@ -1,0 +1,10 @@
+{
+  "properties": {
+    "prop1": {
+      "type": "array",
+      "items": {
+        "$ref": "Error.json"
+      }
+    }
+  }
+}
