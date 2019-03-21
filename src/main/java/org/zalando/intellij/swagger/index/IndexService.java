@@ -3,10 +3,9 @@ package org.zalando.intellij.swagger.index;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import java.util.Optional;
 import org.zalando.intellij.swagger.index.openapi.OpenApiIndexService;
 import org.zalando.intellij.swagger.index.swagger.SwaggerIndexService;
-
-import java.util.Optional;
 
 public class IndexService {
 

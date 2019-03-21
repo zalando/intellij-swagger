@@ -8,11 +8,10 @@ import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.index.IndexService;
 import org.zalando.intellij.swagger.service.SwaggerFileService;
-
-import java.util.Optional;
 
 public class FileDocumentListener extends FileDocumentManagerAdapter {
 

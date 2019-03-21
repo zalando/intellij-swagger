@@ -8,12 +8,11 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.RecursionGuard;
 import com.intellij.openapi.util.RecursionManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.apache.commons.lang.StringUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
+import org.apache.commons.lang.StringUtils;
 
 class JsonBuilderService {
 
