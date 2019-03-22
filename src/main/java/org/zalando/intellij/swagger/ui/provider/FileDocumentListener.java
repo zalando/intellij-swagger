@@ -11,11 +11,14 @@ import com.intellij.psi.PsiFile;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.index.IndexService;
+import org.zalando.intellij.swagger.index.openapi.OpenApiIndexService;
+import org.zalando.intellij.swagger.index.swagger.SwaggerIndexService;
 import org.zalando.intellij.swagger.service.SwaggerFileService;
 
 public class FileDocumentListener extends FileDocumentManagerAdapter {
 
-  private final IndexService indexService = new IndexService();
+  private final IndexService indexService =
+      new IndexService(new OpenApiIndexService(), new SwaggerIndexService());
 
   @Override
   public void beforeDocumentSaving(@NotNull final Document document) {
