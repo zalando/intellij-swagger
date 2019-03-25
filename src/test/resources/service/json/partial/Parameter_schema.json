@@ -1,0 +1,11 @@
+{
+  "required": [
+    "param"
+  ],
+  "properties": {
+    "param": {
+      "type": "integer",
+      "format": "int32"
+    }
+  }
+}
