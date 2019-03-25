@@ -1,0 +1,9 @@
+{
+  "Parameter": {
+    "name": "parameter2",
+    "in": "path",
+    "required": true,
+    "description": "The id of the pet to retrieve",
+    "type": "string"
+  }
+}

@@ -132,6 +132,65 @@ public class JsonBuilderTest {
   }
 
   @Test
+  public void thatReferencesInArrayAreHandled() {
+    final VirtualFile specFile = mock(VirtualFile.class);
+    final VirtualFile parameter1File = mock(VirtualFile.class);
+    final VirtualFile parameter2File = mock(VirtualFile.class);
+    final VirtualFile parameter3File = mock(VirtualFile.class);
+    final VirtualFile parameterSchemaFile = mock(VirtualFile.class);
+
+    when(specFile.getParent()).thenReturn(specFile);
+    when(parameter1File.getParent()).thenReturn(parameter1File);
+    when(parameter2File.getParent()).thenReturn(parameter2File);
+    when(parameter3File.getParent()).thenReturn(parameter3File);
+    when(parameterSchemaFile.getParent()).thenReturn(parameterSchemaFile);
+
+    when(specFile.findFileByRelativePath("partial/Parameter_1.json")).thenReturn(parameter1File);
+    when(parameter1File.getPath()).thenReturn(getUrl("partial/Parameter_1.json").getPath());
+
+    when(specFile.findFileByRelativePath("partial/Parameter_2.json")).thenReturn(parameter2File);
+    when(parameter2File.getPath()).thenReturn(getUrl("partial/Parameter_2.json").getPath());
+
+    when(specFile.findFileByRelativePath("partial/Parameter_3.json")).thenReturn(parameter3File);
+    when(parameter3File.getPath()).thenReturn(getUrl("partial/Parameter_3.json").getPath());
+
+    when(parameter3File.findFileByRelativePath("Parameter_schema.json"))
+        .thenReturn(parameterSchemaFile);
+    when(parameterSchemaFile.getPath())
+        .thenReturn(getUrl("partial/Parameter_schema.json").getPath());
+
+    final JsonNode jsonNode = getJsonNode("petstore_with_file_ref_7.json");
+
+    JsonNode result = jsonBuilderService.buildWithResolvedReferences(jsonNode, specFile);
+
+    JsonNode expected = getJsonNode("petstore_with_file_ref_7_after.json");
+
+    assertEquals(expected, result);
+  }
+
+  @Test
+  public void thatCircularReferenceInArrayIsHandled() {
+    final VirtualFile specFile = mock(VirtualFile.class);
+    final VirtualFile parameter4File = mock(VirtualFile.class);
+
+    when(specFile.getParent()).thenReturn(specFile);
+    when(parameter4File.getParent()).thenReturn(parameter4File);
+
+    when(specFile.findFileByRelativePath("partial/Parameter_4.json")).thenReturn(parameter4File);
+    when(parameter4File.getPath()).thenReturn(getUrl("partial/Parameter_4.json").getPath());
+
+    when(parameter4File.findFileByRelativePath("Parameter_4.json")).thenReturn(parameter4File);
+
+    final JsonNode jsonNode = getJsonNode("petstore_with_file_ref_8.json");
+
+    JsonNode result = jsonBuilderService.buildWithResolvedReferences(jsonNode, specFile);
+
+    JsonNode expected = getJsonNode("petstore_with_file_ref_8_after.json");
+
+    assertEquals(expected, result);
+  }
+
+  @Test
   public void thatYamlFileWithDepthOneReferenceIsHandled() {
     when(fakeVirtualFile.findFileByRelativePath(anyString())).thenReturn(fakeVirtualFile2);
     when(fakeVirtualFile2.getPath()).thenReturn(getUrl("partial/Error.yaml").getPath());

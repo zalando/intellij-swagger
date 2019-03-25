@@ -1,0 +1,6 @@
+{
+  "in": "body",
+  "schema": {
+    "$ref": "Parameter_4.json"
+  }
+}
