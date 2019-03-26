@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>org.zalando.intellij.swagger.examples.extensions.zalando</id>
     <name>Swagger [Zalando Extensions]</name>
-    <version>0.0.4</version>
+    <version>0.0.5</version>
     <vendor email="sebastian.monte@zalando.de" url="https://tech.zalando.com/">Zalando SE</vendor>
 
     <depends>com.intellij.modules.lang</depends>
@@ -12,7 +12,7 @@
         such as <a href="https://opensource.zalando.com/zally">Zally</a> linting.
     ]]></description>
 
-    <idea-version since-build="145"/>
+    <idea-version since-build="183"/>
 
     <extensions defaultExtensionNs="org.zalando.intellij.swagger">
         <customFieldFactory implementation="org.zalando.intellij.swagger.examples.extensions.zalando.field.completion.swagger.SwaggerFieldFactory" />
