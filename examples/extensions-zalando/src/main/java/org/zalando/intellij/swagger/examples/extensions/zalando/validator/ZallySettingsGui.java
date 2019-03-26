@@ -11,7 +11,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class ZallySettingsGui implements SearchableConfigurable {
 
-  private JTextField zallyUrlTextField = new JTextField(50);
+  private JTextField zallyUrlTextField = new JTextField(30);
+  private JTextField ztokenPathTextField = new JTextField(30);
 
   @NotNull
   @Override
@@ -42,13 +43,23 @@ public class ZallySettingsGui implements SearchableConfigurable {
   public JComponent createComponent() {
     JPanel panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-    JPanel zallyUrlPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    zallyUrlPanel.add(new JLabel("Zally API URL: "));
-    zallyUrlPanel.add(zallyUrlTextField);
-    zallyUrlPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    JLabel zallyLabel = new JLabel("Zally API URL:");
+    zallyLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-    panel.add(zallyUrlPanel);
+    JLabel ztokenLabel = new JLabel("Ztoken path:");
+    ztokenLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+    panel.add(zallyLabel);
+    panel.add(zallyUrlTextField);
+    zallyUrlTextField.setAlignmentX(Component.LEFT_ALIGNMENT);
+    zallyUrlTextField.setMaximumSize(zallyUrlTextField.getPreferredSize());
+
+    panel.add(ztokenLabel);
+    panel.add(ztokenPathTextField);
+    ztokenPathTextField.setAlignmentX(Component.LEFT_ALIGNMENT);
+    ztokenPathTextField.setMaximumSize(ztokenPathTextField.getPreferredSize());
 
     return panel;
   }
@@ -57,9 +68,28 @@ public class ZallySettingsGui implements SearchableConfigurable {
   public boolean isModified() {
     final ZallySettings settings = ServiceManager.getService(ZallySettings.class);
 
-    return (settings.getZallyUrl() != null
-            && !settings.getZallyUrl().equals(zallyUrlTextField.getText()))
-        || settings.getZallyUrl() == null && zallyUrlTextField.getText() != null;
+    return zallyUrlUpdated(settings)
+        || zallyUrlCreated(settings)
+        || ztokenPathUpdated(settings)
+        || ztokenPathCreated(settings);
+  }
+
+  private boolean zallyUrlUpdated(final ZallySettings settings) {
+    return settings.getZallyUrl() != null
+        && !settings.getZallyUrl().equals(zallyUrlTextField.getText());
+  }
+
+  private boolean zallyUrlCreated(final ZallySettings settings) {
+    return settings.getZallyUrl() == null && zallyUrlTextField.getText() != null;
+  }
+
+  private boolean ztokenPathUpdated(final ZallySettings settings) {
+    return settings.getZtokenPath() != null
+            && !settings.getZtokenPath().equals(ztokenPathTextField.getText());
+  }
+
+  private boolean ztokenPathCreated(final ZallySettings settings) {
+    return settings.getZtokenPath() == null && ztokenPathTextField.getText() != null;
   }
 
   @Override
@@ -67,6 +97,7 @@ public class ZallySettingsGui implements SearchableConfigurable {
     final ZallySettings settings = ServiceManager.getService(ZallySettings.class);
 
     settings.setZallyUrl(zallyUrlTextField.getText());
+    settings.setZtokenPath(ztokenPathTextField.getText());
   }
 
   @Override
@@ -74,6 +105,7 @@ public class ZallySettingsGui implements SearchableConfigurable {
     final ZallySettings settings = ServiceManager.getService(ZallySettings.class);
 
     zallyUrlTextField.setText(settings.getZallyUrl());
+    ztokenPathTextField.setText(settings.getZtokenPath());
   }
 
   @Override

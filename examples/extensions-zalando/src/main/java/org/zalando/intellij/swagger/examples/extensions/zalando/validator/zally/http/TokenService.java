@@ -1,39 +1,62 @@
 package org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.http;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import com.intellij.openapi.components.ServiceManager;
+import org.apache.commons.io.IOUtils;
+import org.zalando.intellij.swagger.examples.extensions.zalando.validator.ZallySettings;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 public class TokenService {
 
-  private static final String CACHE_KEY = "token";
+  public static String getToken() throws Exception {
+    final String ztokenPath = ServiceManager.getService(ZallySettings.class).getZtokenPath();
 
-  private static final LoadingCache<String, String> TOKEN_CACHE =
-      CacheBuilder.newBuilder()
-          .maximumSize(1)
-          .expireAfterWrite(30, TimeUnit.MINUTES)
-          .build(
-              new CacheLoader<String, String>() {
-                public String load(String key) throws Exception {
-                  return createToken();
-                }
-              });
+    Process process = createTokenProcess(ztokenPath);
 
-  public static String getToken() {
-    try {
-      return TOKEN_CACHE.get(CACHE_KEY);
-    } catch (ExecutionException e) {
-      throw new RuntimeException(e);
+    process.waitFor(10, TimeUnit.SECONDS);
+
+    if (process.exitValue() == 0) {
+      return handleSuccess(process);
+    } else {
+      return handleError(process);
     }
   }
 
-  private static String createToken() throws IOException {
+  private static String handleError(final Process process) throws IOException {
+    BufferedReader bufferedReader = null;
+    try {
+      bufferedReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+      throw new TokenException(bufferedReader.readLine());
+    } finally {
+      IOUtils.closeQuietly(bufferedReader);
+    }
+  }
+
+  private static String handleSuccess(final Process process) throws IOException {
+    BufferedReader bufferedReader = null;
+    try {
+      bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+      return bufferedReader.readLine();
+    } finally {
+      IOUtils.closeQuietly(bufferedReader);
+    }
+  }
+
+  private static Process createTokenProcess(final String ztokenPath) throws Exception {
+    if (ztokenPath != null && !ztokenPath.isEmpty()) {
+      return createTokenWithZtokenPath(ztokenPath);
+    } else {
+      return createToken();
+    }
+  }
+
+  private static Process createToken() throws Exception {
     final ProcessBuilder pb = new ProcessBuilder("/bin/bash", "-c", "ztoken");
     final String path =
         Optional.ofNullable(pb.environment().get("PATH"))
@@ -43,15 +66,14 @@ public class TokenService {
     pb.environment().put("PATH", path);
     pb.environment().put("LANG", "en_US.UTF-8");
 
-    final Process p = pb.start();
+    return pb.start();
+  }
 
-    final String token = new BufferedReader(new InputStreamReader(p.getInputStream())).readLine();
+  private static Process createTokenWithZtokenPath(final String ztokenPath) throws Exception {
+    final ProcessBuilder pb = new ProcessBuilder("/bin/bash", "-c", ztokenPath);
 
-    if (token == null) {
-      throw new RuntimeException(
-          "Could not get a token using `ztoken`. Make sure you are logged in with `zaws login`");
-    }
+    pb.environment().put("LANG", "en_US.UTF-8");
 
-    return token;
+    return pb.start();
   }
 }

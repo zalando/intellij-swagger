@@ -2,23 +2,30 @@ package org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally
 
 import com.google.common.collect.Lists;
 import com.intellij.codeInspection.*;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationAction;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.options.ShowSettingsUtil;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import java.util.List;
-import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
-import org.zalando.intellij.swagger.examples.extensions.zalando.validator.ZallySettings;
+import org.zalando.intellij.swagger.examples.extensions.zalando.validator.ZallySettingsGui;
 import org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.model.LintingResponse;
 import org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.model.Violation;
 import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.traversal.path.PathFinder;
 
-public class ZallyYamlFileValidator extends LocalInspectionTool {
+import java.util.List;
+import java.util.Optional;
 
-  private static final Logger LOG = Logger.getInstance(ZallyYamlFileValidator.class);
+public class ZallyYamlFileValidator extends LocalInspectionTool {
 
   private final ZallyService zallyService;
   private final PathFinder pathFinder;
@@ -41,35 +48,43 @@ public class ZallyYamlFileValidator extends LocalInspectionTool {
   public ProblemDescriptor[] checkFile(
       @NotNull PsiFile file, @NotNull InspectionManager manager, boolean isOnTheFly) {
     if (canLint(file) && !isOnTheFly) {
-      final LintingResponse lintingResponse = lint(file);
-      return createProblems(manager, lintingResponse, file);
+      return lint(file).map(response -> createProblems(manager, response, file)).orElse(null);
     }
 
-    return ProblemDescriptor.EMPTY_ARRAY;
+    return null;
   }
 
-  private LintingResponse lint(final PsiFile file) {
+  private Optional<LintingResponse> lint(final PsiFile file) {
     try {
-      return zallyService.lint(file.getText());
+      return Optional.of(zallyService.lint(file.getText()));
     } catch (final Exception e) {
-      LOG.error("Could not lint specification with Zally", e);
+      Notification notification =
+          new Notification(
+              "Zally", "Could not lint API spec", e.getMessage(), NotificationType.ERROR);
 
-      throw new RuntimeException(e);
+      Notifications.Bus.notify(notification);
+
+      notification.addAction(
+          new NotificationAction("Configure Zally") {
+            @Override
+            public void actionPerformed(
+                @NotNull AnActionEvent anActionEvent, @NotNull Notification notification) {
+              final DataContext dataContext = anActionEvent.getDataContext();
+              final Project project = PlatformDataKeys.PROJECT.getData(dataContext);
+              ShowSettingsUtil.getInstance().showSettingsDialog(project, ZallySettingsGui.class);
+            }
+          });
+
+      return Optional.empty();
     }
   }
 
   private boolean canLint(final PsiFile file) {
-    return hasZallyUrl() && supportsFile(file);
+    return supportsFile(file);
   }
 
   private boolean supportsFile(final PsiFile file) {
     return fileDetector.isMainOpenApiYamlFile(file) || fileDetector.isMainSwaggerFile(file);
-  }
-
-  private boolean hasZallyUrl() {
-    final ZallySettings zallySettings = ServiceManager.getService(ZallySettings.class);
-
-    return zallySettings.getZallyUrl() != null && !zallySettings.getZallyUrl().isEmpty();
   }
 
   @NotNull
