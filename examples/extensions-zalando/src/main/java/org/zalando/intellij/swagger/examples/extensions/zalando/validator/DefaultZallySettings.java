@@ -12,6 +12,8 @@ public class DefaultZallySettings
 
   public String zallyUrl;
 
+  public String ztokenPath;
+
   @Nullable
   @Override
   public DefaultZallySettings getState() {
@@ -31,5 +33,15 @@ public class DefaultZallySettings
   @Override
   public void setZallyUrl(String zallyUrl) {
     this.zallyUrl = zallyUrl;
+  }
+
+  @Override
+  public String getZtokenPath() {
+    return ztokenPath;
+  }
+
+  @Override
+  public void setZtokenPath(final String ztokenPath) {
+    this.ztokenPath = ztokenPath;
   }
 }

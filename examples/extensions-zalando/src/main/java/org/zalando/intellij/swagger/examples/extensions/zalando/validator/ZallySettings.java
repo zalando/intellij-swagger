@@ -5,4 +5,8 @@ public interface ZallySettings {
   String getZallyUrl();
 
   void setZallyUrl(String zallyUrl);
+
+  String getZtokenPath();
+
+  void setZtokenPath(String ztokenPath);
 }

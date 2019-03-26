@@ -35,11 +35,11 @@ public class HttpZallyService implements ZallyService {
     this.plugin = plugin;
   }
 
-  public LintingResponse lint(final String spec) {
+  public LintingResponse lint(final String spec) throws Exception {
     return connect().lint(zallyHeaders(), new LintingRequest(spec));
   }
 
-  private Map<String, Object> zallyHeaders() {
+  private Map<String, Object> zallyHeaders() throws Exception {
     return ImmutableMap.of(
         "User-Agent", "intellij-swagger-plugin/" + plugin.getVersion(),
         "Authorization", "Bearer " + TokenService.getToken(),
@@ -48,6 +48,10 @@ public class HttpZallyService implements ZallyService {
 
   private static ZallyApi connect() {
     final String zallyUrl = ServiceManager.getService(ZallySettings.class).getZallyUrl();
+
+    if (zallyUrl == null || zallyUrl.isEmpty()) {
+      throw new RuntimeException("Zally URL is missing");
+    }
 
     final Gson gson =
         new GsonBuilder()
