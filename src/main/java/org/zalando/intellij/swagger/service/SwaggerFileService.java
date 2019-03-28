@@ -89,7 +89,7 @@ public class SwaggerFileService {
 
   private String convertToJsonIfNecessary(@NotNull final VirtualFile virtualFile) throws Exception {
     final JsonNode root = mapper.readTree(LoadTextUtil.loadText(virtualFile).toString());
-    final JsonNode result = jsonBuilderService.buildWithResolvedReferences(root, virtualFile);
+    final JsonNode result = jsonBuilderService.buildFromSpec(root, virtualFile);
 
     return new ObjectMapper().writeValueAsString(result);
   }
