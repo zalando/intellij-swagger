@@ -5,6 +5,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReferenceBase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.zalando.intellij.swagger.traversal.path.PathExpressionUtil;
 import org.zalando.intellij.swagger.traversal.path.PathFinder;
 
 public class SchemaNameReference extends PsiReferenceBase<PsiElement> {
@@ -20,7 +21,7 @@ public class SchemaNameReference extends PsiReferenceBase<PsiElement> {
   @Nullable
   @Override
   public PsiElement resolve() {
-    final String escaped = originalRefValue.replace(".", "\\.");
+    final String escaped = PathExpressionUtil.escape(originalRefValue);
     final String pathExpression = String.format("$.components.schemas.%s", escaped);
 
     final PsiFile psiFile = getElement().getContainingFile();
