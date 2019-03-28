@@ -31,7 +31,7 @@ public class JsonBuilderTest {
   public void thatFileWithoutFileReferencesIsHandled() {
     final JsonNode jsonNode = getJsonNode("petstore.json");
 
-    JsonNode result = jsonBuilderService.buildWithResolvedReferences(jsonNode, fakeVirtualFile);
+    JsonNode result = jsonBuilderService.buildFromSpec(jsonNode, fakeVirtualFile);
 
     JsonNode expected = getJsonNode("petstore.json");
 
@@ -45,7 +45,7 @@ public class JsonBuilderTest {
 
     final JsonNode jsonNode = getJsonNode("petstore_with_file_ref_1.json");
 
-    JsonNode result = jsonBuilderService.buildWithResolvedReferences(jsonNode, fakeVirtualFile);
+    JsonNode result = jsonBuilderService.buildFromSpec(jsonNode, fakeVirtualFile);
 
     JsonNode expected = getJsonNode("petstore_with_file_ref_1_after.json");
 
@@ -63,7 +63,7 @@ public class JsonBuilderTest {
 
     final JsonNode jsonNode = getJsonNode("petstore_with_file_ref_2.json");
 
-    JsonNode result = jsonBuilderService.buildWithResolvedReferences(jsonNode, fakeVirtualFile);
+    JsonNode result = jsonBuilderService.buildFromSpec(jsonNode, fakeVirtualFile);
 
     JsonNode expected = getJsonNode("petstore_with_file_ref_2_after.json");
 
@@ -76,7 +76,7 @@ public class JsonBuilderTest {
 
     final JsonNode jsonNode = getJsonNode("petstore_with_file_ref_3.json");
 
-    JsonNode result = jsonBuilderService.buildWithResolvedReferences(jsonNode, fakeVirtualFile);
+    JsonNode result = jsonBuilderService.buildFromSpec(jsonNode, fakeVirtualFile);
 
     JsonNode expected = getJsonNode("petstore_with_file_ref_3_after.json");
 
@@ -90,7 +90,7 @@ public class JsonBuilderTest {
 
     final JsonNode jsonNode = getJsonNode("petstore_with_file_ref_4.json");
 
-    JsonNode result = jsonBuilderService.buildWithResolvedReferences(jsonNode, fakeVirtualFile);
+    JsonNode result = jsonBuilderService.buildFromSpec(jsonNode, fakeVirtualFile);
 
     JsonNode expected = getJsonNode("petstore_with_file_ref_4_after.json");
 
@@ -104,7 +104,7 @@ public class JsonBuilderTest {
 
     final JsonNode jsonNode = getJsonNode("petstore_with_file_ref_6.json");
 
-    JsonNode result = jsonBuilderService.buildWithResolvedReferences(jsonNode, fakeVirtualFile);
+    JsonNode result = jsonBuilderService.buildFromSpec(jsonNode, fakeVirtualFile);
 
     JsonNode expected = getJsonNode("petstore_with_file_ref_6_after.json");
 
@@ -124,7 +124,7 @@ public class JsonBuilderTest {
 
     final JsonNode jsonNode = getJsonNode("petstore_with_file_ref_5.json");
 
-    JsonNode result = jsonBuilderService.buildWithResolvedReferences(jsonNode, fakeVirtualFile);
+    JsonNode result = jsonBuilderService.buildFromSpec(jsonNode, fakeVirtualFile);
 
     JsonNode expected = getJsonNode("petstore_with_file_ref_5_after.json");
 
@@ -161,7 +161,7 @@ public class JsonBuilderTest {
 
     final JsonNode jsonNode = getJsonNode("petstore_with_file_ref_7.json");
 
-    JsonNode result = jsonBuilderService.buildWithResolvedReferences(jsonNode, specFile);
+    JsonNode result = jsonBuilderService.buildFromSpec(jsonNode, specFile);
 
     JsonNode expected = getJsonNode("petstore_with_file_ref_7_after.json");
 
@@ -183,7 +183,7 @@ public class JsonBuilderTest {
 
     final JsonNode jsonNode = getJsonNode("petstore_with_file_ref_8.json");
 
-    JsonNode result = jsonBuilderService.buildWithResolvedReferences(jsonNode, specFile);
+    JsonNode result = jsonBuilderService.buildFromSpec(jsonNode, specFile);
 
     JsonNode expected = getJsonNode("petstore_with_file_ref_8_after.json");
 
@@ -197,7 +197,7 @@ public class JsonBuilderTest {
 
     final JsonNode jsonNode = getJsonNode("petstore_with_file_ref_1.yaml");
 
-    JsonNode result = jsonBuilderService.buildWithResolvedReferences(jsonNode, fakeVirtualFile);
+    JsonNode result = jsonBuilderService.buildFromSpec(jsonNode, fakeVirtualFile);
 
     JsonNode expected = getJsonNode("petstore_with_file_ref_1_after.json");
 
@@ -215,7 +215,7 @@ public class JsonBuilderTest {
 
     final JsonNode jsonNode = getJsonNode("petstore_with_file_ref_2.yaml");
 
-    JsonNode result = jsonBuilderService.buildWithResolvedReferences(jsonNode, fakeVirtualFile);
+    JsonNode result = jsonBuilderService.buildFromSpec(jsonNode, fakeVirtualFile);
 
     JsonNode expected = getJsonNode("petstore_with_file_ref_2_after.json");
 
@@ -228,7 +228,7 @@ public class JsonBuilderTest {
 
     final JsonNode jsonNode = getJsonNode("petstore_with_file_ref_3.yaml");
 
-    JsonNode result = jsonBuilderService.buildWithResolvedReferences(jsonNode, fakeVirtualFile);
+    JsonNode result = jsonBuilderService.buildFromSpec(jsonNode, fakeVirtualFile);
 
     JsonNode expected = getJsonNode("petstore_with_file_ref_3_yaml_after.json");
 
@@ -242,7 +242,7 @@ public class JsonBuilderTest {
 
     final JsonNode jsonNode = getJsonNode("petstore_with_file_ref_4.yaml");
 
-    JsonNode result = jsonBuilderService.buildWithResolvedReferences(jsonNode, fakeVirtualFile);
+    JsonNode result = jsonBuilderService.buildFromSpec(jsonNode, fakeVirtualFile);
 
     JsonNode expected = getJsonNode("petstore_with_file_ref_4_yaml_after.json");
 
@@ -256,7 +256,7 @@ public class JsonBuilderTest {
 
     final JsonNode jsonNode = getJsonNode("petstore_with_file_ref_6.yaml");
 
-    JsonNode result = jsonBuilderService.buildWithResolvedReferences(jsonNode, fakeVirtualFile);
+    JsonNode result = jsonBuilderService.buildFromSpec(jsonNode, fakeVirtualFile);
 
     JsonNode expected = getJsonNode("petstore_with_file_ref_6_after.json");
 
@@ -276,9 +276,28 @@ public class JsonBuilderTest {
 
     final JsonNode jsonNode = getJsonNode("petstore_with_file_ref_5.yaml");
 
-    JsonNode result = jsonBuilderService.buildWithResolvedReferences(jsonNode, fakeVirtualFile);
+    JsonNode result = jsonBuilderService.buildFromSpec(jsonNode, fakeVirtualFile);
 
     JsonNode expected = getJsonNode("petstore_with_file_ref_5_after.json");
+
+    assertEquals(expected, result);
+  }
+
+  @Test
+  public void thatLocalReferenceInReferencedFileIsHandled() {
+    final VirtualFile specFile = mock(VirtualFile.class);
+    final VirtualFile refFile = mock(VirtualFile.class);
+
+    when(specFile.getParent()).thenReturn(specFile);
+
+    when(specFile.findFileByRelativePath("partial/Pets.json")).thenReturn(refFile);
+    when(refFile.getPath()).thenReturn(getUrl("partial/Pets.json").getPath());
+
+    final JsonNode jsonNode = getJsonNode("petstore_with_file_ref_9.json");
+
+    JsonNode result = jsonBuilderService.buildFromSpec(jsonNode, specFile);
+
+    JsonNode expected = getJsonNode("petstore_with_file_ref_9_after.json");
 
     assertEquals(expected, result);
   }

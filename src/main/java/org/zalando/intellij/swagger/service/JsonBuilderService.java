@@ -27,24 +27,30 @@ class JsonBuilderService {
    * traversing them would result in a stack overflow.
    */
   private static final RecursionGuard recursionGuard =
-      RecursionManager.createGuard("JsonBuilderService.buildWithResolvedReferences");
+      RecursionManager.createGuard("JsonBuilderService.buildRecursive");
 
   // It is safe to use a cache for already resolved references.
   private static final boolean memoize = true;
 
   private static final String CIRCULAR_REFERENCE = "Circular reference!";
 
-  JsonNode buildWithResolvedReferences(final JsonNode root, final VirtualFile containingFile) {
+  JsonNode buildFromSpec(final JsonNode root, final VirtualFile specFile) {
+    return buildRecursive(root, specFile, specFile);
+  }
+
+  private JsonNode buildRecursive(
+      final JsonNode root, final VirtualFile containingFile, final VirtualFile specFile) {
     if (root.isObject()) {
-      handleObjectNode((ObjectNode) root, containingFile);
+      handleObjectNode((ObjectNode) root, containingFile, specFile);
     } else if (root.isArray()) {
-      handleArrayNode((ArrayNode) root, containingFile);
+      handleArrayNode((ArrayNode) root, containingFile, specFile);
     }
 
     return root;
   }
 
-  private void handleObjectNode(final ObjectNode root, final VirtualFile containingFile) {
+  private void handleObjectNode(
+      final ObjectNode root, final VirtualFile containingFile, final VirtualFile specFile) {
     Iterator<Map.Entry<String, JsonNode>> iterator = root.fields();
 
     while (iterator.hasNext()) {
@@ -52,19 +58,19 @@ class JsonBuilderService {
       final JsonNode ref = current.getValue().get(SwaggerConstants.REF_KEY);
 
       if (ref != null && ref.isTextual()) {
-        final String text = ref.asText();
-
-        if (isFileReference(text)) {
-          consumeFileReference(
-              (TextNode) ref, containingFile, new ObjectNodeConsumer(root, current.getKey()));
-        }
+        consumeRef(
+            (TextNode) ref,
+            containingFile,
+            new ObjectNodeConsumer(root, current.getKey()),
+            specFile);
       } else {
-        buildWithResolvedReferences(current.getValue(), containingFile);
+        buildRecursive(current.getValue(), containingFile, specFile);
       }
     }
   }
 
-  private void handleArrayNode(final ArrayNode root, final VirtualFile containingFile) {
+  private void handleArrayNode(
+      final ArrayNode root, final VirtualFile containingFile, final VirtualFile specFile) {
     final Iterator<JsonNode> iterator = root.iterator();
     int index = 0;
 
@@ -73,28 +79,62 @@ class JsonBuilderService {
       final JsonNode ref = current.get(SwaggerConstants.REF_KEY);
 
       if (ref != null && ref.isTextual()) {
-        final String text = ref.asText();
-
-        if (isFileReference(text)) {
-          consumeFileReference((TextNode) ref, containingFile, new ArrayNodeConsumer(root, index));
-        }
+        consumeRef((TextNode) ref, containingFile, new ArrayNodeConsumer(root, index), specFile);
       }
       index++;
     }
   }
 
-  private void consumeFileReference(
-      final TextNode ref, final VirtualFile containingFile, Consumer<ResolvedRef> refConsumer) {
-    final ResolvedRef resolvedRef = resolveRef(ref.asText(), containingFile);
+  private void consumeRef(
+      final TextNode ref,
+      final VirtualFile containingFile,
+      final Consumer<ResolvedRef> refConsumer,
+      final VirtualFile specFile) {
+    if (isFileReference(ref.asText())) {
+      consumeFileReference(ref, containingFile, refConsumer, specFile);
+    } else {
+      consumeLocalReference(ref, containingFile, refConsumer, specFile);
+    }
+  }
 
+  private void consumeFileReference(
+      final TextNode ref,
+      final VirtualFile containingFile,
+      Consumer<ResolvedRef> refConsumer,
+      final VirtualFile specFile) {
+    final ResolvedRef resolvedRef = resolveFileRef(ref.asText(), containingFile);
+
+    consumeResolvedRef(refConsumer, specFile, resolvedRef);
+  }
+
+  private void consumeLocalReference(
+      final TextNode ref,
+      final VirtualFile containingFile,
+      Consumer<ResolvedRef> refConsumer,
+      final VirtualFile specFile) {
+
+    // We only need to inline references if we are in a referenced file.
+    if (!containingFile.equals(specFile)) {
+      final String jsonPointer = StringUtils.substringAfter(ref.asText(), "#");
+
+      final ResolvedRef resolvedRef = resolveJsonPointer(jsonPointer, containingFile);
+
+      consumeResolvedRef(refConsumer, specFile, resolvedRef);
+    }
+  }
+
+  private void consumeResolvedRef(
+      final Consumer<ResolvedRef> refConsumer,
+      final VirtualFile specFile,
+      final ResolvedRef resolvedRef) {
     if (resolvedRef.isValid()) {
       final JsonNode node =
           recursionGuard.doPreventingRecursion(
               Pair.create(resolvedRef.getJsonNode(), resolvedRef.getContainingFile()),
               memoize,
               () ->
-                  buildWithResolvedReferences(
-                      resolvedRef.getJsonNode(), resolvedRef.getContainingFile()));
+                  buildRecursive(
+                      resolvedRef.getJsonNode(), resolvedRef.getContainingFile(), specFile));
 
       // "doPreventingRecursion" returns null in case of a circular reference
       if (node != null) {
@@ -117,28 +157,33 @@ class JsonBuilderService {
         || text.contains(".yml#/");
   }
 
-  private ResolvedRef resolveRef(final String ref, final VirtualFile containingFile) {
+  private ResolvedRef resolveFileRef(final String ref, final VirtualFile containingFile) {
 
     final VirtualFile referencedFile = getReferencedFile(ref, containingFile);
 
     if (referencedFile == null) return MissingElementRef.getInstance();
 
+    final String jsonPointer = StringUtils.substringAfter(ref, "#");
+
+    return resolveJsonPointer(jsonPointer, referencedFile);
+  }
+
+  private ResolvedRef resolveJsonPointer(
+      final String jsonPointer, final VirtualFile containingFile) {
     final JsonNode tree;
     try {
-      tree = mapper.readTree(new File(referencedFile.getPath()));
+      tree = mapper.readTree(new File(containingFile.getPath()));
     } catch (IOException e) {
       return MissingElementRef.getInstance();
     }
 
-    final String s = StringUtils.substringAfter(ref, "#");
-
-    final JsonNode at = tree.at(s);
+    final JsonNode at = tree.at(jsonPointer);
 
     if (at.isMissingNode()) {
       return MissingElementRef.getInstance();
     }
 
-    return new ValidRef(at, referencedFile);
+    return new ValidRef(at, containingFile);
   }
 
   private VirtualFile getReferencedFile(final String ref, final VirtualFile containingFile) {

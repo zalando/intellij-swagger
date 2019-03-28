@@ -1,0 +1,16 @@
+{
+  "Dogs": {
+    "type": "array",
+    "items": {
+      "$ref": "#/Dog"
+    }
+  },
+  "Dog": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      }
+    }
+  }
+}
