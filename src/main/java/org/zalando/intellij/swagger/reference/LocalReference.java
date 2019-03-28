@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.zalando.intellij.swagger.traversal.path.PathExpressionUtil;
 import org.zalando.intellij.swagger.traversal.path.PathFinder;
 
 public class LocalReference extends PsiReferenceBase<PsiElement> {
@@ -27,7 +28,7 @@ public class LocalReference extends PsiReferenceBase<PsiElement> {
   public PsiElement resolve() {
     final String pathExpression =
         Arrays.stream(originalRefValue.substring(2, originalRefValue.length()).split("/"))
-            .map(s -> s.replace(".", "\\."))
+            .map(PathExpressionUtil::escape)
             .collect(Collectors.joining(".", "$.", ""));
 
     final PsiFile psiFile = getElement().getContainingFile();

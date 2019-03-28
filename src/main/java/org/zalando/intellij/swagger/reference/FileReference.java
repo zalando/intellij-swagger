@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.zalando.intellij.swagger.traversal.path.PathExpressionUtil;
 import org.zalando.intellij.swagger.traversal.path.PathFinder;
 
 public class FileReference extends PsiReferenceBase<PsiElement> {
@@ -42,7 +43,7 @@ public class FileReference extends PsiReferenceBase<PsiElement> {
     String textAfterRelativePath = StringUtils.substringAfter(originalRefValue, relativePath);
     final String pathExpression =
         Arrays.stream(textAfterRelativePath.substring(2).split("/"))
-            .map(s -> s.replace(".", "\\."))
+            .map(PathExpressionUtil::escape)
             .collect(Collectors.joining(".", "$.", ""));
 
     return getReferencedFile(relativePath)

@@ -1,0 +1,9 @@
+openapi: 3.0.2
+info:
+  title: Title
+  description: Description
+  version: 1.0.0
+paths:
+  '/foo':
+    $ref: '#/paths/~1bar<caret>'
+  '/bar':
