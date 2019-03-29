@@ -3,6 +3,7 @@ package org.zalando.intellij.swagger.ui.provider;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManagerAdapter;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -26,13 +27,21 @@ public class FileDocumentListener extends FileDocumentManagerAdapter {
     final Project[] openProjects = ProjectManager.getInstance().getOpenProjects();
 
     if (openProjects.length > 0) {
-      final PsiFile psiFile = PsiDocumentManager.getInstance(openProjects[0]).getPsiFile(document);
+      final Project openProject = openProjects[0];
 
-      if (psiFile != null) {
-        final Optional<VirtualFile> specFile = indexService.getMainSpecFile(psiFile);
+      if (indexIsReady(openProject)) {
+        final PsiFile psiFile = PsiDocumentManager.getInstance(openProject).getPsiFile(document);
 
-        specFile.ifPresent(swaggerFileService::convertSwaggerToHtmlAsync);
+        if (psiFile != null) {
+          final Optional<VirtualFile> specFile = indexService.getMainSpecFile(psiFile);
+
+          specFile.ifPresent(swaggerFileService::convertSwaggerToHtmlAsync);
+        }
       }
     }
+  }
+
+  private boolean indexIsReady(final Project openProject) {
+    return !DumbService.isDumb(openProject);
   }
 }
