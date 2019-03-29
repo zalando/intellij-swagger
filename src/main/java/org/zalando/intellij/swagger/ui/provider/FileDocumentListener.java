@@ -2,7 +2,7 @@ package org.zalando.intellij.swagger.ui.provider;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileEditor.FileDocumentManagerAdapter;
+import com.intellij.openapi.fileEditor.FileDocumentManagerListener;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
@@ -16,7 +16,7 @@ import org.zalando.intellij.swagger.index.openapi.OpenApiIndexService;
 import org.zalando.intellij.swagger.index.swagger.SwaggerIndexService;
 import org.zalando.intellij.swagger.service.SwaggerFileService;
 
-public class FileDocumentListener extends FileDocumentManagerAdapter {
+public class FileDocumentListener implements FileDocumentManagerListener {
 
   private final IndexService indexService =
       new IndexService(new OpenApiIndexService(), new SwaggerIndexService());
