@@ -46,6 +46,12 @@
         <fileBasedIndex implementation="org.zalando.intellij.swagger.index.openapi.OpenApiFileIndex" />
 
         <applicationService serviceImplementation="org.zalando.intellij.swagger.service.SwaggerFileService" />
+        <applicationService serviceImplementation="org.zalando.intellij.swagger.index.swagger.SwaggerIndexService" />
+        <applicationService serviceImplementation="org.zalando.intellij.swagger.index.openapi.OpenApiIndexService" />
+        <applicationService serviceImplementation="org.zalando.intellij.swagger.index.IndexService" />
+        <applicationService serviceImplementation="org.zalando.intellij.swagger.service.intellij.DumbService" />
+        <applicationService serviceImplementation="org.zalando.intellij.swagger.service.PsiFileService" />
+        <applicationService serviceImplementation="org.zalando.intellij.swagger.service.intellij.PsiDocumentManager" />
 
         <internalFileTemplate name="Swagger File (JSON)"/>
         <internalFileTemplate name="Swagger File (YAML)"/>
