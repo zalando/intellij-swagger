@@ -12,10 +12,6 @@ public class IndexService {
   private final OpenApiIndexService openApiIndexService;
   private final SwaggerIndexService swaggerIndexService;
 
-  public IndexService() {
-    this(new OpenApiIndexService(), new SwaggerIndexService());
-  }
-
   public IndexService(
       final OpenApiIndexService openApiIndexService,
       final SwaggerIndexService swaggerIndexService) {
