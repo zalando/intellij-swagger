@@ -1,5 +1,7 @@
 package org.zalando.intellij.swagger.traversal.path;
 
+import static org.zalando.intellij.swagger.traversal.path.PathExpressionUtil.*;
+
 import com.intellij.json.psi.JsonArray;
 import com.intellij.json.psi.JsonObject;
 import com.intellij.json.psi.JsonStringLiteral;
@@ -76,7 +78,7 @@ public class PathFinder {
     }
 
     final PsiNamedElement nextNamedParent = getNextNamedParent(psiElement);
-    final String unescapedTargetKeyName = unescapedName(pathExpression.last());
+    final String unescapedTargetKeyName = unescape(pathExpression.last());
 
     if (pathExpression.isAnyKey()) {
       return isInsidePath(
@@ -111,7 +113,7 @@ public class PathFinder {
     if (psiElement instanceof PsiNamedElement) {
       final PsiNamedElement psiNamedElement = (PsiNamedElement) psiElement;
 
-      if (unescapedName(keyName).equals(psiNamedElement.getName())) {
+      if (unescape(keyName).equals(psiNamedElement.getName())) {
         return (PsiNamedElement) psiElement;
       } else if (keyName.equals(ROOT_PATH)) {
         return isRoot(psiElement)
@@ -228,13 +230,9 @@ public class PathFinder {
           : Optional.empty();
     }
 
-    final String unescapedName = unescapedName(name);
+    final String unescapedName = unescape(name);
 
     return children.stream().filter(child -> unescapedName.equals(child.getName())).findFirst();
-  }
-
-  private String unescapedName(final String name) {
-    return name.replace("\\.", ".");
   }
 
   private PsiElement getNextObjectParent(final PsiElement psiElement) {
