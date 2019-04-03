@@ -52,11 +52,15 @@ abstract class ReferenceInspection extends LocalInspectionTool {
         new LocalQuickFixBackedByIntentionAction(intentionAction);
 
     holder.registerProblem(
-        psiElement, getMessage(psiElement), ProblemHighlightType.GENERIC_ERROR, quickFix);
+        psiElement,
+        getMessage(psiElement),
+        ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+        quickFix);
   }
 
   private void registerReferenceProblem(final ProblemsHolder holder, final PsiElement psiElement) {
-    holder.registerProblem(psiElement, getMessage(psiElement), ProblemHighlightType.GENERIC_ERROR);
+    holder.registerProblem(
+        psiElement, getMessage(psiElement), ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
   }
 
   private String getMessage(final PsiElement psiElement) {
