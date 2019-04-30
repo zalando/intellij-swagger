@@ -63,7 +63,7 @@ paths:
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/Pet"
+              $ref: "#/definitions/~1Pet"
         201:
           description: "pet response",
           schema:
@@ -132,27 +132,11 @@ securityDefinitions:
     in: "header"
     name: "api_key"
 definitions:
-  User:
-    type: "object"
-    description: "User"
-    properties:
-      contact:
-        $ref: '#/definitions/Pet'
-  Pet:
+  '/Pet':
     required:
       - "name"
     properties:
       name:
         type: "string"
       tag:
-        type: "string"
-  ErrorModel:
-    required:
-      - "code"
-      - "message"
-    properties:
-      code:
-        type: "integer"
-        format: "int32"
-      message:
         type: "string"
