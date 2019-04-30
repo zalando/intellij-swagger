@@ -77,7 +77,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Pet"
+                "$ref": "#/definitions/~1ErrorModel"
               }
             }
           },
@@ -98,12 +98,6 @@
                   }
                 }
               }
-            }
-          },
-          "default": {
-            "description": "error payload",
-            "schema": {
-              "$ref": "#/definitions/ErrorModel"
             }
           }
         }
@@ -171,29 +165,7 @@
     }
   },
   "definitions": {
-    "User": {
-      "type": "object",
-      "description": "User",
-      "properties": {
-        "contact": {
-          "$ref": "#/definitions/Pet"
-        }
-      }
-    },
-    "Pet": {
-      "required": [
-        "name"
-      ],
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "tag": {
-          "type": "string"
-        }
-      }
-    },
-    "ErrorModel": {
+    "/ErrorModel": {
       "required": [
         "code",
         "message"

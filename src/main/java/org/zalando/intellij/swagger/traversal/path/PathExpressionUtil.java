@@ -14,4 +14,8 @@ public class PathExpressionUtil {
   public static String escape(final String part) {
     return part.replace(".", "\\.");
   }
+
+  public static String escapeJsonPointer(final String part) {
+    return part.replace("~", "~0").replace("/", "~1");
+  }
 }
