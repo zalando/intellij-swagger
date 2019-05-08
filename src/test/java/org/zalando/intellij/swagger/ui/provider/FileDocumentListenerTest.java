@@ -11,19 +11,16 @@ import org.junit.Test;
 import org.zalando.intellij.swagger.index.IndexService;
 import org.zalando.intellij.swagger.service.PsiFileService;
 import org.zalando.intellij.swagger.service.SwaggerFileService;
-import org.zalando.intellij.swagger.service.intellij.DumbService;
 
 public class FileDocumentListenerTest {
 
   private IndexService fakeIndexService = mock(IndexService.class);
-  private DumbService fakeDumbService = mock(DumbService.class);
   private SwaggerFileService fakeSwaggerFileService = mock(SwaggerFileService.class);
   private PsiFileService fakePsiFileService = mock(PsiFileService.class);
   private Document fakeDocument = mock(Document.class);
 
   private final FileDocumentListener listener =
-      new FileDocumentListener(
-          fakeIndexService, fakeSwaggerFileService, fakePsiFileService, fakeDumbService);
+      new FileDocumentListener(fakeIndexService, fakeSwaggerFileService, fakePsiFileService);
 
   @Test
   public void thatSwaggerUiConversionIsCalled() {
@@ -33,7 +30,7 @@ public class FileDocumentListenerTest {
 
     when(fakePsiFile.getProject()).thenReturn(fakeProject);
     when(fakePsiFileService.fromDocument(fakeDocument)).thenReturn(Optional.of(fakePsiFile));
-    when(fakeDumbService.isDumb(fakeProject)).thenReturn(false);
+    when(fakeIndexService.isIndexReady(fakeProject)).thenReturn(true);
     when(fakeIndexService.getMainSpecFile(fakePsiFile)).thenReturn(Optional.of(fakeSpecFile));
 
     listener.beforeDocumentSaving(fakeDocument);
@@ -48,7 +45,7 @@ public class FileDocumentListenerTest {
 
     when(fakePsiFile.getProject()).thenReturn(fakeProject);
     when(fakePsiFileService.fromDocument(fakeDocument)).thenReturn(Optional.of(fakePsiFile));
-    when(fakeDumbService.isDumb(fakeProject)).thenReturn(true);
+    when(fakeIndexService.isIndexReady(fakeProject)).thenReturn(false);
 
     listener.beforeDocumentSaving(fakeDocument);
 
@@ -62,7 +59,7 @@ public class FileDocumentListenerTest {
 
     when(fakePsiFile.getProject()).thenReturn(fakeProject);
     when(fakePsiFileService.fromDocument(fakeDocument)).thenReturn(Optional.of(fakePsiFile));
-    when(fakeDumbService.isDumb(fakeProject)).thenReturn(false);
+    when(fakeIndexService.isIndexReady(fakeProject)).thenReturn(true);
     when(fakeIndexService.getMainSpecFile(fakePsiFile)).thenReturn(Optional.empty());
 
     listener.beforeDocumentSaving(fakeDocument);
