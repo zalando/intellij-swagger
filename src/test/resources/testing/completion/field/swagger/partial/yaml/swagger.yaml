@@ -46,6 +46,12 @@ paths:
           $ref: "response_definitions_not_in_root.yaml#/responses/myResponse"
         '404':
           $ref: "response.yaml"
+        '500':
+          description: pets json
+          schema:
+            type: array
+            items:
+              "$ref": pet.json
         default:
           description: unexpected error
           schema:

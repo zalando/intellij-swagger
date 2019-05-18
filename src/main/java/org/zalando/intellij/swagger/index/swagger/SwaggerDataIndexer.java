@@ -16,7 +16,6 @@ import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.zalando.intellij.swagger.StringUtils;
-import org.zalando.intellij.swagger.file.FileConstants;
 import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.file.SwaggerFileType;
 import org.zalando.intellij.swagger.reference.SwaggerConstants;
@@ -72,12 +71,10 @@ class SwaggerDataIndexer implements DataIndexer<String, Set<String>, FileContent
             if (SwaggerConstants.REF_KEY.equals(property.getName())) {
               if (property.getValue() != null) {
                 final String refValue = StringUtils.removeAllQuotes(property.getValue().getText());
-                if (refValue.contains(FileConstants.JSON_FILE_NAME_SUFFIX)) {
-                  result.add(
-                      extractFileNameFromFileRefValue(refValue)
-                          + DELIMITER
-                          + getSwaggerFileType(property.getValue(), refValue));
-                }
+                result.add(
+                    extractFileNameFromFileRefValue(refValue)
+                        + DELIMITER
+                        + getSwaggerFileType(property.getValue(), refValue));
               }
             }
             super.visitProperty(property);
@@ -98,20 +95,13 @@ class SwaggerDataIndexer implements DataIndexer<String, Set<String>, FileContent
               final YAMLKeyValue yamlKeyValue = (YAMLKeyValue) element;
               if (SwaggerConstants.REF_KEY.equals(yamlKeyValue.getKeyText())) {
                 final String refValue = StringUtils.removeAllQuotes(yamlKeyValue.getValueText());
-                if (isYamlFile(refValue)) {
-                  result.add(
-                      extractFileNameFromFileRefValue(refValue)
-                          + DELIMITER
-                          + getSwaggerFileType(yamlKeyValue.getValue(), refValue));
-                }
+                result.add(
+                    extractFileNameFromFileRefValue(refValue)
+                        + DELIMITER
+                        + getSwaggerFileType(yamlKeyValue.getValue(), refValue));
               }
             }
             super.visitElement(element);
-          }
-
-          private boolean isYamlFile(String refValue) {
-            return refValue.contains(FileConstants.YAML_FILE_NAME_SUFFIX)
-                || refValue.contains(FileConstants.YML_FILE_NAME_SUFFIX);
           }
         });
 

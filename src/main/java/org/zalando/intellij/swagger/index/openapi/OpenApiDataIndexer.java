@@ -16,7 +16,6 @@ import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.zalando.intellij.swagger.StringUtils;
-import org.zalando.intellij.swagger.file.FileConstants;
 import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.file.OpenApiFileType;
 import org.zalando.intellij.swagger.reference.OpenApiConstants;
@@ -71,19 +70,13 @@ class OpenApiDataIndexer implements DataIndexer<String, Set<String>, FileContent
             if (OpenApiConstants.REF_KEY.equals(property.getName())) {
               if (property.getValue() != null) {
                 final String refValue = StringUtils.removeAllQuotes(property.getValue().getText());
-                if (isJsonFile(refValue)) {
-                  result.add(
-                      extractFileNameFromFileRefValue(refValue)
-                          + DELIMITER
-                          + getOpenApiFileTypeFromRefElement(property.getValue(), refValue));
-                }
+                result.add(
+                    extractFileNameFromFileRefValue(refValue)
+                        + DELIMITER
+                        + getOpenApiFileTypeFromRefElement(property.getValue(), refValue));
               }
             }
             super.visitProperty(property);
-          }
-
-          private boolean isJsonFile(final String refValue) {
-            return refValue.contains(FileConstants.JSON_FILE_NAME_SUFFIX);
           }
         });
 
@@ -101,20 +94,13 @@ class OpenApiDataIndexer implements DataIndexer<String, Set<String>, FileContent
               final YAMLKeyValue yamlKeyValue = (YAMLKeyValue) element;
               if (OpenApiConstants.REF_KEY.equals(yamlKeyValue.getKeyText())) {
                 final String refValue = StringUtils.removeAllQuotes(yamlKeyValue.getValueText());
-                if (isYamlFile(refValue)) {
-                  result.add(
-                      extractFileNameFromFileRefValue(refValue)
-                          + DELIMITER
-                          + getOpenApiFileTypeFromRefElement(yamlKeyValue.getValue(), refValue));
-                }
+                result.add(
+                    extractFileNameFromFileRefValue(refValue)
+                        + DELIMITER
+                        + getOpenApiFileTypeFromRefElement(yamlKeyValue.getValue(), refValue));
               }
             }
             super.visitElement(element);
-          }
-
-          private boolean isYamlFile(String refValue) {
-            return refValue.contains(FileConstants.YAML_FILE_NAME_SUFFIX)
-                || refValue.contains(FileConstants.YML_FILE_NAME_SUFFIX);
           }
         });
 
