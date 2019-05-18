@@ -17,7 +17,7 @@ public class YamlReferenceContributor extends ReferenceContributor {
       StandardPatterns.string().matches("^(\"|\')?https://(.)*");
 
   private static final StringPattern YAML_FILE_NAME_PATTERN =
-      StandardPatterns.string().matches("(.)*.ya?ml(.)*");
+      StandardPatterns.string().matches("(.)*\\.ya?ml(.)*");
 
   @Override
   public void registerReferenceProviders(@NotNull final PsiReferenceRegistrar registrar) {

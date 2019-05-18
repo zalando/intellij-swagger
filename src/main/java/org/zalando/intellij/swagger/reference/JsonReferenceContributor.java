@@ -17,7 +17,7 @@ public class JsonReferenceContributor extends ReferenceContributor {
       StandardPatterns.string().matches("^\"https://(.)*");
 
   private static final StringPattern JSON_FILE_NAME_PATTERN =
-      StandardPatterns.string().matches("(.)*.json(.)*");
+      StandardPatterns.string().matches("(.)*\\.json(.)*");
 
   @Override
   public void registerReferenceProviders(@NotNull final PsiReferenceRegistrar registrar) {

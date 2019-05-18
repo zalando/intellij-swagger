@@ -77,6 +77,11 @@ paths:
                   format": int32
                 name:
                   type: string
+        404:
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/name_with_yaml"
 securityDefinitions:
   githubAccessCode:
     type: "oauth2"
@@ -140,3 +145,4 @@ definitions:
         type: "string"
       tag:
         type: "string"
+  name_with_yaml:

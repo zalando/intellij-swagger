@@ -99,6 +99,14 @@
                 }
               }
             }
+          },
+          "404": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/name_with_json"
+              }
+            }
           }
         }
       }
@@ -179,6 +187,7 @@
           "type": "string"
         }
       }
-    }
+    },
+    "name_with_json": {}
   }
 }
