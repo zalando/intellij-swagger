@@ -18,7 +18,7 @@ public class SwaggerFileIndex extends FileBasedIndexExtension<String, Set<String
   static final String PARTIAL_SWAGGER_FILES = "PARTIAL_SWAGGER_FILES";
 
   static final ID<String, Set<String>> SWAGGER_INDEX_ID = ID.create("SwaggerFileIndex");
-  private static final int VERSION = 1;
+  private static final int VERSION = 2;
 
   private final FileDetector fileDetector = new FileDetector();
 

@@ -1,7 +1,6 @@
 package org.zalando.intellij.swagger.index.swagger;
 
 import static org.apache.commons.lang.StringUtils.substringAfterLast;
-import static org.apache.commons.lang.StringUtils.substringBeforeLast;
 
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.openapi.project.Project;
@@ -10,54 +9,45 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.FileBasedIndex;
 import java.util.*;
-import java.util.stream.Collectors;
 import org.zalando.intellij.swagger.file.SwaggerFileType;
 
 public class SwaggerIndexService {
 
   public boolean isMainSwaggerFile(final VirtualFile virtualFile, final Project project) {
-    final FileBasedIndex index = FileBasedIndex.getInstance();
-    final Collection<VirtualFile> swaggerFiles =
-        index.getContainingFiles(
+    return FileBasedIndex.getInstance()
+        .getContainingFiles(
             SwaggerFileIndex.SWAGGER_INDEX_ID,
             SwaggerFileIndex.MAIN_SWAGGER_FILE,
-            GlobalSearchScope.allScope(project));
-    return swaggerFiles.contains(virtualFile);
+            GlobalSearchScope.allScope(project))
+        .contains(virtualFile);
   }
 
   public boolean isPartialSwaggerFile(final VirtualFile virtualFile, final Project project) {
-    final Set<VirtualFile> partialSwaggerFiles = getPartialSwaggerFiles(project);
-    return partialSwaggerFiles.contains(virtualFile);
+    return FileBasedIndex.getInstance()
+        .getValues(
+            SwaggerFileIndex.SWAGGER_INDEX_ID,
+            SwaggerFileIndex.PARTIAL_SWAGGER_FILES,
+            GlobalSearchScope.allScope(project))
+        .stream()
+        .flatMap(Set::stream)
+        .anyMatch(value -> value.startsWith(virtualFile.getPath()));
   }
 
   private SwaggerFileType getPartialSwaggerFileType(
       final VirtualFile virtualFile, final Project project) {
-    final Set<String> partialSwaggerFilesWithTypeInfo = getPartialSwaggerFilesWithTypeInfo(project);
-
-    final Collection<VirtualFile> mainSwaggerFiles =
+    Optional<String> indexValue =
         FileBasedIndex.getInstance()
-            .getContainingFiles(
+            .getValues(
                 SwaggerFileIndex.SWAGGER_INDEX_ID,
-                SwaggerFileIndex.MAIN_SWAGGER_FILE,
-                GlobalSearchScope.allScope(project));
+                SwaggerFileIndex.PARTIAL_SWAGGER_FILES,
+                GlobalSearchScope.allScope(project))
+            .stream()
+            .flatMap(Set::stream)
+            .filter(value -> value.startsWith(virtualFile.getPath()))
+            .findFirst();
 
-    if (mainSwaggerFiles.isEmpty()) {
-      return SwaggerFileType.UNDEFINED;
-    }
-
-    final VirtualFile mainSwaggerFileFolder = mainSwaggerFiles.iterator().next().getParent();
-
-    return partialSwaggerFilesWithTypeInfo
-        .stream()
-        .filter(
-            nameWithTypeInfo -> {
-              final VirtualFile foundFile =
-                  mainSwaggerFileFolder.findFileByRelativePath(
-                      substringBeforeLast(nameWithTypeInfo, SwaggerDataIndexer.DELIMITER));
-              return virtualFile.equals(foundFile);
-            })
-        .findFirst()
-        .map(nameWithTypeInfo -> substringAfterLast(nameWithTypeInfo, SwaggerDataIndexer.DELIMITER))
+    return indexValue
+        .map(value -> substringAfterLast(value, SwaggerDataIndexer.DELIMITER))
         .map(SwaggerFileType::valueOf)
         .orElse(SwaggerFileType.UNDEFINED);
   }
@@ -75,36 +65,6 @@ public class SwaggerIndexService {
     }
 
     return Optional.of(mainSwaggerFiles.iterator().next());
-  }
-
-  private Set<VirtualFile> getPartialSwaggerFiles(final Project project) {
-    final Set<String> partialSwaggerFilesWithTypeInfo = getPartialSwaggerFilesWithTypeInfo(project);
-
-    final Optional<VirtualFile> mainSwaggerFolder =
-        getMainSwaggerFile(project).map(VirtualFile::getParent);
-
-    return mainSwaggerFolder
-        .map(
-            specFolder ->
-                partialSwaggerFilesWithTypeInfo
-                    .stream()
-                    .map(v -> substringBeforeLast(v, SwaggerDataIndexer.DELIMITER))
-                    .map(specFolder::findFileByRelativePath)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toSet()))
-        .orElse(Collections.emptySet());
-  }
-
-  private Set<String> getPartialSwaggerFilesWithTypeInfo(final Project project) {
-    final FileBasedIndex index = FileBasedIndex.getInstance();
-    return index
-        .getValues(
-            SwaggerFileIndex.SWAGGER_INDEX_ID,
-            SwaggerFileIndex.PARTIAL_SWAGGER_FILES,
-            GlobalSearchScope.allScope(project))
-        .stream()
-        .flatMap(Set::stream)
-        .collect(Collectors.toSet());
   }
 
   public Optional<SwaggerFileType> getFileType(final PsiElement psiElement) {

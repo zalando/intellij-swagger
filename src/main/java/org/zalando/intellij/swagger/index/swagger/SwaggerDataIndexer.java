@@ -4,21 +4,24 @@ import com.google.common.collect.ImmutableSet;
 import com.intellij.json.psi.JsonFile;
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.json.psi.impl.JsonRecursiveElementVisitor;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.intellij.util.containers.HashSet;
 import com.intellij.util.indexing.DataIndexer;
 import com.intellij.util.indexing.FileContent;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
+import org.jetbrains.yaml.psi.YamlRecursivePsiElementVisitor;
 import org.zalando.intellij.swagger.StringUtils;
 import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.file.SwaggerFileType;
 import org.zalando.intellij.swagger.reference.SwaggerConstants;
+import org.zalando.intellij.swagger.service.SwaggerFilesUtils;
 import org.zalando.intellij.swagger.traversal.path.swagger.MainPathResolver;
 import org.zalando.intellij.swagger.traversal.path.swagger.PathResolver;
 
@@ -38,30 +41,32 @@ class SwaggerDataIndexer implements DataIndexer<String, Set<String>, FileContent
       return indexMap;
     }
 
-    final PsiFile file = inputData.getPsiFile();
+    final PsiFile specFile = inputData.getPsiFile();
 
-    if (fileDetector.isMainSwaggerFile(file)) {
-      Set<String> partialSwaggerFileNames = getPartialSwaggerFileNames(file);
+    if (fileDetector.isMainSwaggerFile(specFile)) {
+      final VirtualFile specDirectory = inputData.getFile().getParent();
+      final Set<String> referencedFiles = getReferencedFiles(specFile, specDirectory);
 
-      indexMap.put(SwaggerFileIndex.PARTIAL_SWAGGER_FILES, partialSwaggerFileNames);
+      indexMap.put(SwaggerFileIndex.PARTIAL_SWAGGER_FILES, referencedFiles);
       indexMap.put(
           SwaggerFileIndex.MAIN_SWAGGER_FILE,
-          ImmutableSet.of(file.getName() + DELIMITER + SwaggerFileType.MAIN));
+          ImmutableSet.of(specFile.getName() + DELIMITER + SwaggerFileType.MAIN));
     }
     return indexMap;
   }
 
-  private Set<String> getPartialSwaggerFileNames(PsiFile file) {
+  private Set<String> getReferencedFiles(final PsiFile file, final VirtualFile specDirectory) {
     return isJsonFile(file)
-        ? getPartialJsonSwaggerFileNames(file)
-        : getPartialYamlSwaggerFileNames(file);
+        ? getPartialJsonSwaggerFileNames(file, specDirectory)
+        : getPartialYamlSwaggerFileNames(file, specDirectory);
   }
 
   private boolean isJsonFile(PsiFile file) {
     return file instanceof JsonFile;
   }
 
-  private Set<String> getPartialJsonSwaggerFileNames(final PsiFile file) {
+  private Set<String> getPartialJsonSwaggerFileNames(
+      final PsiFile file, final VirtualFile specDirectory) {
     final Set<String> result = new HashSet<>();
 
     file.accept(
@@ -71,10 +76,11 @@ class SwaggerDataIndexer implements DataIndexer<String, Set<String>, FileContent
             if (SwaggerConstants.REF_KEY.equals(property.getName())) {
               if (property.getValue() != null) {
                 final String refValue = StringUtils.removeAllQuotes(property.getValue().getText());
-                result.add(
-                    extractFileNameFromFileRefValue(refValue)
-                        + DELIMITER
-                        + getSwaggerFileType(property.getValue(), refValue));
+
+                if (SwaggerFilesUtils.isFileReference(refValue)) {
+                  getReferencedFileIndexValue(property.getValue(), refValue, specDirectory)
+                      .ifPresent(result::add);
+                }
               }
             }
             super.visitProperty(property);
@@ -84,33 +90,37 @@ class SwaggerDataIndexer implements DataIndexer<String, Set<String>, FileContent
     return result;
   }
 
-  private Set<String> getPartialYamlSwaggerFileNames(final PsiFile file) {
+  private Optional<String> getReferencedFileIndexValue(
+      final PsiElement psiElement, final String refValue, final VirtualFile specDirectory) {
+    final String relativePath =
+        org.apache.commons.lang.StringUtils.substringBefore(
+            refValue, SwaggerConstants.REFERENCE_PREFIX);
+
+    return Optional.ofNullable(specDirectory.findFileByRelativePath(relativePath))
+        .map(file -> file.getPath() + DELIMITER + getSwaggerFileType(psiElement, refValue));
+  }
+
+  private Set<String> getPartialYamlSwaggerFileNames(
+      final PsiFile file, final VirtualFile specDirectory) {
     final Set<String> result = new HashSet<>();
 
     file.accept(
-        new PsiRecursiveElementVisitor() {
+        new YamlRecursivePsiElementVisitor() {
           @Override
-          public void visitElement(final PsiElement element) {
-            if (element instanceof YAMLKeyValue) {
-              final YAMLKeyValue yamlKeyValue = (YAMLKeyValue) element;
-              if (SwaggerConstants.REF_KEY.equals(yamlKeyValue.getKeyText())) {
-                final String refValue = StringUtils.removeAllQuotes(yamlKeyValue.getValueText());
-                result.add(
-                    extractFileNameFromFileRefValue(refValue)
-                        + DELIMITER
-                        + getSwaggerFileType(yamlKeyValue.getValue(), refValue));
+          public void visitKeyValue(@NotNull YAMLKeyValue yamlKeyValue) {
+            if (SwaggerConstants.REF_KEY.equals(yamlKeyValue.getKeyText())) {
+              final String refValue = StringUtils.removeAllQuotes(yamlKeyValue.getValueText());
+
+              if (SwaggerFilesUtils.isFileReference(refValue)) {
+                getReferencedFileIndexValue(yamlKeyValue.getValue(), refValue, specDirectory)
+                    .ifPresent(result::add);
               }
             }
-            super.visitElement(element);
+            super.visitKeyValue(yamlKeyValue);
           }
         });
 
     return result;
-  }
-
-  private String extractFileNameFromFileRefValue(final String fileRefValue) {
-    return org.apache.commons.lang.StringUtils.substringBefore(
-        fileRefValue, SwaggerConstants.REFERENCE_PREFIX);
   }
 
   @NotNull
