@@ -1,7 +1,6 @@
 package org.zalando.intellij.swagger.index.openapi;
 
 import static org.apache.commons.lang.StringUtils.substringAfterLast;
-import static org.apache.commons.lang.StringUtils.substringBeforeLast;
 
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.openapi.project.Project;
@@ -9,76 +8,51 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.FileBasedIndex;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.Set;
 import org.zalando.intellij.swagger.file.OpenApiFileType;
+import org.zalando.intellij.swagger.index.SpecIndexer;
 
 public class OpenApiIndexService {
 
   public boolean isMainOpenApiFile(final VirtualFile virtualFile, final Project project) {
-    final FileBasedIndex index = FileBasedIndex.getInstance();
-    final Collection<VirtualFile> openApiFiles =
-        index.getContainingFiles(
+    return FileBasedIndex.getInstance()
+        .getContainingFiles(
             OpenApiFileIndex.OPEN_API_INDEX_ID,
-            OpenApiFileIndex.MAIN_OPEN_API_FILE,
-            GlobalSearchScope.allScope(project));
-
-    return openApiFiles.contains(virtualFile);
+            SpecIndexer.MAIN_SPEC_FILES,
+            GlobalSearchScope.allScope(project))
+        .contains(virtualFile);
   }
 
   public boolean isPartialOpenApiFile(final VirtualFile virtualFile, final Project project) {
-    final Set<VirtualFile> partialOpenApiFiles = getPartialOpenApiFiles(project);
-    return partialOpenApiFiles.contains(virtualFile);
+    return FileBasedIndex.getInstance()
+        .getValues(
+            OpenApiFileIndex.OPEN_API_INDEX_ID,
+            SpecIndexer.PARTIAL_SPEC_FILES,
+            GlobalSearchScope.allScope(project))
+        .stream()
+        .flatMap(Set::stream)
+        .anyMatch(value -> value.startsWith(virtualFile.getPath()));
   }
 
   private OpenApiFileType getPartialOpenApiFileType(
       final VirtualFile virtualFile, final Project project) {
-    final Set<String> partialOpenApiFilesWithTypeInfo = getPartialOpenApiFilesWithTypeInfo(project);
-
-    final Collection<VirtualFile> mainOpenApiFiles =
+    Optional<String> indexValue =
         FileBasedIndex.getInstance()
-            .getContainingFiles(
+            .getValues(
                 OpenApiFileIndex.OPEN_API_INDEX_ID,
-                OpenApiFileIndex.MAIN_OPEN_API_FILE,
-                GlobalSearchScope.allScope(project));
+                SpecIndexer.PARTIAL_SPEC_FILES,
+                GlobalSearchScope.allScope(project))
+            .stream()
+            .flatMap(Set::stream)
+            .filter(value -> value.startsWith(virtualFile.getPath()))
+            .findFirst();
 
-    if (mainOpenApiFiles.isEmpty()) {
-      return OpenApiFileType.UNDEFINED;
-    }
-
-    final VirtualFile mainOpenApiFileFolder = mainOpenApiFiles.iterator().next().getParent();
-
-    return partialOpenApiFilesWithTypeInfo
-        .stream()
-        .filter(
-            nameWithTypeInfo -> {
-              final VirtualFile foundFile =
-                  mainOpenApiFileFolder.findFileByRelativePath(
-                      substringBeforeLast(nameWithTypeInfo, OpenApiDataIndexer.DELIMITER));
-              return virtualFile.equals(foundFile);
-            })
-        .findFirst()
-        .map(nameWithTypeInfo -> substringAfterLast(nameWithTypeInfo, OpenApiDataIndexer.DELIMITER))
+    return indexValue
+        .map(value -> substringAfterLast(value, SpecIndexer.DELIMITER))
         .map(OpenApiFileType::valueOf)
         .orElse(OpenApiFileType.UNDEFINED);
-  }
-
-  private Set<VirtualFile> getPartialOpenApiFiles(final Project project) {
-    final Set<String> partialOpenApiFilesWithTypeInfo = getPartialOpenApiFilesWithTypeInfo(project);
-
-    final Optional<VirtualFile> mainOpenApiFolder =
-        getMainOpenApiFile(project).map(VirtualFile::getParent);
-
-    return mainOpenApiFolder
-        .map(
-            specFolder ->
-                partialOpenApiFilesWithTypeInfo
-                    .stream()
-                    .map(v -> substringBeforeLast(v, OpenApiDataIndexer.DELIMITER))
-                    .map(specFolder::findFileByRelativePath)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toSet()))
-        .orElse(Collections.emptySet());
   }
 
   public Optional<VirtualFile> getMainOpenApiFile(final Project project) {
@@ -86,7 +60,7 @@ public class OpenApiIndexService {
         FileBasedIndex.getInstance()
             .getContainingFiles(
                 OpenApiFileIndex.OPEN_API_INDEX_ID,
-                OpenApiFileIndex.MAIN_OPEN_API_FILE,
+                SpecIndexer.MAIN_SPEC_FILES,
                 GlobalSearchScope.allScope(project));
 
     if (mainOpenApiFiles.isEmpty()) {
@@ -94,18 +68,6 @@ public class OpenApiIndexService {
     }
 
     return Optional.of(mainOpenApiFiles.iterator().next());
-  }
-
-  private Set<String> getPartialOpenApiFilesWithTypeInfo(final Project project) {
-    final FileBasedIndex index = FileBasedIndex.getInstance();
-    return index
-        .getValues(
-            OpenApiFileIndex.OPEN_API_INDEX_ID,
-            OpenApiFileIndex.PARTIAL_OPEN_API_FILES,
-            GlobalSearchScope.allScope(project))
-        .stream()
-        .flatMap(Set::stream)
-        .collect(Collectors.toSet());
   }
 
   public Optional<OpenApiFileType> getFileType(final PsiElement psiElement) {

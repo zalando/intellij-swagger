@@ -14,9 +14,6 @@ import org.zalando.intellij.swagger.file.FileDetector;
 
 public class SwaggerFileIndex extends FileBasedIndexExtension<String, Set<String>> {
 
-  static final String MAIN_SWAGGER_FILE = "MAIN_SWAGGER_FILE";
-  static final String PARTIAL_SWAGGER_FILES = "PARTIAL_SWAGGER_FILES";
-
   static final ID<String, Set<String>> SWAGGER_INDEX_ID = ID.create("SwaggerFileIndex");
   private static final int VERSION = 2;
 

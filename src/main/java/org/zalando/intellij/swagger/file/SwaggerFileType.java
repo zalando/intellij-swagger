@@ -1,6 +1,6 @@
 package org.zalando.intellij.swagger.file;
 
-public enum SwaggerFileType {
+public enum SwaggerFileType implements SpecFileType {
   UNDEFINED,
   MAIN,
   DEFINITIONS,
@@ -14,5 +14,5 @@ public enum SwaggerFileType {
   RESPONSES_MULTIPLE_NOT_IN_ROOT,
   PATHS,
   PATHS_MULTIPLE_IN_ROOT,
-  PATHS_MULTIPLE_NOT_IN_ROOT
+  PATHS_MULTIPLE_NOT_IN_ROOT;
 }

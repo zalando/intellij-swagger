@@ -10,6 +10,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.FileBasedIndex;
 import java.util.*;
 import org.zalando.intellij.swagger.file.SwaggerFileType;
+import org.zalando.intellij.swagger.index.SpecIndexer;
 
 public class SwaggerIndexService {
 
@@ -17,7 +18,7 @@ public class SwaggerIndexService {
     return FileBasedIndex.getInstance()
         .getContainingFiles(
             SwaggerFileIndex.SWAGGER_INDEX_ID,
-            SwaggerFileIndex.MAIN_SWAGGER_FILE,
+            SpecIndexer.MAIN_SPEC_FILES,
             GlobalSearchScope.allScope(project))
         .contains(virtualFile);
   }
@@ -26,7 +27,7 @@ public class SwaggerIndexService {
     return FileBasedIndex.getInstance()
         .getValues(
             SwaggerFileIndex.SWAGGER_INDEX_ID,
-            SwaggerFileIndex.PARTIAL_SWAGGER_FILES,
+            SpecIndexer.PARTIAL_SPEC_FILES,
             GlobalSearchScope.allScope(project))
         .stream()
         .flatMap(Set::stream)
@@ -39,7 +40,7 @@ public class SwaggerIndexService {
         FileBasedIndex.getInstance()
             .getValues(
                 SwaggerFileIndex.SWAGGER_INDEX_ID,
-                SwaggerFileIndex.PARTIAL_SWAGGER_FILES,
+                SpecIndexer.PARTIAL_SPEC_FILES,
                 GlobalSearchScope.allScope(project))
             .stream()
             .flatMap(Set::stream)
@@ -47,7 +48,7 @@ public class SwaggerIndexService {
             .findFirst();
 
     return indexValue
-        .map(value -> substringAfterLast(value, SwaggerDataIndexer.DELIMITER))
+        .map(value -> substringAfterLast(value, SpecIndexer.DELIMITER))
         .map(SwaggerFileType::valueOf)
         .orElse(SwaggerFileType.UNDEFINED);
   }
@@ -57,7 +58,7 @@ public class SwaggerIndexService {
         FileBasedIndex.getInstance()
             .getContainingFiles(
                 SwaggerFileIndex.SWAGGER_INDEX_ID,
-                SwaggerFileIndex.MAIN_SWAGGER_FILE,
+                SpecIndexer.MAIN_SPEC_FILES,
                 GlobalSearchScope.allScope(project));
 
     if (mainSwaggerFiles.isEmpty()) {
