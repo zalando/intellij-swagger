@@ -13,10 +13,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.zalando.intellij.swagger.traversal.path.PathExpressionUtil;
 
-public class ReferenceSearch
+public class SpecReferenceSearch
     extends QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters> {
 
   private static final boolean CASE_SENSITIVE = false;
+  private static final boolean REQUIRE_READ_ACTION = true;
+
+  public SpecReferenceSearch() {
+    super(REQUIRE_READ_ACTION);
+  }
 
   @Override
   public void processQuery(
