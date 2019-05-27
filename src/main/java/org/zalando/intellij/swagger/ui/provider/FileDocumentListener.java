@@ -6,21 +6,21 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
-import org.zalando.intellij.swagger.index.IndexService;
+import org.zalando.intellij.swagger.index.IndexFacade;
 import org.zalando.intellij.swagger.service.PsiFileService;
 import org.zalando.intellij.swagger.service.SwaggerFileService;
 
 public class FileDocumentListener implements FileDocumentManagerListener {
 
-  private final IndexService indexService;
+  private final IndexFacade indexFacade;
   private final SwaggerFileService swaggerFileService;
   private final PsiFileService psiFileService;
 
   public FileDocumentListener(
-      final IndexService indexService,
+      final IndexFacade indexFacade,
       final SwaggerFileService swaggerFileService,
       final PsiFileService psiFileService) {
-    this.indexService = indexService;
+    this.indexFacade = indexFacade;
     this.swaggerFileService = swaggerFileService;
     this.psiFileService = psiFileService;
   }
@@ -31,8 +31,8 @@ public class FileDocumentListener implements FileDocumentManagerListener {
 
     psiFile.ifPresent(
         file -> {
-          if (indexService.isIndexReady(file.getProject())) {
-            final Optional<VirtualFile> specFile = indexService.getMainSpecFile(file);
+          if (indexFacade.isIndexReady(file.getProject())) {
+            final Optional<VirtualFile> specFile = indexFacade.getMainSpecFile(file);
 
             specFile.ifPresent(swaggerFileService::convertSwaggerToHtmlAsync);
           }

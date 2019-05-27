@@ -8,19 +8,19 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import java.util.Optional;
 import org.junit.Test;
-import org.zalando.intellij.swagger.index.IndexService;
+import org.zalando.intellij.swagger.index.IndexFacade;
 import org.zalando.intellij.swagger.service.PsiFileService;
 import org.zalando.intellij.swagger.service.SwaggerFileService;
 
 public class FileDocumentListenerTest {
 
-  private IndexService fakeIndexService = mock(IndexService.class);
+  private IndexFacade fakeIndexFacade = mock(IndexFacade.class);
   private SwaggerFileService fakeSwaggerFileService = mock(SwaggerFileService.class);
   private PsiFileService fakePsiFileService = mock(PsiFileService.class);
   private Document fakeDocument = mock(Document.class);
 
   private final FileDocumentListener listener =
-      new FileDocumentListener(fakeIndexService, fakeSwaggerFileService, fakePsiFileService);
+      new FileDocumentListener(fakeIndexFacade, fakeSwaggerFileService, fakePsiFileService);
 
   @Test
   public void thatSwaggerUiConversionIsCalled() {
@@ -30,8 +30,8 @@ public class FileDocumentListenerTest {
 
     when(fakePsiFile.getProject()).thenReturn(fakeProject);
     when(fakePsiFileService.fromDocument(fakeDocument)).thenReturn(Optional.of(fakePsiFile));
-    when(fakeIndexService.isIndexReady(fakeProject)).thenReturn(true);
-    when(fakeIndexService.getMainSpecFile(fakePsiFile)).thenReturn(Optional.of(fakeSpecFile));
+    when(fakeIndexFacade.isIndexReady(fakeProject)).thenReturn(true);
+    when(fakeIndexFacade.getMainSpecFile(fakePsiFile)).thenReturn(Optional.of(fakeSpecFile));
 
     listener.beforeDocumentSaving(fakeDocument);
 
@@ -45,7 +45,7 @@ public class FileDocumentListenerTest {
 
     when(fakePsiFile.getProject()).thenReturn(fakeProject);
     when(fakePsiFileService.fromDocument(fakeDocument)).thenReturn(Optional.of(fakePsiFile));
-    when(fakeIndexService.isIndexReady(fakeProject)).thenReturn(false);
+    when(fakeIndexFacade.isIndexReady(fakeProject)).thenReturn(false);
 
     listener.beforeDocumentSaving(fakeDocument);
 
@@ -59,8 +59,8 @@ public class FileDocumentListenerTest {
 
     when(fakePsiFile.getProject()).thenReturn(fakeProject);
     when(fakePsiFileService.fromDocument(fakeDocument)).thenReturn(Optional.of(fakePsiFile));
-    when(fakeIndexService.isIndexReady(fakeProject)).thenReturn(true);
-    when(fakeIndexService.getMainSpecFile(fakePsiFile)).thenReturn(Optional.empty());
+    when(fakeIndexFacade.isIndexReady(fakeProject)).thenReturn(true);
+    when(fakeIndexFacade.getMainSpecFile(fakePsiFile)).thenReturn(Optional.empty());
 
     listener.beforeDocumentSaving(fakeDocument);
 

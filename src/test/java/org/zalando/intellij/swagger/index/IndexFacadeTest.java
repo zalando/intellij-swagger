@@ -11,42 +11,42 @@ import org.zalando.intellij.swagger.index.openapi.OpenApiIndexService;
 import org.zalando.intellij.swagger.index.swagger.SwaggerIndexService;
 import org.zalando.intellij.swagger.service.intellij.DumbService;
 
-public class IndexServiceTest {
+public class IndexFacadeTest {
 
   private final OpenApiIndexService fakeOpenApiIndexService = mock(OpenApiIndexService.class);
   private final SwaggerIndexService fakeSwaggerIndexService = mock(SwaggerIndexService.class);
   private final DumbService dumbService = mock(DumbService.class);
 
-  private final IndexService indexService =
-      new IndexService(fakeOpenApiIndexService, fakeSwaggerIndexService, dumbService);
+  private final IndexFacade indexFacade =
+      new IndexFacade(fakeOpenApiIndexService, fakeSwaggerIndexService, dumbService);
 
   private final VirtualFile fakeVirtualFile = mock(VirtualFile.class);
   private final Project fakeProject = mock(Project.class);
 
   @Test
   public void thatMainSwaggerFileIsDetected() {
-    when(fakeSwaggerIndexService.isMainSwaggerFile(fakeVirtualFile, fakeProject)).thenReturn(true);
+    when(fakeSwaggerIndexService.isMainSpecFile(fakeVirtualFile, fakeProject)).thenReturn(true);
 
-    final boolean isMainSpec = indexService.isMainSpecFile(fakeVirtualFile, fakeProject);
+    final boolean isMainSpec = indexFacade.isMainSpecFile(fakeVirtualFile, fakeProject);
 
     assertThat(isMainSpec, is(true));
   }
 
   @Test
   public void thatMainOpenApiFileIsDetected() {
-    when(fakeOpenApiIndexService.isMainOpenApiFile(fakeVirtualFile, fakeProject)).thenReturn(true);
+    when(fakeOpenApiIndexService.isMainSpecFile(fakeVirtualFile, fakeProject)).thenReturn(true);
 
-    final boolean isMainSpec = indexService.isMainSpecFile(fakeVirtualFile, fakeProject);
+    final boolean isMainSpec = indexFacade.isMainSpecFile(fakeVirtualFile, fakeProject);
 
     assertThat(isMainSpec, is(true));
   }
 
   @Test
   public void thatFileThatIsNotMainSpecIsDetected() {
-    when(fakeOpenApiIndexService.isMainOpenApiFile(fakeVirtualFile, fakeProject)).thenReturn(false);
-    when(fakeSwaggerIndexService.isMainSwaggerFile(fakeVirtualFile, fakeProject)).thenReturn(false);
+    when(fakeOpenApiIndexService.isMainSpecFile(fakeVirtualFile, fakeProject)).thenReturn(false);
+    when(fakeSwaggerIndexService.isMainSpecFile(fakeVirtualFile, fakeProject)).thenReturn(false);
 
-    final boolean isMainSpec = indexService.isMainSpecFile(fakeVirtualFile, fakeProject);
+    final boolean isMainSpec = indexFacade.isMainSpecFile(fakeVirtualFile, fakeProject);
 
     assertThat(isMainSpec, is(false));
   }

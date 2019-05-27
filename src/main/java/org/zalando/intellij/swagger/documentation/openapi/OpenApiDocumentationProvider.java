@@ -15,7 +15,11 @@ import org.zalando.intellij.swagger.traversal.path.openapi.PathResolverFactory;
 
 public class OpenApiDocumentationProvider extends ApiDocumentProvider {
 
-  private final OpenApiIndexService openApiIndexService = new OpenApiIndexService();
+  private final OpenApiIndexService openApiIndexService;
+
+  public OpenApiDocumentationProvider(final OpenApiIndexService openApiIndexService) {
+    this.openApiIndexService = openApiIndexService;
+  }
 
   @Nullable
   @Override
@@ -34,7 +38,7 @@ public class OpenApiDocumentationProvider extends ApiDocumentProvider {
               final Project project = maybeProject.get();
 
               final Optional<OpenApiFileType> maybeFileType =
-                  openApiIndexService.getOpenApiFileType(project, virtualFile);
+                  openApiIndexService.getFileType(project, virtualFile);
 
               return maybeFileType.map(
                   openApiFileType -> {
