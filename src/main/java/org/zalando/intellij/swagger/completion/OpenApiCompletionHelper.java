@@ -1,6 +1,7 @@
 package org.zalando.intellij.swagger.completion;
 
 import com.intellij.psi.PsiElement;
+import org.zalando.intellij.swagger.index.openapi.OpenApiIndexService;
 import org.zalando.intellij.swagger.traversal.Traversal;
 import org.zalando.intellij.swagger.traversal.path.openapi.PathResolver;
 
@@ -9,8 +10,11 @@ public class OpenApiCompletionHelper extends CompletionHelper {
   private final PathResolver pathResolver;
 
   public OpenApiCompletionHelper(
-      final PsiElement psiElement, final Traversal traversal, final PathResolver pathResolver) {
-    super(psiElement, traversal);
+      final PsiElement psiElement,
+      final Traversal traversal,
+      final PathResolver pathResolver,
+      final OpenApiIndexService openApiIndexService) {
+    super(psiElement, traversal, openApiIndexService);
     this.pathResolver = pathResolver;
   }
 

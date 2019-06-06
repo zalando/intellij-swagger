@@ -23,7 +23,8 @@ public class CompletionResultSetFactory {
     while (offset > 0
         && (Character.isLetterOrDigit(text.charAt(offset))
             || text.charAt(offset) == '#'
-            || text.charAt(offset) == '/')) {
+            || text.charAt(offset) == '/'
+            || text.charAt(offset) == '.')) {
       prefixBuilder.insert(0, text.charAt(offset));
       offset--;
     }

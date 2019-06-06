@@ -26,5 +26,26 @@ public enum OpenApiFileType implements SpecFileType {
   MULTIPLE_CALLBACKS,
 
   SINGLE_SCHEMA,
-  MULTIPLE_SCHEMAS
+  MULTIPLE_SCHEMAS;
+
+  public boolean isSingleDefinition() {
+    return false;
+  }
+
+  public boolean isMultipleDefinitionsInRoot() {
+    return false;
+  }
+
+  public boolean isMultipleDefinitionsNotInRoot() {
+    return false;
+  }
+
+  public SpecFileType fromString(final String s) {
+    return null;
+  }
+
+  @Override
+  public String asSpecKey() {
+    return null;
+  }
 }

@@ -48,7 +48,8 @@ public class SwaggerYamlCompletionContributor extends CompletionContributor {
           final PsiElement psiElement = parameters.getPosition();
 
           final SwaggerCompletionHelper completionHelper =
-              new SwaggerCompletionHelper(psiElement, yamlTraversal, pathResolver);
+              new SwaggerCompletionHelper(
+                  psiElement, yamlTraversal, pathResolver, swaggerIndexService);
 
           SwaggerFieldCompletionFactory.from(completionHelper, result)
               .ifPresent(FieldCompletion::fill);

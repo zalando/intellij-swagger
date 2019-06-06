@@ -2,13 +2,17 @@ package org.zalando.intellij.swagger.completion;
 
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiNamedElement;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.zalando.intellij.swagger.completion.field.model.common.Field;
 import org.zalando.intellij.swagger.completion.value.model.common.Value;
+import org.zalando.intellij.swagger.file.SpecFileType;
+import org.zalando.intellij.swagger.index.IndexService;
 import org.zalando.intellij.swagger.traversal.Traversal;
 import org.zalando.intellij.swagger.traversal.path.PathFinder;
 
@@ -16,10 +20,15 @@ public class CompletionHelper {
 
   protected final PsiElement psiElement;
   private final Traversal traversal;
+  private final IndexService<? extends SpecFileType> indexService;
 
-  protected CompletionHelper(final PsiElement psiElement, final Traversal traversal) {
+  protected CompletionHelper(
+      final PsiElement psiElement,
+      final Traversal traversal,
+      final IndexService<? extends SpecFileType> indexService) {
     this.psiElement = psiElement;
     this.traversal = traversal;
+    this.indexService = indexService;
   }
 
   public boolean hasPath(final String pathExpression) {
@@ -75,5 +84,13 @@ public class CompletionHelper {
 
   public PsiFile getPsiFile() {
     return psiElement.getContainingFile();
+  }
+
+  public VirtualFile getVirtualFile() {
+    return getPsiFile().getOriginalFile().getVirtualFile();
+  }
+
+  public Map<PsiFile, SpecFileType> getPartialSpecFiles(final SpecFileType specFileType) {
+    return indexService.getPartialSpecFiles(psiElement.getProject(), specFileType);
   }
 }

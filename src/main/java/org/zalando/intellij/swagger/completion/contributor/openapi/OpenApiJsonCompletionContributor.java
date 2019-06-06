@@ -46,7 +46,8 @@ public class OpenApiJsonCompletionContributor extends CompletionContributor {
           final PsiElement psiElement = parameters.getPosition();
 
           final OpenApiCompletionHelper completionHelper =
-              new OpenApiCompletionHelper(psiElement, jsonTraversal, pathResolver);
+              new OpenApiCompletionHelper(
+                  psiElement, jsonTraversal, pathResolver, openApiIndexService);
 
           if (jsonTraversal.isKey(psiElement)) {
             OpenApiFieldCompletionFactory.from(completionHelper, result)

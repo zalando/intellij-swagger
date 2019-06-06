@@ -46,7 +46,8 @@ public class OpenApiYamlCompletionContributor extends CompletionContributor {
           final PsiElement psiElement = parameters.getPosition();
 
           final OpenApiCompletionHelper completionHelper =
-              new OpenApiCompletionHelper(psiElement, yamlTraversal, pathResolver);
+              new OpenApiCompletionHelper(
+                  psiElement, yamlTraversal, pathResolver, openApiIndexService);
 
           OpenApiFieldCompletionFactory.from(completionHelper, result)
               .ifPresent(FieldCompletion::fill);

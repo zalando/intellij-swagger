@@ -48,7 +48,8 @@ public class SwaggerJsonCompletionContributor extends CompletionContributor {
           final PsiElement psiElement = parameters.getPosition();
 
           final SwaggerCompletionHelper completionHelper =
-              new SwaggerCompletionHelper(psiElement, jsonTraversal, pathResolver);
+              new SwaggerCompletionHelper(
+                  psiElement, jsonTraversal, pathResolver, swaggerIndexService);
 
           if (jsonTraversal.isKey(psiElement)) {
             SwaggerFieldCompletionFactory.from(completionHelper, result)

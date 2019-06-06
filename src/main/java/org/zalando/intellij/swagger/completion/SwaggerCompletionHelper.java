@@ -1,6 +1,7 @@
 package org.zalando.intellij.swagger.completion;
 
 import com.intellij.psi.PsiElement;
+import org.zalando.intellij.swagger.index.swagger.SwaggerIndexService;
 import org.zalando.intellij.swagger.traversal.Traversal;
 import org.zalando.intellij.swagger.traversal.path.swagger.PathResolver;
 
@@ -9,9 +10,11 @@ public class SwaggerCompletionHelper extends CompletionHelper {
   private final PathResolver pathResolver;
 
   public SwaggerCompletionHelper(
-      final PsiElement psiElement, final Traversal traversal, final PathResolver pathResolver) {
-
-    super(psiElement, traversal);
+      final PsiElement psiElement,
+      final Traversal traversal,
+      final PathResolver pathResolver,
+      final SwaggerIndexService swaggerIndexService) {
+    super(psiElement, traversal, swaggerIndexService);
     this.pathResolver = pathResolver;
   }
 

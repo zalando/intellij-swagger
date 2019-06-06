@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.zalando.intellij.swagger.completion.SwaggerCompletionHelper;
 import org.zalando.intellij.swagger.completion.value.ValueCompletion;
 import org.zalando.intellij.swagger.completion.value.completion.common.BooleanValueCompletion;
+import org.zalando.intellij.swagger.completion.value.completion.common.RefValueCompletion;
+import org.zalando.intellij.swagger.file.SwaggerFileType;
 
 public class SwaggerValueCompletionFactory {
 
@@ -17,10 +19,12 @@ public class SwaggerValueCompletionFactory {
       return Optional.of(new SchemesValueCompletion(completionHelper, completionResultSet));
     } else if (completionHelper.completeDefinitionRefValue()) {
       return Optional.of(
-          new LocalRefValueCompletion(completionHelper, completionResultSet, "definitions"));
+          new RefValueCompletion(
+              completionHelper, completionResultSet, SwaggerFileType.DEFINITIONS));
     } else if (completionHelper.completeParameterRefValue()) {
       return Optional.of(
-          new LocalRefValueCompletion(completionHelper, completionResultSet, "parameters"));
+          new RefValueCompletion(
+              completionHelper, completionResultSet, SwaggerFileType.PARAMETERS));
     } else if (completionHelper.completeBooleanValue()) {
       return Optional.of(new BooleanValueCompletion(completionHelper, completionResultSet));
     } else if (completionHelper.completeTypeValue()) {
@@ -29,7 +33,7 @@ public class SwaggerValueCompletionFactory {
       return Optional.of(new InValueCompletion(completionHelper, completionResultSet));
     } else if (completionHelper.completeResponseRefValue()) {
       return Optional.of(
-          new LocalRefValueCompletion(completionHelper, completionResultSet, "responses"));
+          new RefValueCompletion(completionHelper, completionResultSet, SwaggerFileType.RESPONSES));
     } else if (completionHelper.completeSecurityScopeNameValue()) {
       return Optional.of(
           new SecurityScopeNameValueCompletion(completionHelper, completionResultSet));
