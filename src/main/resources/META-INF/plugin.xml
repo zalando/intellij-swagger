@@ -90,7 +90,7 @@
                          level="ERROR"
                          implementationClass="org.zalando.intellij.swagger.inspection.reference.JsonReferenceInspection"/>
 
-        <referencesSearch implementation="org.zalando.intellij.swagger.reference.usage.ReferenceSearch"/>
+        <referencesSearch implementation="org.zalando.intellij.swagger.reference.usage.SpecReferenceSearch"/>
     </extensions>
     <actions>
         <action id="SwaggerPlugin.CreateSwaggerFile" class="CreateSwaggerFile" text="Swagger/OpenAPI File"
