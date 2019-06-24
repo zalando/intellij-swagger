@@ -1,6 +1,6 @@
 package org.zalando.intellij.swagger.file;
 
-public enum OpenApiFileType {
+public enum OpenApiFileType implements SpecFileType {
   UNDEFINED,
   MAIN,
 

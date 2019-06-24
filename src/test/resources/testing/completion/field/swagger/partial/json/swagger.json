@@ -61,6 +61,15 @@
           "404": {
             "$ref": "response_definitions_not_in_root.json#/responses/myResponse"
           },
+          "500": {
+            "description": "pet yaml",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "pet.yaml"
+              }
+            }
+          },
           "default": {
             "description": "unexpected error",
             "schema": {

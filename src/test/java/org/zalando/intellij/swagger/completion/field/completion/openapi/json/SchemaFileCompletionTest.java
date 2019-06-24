@@ -20,6 +20,22 @@ public class SchemaFileCompletionTest extends PartialFileCompletionTest {
     assertSchemaCompletions(completions);
   }
 
+  public void testThatReferencedYamlFileIsAutoCompleted() {
+    withSpecFiles("pet.yaml", "yaml_reference.json");
+
+    final AssertableList completions = new AssertableList(geCompletions("pet.yaml"));
+
+    assertSchemaCompletions(completions);
+  }
+
+  public void testThatReferencedJsonFileIsAutoCompleted() {
+    withSpecFiles("pet.json", "json_reference.yaml");
+
+    final AssertableList completions = new AssertableList(geCompletions("pet.json"));
+
+    assertSchemaCompletions(completions);
+  }
+
   private void assertSchemaCompletions(final AssertableList completions) {
     completions
         .assertContains(

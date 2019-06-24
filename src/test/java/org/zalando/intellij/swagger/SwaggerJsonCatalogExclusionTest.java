@@ -12,15 +12,15 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.junit.Test;
-import org.zalando.intellij.swagger.index.IndexService;
+import org.zalando.intellij.swagger.index.IndexFacade;
 
 public class SwaggerJsonCatalogExclusionTest {
 
-  private IndexService fakeIndexService = mock(IndexService.class);
+  private IndexFacade fakeIndexFacade = mock(IndexFacade.class);
   private ProjectManager fakeProjectManager = mock(ProjectManager.class);
 
   private final SwaggerJsonCatalogExclusion exclusion =
-      new SwaggerJsonCatalogExclusion(fakeIndexService, fakeProjectManager);
+      new SwaggerJsonCatalogExclusion(fakeIndexFacade, fakeProjectManager);
 
   @Test
   public void thatIndexIsNotUsedIfItIsNotReady() {
@@ -28,11 +28,11 @@ public class SwaggerJsonCatalogExclusionTest {
     final Project fakeProject = mock(Project.class);
 
     when(fakeProjectManager.getOpenProjects()).thenReturn(new Project[] {fakeProject});
-    when(fakeIndexService.isIndexReady(fakeProject)).thenReturn(false);
+    when(fakeIndexFacade.isIndexReady(fakeProject)).thenReturn(false);
 
     exclusion.isExcluded(fakeVirtualFile);
 
-    verify(fakeIndexService, never()).isMainSpecFile(any(), any());
+    verify(fakeIndexFacade, never()).isMainSpecFile(any(), any());
   }
 
   @Test
@@ -41,7 +41,7 @@ public class SwaggerJsonCatalogExclusionTest {
     final Project fakeProject = mock(Project.class);
 
     when(fakeProjectManager.getOpenProjects()).thenReturn(new Project[] {fakeProject});
-    when(fakeIndexService.isIndexReady(fakeProject)).thenReturn(false);
+    when(fakeIndexFacade.isIndexReady(fakeProject)).thenReturn(false);
 
     final boolean result = exclusion.isExcluded(fakeVirtualFile);
 
@@ -54,7 +54,7 @@ public class SwaggerJsonCatalogExclusionTest {
     final Project fakeProject = mock(Project.class);
 
     when(fakeProjectManager.getOpenProjects()).thenReturn(new Project[0]);
-    when(fakeIndexService.isIndexReady(fakeProject)).thenReturn(true);
+    when(fakeIndexFacade.isIndexReady(fakeProject)).thenReturn(true);
 
     final boolean result = exclusion.isExcluded(fakeVirtualFile);
 
@@ -67,8 +67,8 @@ public class SwaggerJsonCatalogExclusionTest {
     final Project fakeProject = mock(Project.class);
 
     when(fakeProjectManager.getOpenProjects()).thenReturn(new Project[] {fakeProject});
-    when(fakeIndexService.isIndexReady(fakeProject)).thenReturn(true);
-    when(fakeIndexService.isMainSpecFile(fakeVirtualFile, fakeProject)).thenReturn(true);
+    when(fakeIndexFacade.isIndexReady(fakeProject)).thenReturn(true);
+    when(fakeIndexFacade.isMainSpecFile(fakeVirtualFile, fakeProject)).thenReturn(true);
 
     final boolean result = exclusion.isExcluded(fakeVirtualFile);
 

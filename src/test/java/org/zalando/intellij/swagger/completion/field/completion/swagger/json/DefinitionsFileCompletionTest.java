@@ -17,39 +17,7 @@ public class DefinitionsFileCompletionTest extends SwaggerLightCodeInsightFixtur
     final AssertableList completions =
         new AssertableList(myFixture.getCompletionVariants("pet.json"));
 
-    completions
-        .assertContains(
-            "$ref",
-            "format",
-            "title",
-            "description",
-            "default",
-            "multipleOf",
-            "maximum",
-            "exclusiveMaximum",
-            "minimum",
-            "exclusiveMinimum",
-            "maxLength",
-            "minLength",
-            "pattern",
-            "maxItems",
-            "minItems",
-            "uniqueItems",
-            "maxProperties",
-            "minProperties",
-            "required",
-            "enum",
-            "type",
-            "items",
-            "allOf",
-            "properties",
-            "additionalProperties",
-            "discriminator",
-            "readOnly",
-            "xml",
-            "externalDocs",
-            "example")
-        .isOfSize(30);
+    assertSchemaCompletions(completions);
   }
 
   public void testThatAutoCompletionWorksForFileWithMultipleDefinitionsInRoot() {
@@ -62,39 +30,7 @@ public class DefinitionsFileCompletionTest extends SwaggerLightCodeInsightFixtur
     final AssertableList completions =
         new AssertableList(myFixture.getCompletionVariants("definitions_in_root.json"));
 
-    completions
-        .assertContains(
-            "$ref",
-            "format",
-            "title",
-            "description",
-            "default",
-            "multipleOf",
-            "maximum",
-            "exclusiveMaximum",
-            "minimum",
-            "exclusiveMinimum",
-            "maxLength",
-            "minLength",
-            "pattern",
-            "maxItems",
-            "minItems",
-            "uniqueItems",
-            "maxProperties",
-            "minProperties",
-            "required",
-            "enum",
-            "type",
-            "items",
-            "allOf",
-            "properties",
-            "additionalProperties",
-            "discriminator",
-            "readOnly",
-            "xml",
-            "externalDocs",
-            "example")
-        .isOfSize(30);
+    assertSchemaCompletions(completions);
   }
 
   public void testThatAutoCompletionWorksForFileWithMultipleDefinitionsNotInRoot() {
@@ -107,6 +43,22 @@ public class DefinitionsFileCompletionTest extends SwaggerLightCodeInsightFixtur
     final AssertableList completions =
         new AssertableList(myFixture.getCompletionVariants("definitions_not_in_root.json"));
 
+    assertSchemaCompletions(completions);
+  }
+
+  public void testThatAutoCompletionWorksForReferencedYamlFile() {
+    myFixture.copyFileToProject(PARTIAL_FILES_PATH + "/pet.yaml", "pet.yaml");
+    final VirtualFile swaggerFile =
+        myFixture.copyFileToProject(PARTIAL_FILES_PATH + "/swagger.json", "swagger.json");
+    myFixture.configureFromExistingVirtualFile(swaggerFile);
+
+    final AssertableList completions =
+        new AssertableList(myFixture.getCompletionVariants("pet.yaml"));
+
+    assertSchemaCompletions(completions);
+  }
+
+  private void assertSchemaCompletions(final AssertableList completions) {
     completions
         .assertContains(
             "$ref",

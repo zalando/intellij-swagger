@@ -1,4 +1,4 @@
-package org.zalando.intellij.swagger.reference;
+package org.zalando.intellij.swagger.reference.contributor;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
@@ -10,14 +10,12 @@ import com.intellij.patterns.StandardPatterns;
 import com.intellij.patterns.StringPattern;
 import com.intellij.psi.PsiReferenceRegistrar;
 import org.jetbrains.annotations.NotNull;
+import org.zalando.intellij.swagger.reference.SwaggerConstants;
 
 public class JsonReferenceContributor extends ReferenceContributor {
 
   private static final StringPattern URL_PATTERN =
       StandardPatterns.string().matches("^\"https://(.)*");
-
-  private static final StringPattern JSON_FILE_NAME_PATTERN =
-      StandardPatterns.string().matches("(.)*.json(.)*");
 
   @Override
   public void registerReferenceProviders(@NotNull final PsiReferenceRegistrar registrar) {
@@ -35,7 +33,7 @@ public class JsonReferenceContributor extends ReferenceContributor {
                 .withParent(psiElement(JsonProperty.class).withName(SwaggerConstants.REF_KEY)),
             psiElement().withSuperParent(3, psiElement(JsonProperty.class).withName("mapping")))
         .withText(StandardPatterns.string().contains(SwaggerConstants.REFERENCE_PREFIX))
-        .withoutText(JSON_FILE_NAME_PATTERN)
+        .withoutText(FILE_NAME_PATTERN)
         .withoutText(URL_PATTERN)
         .withLanguage(JsonLanguage.INSTANCE);
   }
@@ -44,14 +42,14 @@ public class JsonReferenceContributor extends ReferenceContributor {
     return psiElement(JsonLiteral.class)
         .withSuperParent(3, psiElement(JsonProperty.class).withName("mapping"))
         .withoutText(StandardPatterns.string().contains(SwaggerConstants.REFERENCE_PREFIX))
-        .withoutText(JSON_FILE_NAME_PATTERN)
+        .withoutText(FILE_NAME_PATTERN)
         .withoutText(URL_PATTERN)
         .withLanguage(JsonLanguage.INSTANCE);
   }
 
   private PsiElementPattern.Capture<JsonLiteral> filePattern() {
     return psiElement(JsonLiteral.class)
-        .withText(JSON_FILE_NAME_PATTERN)
+        .withText(FILE_NAME_PATTERN)
         .withoutText(URL_PATTERN)
         .withLanguage(JsonLanguage.INSTANCE);
   }

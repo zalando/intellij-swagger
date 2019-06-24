@@ -90,7 +90,7 @@ class JsonBuilderService {
       final VirtualFile containingFile,
       final Consumer<ResolvedRef> refConsumer,
       final VirtualFile specFile) {
-    if (isFileReference(ref.asText())) {
+    if (SwaggerFilesUtils.isFileReference(ref.asText())) {
       consumeFileReference(ref, containingFile, refConsumer, specFile);
     } else {
       consumeLocalReference(ref, containingFile, refConsumer, specFile);
@@ -146,15 +146,6 @@ class JsonBuilderService {
     } else {
       refConsumer.accept(resolvedRef);
     }
-  }
-
-  private boolean isFileReference(final String text) {
-    return text.endsWith(".json")
-        || text.contains(".json#/")
-        || text.endsWith(".yaml")
-        || text.contains(".yaml#/")
-        || text.endsWith(".yml")
-        || text.contains(".yml#/");
   }
 
   private ResolvedRef resolveFileRef(final String ref, final VirtualFile containingFile) {

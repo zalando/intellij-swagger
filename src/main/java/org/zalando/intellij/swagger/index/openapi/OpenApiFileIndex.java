@@ -14,11 +14,8 @@ import org.zalando.intellij.swagger.file.FileDetector;
 
 public class OpenApiFileIndex extends FileBasedIndexExtension<String, Set<String>> {
 
-  static final String MAIN_OPEN_API_FILE = "MAIN_OPEN_API_FILE";
-  static final String PARTIAL_OPEN_API_FILES = "PARTIAL_OPEN_API_FILES";
-
   static final ID<String, Set<String>> OPEN_API_INDEX_ID = ID.create("OpenApiFileIndex");
-  private static final int VERSION = 1;
+  private static final int VERSION = 2;
 
   private final FileDetector fileDetector = new FileDetector();
 
