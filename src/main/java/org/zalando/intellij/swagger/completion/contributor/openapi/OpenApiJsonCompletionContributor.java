@@ -12,6 +12,8 @@ import org.zalando.intellij.swagger.completion.field.FieldCompletion;
 import org.zalando.intellij.swagger.completion.field.completion.openapi.OpenApiFieldCompletionFactory;
 import org.zalando.intellij.swagger.completion.value.ValueCompletion;
 import org.zalando.intellij.swagger.completion.value.completion.openapi.OpenApiValueCompletionFactory;
+import org.zalando.intellij.swagger.extensions.completion.openapi.OpenApiCustomFieldCompletionFactory;
+import org.zalando.intellij.swagger.extensions.completion.openapi.OpenApiCustomValueCompletionFactory;
 import org.zalando.intellij.swagger.file.OpenApiFileType;
 import org.zalando.intellij.swagger.index.openapi.OpenApiIndexService;
 import org.zalando.intellij.swagger.traversal.JsonTraversal;
@@ -51,10 +53,18 @@ public class OpenApiJsonCompletionContributor extends CompletionContributor {
           if (jsonTraversal.isKey(psiElement)) {
             OpenApiFieldCompletionFactory.from(completionHelper, result)
                 .ifPresent(FieldCompletion::fill);
+            for (OpenApiCustomFieldCompletionFactory ep :
+                OpenApiCustomFieldCompletionFactory.EP_NAME.getExtensions()) {
+              ep.from(completionHelper, result).ifPresent(FieldCompletion::fill);
+            }
           } else {
             OpenApiValueCompletionFactory.from(
                     completionHelper, CompletionResultSetFactory.forValue(parameters, result))
                 .ifPresent(ValueCompletion::fill);
+            for (OpenApiCustomValueCompletionFactory ep :
+                OpenApiCustomValueCompletionFactory.EP_NAME.getExtensions()) {
+              ep.from(completionHelper, result).ifPresent(ValueCompletion::fill);
+            }
           }
 
           result.stopHere();

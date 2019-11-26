@@ -19,6 +19,8 @@
     <extensionPoints>
         <extensionPoint qualifiedName="org.zalando.intellij.swagger.customFieldFactory" interface="org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomFieldCompletionFactory"/>
         <extensionPoint qualifiedName="org.zalando.intellij.swagger.customValueFactory" interface="org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomValueCompletionFactory"/>
+        <extensionPoint qualifiedName="org.zalando.intellij.openapi.customFieldFactory" interface="org.zalando.intellij.swagger.extensions.completion.openapi.OpenApiCustomFieldCompletionFactory"/>
+        <extensionPoint qualifiedName="org.zalando.intellij.openapi.customValueFactory" interface="org.zalando.intellij.swagger.extensions.completion.openapi.OpenApiCustomValueCompletionFactory"/>
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">

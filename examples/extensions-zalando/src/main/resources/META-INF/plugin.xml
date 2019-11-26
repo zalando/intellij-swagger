@@ -19,6 +19,11 @@
         <customValueFactory implementation="org.zalando.intellij.swagger.examples.extensions.zalando.value.completion.swagger.SwaggerValueFactory" />
     </extensions>
 
+    <extensions defaultExtensionNs="org.zalando.intellij.openapi">
+        <customFieldFactory implementation="org.zalando.intellij.swagger.examples.extensions.zalando.field.completion.swagger.SwaggerFieldFactory" />
+        <customValueFactory implementation="org.zalando.intellij.swagger.examples.extensions.zalando.value.completion.swagger.SwaggerValueFactory" />
+    </extensions>
+
     <extensions defaultExtensionNs="com.intellij">
 
         <localInspection displayName="Zally Linter" groupName="Zally Linter" language="yaml"
