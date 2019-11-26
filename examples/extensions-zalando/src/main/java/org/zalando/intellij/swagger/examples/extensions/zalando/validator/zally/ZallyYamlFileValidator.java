@@ -14,6 +14,8 @@ import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import java.util.List;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.zalando.intellij.swagger.examples.extensions.zalando.validator.ZallySettingsGui;
@@ -21,9 +23,6 @@ import org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.
 import org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.model.Violation;
 import org.zalando.intellij.swagger.file.FileDetector;
 import org.zalando.intellij.swagger.traversal.path.PathFinder;
-
-import java.util.List;
-import java.util.Optional;
 
 public class ZallyYamlFileValidator extends LocalInspectionTool {
 

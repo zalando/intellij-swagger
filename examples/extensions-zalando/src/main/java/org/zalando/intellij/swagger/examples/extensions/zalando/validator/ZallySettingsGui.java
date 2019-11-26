@@ -85,7 +85,7 @@ public class ZallySettingsGui implements SearchableConfigurable {
 
   private boolean ztokenPathUpdated(final ZallySettings settings) {
     return settings.getZtokenPath() != null
-            && !settings.getZtokenPath().equals(ztokenPathTextField.getText());
+        && !settings.getZtokenPath().equals(ztokenPathTextField.getText());
   }
 
   private boolean ztokenPathCreated(final ZallySettings settings) {

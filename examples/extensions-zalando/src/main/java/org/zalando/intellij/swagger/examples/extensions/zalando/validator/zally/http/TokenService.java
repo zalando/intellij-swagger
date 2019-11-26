@@ -1,14 +1,13 @@
 package org.zalando.intellij.swagger.examples.extensions.zalando.validator.zally.http;
 
 import com.intellij.openapi.components.ServiceManager;
-import org.apache.commons.io.IOUtils;
-import org.zalando.intellij.swagger.examples.extensions.zalando.validator.ZallySettings;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import org.apache.commons.io.IOUtils;
+import org.zalando.intellij.swagger.examples.extensions.zalando.validator.ZallySettings;
 
 public class TokenService {
 
