@@ -156,4 +156,14 @@ public class CompletionTest extends JsonAndYamlCompletionTest {
   public void thatDefinitionsAreSuggestedWithUppercasePrefix() {
     getCaretCompletions("ref_uppercase").assertContains("#/definitions/Pets").isOfSize(1);
   }
+
+  @Test
+  public void testRefValueInOtherFileDefinitions() throws Exception {
+    getCaretCompletions("definition_ref_value_in_definition", "additional_definitions")
+        .assertContains(
+            "#/definitions/Bar",
+            "./" + fileNameWithExt("additional_definitions") + "#/definitions/ABar",
+            "./" + fileNameWithExt("additional_definitions") + "#/definitions/AFoo")
+        .isOfSize(4);
+  }
 }

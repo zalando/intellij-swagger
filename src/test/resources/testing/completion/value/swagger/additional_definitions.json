@@ -1,0 +1,9 @@
+{
+  "swagger": "2.0",
+  "definitions": {
+    "AFoo": {
+      "type": "object"
+    },
+    "ABar": {}
+  }
+}

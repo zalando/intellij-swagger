@@ -1,7 +1,14 @@
 package org.zalando.intellij.swagger.completion.value.completion.openapi;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ProjectFileIndex;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.search.FilenameIndex;
+import com.intellij.psi.search.GlobalSearchScope;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.zalando.intellij.swagger.completion.CompletionHelper;
@@ -24,11 +31,37 @@ class ComponentRefValueCompletion extends ValueCompletion {
 
   @Override
   public void fill() {
-    getSchemaKeys().forEach(this::addValue);
+    final PsiFile psiFile = completionHelper.getPsiFile().getOriginalFile();
+    final Project project = psiFile.getProject();
+    final PsiManager psiManager = PsiManager.getInstance(project);
+    final VirtualFile virtualFile = psiFile.getVirtualFile();
+
+    getSchemaKeys(psiFile).forEach(this::addValue);
+
+    if (virtualFile != null && virtualFile.getExtension() != null) {
+      final Module module = ProjectFileIndex.getInstance(project).getModuleForFile(virtualFile);
+
+      if (module != null) {
+        FilenameIndex.getAllFilesByExt(
+                project, virtualFile.getExtension(), GlobalSearchScope.moduleScope(module))
+            .forEach(
+                f -> {
+                  PsiFile file = psiManager.findFile(f);
+                  if (file != null && !psiFile.equals(file)) {
+                    getSchemaKeys(file)
+                        .stream()
+                        .map(
+                            v -> {
+                              return new StringValue("./" + file.getName() + v.getValue());
+                            })
+                        .forEach(this::addValue);
+                  }
+                });
+      }
+    }
   }
 
-  private List<Value> getSchemaKeys() {
-    final PsiFile psiFile = completionHelper.getPsiFile();
+  private List<Value> getSchemaKeys(PsiFile psiFile) {
     final String pathExpression = String.format("$.components.%s", refType);
 
     return new PathFinder()
