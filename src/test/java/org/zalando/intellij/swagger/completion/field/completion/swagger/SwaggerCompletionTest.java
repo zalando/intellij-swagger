@@ -570,4 +570,42 @@ public class SwaggerCompletionTest extends JsonAndYamlCompletionTest {
   public void thatSecurityFieldsInOperationAreSuggested() {
     getCaretCompletions("security_in_operation").assertContains("petstoreImplicit").isOfSize(1);
   }
+
+  @Test
+  public void thatAllOfSchemaIsSuggested() {
+    String[] expectedCompletion = {
+      "$ref",
+      "format",
+      "title",
+      "description",
+      "default",
+      "multipleOf",
+      "maximum",
+      "exclusiveMaximum",
+      "minimum",
+      "exclusiveMinimum",
+      "maxLength",
+      "minLength",
+      "pattern",
+      "maxItems",
+      "minItems",
+      "uniqueItems",
+      "maxProperties",
+      "minProperties",
+      "required",
+      "enum",
+      "type",
+      "items",
+      "allOf",
+      "properties",
+      "additionalProperties",
+      "discriminator",
+      "readOnly",
+      "xml",
+      "externalDocs",
+      "example"
+    };
+
+    getCaretCompletions("schema_all_of").assertContains(expectedCompletion).isOfSize(30);
+  }
 }
