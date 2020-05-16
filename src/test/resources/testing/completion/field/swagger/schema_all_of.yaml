@@ -1,0 +1,5 @@
+swagger: '2.0'
+definitions:
+  Schema1:
+    allOf:
+      - <caret>
