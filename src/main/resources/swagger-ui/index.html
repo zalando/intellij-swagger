@@ -33,12 +33,11 @@
   <body>
     <div id="swagger-ui"></div>
 
-    <script src="./swagger-ui-bundle.js"> </script>
-    <script src="./swagger-ui-standalone-preset.js"> </script>
+    <script src="./swagger-ui-bundle.js" charset="UTF-8"> </script>
+    <script src="./swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
     <script>
     window.onload = function() {
-
-      // Build a system
+      // Begin Swagger UI call region
       const ui = SwaggerUIBundle({
         spec: /*intellij-swagger-spec-start*//*intellij-swagger-spec-end*/,
         validatorUrl: null,
@@ -53,6 +52,7 @@
         ],
         layout: "StandaloneLayout"
       })
+      // End Swagger UI call region
 
       window.ui = ui
     }
