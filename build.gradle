@@ -62,3 +62,8 @@ spotless {
         googleJavaFormat('1.6')
     }
 }
+
+publishPlugin {
+    channels 'beta'
+    token = System.getenv("JETBRAINS_HUB_TOKEN")
+}
