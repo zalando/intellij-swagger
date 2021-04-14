@@ -6,6 +6,7 @@ import com.intellij.json.psi.JsonElementVisitor;
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.json.psi.JsonStringLiteral;
 import com.intellij.json.psi.JsonValue;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -17,12 +18,6 @@ import org.zalando.intellij.swagger.intention.reference.CreateJsonReferenceInten
 
 public class JsonReferenceInspection extends ReferenceInspection {
 
-  private final IndexFacade indexFacade;
-
-  public JsonReferenceInspection(final IndexFacade indexFacade) {
-    this.indexFacade = indexFacade;
-  }
-
   @NotNull
   @Override
   public PsiElementVisitor buildVisitor(
@@ -32,6 +27,7 @@ public class JsonReferenceInspection extends ReferenceInspection {
     final PsiFile file = holder.getFile();
     final VirtualFile virtualFile = file.getVirtualFile();
     final Project project = holder.getProject();
+    IndexFacade indexFacade = ServiceManager.getService(IndexFacade.class);
 
     boolean checkRefs =
         indexFacade.isMainSpecFile(virtualFile, project)

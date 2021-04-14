@@ -1,7 +1,10 @@
 package org.zalando.intellij.swagger.reference.usage;
 
+import java.util.Optional;
+
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.openapi.application.QueryExecutorBase;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -10,7 +13,6 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.util.Processor;
-import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.zalando.intellij.swagger.index.IndexFacade;
@@ -21,12 +23,9 @@ public class SpecReferenceSearch
 
   private static final boolean CASE_SENSITIVE = false;
   private static final boolean REQUIRE_READ_ACTION = true;
-  private IndexFacade indexFacade;
 
-  public SpecReferenceSearch(final IndexFacade indexFacade) {
+  public SpecReferenceSearch() {
     super(REQUIRE_READ_ACTION);
-
-    this.indexFacade = indexFacade;
   }
 
   @Override
@@ -37,7 +36,7 @@ public class SpecReferenceSearch
 
     final Project project = queryParameters.getProject();
 
-    if (indexFacade.isIndexReady(project)) {
+    if (ServiceManager.getService(IndexFacade.class).isIndexReady(project)) {
       if (isSpec(elementToSearch, project)) {
         process(queryParameters, elementToSearch, project);
       }
@@ -69,6 +68,7 @@ public class SpecReferenceSearch
     if (elementToSearch instanceof YAMLKeyValue || elementToSearch instanceof JsonProperty) {
       final VirtualFile virtualFile = elementToSearch.getContainingFile().getVirtualFile();
 
+      IndexFacade indexFacade = ServiceManager.getService(IndexFacade.class);
       return indexFacade.isMainSpecFile(virtualFile, project)
           || indexFacade.isPartialSpecFile(virtualFile, project);
     }

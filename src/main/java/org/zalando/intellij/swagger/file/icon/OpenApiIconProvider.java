@@ -1,13 +1,8 @@
 package org.zalando.intellij.swagger.file.icon;
 
-import javax.swing.*;
-import org.zalando.intellij.swagger.index.openapi.OpenApiIndexService;
+import javax.swing.Icon;
 
 public class OpenApiIconProvider extends SpecIconProvider {
-
-  protected OpenApiIconProvider(final OpenApiIndexService openApiIndexService) {
-    super(openApiIndexService);
-  }
 
   @Override
   protected Icon getIcon() {

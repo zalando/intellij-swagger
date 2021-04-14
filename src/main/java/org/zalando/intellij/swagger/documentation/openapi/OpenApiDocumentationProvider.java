@@ -1,11 +1,13 @@
 package org.zalando.intellij.swagger.documentation.openapi;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import java.util.Optional;
-import java.util.stream.Stream;
 import org.jetbrains.annotations.Nullable;
 import org.zalando.intellij.swagger.documentation.ApiDocumentProvider;
 import org.zalando.intellij.swagger.file.OpenApiFileType;
@@ -14,12 +16,6 @@ import org.zalando.intellij.swagger.traversal.path.openapi.PathResolver;
 import org.zalando.intellij.swagger.traversal.path.openapi.PathResolverFactory;
 
 public class OpenApiDocumentationProvider extends ApiDocumentProvider {
-
-  private final OpenApiIndexService openApiIndexService;
-
-  public OpenApiDocumentationProvider(final OpenApiIndexService openApiIndexService) {
-    this.openApiIndexService = openApiIndexService;
-  }
 
   @Nullable
   @Override
@@ -38,7 +34,7 @@ public class OpenApiDocumentationProvider extends ApiDocumentProvider {
               final Project project = maybeProject.get();
 
               final Optional<OpenApiFileType> maybeFileType =
-                  openApiIndexService.getFileType(project, virtualFile);
+                      ServiceManager.getService(OpenApiIndexService.class).getFileType(project, virtualFile);
 
               return maybeFileType.map(
                   openApiFileType -> {

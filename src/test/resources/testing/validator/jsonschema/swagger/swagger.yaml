@@ -5,7 +5,7 @@ info:
   license:
     name: MIT
 host: petstore.swagger.io
-basePath: <error descr="String is violating the pattern: '^/'">v1</error>
+basePath: <error descr="String violates the pattern: '^/'">v1</error>
 schemes:
 - http
 consumes:

@@ -1,17 +1,13 @@
 package org.zalando.intellij.swagger;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
+import com.intellij.mock.MockApplication;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.vfs.VirtualFile;
+import static org.junit.Assert.*;
+import org.junit.Before;
 import org.junit.Test;
+import static org.mockito.Mockito.*;
 import org.zalando.intellij.swagger.index.IndexFacade;
 
 public class SwaggerJsonCatalogExclusionTest {
@@ -19,8 +15,14 @@ public class SwaggerJsonCatalogExclusionTest {
   private IndexFacade fakeIndexFacade = mock(IndexFacade.class);
   private ProjectManager fakeProjectManager = mock(ProjectManager.class);
 
-  private final SwaggerJsonCatalogExclusion exclusion =
-      new SwaggerJsonCatalogExclusion(fakeIndexFacade, fakeProjectManager);
+  private final SwaggerJsonCatalogExclusion exclusion = new SwaggerJsonCatalogExclusion();
+
+  @Before
+  public void setUp() {
+    MockApplication app = MockApplication.setUp(() -> {});
+    app.registerService(IndexFacade.class, fakeIndexFacade);
+    app.registerService(ProjectManager.class, fakeProjectManager);
+  }
 
   @Test
   public void thatIndexIsNotUsedIfItIsNotReady() {

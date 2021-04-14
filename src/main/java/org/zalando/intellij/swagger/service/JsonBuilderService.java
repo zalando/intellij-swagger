@@ -1,20 +1,22 @@
 package org.zalando.intellij.swagger.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.function.Consumer;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.RecursionGuard;
 import com.intellij.openapi.util.RecursionManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import java.io.File;
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.function.Consumer;
 import org.apache.commons.lang.StringUtils;
 import org.zalando.intellij.swagger.reference.SwaggerConstants;
 
@@ -129,12 +131,12 @@ class JsonBuilderService {
       final ResolvedRef resolvedRef) {
     if (resolvedRef.isValid()) {
       final JsonNode node =
-          recursionGuard.doPreventingRecursion(
-              Pair.create(resolvedRef.getJsonNode(), resolvedRef.getContainingFile()),
-              memoize,
-              () ->
-                  buildRecursive(
-                      resolvedRef.getJsonNode(), resolvedRef.getContainingFile(), specFile));
+              (JsonNode) recursionGuard.doPreventingRecursion(
+                  Pair.create(resolvedRef.getJsonNode(), resolvedRef.getContainingFile()),
+                  memoize,
+                      (Computable<JsonNode>) () ->
+                              buildRecursive(
+                                      resolvedRef.getJsonNode(), resolvedRef.getContainingFile(), specFile));
 
       // "doPreventingRecursion" returns null in case of a circular reference
       if (node != null) {

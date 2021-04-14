@@ -1,13 +1,15 @@
 package org.zalando.intellij.swagger.ui.provider;
 
-import static org.mockito.Mockito.*;
+import java.util.Optional;
 
+import com.intellij.mock.MockApplication;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
-import java.util.Optional;
+import org.junit.Before;
 import org.junit.Test;
+import static org.mockito.Mockito.*;
 import org.zalando.intellij.swagger.index.IndexFacade;
 import org.zalando.intellij.swagger.service.PsiFileService;
 import org.zalando.intellij.swagger.service.SwaggerFileService;
@@ -15,12 +17,22 @@ import org.zalando.intellij.swagger.service.SwaggerFileService;
 public class FileDocumentListenerTest {
 
   private IndexFacade fakeIndexFacade = mock(IndexFacade.class);
+
   private SwaggerFileService fakeSwaggerFileService = mock(SwaggerFileService.class);
+
   private PsiFileService fakePsiFileService = mock(PsiFileService.class);
+
   private Document fakeDocument = mock(Document.class);
 
-  private final FileDocumentListener listener =
-      new FileDocumentListener(fakeIndexFacade, fakeSwaggerFileService, fakePsiFileService);
+  private final FileDocumentListener listener = new FileDocumentListener();
+
+  @Before
+  public void setUp() {
+    MockApplication app = MockApplication.setUp(() -> {});
+    app.registerService(IndexFacade.class, fakeIndexFacade);
+    app.registerService(PsiFileService.class, fakePsiFileService);
+    app.registerService(SwaggerFileService.class, fakeSwaggerFileService);
+  }
 
   @Test
   public void thatSwaggerUiConversionIsCalled() {
