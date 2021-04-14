@@ -1,7 +1,5 @@
 package org.zalando.intellij.swagger.file;
 
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.util.LocalFileUrl;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -16,6 +14,10 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Collections;
+import java.util.Objects;
+
+import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.util.LocalFileUrl;
 import org.jetbrains.annotations.NotNull;
 
 public class SwaggerUiCreator {
@@ -58,7 +60,7 @@ public class SwaggerUiCreator {
   }
 
   private void copyFromJar(final Path target) throws URISyntaxException, IOException {
-    URI resource = getClass().getResource("").toURI();
+    URI resource = Objects.requireNonNull(getClass().getResource(""), "resource").toURI();
     FileSystem fileSystem =
         FileSystems.newFileSystem(resource, Collections.<String, String>emptyMap());
 
