@@ -27,7 +27,7 @@ See the [Zalando extension example](https://github.com/zalando/intellij-swagger/
 
 Developing the Swagger Plugin is easy, just execute the following command:
 
-```./gradlew runIdea```
+```./gradlew runIde```
 
 This will start IntelliJ IDEA with the plugin installed.
 

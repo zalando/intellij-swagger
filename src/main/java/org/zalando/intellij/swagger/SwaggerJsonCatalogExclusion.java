@@ -12,7 +12,8 @@ public class SwaggerJsonCatalogExclusion implements JsonSchemaCatalogExclusion {
 
   @Override
   public boolean isExcluded(@NotNull VirtualFile file) {
-    final Project[] openProjects = ServiceManager.getService(ProjectManager.class).getOpenProjects();
+    final Project[] openProjects =
+        ServiceManager.getService(ProjectManager.class).getOpenProjects();
 
     IndexFacade indexFacade = ServiceManager.getService(IndexFacade.class);
     if (openProjects.length > 0 && indexFacade.isIndexReady(openProjects[0])) {

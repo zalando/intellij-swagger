@@ -1,12 +1,11 @@
 package org.zalando.intellij.swagger.file.icon;
 
-import javax.swing.Icon;
-
 import com.intellij.ide.IconProvider;
 import com.intellij.json.psi.JsonFile;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
+import javax.swing.Icon;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.yaml.psi.YAMLFile;

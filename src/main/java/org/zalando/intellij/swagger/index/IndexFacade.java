@@ -1,11 +1,10 @@
 package org.zalando.intellij.swagger.index;
 
-import java.util.Optional;
-
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import java.util.Optional;
 import org.zalando.intellij.swagger.index.openapi.OpenApiIndexService;
 import org.zalando.intellij.swagger.index.swagger.SwaggerIndexService;
 import org.zalando.intellij.swagger.service.intellij.DumbService;
@@ -32,12 +31,15 @@ public class IndexFacade {
 
   public boolean isMainSpecFile(final VirtualFile virtualFile, final Project project) {
     return ServiceManager.getService(OpenApiIndexService.class).isMainSpecFile(virtualFile, project)
-        || ServiceManager.getService(SwaggerIndexService.class).isMainSpecFile(virtualFile, project);
+        || ServiceManager.getService(SwaggerIndexService.class)
+            .isMainSpecFile(virtualFile, project);
   }
 
   public boolean isPartialSpecFile(final VirtualFile virtualFile, final Project project) {
-    return ServiceManager.getService(OpenApiIndexService.class).isPartialSpecFile(virtualFile, project)
-        || ServiceManager.getService(SwaggerIndexService.class).isPartialSpecFile(virtualFile, project);
+    return ServiceManager.getService(OpenApiIndexService.class)
+            .isPartialSpecFile(virtualFile, project)
+        || ServiceManager.getService(SwaggerIndexService.class)
+            .isPartialSpecFile(virtualFile, project);
   }
 
   public boolean isIndexReady(final Project project) {

@@ -1,7 +1,5 @@
 package org.zalando.intellij.swagger.reference.usage;
 
-import java.util.Optional;
-
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.openapi.application.QueryExecutorBase;
 import com.intellij.openapi.components.ServiceManager;
@@ -13,6 +11,7 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.util.Processor;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.yaml.psi.YAMLKeyValue;
 import org.zalando.intellij.swagger.index.IndexFacade;

@@ -1,15 +1,15 @@
 package org.zalando.intellij.swagger.ui.provider;
 
-import java.util.Optional;
+import static org.mockito.Mockito.*;
 
 import com.intellij.mock.MockApplication;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Mockito.*;
 import org.zalando.intellij.swagger.index.IndexFacade;
 import org.zalando.intellij.swagger.service.PsiFileService;
 import org.zalando.intellij.swagger.service.SwaggerFileService;

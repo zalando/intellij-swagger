@@ -6,7 +6,7 @@ buildscript {
 
 plugins {
     id "org.jetbrains.intellij" version "0.3.4"
-    id "com.diffplug.gradle.spotless" version "3.15.0"
+    id "com.diffplug.spotless" version "5.12.4"
 }
 
 apply plugin: 'idea'

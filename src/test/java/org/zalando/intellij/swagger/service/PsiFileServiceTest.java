@@ -1,17 +1,17 @@
 package org.zalando.intellij.swagger.service;
 
-import java.util.Optional;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import com.intellij.mock.MockApplication;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.psi.PsiFile;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Mockito.*;
 import org.zalando.intellij.swagger.service.intellij.PsiDocumentManager;
 
 public class PsiFileServiceTest {

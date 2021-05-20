@@ -18,7 +18,7 @@ public class CreateReferenceIntentionActionTest extends IntentionActionTest {
   @NotNull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
-    return new LocalInspectionTool[] { new YamlReferenceInspection() };
+    return new LocalInspectionTool[] {new YamlReferenceInspection()};
   }
 
   public void test() {
