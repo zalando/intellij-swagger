@@ -59,11 +59,12 @@ public class SwaggerUiCreator {
   }
 
   private void copyFromJar(final Path target) throws URISyntaxException, IOException {
-    URI resource = Objects.requireNonNull(getClass().getResource(""), "resource").toURI();
+    String resourcePath = "/" + SWAGGER_UI_FOLDER_NAME;
+    URI resource = Objects.requireNonNull(getClass().getResource(resourcePath), "resource").toURI();
     FileSystem fileSystem =
         FileSystems.newFileSystem(resource, Collections.<String, String>emptyMap());
 
-    final Path jarPath = fileSystem.getPath("/" + SWAGGER_UI_FOLDER_NAME);
+    final Path jarPath = fileSystem.getPath(resourcePath);
 
     Files.walkFileTree(
         jarPath,
