@@ -8,9 +8,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.zalando.intellij.swagger.index.IndexFacade;
 
+@Ignore
 public class SwaggerJsonCatalogExclusionTest {
 
   private IndexFacade fakeIndexFacade = mock(IndexFacade.class);

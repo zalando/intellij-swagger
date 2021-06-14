@@ -67,7 +67,3 @@ publishPlugin {
     channels 'beta'
     token = System.getenv("JETBRAINS_HUB_TOKEN")
 }
-
-test {
-    forkEvery = 1
-}

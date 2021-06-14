@@ -9,11 +9,13 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import java.util.Optional;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.zalando.intellij.swagger.index.IndexFacade;
 import org.zalando.intellij.swagger.service.PsiFileService;
 import org.zalando.intellij.swagger.service.SwaggerFileService;
 
+@Ignore
 public class FileDocumentListenerTest {
 
   private IndexFacade fakeIndexFacade = mock(IndexFacade.class);

@@ -11,9 +11,11 @@ import com.intellij.openapi.project.ProjectManager;
 import com.intellij.psi.PsiFile;
 import java.util.Optional;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.zalando.intellij.swagger.service.intellij.PsiDocumentManager;
 
+@Ignore
 public class PsiFileServiceTest {
 
   private final PsiDocumentManager fakePsiDocumentManager = mock(PsiDocumentManager.class);

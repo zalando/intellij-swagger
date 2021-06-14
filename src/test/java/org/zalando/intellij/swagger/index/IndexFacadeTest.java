@@ -8,11 +8,13 @@ import com.intellij.mock.MockApplication;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.zalando.intellij.swagger.index.openapi.OpenApiIndexService;
 import org.zalando.intellij.swagger.index.swagger.SwaggerIndexService;
 import org.zalando.intellij.swagger.service.intellij.DumbService;
 
+@Ignore
 public class IndexFacadeTest {
 
   private final OpenApiIndexService fakeOpenApiIndexService = mock(OpenApiIndexService.class);
