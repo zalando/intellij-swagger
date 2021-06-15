@@ -8,6 +8,7 @@ import com.intellij.mock.MockApplication;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.project.ex.ProjectManagerEx;
 import com.intellij.psi.PsiFile;
 import java.util.Optional;
 import org.junit.Before;
@@ -19,7 +20,7 @@ import org.zalando.intellij.swagger.service.intellij.PsiDocumentManager;
 public class PsiFileServiceTest {
 
   private final PsiDocumentManager fakePsiDocumentManager = mock(PsiDocumentManager.class);
-  private final ProjectManager fakeProjectManager = mock(ProjectManager.class);
+  private final ProjectManagerEx fakeProjectManager = mock(ProjectManagerEx.class);
   private final Document fakeDocument = mock(Document.class);
 
   private final PsiFileService service = new PsiFileService();

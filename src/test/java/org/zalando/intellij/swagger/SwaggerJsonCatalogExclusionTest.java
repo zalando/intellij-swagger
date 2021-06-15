@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import com.intellij.mock.MockApplication;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.project.ex.ProjectManagerEx;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -16,7 +17,7 @@ import org.zalando.intellij.swagger.index.IndexFacade;
 public class SwaggerJsonCatalogExclusionTest {
 
   private IndexFacade fakeIndexFacade = mock(IndexFacade.class);
-  private ProjectManager fakeProjectManager = mock(ProjectManager.class);
+  private ProjectManagerEx fakeProjectManager = mock(ProjectManagerEx.class);
 
   private final SwaggerJsonCatalogExclusion exclusion = new SwaggerJsonCatalogExclusion();
 

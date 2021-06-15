@@ -4,11 +4,9 @@ import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.testFramework.PsiTestUtil;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Ignore;
 import org.zalando.intellij.swagger.inspection.reference.YamlReferenceInspection;
 import org.zalando.intellij.swagger.intention.IntentionActionTest;
 
-@Ignore
 public class CreateReferenceIntentionActionTest extends IntentionActionTest {
 
   @Override

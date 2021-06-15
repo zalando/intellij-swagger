@@ -5,6 +5,8 @@ import static org.mockito.Mockito.*;
 import com.intellij.mock.MockApplication;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.project.ex.ProjectManagerEx;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import java.util.Optional;
@@ -26,6 +28,8 @@ public class FileDocumentListenerTest {
 
   private Document fakeDocument = mock(Document.class);
 
+  private ProjectManagerEx fakeProjectManager = mock(ProjectManagerEx.class);
+
   private final FileDocumentListener listener = new FileDocumentListener();
 
   @Before
@@ -34,6 +38,7 @@ public class FileDocumentListenerTest {
     app.registerService(IndexFacade.class, fakeIndexFacade);
     app.registerService(PsiFileService.class, fakePsiFileService);
     app.registerService(SwaggerFileService.class, fakeSwaggerFileService);
+    app.registerService(ProjectManager.class, fakeProjectManager);
   }
 
   @Test
