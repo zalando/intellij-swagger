@@ -22,8 +22,9 @@ public abstract class JsonAndYamlCompletionTest {
   }
 
   @NotNull
-  protected final AssertableList getCaretCompletions(@NotNull String testFileNoExt) {
-    return myFixture.getCompletions(testFileNoExt, myFormat);
+  protected final AssertableList getCaretCompletions(
+      @NotNull String testFileNoExt, String... otherFiles) {
+    return myFixture.getCompletions(testFileNoExt, myFormat, otherFiles);
   }
 
   protected final void completeAndCheckResultsByFile(@NotNull String inputFileNoExt) {
@@ -35,6 +36,11 @@ public abstract class JsonAndYamlCompletionTest {
       @NotNull String inputFileNoExt, @NotNull String afterFileNoExt) {
     myFixture.complete(inputFileNoExt, myFormat);
     myFixture.checkResultByFile(afterFileNoExt, myFormat);
+  }
+
+  @NotNull
+  protected final String fileNameWithExt(@NotNull String fileName) {
+    return this.myFormat.getFileNameWithExtension(fileName);
   }
 
   @NotNull

@@ -11,7 +11,10 @@ import com.intellij.testFramework.fixtures.impl.LightTempDirTestFixtureImpl;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 import org.hamcrest.core.IsNull;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
@@ -49,16 +52,24 @@ public class SwaggerFixture {
   }
 
   @NotNull
-  private AssertableList getCompletions(@NotNull String caretFileName) {
+  private AssertableList getCompletions(@NotNull String caretFileName, String... otherFiles) {
+    ArrayList<String> list = new ArrayList<String>();
+    list.add(caretFileName);
+    list.addAll(Arrays.asList(otherFiles));
+    myCodeInsightFixture.configureByFiles(list.toArray(new String[0]));
+
     List<String> results = myCodeInsightFixture.getCompletionVariants(caretFileName);
     Assert.assertThat(results, IsNull.notNullValue());
     return new AssertableList(results);
   }
 
   @NotNull
-  public AssertableList getCompletions(@NotNull String caretFileNoExt, @NotNull Format fileKind) {
+  public AssertableList getCompletions(
+      @NotNull String caretFileNoExt, @NotNull Format fileKind, String... otherFiles) {
     String fullName = fileKind.getFileNameWithExtension(caretFileNoExt);
-    return getCompletions(fullName);
+    return getCompletions(
+        fullName,
+        Stream.of(otherFiles).map(fileKind::getFileNameWithExtension).toArray(String[]::new));
   }
 
   public void complete(@NotNull final String testFileNoExt, @NotNull final Format fileKind) {

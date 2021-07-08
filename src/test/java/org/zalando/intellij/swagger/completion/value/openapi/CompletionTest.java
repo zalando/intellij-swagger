@@ -144,4 +144,13 @@ public class CompletionTest extends JsonAndYamlCompletionTest {
     getCaretCompletions("mapping_ref")
         .assertContains("#/components/schemas/Pet", "#/components/schemas/Dog");
   }
+
+  @Test
+  public void thatSchemaRefValueInOtherFilesAreSuggested() {
+    getCaretCompletions("schema_ref", "additional_ref")
+        .assertContains(
+            "#/components/schemas/Pet",
+            "./" + fileNameWithExt("additional_ref") + "#/components/schemas/PetA")
+        .isOfSize(2);
+  }
 }
