@@ -37,3 +37,4 @@ bin/
 out/
 
 .DS_Store
+.env
