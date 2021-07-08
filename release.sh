@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -eux
 
 if [ -z "$1" ]
   then
@@ -6,21 +7,19 @@ if [ -z "$1" ]
     exit 1
 fi
 
-if [ -z "$2" ]
+export $(grep -v '^\#' .env)
+if [ -z "$JETBRAINS_HUB_TOKEN" ]
   then
-    echo "Missing version for 162.x branch"
+    echo "Please put JETBRAINS_HUB_TOKEN in .env: JETBRAINS_HUB_TOKEN=<token>"
     exit 1
 fi
 
+NEW_VERSION=$1
+
+sed -i "s/<version>.*<\/version>/<version>$NEW_VERSION<\/version>/g" src/main/resources/META-INF/plugin.xml
+
 git checkout master
-./gradlew updateVersion -Pversion=$1
-./gradlew buildPlugin -Pversion=$1
+./gradlew publishPlugin -Pversion=$NEW_VERSION -x buildSearchableOptions
 git add src/main/resources/META-INF/plugin.xml
 git commit -m "Bump version"
 
-git checkout 162.x
-./gradlew updateVersion -Pversion=$2
-./gradlew buildPlugin -Pversion=$2
-git add src/main/resources/META-INF/plugin.xml
-git commit -m "Bump version"
-git checkout master

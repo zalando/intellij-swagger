@@ -2,6 +2,7 @@ package org.zalando.intellij.swagger.inspection.reference;
 
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -17,12 +18,6 @@ import org.zalando.intellij.swagger.intention.reference.CreateYamlReferenceInten
 
 public class YamlReferenceInspection extends ReferenceInspection {
 
-  private final IndexFacade indexFacade;
-
-  public YamlReferenceInspection(final IndexFacade indexFacade) {
-    this.indexFacade = indexFacade;
-  }
-
   @NotNull
   @Override
   public PsiElementVisitor buildVisitor(
@@ -33,6 +28,7 @@ public class YamlReferenceInspection extends ReferenceInspection {
     final VirtualFile virtualFile = file.getVirtualFile();
     final Project project = holder.getProject();
 
+    IndexFacade indexFacade = ServiceManager.getService(IndexFacade.class);
     boolean checkRefs =
         indexFacade.isMainSpecFile(virtualFile, project)
             || indexFacade.isPartialSpecFile(virtualFile, project);

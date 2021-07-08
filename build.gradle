@@ -1,46 +1,53 @@
 buildscript {
     repositories {
         mavenCentral()
+        maven {
+            url 'https://www.jetbrains.com/intellij-repository/releases'
+        }
     }
 }
 
 plugins {
-    id "org.jetbrains.intellij" version "0.4.1"
+    id 'org.jetbrains.intellij' version '0.7.3'
     id 'jacoco'
     id 'com.github.kt3k.coveralls' version '2.7.1'
-    id "com.diffplug.gradle.spotless" version "3.15.0"
+    id "com.diffplug.spotless" version "5.12.4"
+    id 'idea'
+    id 'java'
 }
-
-apply plugin: 'idea'
-apply plugin: 'org.jetbrains.intellij'
-apply plugin: 'java'
 
 intellij {
     plugins 'yaml' //Bundled plugin dependencies
     pluginName 'intellij-swagger'
     updateSinceUntilBuild false
-    version '2018.3'
+    version '2021.1'
+    plugins = ['com.intellij.java', 'org.jetbrains.plugins.yaml']
 }
 
 group 'org.zalando.intellij'
 version = project.hasProperty('version') ? project['version'] : '0.0.1'
 
-apply plugin: 'java'
-sourceCompatibility = 1.8
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://www.jetbrains.com/intellij-repository/releases'
+    }
 }
 
 dependencies {
-    compile 'commons-io:commons-io:2.5'
-    compile 'com.google.code.gson:gson:2.6.2'
-    compile 'com.google.guava:guava:19.0'
-    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.7.4'
-    compile 'com.fasterxml.jackson.core:jackson-core:2.7.5'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.5'
-    testCompile group: 'junit', name: 'junit', version: '4.11'
-    testCompile 'org.mockito:mockito-all:1.10.19'
+    implementation 'commons-io:commons-io:2.8.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.guava:guava:30.1.1-jre'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.3'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.12.3'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.3'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.0-M1'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.10.0'
 }
 
 jacocoTestReport {
@@ -54,4 +61,9 @@ spotless {
     java {
         googleJavaFormat('1.6')
     }
+}
+
+publishPlugin {
+    channels 'stable'
+    token = System.getenv("JETBRAINS_HUB_TOKEN")
 }

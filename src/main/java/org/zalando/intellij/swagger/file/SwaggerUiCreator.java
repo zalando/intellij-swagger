@@ -16,6 +16,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Collections;
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 public class SwaggerUiCreator {
@@ -58,11 +59,12 @@ public class SwaggerUiCreator {
   }
 
   private void copyFromJar(final Path target) throws URISyntaxException, IOException {
-    URI resource = getClass().getResource("").toURI();
+    String resourcePath = "/" + SWAGGER_UI_FOLDER_NAME;
+    URI resource = Objects.requireNonNull(getClass().getResource(resourcePath), "resource").toURI();
     FileSystem fileSystem =
         FileSystems.newFileSystem(resource, Collections.<String, String>emptyMap());
 
-    final Path jarPath = fileSystem.getPath("/" + SWAGGER_UI_FOLDER_NAME);
+    final Path jarPath = fileSystem.getPath(resourcePath);
 
     Files.walkFileTree(
         jarPath,

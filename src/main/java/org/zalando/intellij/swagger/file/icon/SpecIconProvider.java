@@ -5,19 +5,13 @@ import com.intellij.json.psi.JsonFile;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
-import javax.swing.*;
+import javax.swing.Icon;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.yaml.psi.YAMLFile;
 import org.zalando.intellij.swagger.index.IndexService;
 
 public abstract class SpecIconProvider extends IconProvider {
-
-  private final IndexService indexService;
-
-  protected SpecIconProvider(final IndexService indexService) {
-    this.indexService = indexService;
-  }
 
   @Nullable
   @Override
@@ -27,6 +21,7 @@ public abstract class SpecIconProvider extends IconProvider {
       final VirtualFile virtualFile = element.getContainingFile().getVirtualFile();
       final Project project = element.getProject();
 
+      IndexService indexService = getIndexService();
       if (indexService.isMainSpecFile(virtualFile, project)
           || indexService.isPartialSpecFile(virtualFile, project)) {
         return getIcon();
@@ -35,6 +30,8 @@ public abstract class SpecIconProvider extends IconProvider {
 
     return null;
   }
+
+  protected abstract IndexService getIndexService();
 
   protected abstract Icon getIcon();
 }

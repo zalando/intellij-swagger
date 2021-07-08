@@ -7,11 +7,13 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileEditor.impl.LoadTextUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.LocalFileUrl;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -29,6 +31,8 @@ public class SwaggerFileService {
   private final ExecutorService executorService = Executors.newSingleThreadExecutor();
   private final JsonBuilderService jsonBuilderService = new JsonBuilderService();
   private final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+
+  private static final Logger log = Logger.getInstance(SwaggerFileService.class);
 
   public Optional<Path> convertSwaggerToHtml(@NotNull final VirtualFile virtualFile) {
     try {
@@ -58,11 +62,12 @@ public class SwaggerFileService {
   }
 
   private void notifyFailure(final Exception exception) {
+    log.info("Error generating Swagger UI", exception);
     Notification notification =
         new Notification(
             "Swagger UI",
             "Could not generate Swagger UI",
-            exception.getMessage(),
+            Objects.toString(exception),
             NotificationType.WARNING);
 
     Notifications.Bus.notify(notification);
