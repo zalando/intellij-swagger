@@ -64,6 +64,6 @@ spotless {
 }
 
 publishPlugin {
-    channels 'beta'
+    channels 'stable'
     token = System.getenv("JETBRAINS_HUB_TOKEN")
 }
