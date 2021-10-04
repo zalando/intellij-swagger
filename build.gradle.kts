@@ -6,7 +6,7 @@ buildscript {
 }
 
 plugins {
-    id("org.jetbrains.intellij") version "1.1.6"
+    id("org.jetbrains.intellij") version "1.2.0"
     id("jacoco")
     id("com.github.kt3k.coveralls") version "2.7.1"
     id("com.diffplug.spotless") version "5.12.4"
@@ -53,7 +53,7 @@ tasks {
         }
     }
     publishPlugin {
-        channels.set(listOf("stable"))
+        channels.set(listOf("beta"))
         token.set(System.getenv("JETBRAINS_HUB_TOKEN"))
     }
 }
