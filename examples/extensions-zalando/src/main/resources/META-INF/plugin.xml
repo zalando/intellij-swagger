@@ -12,7 +12,7 @@
         such as <a href="https://opensource.zalando.com/zally">Zally</a> linting.
     ]]></description>
 
-    <idea-version since-build="183"/>
+    <idea-version since-build="211"/>
 
     <extensions defaultExtensionNs="org.zalando.intellij.swagger">
         <customFieldFactory implementation="org.zalando.intellij.swagger.examples.extensions.zalando.field.completion.swagger.SwaggerFieldFactory" />
