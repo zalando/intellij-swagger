@@ -57,7 +57,8 @@ public class YamlSchemaInspection extends LocalInspectionTool {
 
     JsonSchemaService service = JsonSchemaService.Impl.get(file.getProject());
 
-    final URL url = ResourceUtil.getResource(getClass(), "schemas", schemaFileName);
+    final URL url =
+        ResourceUtil.getResource(getClass().getClassLoader(), "schemas", schemaFileName);
     final VirtualFile virtualFile = VfsUtil.findFileByURL(url);
 
     final JsonSchemaObject schema = service.getSchemaObjectForSchemaFile(virtualFile);
