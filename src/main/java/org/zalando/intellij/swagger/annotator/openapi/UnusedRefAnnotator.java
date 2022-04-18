@@ -1,7 +1,6 @@
 package org.zalando.intellij.swagger.annotator.openapi;
 
 import com.intellij.codeInspection.ProblemHighlightType;
-import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.lang.annotation.HighlightSeverity;
@@ -74,11 +73,10 @@ public abstract class UnusedRefAnnotator implements Annotator {
     final PsiReference first = ReferencesSearch.search(searchableCurrentElement).findFirst();
 
     if (first == null) {
-      Annotation annotation =
-          annotationHolder
-              .newAnnotation(HighlightSeverity.WEAK_WARNING, warning)
-              .createAnnotation();
-      annotation.setHighlightType(ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+      annotationHolder
+          .newAnnotation(HighlightSeverity.WEAK_WARNING, warning)
+          .highlightType(ProblemHighlightType.LIKE_UNUSED_SYMBOL)
+          .create();
     }
   }
 }
