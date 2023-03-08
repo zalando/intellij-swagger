@@ -6,12 +6,13 @@ buildscript {
 }
 
 plugins {
-    id("org.jetbrains.intellij") version "1.2.0"
+    id("org.jetbrains.intellij") version "1.10.2"
     id("jacoco")
     id("com.github.kt3k.coveralls") version "2.7.1"
     id("com.diffplug.spotless") version "5.12.4"
     id("idea")
     id("java")
+    id("com.github.ben-manes.versions") version "0.46.0"
 }
 
 intellij {
@@ -36,14 +37,14 @@ repositories {
 }
 
 dependencies {
-    implementation("commons-io:commons-io:2.8.0")
-    implementation("com.google.code.gson:gson:2.8.6")
-    implementation("com.google.guava:guava:30.1.1-jre")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.3")
-    implementation("com.fasterxml.jackson.core:jackson-core:2.12.3")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.3")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.0-M1")
-    testImplementation("org.mockito:mockito-core:3.10.0")
+    implementation("commons-io:commons-io:2.11.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.google.guava:guava:31.1-jre")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.14.2")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
+    testImplementation("org.mockito:mockito-core:5.2.0")
 }
 tasks {
     jacocoTestReport {
