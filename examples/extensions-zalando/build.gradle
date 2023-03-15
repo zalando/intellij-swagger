@@ -35,8 +35,8 @@ repositories {
 }
 
 dependencies {
-    compile 'io.github.openfeign:feign-core:10.0.1'
-    compile 'io.github.openfeign:feign-gson:10.0.1'
+    implementation 'io.github.openfeign:feign-core:12.2'
+    implementation 'io.github.openfeign:feign-gson:12.2'
 }
 
 spotless {

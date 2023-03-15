@@ -13,6 +13,13 @@ Developing the Swagger Plugin is easy, just execute the following command:
 
 This will start IntelliJ IDEA with the plugin installed.
 
+###
+Check dependency updates (preferably replaced with Dependabot):
+
+```sh
+./gradlew dependencyUpdates
+```
+
 ## License
 The MIT License (MIT) Copyright © 2018 Zalando SE, https://tech.zalando.com
 
