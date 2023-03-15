@@ -6,7 +6,7 @@ buildscript {
 
 plugins {
     id "org.jetbrains.intellij" version "1.13.2"
-    id "com.diffplug.spotless" version "6.16.0"
+    id "com.diffplug.spotless" version "6.17.0"
 }
 
 apply plugin: 'idea'
@@ -37,6 +37,6 @@ dependencies {
 
 spotless {
     java {
-        googleJavaFormat('1.6')
+        googleJavaFormat('1.16.0')
     }
 }

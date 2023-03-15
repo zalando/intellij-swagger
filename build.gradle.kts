@@ -9,7 +9,7 @@ plugins {
     id("org.jetbrains.intellij") version "1.13.2"
     id("jacoco")
     id("com.github.kt3k.coveralls") version "2.12.2"
-    id("com.diffplug.spotless") version "6.16.0"
+    id("com.diffplug.spotless") version "6.17.0"
     id("idea")
     id("java")
     id("com.github.ben-manes.versions") version "0.46.0"
@@ -62,6 +62,6 @@ tasks {
 
 spotless {
     java {
-        googleJavaFormat("1.6")
+        googleJavaFormat("1.16.0")
     }
 }
