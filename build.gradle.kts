@@ -19,8 +19,7 @@ intellij {
     //Bundled plugin dependencies
     plugins.set(listOf("yaml", "com.intellij.java", "org.jetbrains.plugins.yaml"))
     pluginName.set("intellij-swagger")
-    updateSinceUntilBuild.set(false)
-    version.set("2021.1")
+    version.set("2022.1") // Recommended to use the lowest supported version to compile against
 }
 
 group = "org.zalando.intellij"
@@ -57,8 +56,10 @@ tasks {
         channels.set(listOf("beta"))
         token.set(System.getenv("JETBRAINS_HUB_TOKEN"))
     }
+    patchPluginXml {
+        untilBuild.set("") // null will add until-build to the plugin.xml
+    }
 }
-
 
 spotless {
     java {
