@@ -8,7 +8,7 @@ public class InfoCompletion extends FieldCompletion {
 
     private int key;
 
-    public InfoCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet,) {
+    public InfoCompletion(final CompletionHelper completionHelper, final CompletionResultSet completionResultSet) {
         super(completionHelper, completionResultSet);
     }
 

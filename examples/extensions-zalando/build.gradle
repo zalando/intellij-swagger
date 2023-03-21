@@ -5,23 +5,19 @@ buildscript {
 }
 
 plugins {
-    id "org.jetbrains.intellij" version "0.3.4"
-    id "com.diffplug.spotless" version "5.12.4"
+    id "org.jetbrains.intellij" version "1.13.2"
+    id "com.diffplug.spotless" version "6.17.0"
 }
 
 apply plugin: 'idea'
 apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.12'
-}
-
 intellij {
-    plugins 'org.zalando.intellij.swagger:1.0.16', 'yaml'
-    pluginName 'intellij-swagger-extensions-zalando'
-    updateSinceUntilBuild false
-    version '2016.2'
+    plugins = ['org.zalando.intellij.swagger:1.1.2', 'yaml']
+    pluginName = 'intellij-swagger-extensions-zalando'
+    updateSinceUntilBuild = false
+    version = '2016.2'
 }
 
 group 'org.zalando.intellij.examples.extensions'
@@ -41,6 +37,6 @@ dependencies {
 
 spotless {
     java {
-        googleJavaFormat('1.6')
+        googleJavaFormat('1.16.0')
     }
 }
