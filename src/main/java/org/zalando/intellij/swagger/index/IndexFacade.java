@@ -1,6 +1,6 @@
 package org.zalando.intellij.swagger.index;
 
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
@@ -15,8 +15,8 @@ public class IndexFacade {
     final VirtualFile virtualFile = psiFile.getVirtualFile();
     final Project project = psiFile.getProject();
 
-    OpenApiIndexService openApiIndexService = ServiceManager.getService(OpenApiIndexService.class);
-    SwaggerIndexService swaggerIndexService = ServiceManager.getService(SwaggerIndexService.class);
+    OpenApiIndexService openApiIndexService = ApplicationManager.getApplication().getService(OpenApiIndexService.class);
+    SwaggerIndexService swaggerIndexService = ApplicationManager.getApplication().getService(SwaggerIndexService.class);
 
     if (isMainSpecFile(virtualFile, project)) {
       return Optional.of(psiFile.getVirtualFile());
@@ -30,19 +30,19 @@ public class IndexFacade {
   }
 
   public boolean isMainSpecFile(final VirtualFile virtualFile, final Project project) {
-    return ServiceManager.getService(OpenApiIndexService.class).isMainSpecFile(virtualFile, project)
-        || ServiceManager.getService(SwaggerIndexService.class)
+    return ApplicationManager.getApplication().getService(OpenApiIndexService.class).isMainSpecFile(virtualFile, project)
+        || ApplicationManager.getApplication().getService(SwaggerIndexService.class)
             .isMainSpecFile(virtualFile, project);
   }
 
   public boolean isPartialSpecFile(final VirtualFile virtualFile, final Project project) {
-    return ServiceManager.getService(OpenApiIndexService.class)
+    return ApplicationManager.getApplication().getService(OpenApiIndexService.class)
             .isPartialSpecFile(virtualFile, project)
-        || ServiceManager.getService(SwaggerIndexService.class)
+        || ApplicationManager.getApplication().getService(SwaggerIndexService.class)
             .isPartialSpecFile(virtualFile, project);
   }
 
   public boolean isIndexReady(final Project project) {
-    return !ServiceManager.getService(DumbService.class).isDumb(project);
+    return !ApplicationManager.getApplication().getService(DumbService.class).isDumb(project);
   }
 }

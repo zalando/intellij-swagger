@@ -1,6 +1,6 @@
 package org.zalando.intellij.swagger.documentation.openapi;
 
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -33,7 +33,7 @@ public class OpenApiDocumentationProvider extends ApiDocumentProvider {
               final Project project = maybeProject.get();
 
               final Optional<OpenApiFileType> maybeFileType =
-                  ServiceManager.getService(OpenApiIndexService.class)
+                ApplicationManager.getApplication().getService(OpenApiIndexService.class)
                       .getFileType(project, virtualFile);
 
               return maybeFileType.map(

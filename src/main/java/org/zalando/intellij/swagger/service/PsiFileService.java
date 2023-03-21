@@ -1,6 +1,6 @@
 package org.zalando.intellij.swagger.service;
 
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
@@ -12,13 +12,13 @@ public class PsiFileService {
 
   public Optional<PsiFile> fromDocument(final Document document) {
     final Project[] openProjects =
-        ServiceManager.getService(ProjectManager.class).getOpenProjects();
+      ApplicationManager.getApplication().getService(ProjectManager.class).getOpenProjects();
 
     if (openProjects.length > 0) {
       final Project openProject = openProjects[0];
 
       return Optional.ofNullable(
-          ServiceManager.getService(PsiDocumentManager.class).getPsiFile(openProject, document));
+        ApplicationManager.getApplication().getService(PsiDocumentManager.class).getPsiFile(openProject, document));
     }
 
     return Optional.empty();

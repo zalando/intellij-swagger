@@ -1,8 +1,8 @@
 package org.zalando.intellij.swagger.reference.usage;
 
 import com.intellij.json.psi.JsonProperty;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.QueryExecutorBase;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -35,7 +35,7 @@ public class SpecReferenceSearch
 
     final Project project = queryParameters.getProject();
 
-    if (ServiceManager.getService(IndexFacade.class).isIndexReady(project)) {
+    if (ApplicationManager.getApplication().getService(IndexFacade.class).isIndexReady(project)) {
       if (isSpec(elementToSearch, project)) {
         process(queryParameters, elementToSearch, project);
       }
@@ -67,7 +67,7 @@ public class SpecReferenceSearch
     if (elementToSearch instanceof YAMLKeyValue || elementToSearch instanceof JsonProperty) {
       final VirtualFile virtualFile = elementToSearch.getContainingFile().getVirtualFile();
 
-      IndexFacade indexFacade = ServiceManager.getService(IndexFacade.class);
+      IndexFacade indexFacade = ApplicationManager.getApplication().getService(IndexFacade.class);
       return indexFacade.isMainSpecFile(virtualFile, project)
           || indexFacade.isPartialSpecFile(virtualFile, project);
     }
