@@ -69,16 +69,14 @@ public class JsonTraversal extends Traversal {
 
   @Override
   public List<String> getTagNames(final PsiFile psiFile) {
-    return getTags(psiFile)
-        .stream()
+    return getTags(psiFile).stream()
         .map(PsiElement::getText)
         .map(StringUtils::removeAllQuotes)
         .collect(Collectors.toList());
   }
 
   private List<PsiElement> getTags(final PsiFile psiFile) {
-    return getRootChildrenOfType(psiFile, JsonProperty.class)
-        .stream()
+    return getRootChildrenOfType(psiFile, JsonProperty.class).stream()
         .filter(jsonProperty -> "tags".equals(jsonProperty.getName()))
         .map(JsonProperty::getValue)
         .map(el -> Arrays.asList(el.getChildren()))
@@ -122,8 +120,7 @@ public class JsonTraversal extends Traversal {
     final List<JsonProperty> properties = getChildProperties(securityDefinitionItem);
 
     final boolean isOAuth2 =
-        properties
-            .stream()
+        properties.stream()
             .anyMatch(
                 prop -> {
                   final Optional<String> value =
@@ -134,8 +131,7 @@ public class JsonTraversal extends Traversal {
                 });
 
     if (isOAuth2) {
-      return properties
-          .stream()
+      return properties.stream()
           .filter(prop -> "scopes".equals(prop.getName()))
           .map(this::getChildProperties)
           .flatMap(Collection::stream)
@@ -222,8 +218,7 @@ public class JsonTraversal extends Traversal {
             .map(Arrays::asList)
             .orElse(new ArrayList<>());
 
-    return children
-        .stream()
+    return children.stream()
         .filter(child -> child instanceof JsonObject)
         .map(JsonObject.class::cast)
         .findFirst();

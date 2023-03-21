@@ -42,8 +42,7 @@ class RootSecurityCompletion extends FieldCompletion {
     final List<? extends PsiNamedElement> securityDefinitions =
         new PathFinder().findNamedChildren("$.securityDefinitions", containingFile);
 
-    return securityDefinitions
-        .stream()
+    return securityDefinitions.stream()
         .map(PsiNamedElement::getName)
         .map(ArrayField::new)
         .collect(Collectors.toList());

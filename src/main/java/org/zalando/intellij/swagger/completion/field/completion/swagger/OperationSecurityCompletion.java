@@ -38,8 +38,7 @@ class OperationSecurityCompletion extends FieldCompletion {
   }
 
   private List<String> extractNames(final List<PsiElement> securityObjects) {
-    return securityObjects
-        .stream()
+    return securityObjects.stream()
         .map(completionHelper::extractSecurityNameFromSecurityObject)
         .filter(Optional::isPresent)
         .map(Optional::get)
@@ -51,8 +50,7 @@ class OperationSecurityCompletion extends FieldCompletion {
     final List<? extends PsiNamedElement> securityDefinitions =
         new PathFinder().findNamedChildren("$.securityDefinitions", containingFile);
 
-    return securityDefinitions
-        .stream()
+    return securityDefinitions.stream()
         .map(PsiNamedElement::getName)
         .map(ArrayField::new)
         .collect(Collectors.toList());

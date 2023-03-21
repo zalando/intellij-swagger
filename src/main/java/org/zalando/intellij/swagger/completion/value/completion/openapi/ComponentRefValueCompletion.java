@@ -32,10 +32,9 @@ class ComponentRefValueCompletion extends ValueCompletion {
     final String pathExpression = String.format("$.components.%s", refType);
 
     return new PathFinder()
-        .findNamedChildren(pathExpression, psiFile)
-        .stream()
-        .map(e -> String.format("#/components/%s/%s", refType, e.getName()))
-        .map(StringValue::new)
-        .collect(Collectors.toList());
+        .findNamedChildren(pathExpression, psiFile).stream()
+            .map(e -> String.format("#/components/%s/%s", refType, e.getName()))
+            .map(StringValue::new)
+            .collect(Collectors.toList());
   }
 }

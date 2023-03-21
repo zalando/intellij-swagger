@@ -32,8 +32,7 @@ class SecurityScopeNameValueCompletion extends ValueCompletion {
     final List<? extends PsiNamedElement> securityDefinitions =
         new PathFinder().findNamedChildren("$.securityDefinitions", containingFile);
 
-    return securityDefinitions
-        .stream()
+    return securityDefinitions.stream()
         .filter(
             e -> securityDefinitionName.equals(completionHelper.getKeyNameOfObject(e).orElse(null)))
         .map(completionHelper::getSecurityScopesIfOAuth2)

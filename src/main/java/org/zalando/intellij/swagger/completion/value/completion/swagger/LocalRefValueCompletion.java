@@ -32,10 +32,9 @@ class LocalRefValueCompletion extends ValueCompletion {
     final String pathExpression = String.format("$.%s", refType);
 
     return new PathFinder()
-        .findNamedChildren(pathExpression, psiFile)
-        .stream()
-        .map(e -> String.format("#/%s/%s", refType, e.getName()))
-        .map(StringValue::new)
-        .collect(Collectors.toList());
+        .findNamedChildren(pathExpression, psiFile).stream()
+            .map(e -> String.format("#/%s/%s", refType, e.getName()))
+            .map(StringValue::new)
+            .collect(Collectors.toList());
   }
 }

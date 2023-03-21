@@ -21,9 +21,7 @@ class TagsValueCompletion extends ValueCompletion {
   }
 
   private List<Value> getTags() {
-    return completionHelper
-        .getTagNames()
-        .stream()
+    return completionHelper.getTagNames().stream()
         .map(StringValue::new)
         .collect(Collectors.toList());
   }

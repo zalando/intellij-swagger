@@ -15,8 +15,10 @@ public class IndexFacade {
     final VirtualFile virtualFile = psiFile.getVirtualFile();
     final Project project = psiFile.getProject();
 
-    OpenApiIndexService openApiIndexService = ApplicationManager.getApplication().getService(OpenApiIndexService.class);
-    SwaggerIndexService swaggerIndexService = ApplicationManager.getApplication().getService(SwaggerIndexService.class);
+    OpenApiIndexService openApiIndexService =
+        ApplicationManager.getApplication().getService(OpenApiIndexService.class);
+    SwaggerIndexService swaggerIndexService =
+        ApplicationManager.getApplication().getService(SwaggerIndexService.class);
 
     if (isMainSpecFile(virtualFile, project)) {
       return Optional.of(psiFile.getVirtualFile());
@@ -30,15 +32,20 @@ public class IndexFacade {
   }
 
   public boolean isMainSpecFile(final VirtualFile virtualFile, final Project project) {
-    return ApplicationManager.getApplication().getService(OpenApiIndexService.class).isMainSpecFile(virtualFile, project)
-        || ApplicationManager.getApplication().getService(SwaggerIndexService.class)
+    return ApplicationManager.getApplication()
+            .getService(OpenApiIndexService.class)
+            .isMainSpecFile(virtualFile, project)
+        || ApplicationManager.getApplication()
+            .getService(SwaggerIndexService.class)
             .isMainSpecFile(virtualFile, project);
   }
 
   public boolean isPartialSpecFile(final VirtualFile virtualFile, final Project project) {
-    return ApplicationManager.getApplication().getService(OpenApiIndexService.class)
+    return ApplicationManager.getApplication()
+            .getService(OpenApiIndexService.class)
             .isPartialSpecFile(virtualFile, project)
-        || ApplicationManager.getApplication().getService(SwaggerIndexService.class)
+        || ApplicationManager.getApplication()
+            .getService(SwaggerIndexService.class)
             .isPartialSpecFile(virtualFile, project);
   }
 
