@@ -5,13 +5,26 @@ Zalando's architecture centers around microservices, and each API is documented 
 
 ## Development
 
-Developing the Swagger Plugin is easy, just execute the following command:
-
+### Running the IDE
+To start IntelliJ IDEA with the plugin installed:
 ```sh
 ./gradlew runIde
 ```
 
-This will start IntelliJ IDEA with the plugin installed.
+### Plugin verification
+To verify the plugin against different IDEA versions run:
+```sh
+./gradlew runPluginVerifier
+```
+This will output information of compatibility and also create reports under `./build/reports/pluginVerifier/`.
+
+Generic verification:
+```sh
+./gradlew check
+```
+
+### Releasing
+See `./release.sh`
 
 ###
 Check dependency updates (preferably replaced with Dependabot):

@@ -16,15 +16,14 @@ apply plugin: 'java'
 intellij {
     plugins = ['org.zalando.intellij.swagger:1.1.2', 'yaml']
     pluginName = 'intellij-swagger-extensions-zalando'
-    updateSinceUntilBuild = false
-    version = '2016.2'
+    version = '2022.1'
 }
 
 group 'org.zalando.intellij.examples.extensions'
 version = project.hasProperty('version') ? project['version'] : '0.0.1'
 
 apply plugin: 'java'
-sourceCompatibility = 1.8
+sourceCompatibility = 11
 
 repositories {
     mavenCentral()
