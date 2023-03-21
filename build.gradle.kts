@@ -19,7 +19,7 @@ intellij {
     //Bundled plugin dependencies
     plugins.set(listOf("yaml", "com.intellij.java", "org.jetbrains.plugins.yaml"))
     pluginName.set("intellij-swagger")
-    version.set("2022.1") // Recommended to use the lowest supported to compile against
+    version.set("2022.1") // Recommended to use the lowest supported version to compile against
 }
 
 group = "org.zalando.intellij"
