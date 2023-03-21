@@ -1,7 +1,7 @@
 package org.zalando.intellij.swagger.ui.provider;
 
 import com.intellij.ide.browsers.OpenInBrowserRequest;
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
@@ -28,7 +28,7 @@ public class SwaggerUiUrlProvider extends BuiltInWebBrowserUrlProvider implement
   @Nullable
   @Override
   protected Url getUrl(@NotNull OpenInBrowserRequest request, @NotNull VirtualFile file) {
-    SwaggerFileService swaggerFileService = ServiceManager.getService(SwaggerFileService.class);
+    SwaggerFileService swaggerFileService = ApplicationManager.getApplication().getService(SwaggerFileService.class);
     Optional<Path> swaggerHTMLFolder =
         swaggerFileService.convertSwaggerToHtml(request.getVirtualFile());
 

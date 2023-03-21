@@ -4,6 +4,7 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
+import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.searches.ReferencesSearch;
@@ -76,8 +77,10 @@ public abstract class UnusedRefAnnotator implements Annotator {
     final PsiReference first = ReferencesSearch.search(searchableCurrentElement).findFirst();
 
     if (first == null) {
-      Annotation annotation = annotationHolder.createWeakWarningAnnotation(psiElement, warning);
-      annotation.setHighlightType(ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+      annotationHolder
+        .newAnnotation(HighlightSeverity.WEAK_WARNING, warning)
+        .highlightType(ProblemHighlightType.LIKE_UNUSED_SYMBOL)
+        .create();
     }
   }
 }

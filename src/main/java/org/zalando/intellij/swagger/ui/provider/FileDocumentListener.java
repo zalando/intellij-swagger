@@ -1,6 +1,6 @@
 package org.zalando.intellij.swagger.ui.provider;
 
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManagerListener;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -16,16 +16,16 @@ public class FileDocumentListener implements FileDocumentManagerListener {
   @Override
   public void beforeDocumentSaving(@NotNull final Document document) {
     final Optional<PsiFile> psiFile =
-        ServiceManager.getService(PsiFileService.class).fromDocument(document);
+      ApplicationManager.getApplication().getService(PsiFileService.class).fromDocument(document);
 
     psiFile.ifPresent(
         file -> {
-          IndexFacade indexFacade = ServiceManager.getService(IndexFacade.class);
+          IndexFacade indexFacade = ApplicationManager.getApplication().getService(IndexFacade.class);
           if (indexFacade.isIndexReady(file.getProject())) {
             final Optional<VirtualFile> specFile = indexFacade.getMainSpecFile(file);
 
             SwaggerFileService swaggerFileService =
-                ServiceManager.getService(SwaggerFileService.class);
+              ApplicationManager.getApplication().getService(SwaggerFileService.class);
             specFile.ifPresent(swaggerFileService::convertSwaggerToHtmlAsync);
           }
         });
