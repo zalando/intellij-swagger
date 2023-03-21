@@ -33,7 +33,8 @@ public class OpenApiDocumentationProvider extends ApiDocumentProvider {
               final Project project = maybeProject.get();
 
               final Optional<OpenApiFileType> maybeFileType =
-                ApplicationManager.getApplication().getService(OpenApiIndexService.class)
+                  ApplicationManager.getApplication()
+                      .getService(OpenApiIndexService.class)
                       .getFileType(project, virtualFile);
 
               return maybeFileType.map(

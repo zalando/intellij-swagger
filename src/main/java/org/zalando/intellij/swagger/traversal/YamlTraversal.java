@@ -51,8 +51,7 @@ public class YamlTraversal extends Traversal {
   }
 
   private List<PsiElement> getTags(final PsiFile psiFile) {
-    return getRootChildrenOfType(psiFile, YAMLKeyValue.class)
-        .stream()
+    return getRootChildrenOfType(psiFile, YAMLKeyValue.class).stream()
         .filter(yamlKeyValue -> "tags".equals(yamlKeyValue.getName()))
         .map(YAMLKeyValue::getValue)
         .map(YAMLPsiElement::getYAMLElements)
@@ -134,8 +133,7 @@ public class YamlTraversal extends Traversal {
     final List<YAMLKeyValue> properties = getChildProperties(securityDefinitionItem);
 
     final boolean isOAuth2 =
-        properties
-            .stream()
+        properties.stream()
             .anyMatch(
                 prop -> {
                   final Optional<String> value =
@@ -146,8 +144,7 @@ public class YamlTraversal extends Traversal {
                 });
 
     if (isOAuth2) {
-      return properties
-          .stream()
+      return properties.stream()
           .filter(prop -> "scopes".equals(prop.getName()))
           .map(this::getChildProperties)
           .flatMap(Collection::stream)

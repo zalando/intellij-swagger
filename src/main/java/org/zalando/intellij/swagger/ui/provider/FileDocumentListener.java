@@ -16,16 +16,17 @@ public class FileDocumentListener implements FileDocumentManagerListener {
   @Override
   public void beforeDocumentSaving(@NotNull final Document document) {
     final Optional<PsiFile> psiFile =
-      ApplicationManager.getApplication().getService(PsiFileService.class).fromDocument(document);
+        ApplicationManager.getApplication().getService(PsiFileService.class).fromDocument(document);
 
     psiFile.ifPresent(
         file -> {
-          IndexFacade indexFacade = ApplicationManager.getApplication().getService(IndexFacade.class);
+          IndexFacade indexFacade =
+              ApplicationManager.getApplication().getService(IndexFacade.class);
           if (indexFacade.isIndexReady(file.getProject())) {
             final Optional<VirtualFile> specFile = indexFacade.getMainSpecFile(file);
 
             SwaggerFileService swaggerFileService =
-              ApplicationManager.getApplication().getService(SwaggerFileService.class);
+                ApplicationManager.getApplication().getService(SwaggerFileService.class);
             specFile.ifPresent(swaggerFileService::convertSwaggerToHtmlAsync);
           }
         });

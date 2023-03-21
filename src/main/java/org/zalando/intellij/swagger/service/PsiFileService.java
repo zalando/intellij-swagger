@@ -12,13 +12,15 @@ public class PsiFileService {
 
   public Optional<PsiFile> fromDocument(final Document document) {
     final Project[] openProjects =
-      ApplicationManager.getApplication().getService(ProjectManager.class).getOpenProjects();
+        ApplicationManager.getApplication().getService(ProjectManager.class).getOpenProjects();
 
     if (openProjects.length > 0) {
       final Project openProject = openProjects[0];
 
       return Optional.ofNullable(
-        ApplicationManager.getApplication().getService(PsiDocumentManager.class).getPsiFile(openProject, document));
+          ApplicationManager.getApplication()
+              .getService(PsiDocumentManager.class)
+              .getPsiFile(openProject, document));
     }
 
     return Optional.empty();
