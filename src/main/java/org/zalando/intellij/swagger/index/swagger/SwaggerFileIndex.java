@@ -44,7 +44,7 @@ public class SwaggerFileIndex extends FileBasedIndexExtension<String, Set<String
   }
 
   private static final DataExternalizer<Set<String>> DATA_EXTERNALIZER =
-      new DataExternalizer<Set<String>>() {
+      new DataExternalizer<>() {
         @Override
         public void save(@NotNull DataOutput out, Set<String> value) throws IOException {
           out.writeInt(value.size());

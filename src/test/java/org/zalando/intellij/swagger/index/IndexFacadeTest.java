@@ -27,7 +27,7 @@ public class IndexFacadeTest {
   private final Project fakeProject = mock(Project.class);
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     MockApplication app = MockApplication.setUp(() -> {});
     app.registerService(OpenApiIndexService.class, fakeOpenApiIndexService);
     app.registerService(SwaggerIndexService.class, fakeSwaggerIndexService);

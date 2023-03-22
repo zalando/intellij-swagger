@@ -24,8 +24,8 @@ import org.zalando.intellij.swagger.service.SwaggerFilesUtils;
 
 public abstract class SpecIndexer implements DataIndexer<String, Set<String>, FileContent> {
 
-  public static String MAIN_SPEC_FILES = "MAIN_SPEC_FILES";
-  public static String PARTIAL_SPEC_FILES = "PARTIAL_SPEC_FILES";
+  public static final String MAIN_SPEC_FILES = "MAIN_SPEC_FILES";
+  public static final String PARTIAL_SPEC_FILES = "PARTIAL_SPEC_FILES";
   public static final String DELIMITER = "-";
 
   protected abstract boolean shouldIndex(PsiFile file);

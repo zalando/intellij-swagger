@@ -1,6 +1,7 @@
 package org.zalando.intellij.swagger.fixture;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupManager;
 import com.intellij.testFramework.LightProjectDescriptor;
@@ -15,7 +16,6 @@ import java.net.URL;
 import java.util.List;
 import org.hamcrest.core.IsNull;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Assert;
 import org.zalando.intellij.swagger.assertion.AssertableList;
 
 public class SwaggerFixture {

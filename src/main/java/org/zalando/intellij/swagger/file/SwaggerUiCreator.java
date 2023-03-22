@@ -68,7 +68,7 @@ public class SwaggerUiCreator {
 
     Files.walkFileTree(
         jarPath,
-        new SimpleFileVisitor<Path>() {
+        new SimpleFileVisitor<>() {
 
           @Override
           public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)

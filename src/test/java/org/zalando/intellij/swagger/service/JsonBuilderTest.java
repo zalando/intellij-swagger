@@ -16,9 +16,9 @@ public class JsonBuilderTest {
 
   private final JsonBuilderService jsonBuilderService = new JsonBuilderService();
 
-  private VirtualFile fakeVirtualFile = mock(VirtualFile.class);
-  private VirtualFile fakeVirtualFile2 = mock(VirtualFile.class);
-  private VirtualFile fakeVirtualFile3 = mock(VirtualFile.class);
+  private final VirtualFile fakeVirtualFile = mock(VirtualFile.class);
+  private final VirtualFile fakeVirtualFile2 = mock(VirtualFile.class);
+  private final VirtualFile fakeVirtualFile3 = mock(VirtualFile.class);
 
   @Before
   public void before() {
