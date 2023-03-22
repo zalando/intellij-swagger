@@ -37,9 +37,6 @@ To contribute, please fork and create a pull request.
 ### Bug Fixes
 If you find a bug, it would be awesome if you created an issue about it. Please include a clear description of the problem so that we can fix it!
 
-## Contact:
-sebastian.monte@zalando.de
-
 ## License
 The MIT License (MIT) Copyright © 2017 Zalando SE, https://tech.zalando.com
 
