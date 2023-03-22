@@ -1,5 +1,6 @@
 package org.zalando.intellij.swagger.fixture;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupManager;
 import com.intellij.testFramework.LightProjectDescriptor;
@@ -51,7 +52,7 @@ public class SwaggerFixture {
   @NotNull
   private AssertableList getCompletions(@NotNull String caretFileName) {
     List<String> results = myCodeInsightFixture.getCompletionVariants(caretFileName);
-    Assert.assertThat(results, IsNull.notNullValue());
+    assertThat(results, IsNull.notNullValue());
     return new AssertableList(results);
   }
 
