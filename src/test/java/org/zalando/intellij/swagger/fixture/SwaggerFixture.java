@@ -36,7 +36,7 @@ public class SwaggerFixture {
     IdeaTestFixtureFactory factory = IdeaTestFixtureFactory.getFixtureFactory();
     LightProjectDescriptor projectDescriptor = LightProjectDescriptor.EMPTY_PROJECT_DESCRIPTOR;
     TestFixtureBuilder<IdeaProjectTestFixture> fixtureBuilder =
-        factory.createLightFixtureBuilder(projectDescriptor);
+        factory.createLightFixtureBuilder(projectDescriptor, getClass().getName());
     IdeaProjectTestFixture fixture = fixtureBuilder.getFixture();
 
     myCodeInsightFixture =
