@@ -8,7 +8,6 @@ buildscript {
 plugins {
     id("org.jetbrains.intellij") version "1.13.2"
     id("jacoco")
-    id("com.github.kt3k.coveralls") version "2.12.2"
     id("com.diffplug.spotless") version "6.17.0"
     id("idea")
     id("java")
@@ -45,10 +44,19 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
     testImplementation("org.mockito:mockito-core:5.2.0")
 }
+
 tasks {
     jacocoTestReport {
+        dependsOn(test) // tests are required to run before generating the report
         reports {
-            xml.required.set(true) // coveralls plugin depends on xml format report
+            xml.required.set(true)
+            html.required.set(true)
+        }
+    }
+    test {
+        finalizedBy(jacocoTestReport) // report is always generated after tests run
+        reports {
+            junitXml.required.set(false)
             html.required.set(true)
         }
     }
