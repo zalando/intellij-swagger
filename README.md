@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/zalando/intellij-swagger.svg?branch=master)](https://travis-ci.org/zalando/intellij-swagger)
-[![Coverage Status](https://coveralls.io/repos/github/zalando/intellij-swagger/badge.svg?branch=master)](https://coveralls.io/github/zalando/intellij-swagger?branch=master) [![Join the chat at https://gitter.im/zalando/intellij-swagger](https://badges.gitter.im/zalando/intellij-swagger.svg)](https://gitter.im/zalando/intellij-swagger?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Plugin](https://github.com/zalando/intellij-swagger/actions/workflows/build.yml/badge.svg)](https://github.com/zalando/intellij-swagger/actions/workflows/build.yml)
 
 # Swagger Plugin
 Swagger Plugin makes it easy to edit Swagger and OpenAPI specification files inside IntelliJ IDEA. You can find it on JetBrains' [plugin page](https://plugins.jetbrains.com/plugin/8347).
