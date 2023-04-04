@@ -1,5 +1,6 @@
 package org.zalando.intellij.swagger.fixture;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import com.intellij.codeInsight.completion.CompletionType;
@@ -14,7 +15,6 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
-import org.hamcrest.core.IsNull;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.assertion.AssertableList;
 
@@ -52,7 +52,7 @@ public class SwaggerFixture {
   @NotNull
   private AssertableList getCompletions(@NotNull String caretFileName) {
     List<String> results = myCodeInsightFixture.getCompletionVariants(caretFileName);
-    assertThat(results, IsNull.notNullValue());
+    assertThat(results, notNullValue());
     return new AssertableList(results);
   }
 
