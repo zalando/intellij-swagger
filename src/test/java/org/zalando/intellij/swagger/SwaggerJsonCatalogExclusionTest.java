@@ -16,8 +16,8 @@ import org.zalando.intellij.swagger.index.IndexFacade;
 @Ignore
 public class SwaggerJsonCatalogExclusionTest {
 
-  private IndexFacade fakeIndexFacade = mock(IndexFacade.class);
-  private ProjectManagerEx fakeProjectManager = mock(ProjectManagerEx.class);
+  private final IndexFacade fakeIndexFacade = mock(IndexFacade.class);
+  private final ProjectManagerEx fakeProjectManager = mock(ProjectManagerEx.class);
 
   private final SwaggerJsonCatalogExclusion exclusion = new SwaggerJsonCatalogExclusion();
 

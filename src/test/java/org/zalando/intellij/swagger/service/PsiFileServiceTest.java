@@ -1,7 +1,7 @@
 package org.zalando.intellij.swagger.service;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.*;
 
 import com.intellij.mock.MockApplication;

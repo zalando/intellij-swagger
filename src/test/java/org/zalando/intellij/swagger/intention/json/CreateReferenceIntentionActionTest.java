@@ -14,10 +14,6 @@ public class CreateReferenceIntentionActionTest extends IntentionActionTest {
     return new LocalInspectionTool[] {new JsonReferenceInspection()};
   }
 
-  public void test() {
-    doAllTests();
-  }
-
   @Override
   @NonNls
   protected String getBasePath() {

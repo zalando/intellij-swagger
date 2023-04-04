@@ -8,57 +8,57 @@ import org.zalando.intellij.swagger.StringUtils;
 public class StringUtilsTest {
 
   @Test
-  public void thatReturnsTrueWhenNextCharIsColon() throws Exception {
+  public void thatReturnsTrueWhenNextCharIsColon() {
     assertTrue(StringUtils.nextCharAfterSpacesAndQuotesIsColon(":"));
   }
 
   @Test
-  public void thatReturnsTrueWhenQuoteIsFollowedByColon() throws Exception {
+  public void thatReturnsTrueWhenQuoteIsFollowedByColon() {
     assertTrue(StringUtils.nextCharAfterSpacesAndQuotesIsColon("\":"));
   }
 
   @Test
-  public void thatReturnsTrueWhenSpaceIsFollowedByColon() throws Exception {
+  public void thatReturnsTrueWhenSpaceIsFollowedByColon() {
     assertTrue(StringUtils.nextCharAfterSpacesAndQuotesIsColon(" :"));
   }
 
   @Test
-  public void thatReturnsTrueWhenSpaceAndQuoteIsFollowedByColon() throws Exception {
+  public void thatReturnsTrueWhenSpaceAndQuoteIsFollowedByColon() {
     assertTrue(StringUtils.nextCharAfterSpacesAndQuotesIsColon(" \":"));
   }
 
   @Test
-  public void thatReturnsFalseWhenQuotesNorSpacesBeforeColon() throws Exception {
+  public void thatReturnsFalseWhenQuotesNorSpacesBeforeColon() {
     assertFalse(StringUtils.nextCharAfterSpacesAndQuotesIsColon("a:"));
   }
 
   @Test
-  public void thatReturnsFalseWhenOnlySpace() throws Exception {
+  public void thatReturnsFalseWhenOnlySpace() {
     assertFalse(StringUtils.nextCharAfterSpacesAndQuotesIsColon(" "));
   }
 
   @Test
-  public void thatStringHasTwoSpacesInRow() throws Exception {
+  public void thatStringHasTwoSpacesInRow() {
     assertEquals(2, StringUtils.getNumberOfSpacesInRowStartingFromEnd("text  "));
   }
 
   @Test
-  public void thatStringHasNoSpacesInRow() throws Exception {
+  public void thatStringHasNoSpacesInRow() {
     assertEquals(0, StringUtils.getNumberOfSpacesInRowStartingFromEnd("text"));
   }
 
   @Test
-  public void thatEmptyStringHasNoSpacesInRow() throws Exception {
+  public void thatEmptyStringHasNoSpacesInRow() {
     assertEquals(0, StringUtils.getNumberOfSpacesInRowStartingFromEnd(""));
   }
 
   @Test
-  public void thatStringHasSingleQuoteIsBeforeColon() throws Exception {
+  public void thatStringHasSingleQuoteIsBeforeColon() {
     assertTrue(StringUtils.hasSingleQuoteBeforeColonStartingFromEnd("$ref: 'somevalue"));
   }
 
   @Test
-  public void thatStringDoesNotHaveSingleQuoteIsBeforeColon() throws Exception {
+  public void thatStringDoesNotHaveSingleQuoteIsBeforeColon() {
     assertFalse(StringUtils.hasSingleQuoteBeforeColonStartingFromEnd("$ref: somevalue"));
   }
 }

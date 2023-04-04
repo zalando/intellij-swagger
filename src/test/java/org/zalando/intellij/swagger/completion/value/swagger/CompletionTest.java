@@ -48,40 +48,40 @@ public class CompletionTest extends JsonAndYamlCompletionTest {
   }
 
   @Test
-  public void testDefinitionRefValueInSchema() throws Exception {
+  public void testDefinitionRefValueInSchema() {
     getCaretCompletions("definition_ref_value_in_schema")
         .assertContains("#/definitions/Pets", "#/definitions/Error")
         .isOfSize(2);
   }
 
   @Test
-  public void testDefinitionRefValueInItems() throws Exception {
+  public void testDefinitionRefValueInItems() {
     getCaretCompletions("definition_ref_value_in_items")
         .assertContains("#/definitions/Pets", "#/definitions/Error")
         .isOfSize(2);
   }
 
   @Test
-  public void testDefinitionRefValueInDefinition() throws Exception {
+  public void testDefinitionRefValueInDefinition() {
     getCaretCompletions("definition_ref_value_in_definition")
         .assertContains("#/definitions/Bar")
         .isOfSize(2);
   }
 
   @Test
-  public void testParameterRefValue() throws Exception {
+  public void testParameterRefValue() {
     getCaretCompletions("parameter_ref_value").assertContains("#/parameters/Dog").isOfSize(1);
   }
 
   @Test
-  public void testParameterRefValueChildOfPath() throws Exception {
+  public void testParameterRefValueChildOfPath() {
     getCaretCompletions("parameter_ref_value_child_of_path")
         .assertContains("#/parameters/Dog")
         .isOfSize(1);
   }
 
   @Test
-  public void testResponseRefValue() throws Exception {
+  public void testResponseRefValue() {
     getCaretCompletions("response_ref_value")
         .assertContains("#/responses/responseName")
         .isOfSize(1);

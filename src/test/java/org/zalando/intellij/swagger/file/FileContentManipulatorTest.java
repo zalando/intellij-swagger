@@ -18,7 +18,7 @@ public class FileContentManipulatorTest {
   @Rule public final TemporaryFolder tempFolder = new TemporaryFolder();
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     fileContentManipulator = new FileContentManipulator();
   }
 

@@ -27,7 +27,7 @@ class JsonBuilderService {
    * We need to use a recursion guard because of circular references;
    * traversing them would result in a stack overflow.
    */
-  private static final RecursionGuard recursionGuard =
+  private static final RecursionGuard<Object> recursionGuard =
       RecursionManager.createGuard("JsonBuilderService.buildRecursive");
 
   // It is safe to use a cache for already resolved references.

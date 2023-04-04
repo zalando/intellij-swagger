@@ -15,12 +15,12 @@ public class FileDetectorTest {
   private FileDetector fileDetector;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     fileDetector = new FileDetector();
   }
 
   @Test
-  public void thatIsNotSwaggerJsonFileBasedOnFileName() throws Exception {
+  public void thatIsNotSwaggerJsonFileBasedOnFileName() {
     final PsiFile jsonFile = mock(PsiFile.class);
     when(jsonFile.getName()).thenReturn("swagger.json");
 
@@ -28,7 +28,7 @@ public class FileDetectorTest {
   }
 
   @Test
-  public void thatIsNotSwaggerYamlFileBasedOnFileName() throws Exception {
+  public void thatIsNotSwaggerYamlFileBasedOnFileName() {
     final PsiFile yamlFile = mock(PsiFile.class);
     when(yamlFile.getName()).thenReturn("swagger.yaml");
 
@@ -36,7 +36,7 @@ public class FileDetectorTest {
   }
 
   @Test
-  public void thatYamlFileExtensionIsSwaggerContentCompatible() throws Exception {
+  public void thatYamlFileExtensionIsSwaggerContentCompatible() {
     VirtualFile yamlFile = mock(VirtualFile.class);
 
     when(yamlFile.getName()).thenReturn("file.yaml");
@@ -45,7 +45,7 @@ public class FileDetectorTest {
   }
 
   @Test
-  public void thatYmlFileExtensionIsSwaggerContentCompatible() throws Exception {
+  public void thatYmlFileExtensionIsSwaggerContentCompatible() {
     VirtualFile yamlFile = mock(VirtualFile.class);
 
     when(yamlFile.getName()).thenReturn("file.yml");
@@ -54,7 +54,7 @@ public class FileDetectorTest {
   }
 
   @Test
-  public void thatJsonFileExtensionIsSwaggerContentCompatible() throws Exception {
+  public void thatJsonFileExtensionIsSwaggerContentCompatible() {
     VirtualFile yamlFile = mock(VirtualFile.class);
 
     when(yamlFile.getName()).thenReturn("file.json");
@@ -63,7 +63,7 @@ public class FileDetectorTest {
   }
 
   @Test
-  public void thatSimilarFileExtensionsAreNotSwaggerContentCompatible() throws Exception {
+  public void thatSimilarFileExtensionsAreNotSwaggerContentCompatible() {
     VirtualFile file = mock(VirtualFile.class);
 
     when(file.getName()).thenReturn("file.libyaml");

@@ -27,7 +27,7 @@ public class LocalReference extends PsiReferenceBase<PsiElement> {
   @Override
   public PsiElement resolve() {
     final String pathExpression =
-        Arrays.stream(originalRefValue.substring(2, originalRefValue.length()).split("/"))
+        Arrays.stream(originalRefValue.substring(2).split("/"))
             .map(PathExpressionUtil::escape)
             .collect(Collectors.joining(".", "$.", ""));
 

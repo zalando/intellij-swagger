@@ -20,15 +20,15 @@ import org.zalando.intellij.swagger.service.SwaggerFileService;
 @Ignore
 public class FileDocumentListenerTest {
 
-  private IndexFacade fakeIndexFacade = mock(IndexFacade.class);
+  private final IndexFacade fakeIndexFacade = mock(IndexFacade.class);
 
-  private SwaggerFileService fakeSwaggerFileService = mock(SwaggerFileService.class);
+  private final SwaggerFileService fakeSwaggerFileService = mock(SwaggerFileService.class);
 
-  private PsiFileService fakePsiFileService = mock(PsiFileService.class);
+  private final PsiFileService fakePsiFileService = mock(PsiFileService.class);
 
-  private Document fakeDocument = mock(Document.class);
+  private final Document fakeDocument = mock(Document.class);
 
-  private ProjectManagerEx fakeProjectManager = mock(ProjectManagerEx.class);
+  private final ProjectManagerEx fakeProjectManager = mock(ProjectManagerEx.class);
 
   private final FileDocumentListener listener = new FileDocumentListener();
 

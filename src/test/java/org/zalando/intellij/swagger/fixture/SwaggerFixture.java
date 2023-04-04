@@ -1,5 +1,8 @@
 package org.zalando.intellij.swagger.fixture;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupManager;
 import com.intellij.testFramework.LightProjectDescriptor;
@@ -12,9 +15,7 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
-import org.hamcrest.core.IsNull;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Assert;
 import org.zalando.intellij.swagger.assertion.AssertableList;
 
 public class SwaggerFixture {
@@ -35,7 +36,7 @@ public class SwaggerFixture {
     IdeaTestFixtureFactory factory = IdeaTestFixtureFactory.getFixtureFactory();
     LightProjectDescriptor projectDescriptor = LightProjectDescriptor.EMPTY_PROJECT_DESCRIPTOR;
     TestFixtureBuilder<IdeaProjectTestFixture> fixtureBuilder =
-        factory.createLightFixtureBuilder(projectDescriptor);
+        factory.createLightFixtureBuilder(projectDescriptor, getClass().getName());
     IdeaProjectTestFixture fixture = fixtureBuilder.getFixture();
 
     myCodeInsightFixture =
@@ -51,7 +52,7 @@ public class SwaggerFixture {
   @NotNull
   private AssertableList getCompletions(@NotNull String caretFileName) {
     List<String> results = myCodeInsightFixture.getCompletionVariants(caretFileName);
-    Assert.assertThat(results, IsNull.notNullValue());
+    assertThat(results, notNullValue());
     return new AssertableList(results);
   }
 

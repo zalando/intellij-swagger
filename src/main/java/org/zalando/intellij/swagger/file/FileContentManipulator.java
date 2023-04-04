@@ -13,12 +13,11 @@ public class FileContentManipulator {
 
   void setJsonToIndexFile(final String specJson, final File indexFile) {
     try {
-      final String originalContent =
-          new String(Files.readAllBytes(indexFile.toPath()), StandardCharsets.UTF_8);
+      final String originalContent = Files.readString(indexFile.toPath(), StandardCharsets.UTF_8);
       final String newContent =
           insertContentBetween(specJson, originalContent, SPEC_START_TOKEN, SPEC_END_TOKEN);
 
-      Files.write(indexFile.toPath(), newContent.getBytes(StandardCharsets.UTF_8));
+      Files.writeString(indexFile.toPath(), newContent, StandardCharsets.UTF_8);
     } catch (final IOException e) {
       throw new RuntimeException(e);
     }

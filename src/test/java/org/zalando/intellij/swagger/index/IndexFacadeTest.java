@@ -1,7 +1,7 @@
 package org.zalando.intellij.swagger.index;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.*;
 
 import com.intellij.mock.MockApplication;
@@ -27,7 +27,7 @@ public class IndexFacadeTest {
   private final Project fakeProject = mock(Project.class);
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     MockApplication app = MockApplication.setUp(() -> {});
     app.registerService(OpenApiIndexService.class, fakeOpenApiIndexService);
     app.registerService(SwaggerIndexService.class, fakeSwaggerIndexService);

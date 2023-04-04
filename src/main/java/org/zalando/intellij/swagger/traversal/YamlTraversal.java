@@ -90,13 +90,12 @@ public class YamlTraversal extends Traversal {
         .filter(el -> el instanceof YAMLDocument)
         .findFirst()
         .map(PsiElement::getChildren)
-        .map(
+        .flatMap(
             children ->
                 Arrays.stream(children)
                     .filter(el -> el instanceof YAMLMapping)
                     .map(YAMLMapping.class::cast)
-                    .findFirst()
-                    .orElse(null));
+                    .findFirst());
   }
 
   @Override
