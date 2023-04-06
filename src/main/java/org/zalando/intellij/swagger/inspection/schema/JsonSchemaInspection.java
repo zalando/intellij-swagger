@@ -19,6 +19,7 @@ import com.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions;
 import com.jetbrains.jsonSchema.impl.JsonSchemaComplianceChecker;
 import com.jetbrains.jsonSchema.impl.JsonSchemaObject;
 import java.net.URL;
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.zalando.intellij.swagger.file.FileDetector;
 
@@ -60,9 +61,14 @@ public class JsonSchemaInspection extends LocalInspectionTool {
 
     final URL url =
         ResourceUtil.getResource(getClass().getClassLoader(), "schemas", schemaFileName);
+    Objects.requireNonNull(url, "Schema file " + schemaFileName + " not found from classpath");
     final VirtualFile virtualFile = VfsUtil.findFileByURL(url);
+    Objects.requireNonNull(
+        virtualFile,
+        "Schema file " + schemaFileName + " with url " + url + " not found from classpath");
 
     final JsonSchemaObject schema = service.getSchemaObjectForSchemaFile(virtualFile);
+    Objects.requireNonNull(schema, "Schema object for virtual file " + virtualFile + " not found");
 
     return new JsonElementVisitor() {
       @Override

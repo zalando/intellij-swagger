@@ -75,12 +75,14 @@ public abstract class SpecIndexer implements DataIndexer<String, Set<String>, Fi
           @Override
           public void visitProperty(@NotNull JsonProperty property) {
             if (ApiConstants.REF_KEY.equals(property.getName()) && property.getValue() != null) {
-              final String refValue = StringUtils.removeAllQuotes(property.getValue().getText());
-
-              if (SwaggerFilesUtils.isFileReference(refValue)) {
-                getReferencedFileIndexValue(property.getValue(), refValue, specDirectory)
-                    .ifPresent(result::add);
-              }
+              Optional.ofNullable(property.getValue())
+                  .flatMap(value -> Optional.ofNullable(value.getText()))
+                  .map(StringUtils::removeAllQuotes)
+                  .filter(SwaggerFilesUtils::isFileReference)
+                  .flatMap(
+                      refValue ->
+                          getReferencedFileIndexValue(property.getValue(), refValue, specDirectory))
+                  .map(result::add);
             }
             super.visitProperty(property);
           }

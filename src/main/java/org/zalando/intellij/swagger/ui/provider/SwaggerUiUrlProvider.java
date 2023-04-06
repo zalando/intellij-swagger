@@ -6,7 +6,6 @@ import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.Url;
-import java.nio.file.Path;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,9 +29,9 @@ public class SwaggerUiUrlProvider extends BuiltInWebBrowserUrlProvider implement
   protected Url getUrl(@NotNull OpenInBrowserRequest request, @NotNull VirtualFile file) {
     SwaggerFileService swaggerFileService =
         ApplicationManager.getApplication().getService(SwaggerFileService.class);
-    Optional<Path> swaggerHTMLFolder =
-        swaggerFileService.convertSwaggerToHtml(request.getVirtualFile());
-
-    return swaggerHTMLFolder.map(SwaggerFilesUtils::convertSwaggerLocationToUrl).orElse(null);
+    return Optional.ofNullable(request.getVirtualFile())
+        .flatMap(swaggerFileService::convertSwaggerToHtml)
+        .map(SwaggerFilesUtils::convertSwaggerLocationToUrl)
+        .orElse(null);
   }
 }
