@@ -30,8 +30,13 @@ fi
 
 NEW_VERSION=$1
 
-sed -i '' "s/<version>.*<\/version>/<version>$NEW_VERSION<\/version>/g" src/main/resources/META-INF/plugin.xml
-
+if [[ "$(uname)" == "Darwin" ]]
+  then
+    SED_ARG=(-i "")
+else
+    SED_ARG=(-i)
+fi
+sed "${SED_ARG[@]}" "s/<version>.*<\/version>/<version>$NEW_VERSION<\/version>/g" src/main/resources/META-INF/plugin.xml
 git checkout master
 ./gradlew publishPlugin -Pversion="${NEW_VERSION}" -PjetbrainsReleaseChannel="${2}" -x buildSearchableOptions
 git add src/main/resources/META-INF/plugin.xml
