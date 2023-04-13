@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [ -z "${1:-}" ]
+if [[ "$#" -lt 2 || -z "${1}" || -z "${2}" ]]
   then
-    echo "Version needs to be provided."
+    echo "Version and release channel need to be provided."
     echo "Usage: ./release.sh <version> <release-channel>"
     exit 1
 fi
 
-if [[ "${2:-}" != "stable" && "${2:-}" != "beta" ]]
+if [[ "${2}" != "stable" && "${2}" != "beta" ]]
   then
-    echo "Release channel needs to be provided - supported values: stable, beta"
+    echo "Unsupported release channel ${2} - supported values: stable, beta."
     echo "Usage: ./release.sh <version> <release-channel>"
     exit 1
 fi
@@ -22,7 +22,7 @@ if [[ -n "${ENVS}" ]]
     export "${ENVS?}"
 fi
 
-if [ -z "${JETBRAINS_HUB_TOKEN:-}" ]
+if [[ -z "${JETBRAINS_HUB_TOKEN:-}" ]]
   then
     echo "Please put JETBRAINS_HUB_TOKEN in .env: JETBRAINS_HUB_TOKEN=<token>"
     exit 1
