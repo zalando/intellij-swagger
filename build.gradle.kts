@@ -61,7 +61,7 @@ tasks {
         }
     }
     publishPlugin {
-        channels.set(listOf("beta"))
+        channels.set(listOf(project.property("jetbrainsReleaseChannel").toString()))
         token.set(System.getenv("JETBRAINS_HUB_TOKEN"))
     }
     patchPluginXml {
