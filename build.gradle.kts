@@ -66,6 +66,8 @@ tasks {
     }
     patchPluginXml {
         untilBuild.set("") // null will add until-build to the plugin.xml
+        version.set(project.findProperty("version")?.toString() ?: "DEV")
+        changeNotes.set(project.findProperty("changeNotes")?.toString() ?: "none")
     }
 }
 

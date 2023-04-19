@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ "$#" -lt 2 || -z "${1}" || -z "${2}" ]]
+if [[ "$#" -lt 3 || -z "${1}" || -z "${2}" || -z "${3}" ]]
   then
-    echo "Version and release channel need to be provided."
-    echo "Usage: ./release.sh <version> <release-channel>"
+    echo "Version, release channel and release notes need to be provided."
+    echo "Usage: ./release.sh <version> <release-channel> <release-notes>"
     exit 1
 fi
 
@@ -28,17 +28,10 @@ if [[ -z "${JETBRAINS_HUB_TOKEN:-}" ]]
     exit 1
 fi
 
-NEW_VERSION=$1
-
-if [[ "$(uname)" == "Darwin" ]]
+if [[ "$(git branch --show-current)" != "master" ]]
   then
-    SED_ARG=(-i "")
-else
-    SED_ARG=(-i)
+    echo "Please use master branch"
+    exit 1
 fi
-sed "${SED_ARG[@]}" "s/<version>.*<\/version>/<version>$NEW_VERSION<\/version>/g" src/main/resources/META-INF/plugin.xml
-git checkout master
-./gradlew publishPlugin -Pversion="${NEW_VERSION}" -PjetbrainsReleaseChannel="${2}" -x buildSearchableOptions
-git add src/main/resources/META-INF/plugin.xml
-git commit -m "Bump version"
 
+./gradlew publishPlugin -Pversion="${1}" -PjetbrainsReleaseChannel="${2}" -PchangeNotes="${3}" -x buildSearchableOptions
