@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+DEFAULT_BRANCH="master"
+
 if [[ "$#" -lt 3 || -z "${1}" || -z "${2}" || -z "${3}" ]]
   then
     echo "Version, release channel and release notes need to be provided."
@@ -28,9 +30,9 @@ if [[ -z "${JETBRAINS_HUB_TOKEN:-}" ]]
     exit 1
 fi
 
-if [[ "$(git branch --show-current)" != "master" ]]
+if [[ "$(git branch --show-current)" != "${DEFAULT_BRANCH}" ]]
   then
-    echo "Please use master branch"
+    echo "Please use ${DEFAULT_BRANCH} branch"
     exit 1
 fi
 
