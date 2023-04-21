@@ -17,7 +17,6 @@ if [[ "${2}" != "stable" && "${2}" != "beta" ]]
     exit 1
 fi
 
-
 ENVS=$(grep -v '^\#' .env || true)
 if [[ -n "${ENVS}" ]]
   then
@@ -37,3 +36,7 @@ if [[ "$(git branch --show-current)" != "${DEFAULT_BRANCH}" ]]
 fi
 
 ./gradlew publishPlugin -Pversion="${1}" -PjetbrainsReleaseChannel="${2}" -PchangeNotes="${3}" -x buildSearchableOptions
+
+TAG="v${1}"
+git tag -a "${TAG}" -m "Release ${1}"
+git push origin "${TAG}"
