@@ -4,7 +4,6 @@ import com.intellij.util.Url;
 import com.intellij.util.Urls;
 import java.io.File;
 import java.nio.file.Path;
-
 import org.jetbrains.annotations.NotNull;
 
 public class SwaggerFilesUtils {
