@@ -1,5 +1,5 @@
-# Swagger Plugin Zalando Extension
-Zalando's architecture centers around microservices, and each API is documented with a Swagger specification. Zalando has its own [API Guidelines](https://opensource.zalando.com/restful-api-guidelines) that extends the standard Swagger specification. This extension example illustrates how the Swagger Plugin can be extended to support Zalando specific guidelines for REST APIs.
+# Zalando OpenAPI Editor with Zalando Extensions
+Zalando's architecture centers around microservices, and each API is documented with an OpenAPI specification. Zalando has its own [API Guidelines](https://opensource.zalando.com/restful-api-guidelines) that extends the standard OpenAPI specification. This extension example illustrates how the Zalando OpenAPI Editor can be extended to support Zalando specific guidelines for REST APIs.
 
 ![Zalando Extension (x-audience)](https://github.com/zalando/intellij-swagger/blob/master/docs/extensions-zalando.png?raw=true)
 
