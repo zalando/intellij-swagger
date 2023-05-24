@@ -22,7 +22,7 @@ intellij {
 }
 
 group = "org.zalando.intellij"
-version = if (project.hasProperty("version")) project.version else "0.0.1"
+version = if (project.version != Project.DEFAULT_VERSION) project.version else "SNAPSHOT"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -67,8 +67,8 @@ tasks {
     }
     patchPluginXml {
         untilBuild.set("") // null will add until-build to the plugin.xml
-        version.set(project.findProperty("version")?.toString() ?: "DEV")
-        changeNotes.set(project.findProperty("changeNotes")?.toString() ?: "none")
+        version.set(project.version.toString())
+        changeNotes.set(project.findProperty("changeNotes")?.toString())
     }
 }
 
