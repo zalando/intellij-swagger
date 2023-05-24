@@ -31,7 +31,8 @@ public class SwaggerUiCreator {
   public Path createSwaggerUiFiles(final String specificationContent) throws Exception {
     final File tempSwaggerUiDir = copySwaggerUiToTempDir();
 
-    setSwaggerConfigurationValues(new File(tempSwaggerUiDir, "index.html"), specificationContent);
+    setSwaggerConfigurationValues(
+        new File(tempSwaggerUiDir, "swagger-initializer.js"), specificationContent);
 
     return Paths.get(tempSwaggerUiDir.getAbsolutePath());
   }
