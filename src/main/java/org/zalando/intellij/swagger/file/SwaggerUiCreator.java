@@ -4,19 +4,18 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.util.LocalFileUrl;
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 
 public class SwaggerUiCreator {
@@ -61,34 +60,28 @@ public class SwaggerUiCreator {
   private void copyFromJar(final Path target) throws URISyntaxException, IOException {
     String resourcePath = "/" + SWAGGER_UI_FOLDER_NAME;
     URI resource = Objects.requireNonNull(getClass().getResource(resourcePath), "resource").toURI();
-    FileSystem fileSystem =
-        FileSystems.newFileSystem(resource, Collections.<String, String>emptyMap());
+    try (FileSystem fileSystem = FileSystems.newFileSystem(resource, Map.of())) {
 
-    final Path jarPath = fileSystem.getPath(resourcePath);
+      final Path jarPath = fileSystem.getPath(resourcePath);
 
-    Files.walkFileTree(
-        jarPath,
-        new SimpleFileVisitor<>() {
-
-          @Override
-          public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
-              throws IOException {
-            final Path currentTarget = target.resolve(jarPath.relativize(dir).toString());
-            Files.createDirectories(currentTarget);
-            return FileVisitResult.CONTINUE;
-          }
-
-          @Override
-          public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-              throws IOException {
-            Files.copy(
-                file,
-                target.resolve(jarPath.relativize(file).toString()),
-                StandardCopyOption.REPLACE_EXISTING);
-            return FileVisitResult.CONTINUE;
-          }
-        });
-
-    fileSystem.close();
+      try (Stream<Path> stream = Files.walk(jarPath)) {
+        stream.forEachOrdered(
+            path -> {
+              try {
+                if (Files.isDirectory(path)) {
+                  final Path currentTarget = target.resolve(jarPath.relativize(path).toString());
+                  Files.createDirectories(currentTarget);
+                } else {
+                  Files.copy(
+                      path,
+                      target.resolve(jarPath.relativize(path).toString()),
+                      StandardCopyOption.REPLACE_EXISTING);
+                }
+              } catch (IOException e) {
+                throw new UncheckedIOException("Failed to copy " + path, e);
+              }
+            });
+      }
+    }
   }
 }
