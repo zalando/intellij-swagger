@@ -1,13 +1,13 @@
 [![Build Plugin](https://github.com/zalando/intellij-swagger/actions/workflows/build.yml/badge.svg)](https://github.com/zalando/intellij-swagger/actions/workflows/build.yml)
 
-# Swagger Plugin
-Swagger Plugin makes it easy to edit Swagger and OpenAPI specification files inside IntelliJ IDEA. You can find it on JetBrains' [plugin page](https://plugins.jetbrains.com/plugin/8347).
+# Zalando OpenAPI Editor
+Zalando OpenAPI Editor makes it easy to edit OpenAPI and Swagger specification files inside IntelliJ IDEA. You can find it on JetBrains' [plugin page](https://plugins.jetbrains.com/plugin/8347).
 
-![Swagger Plugin features](https://github.com/zalando/intellij-swagger/blob/master/docs/features.gif?raw=true)
+![Zalando OpenAPI Editor features](https://github.com/zalando/intellij-swagger/blob/master/docs/features.gif?raw=true)
 
 ## Usage
 
-Open a Swagger or OpenAPI specification file, that's it.
+Open an OpenAPI or Swagger specification file, that's it.
 
 ## Custom Extensions
 
@@ -24,7 +24,7 @@ See the [Zalando extension example](https://github.com/zalando/intellij-swagger/
 
 ## Development
 
-Developing the Swagger Plugin is easy, just execute the following command:
+Developing the Zalando OpenAPI Editor is easy, just execute the following command:
 
 ```./gradlew runIde```
 
