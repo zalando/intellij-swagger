@@ -18,15 +18,15 @@ intellij {
     //Bundled plugin dependencies
     plugins.set(listOf("yaml", "com.intellij.java", "org.jetbrains.plugins.yaml"))
     pluginName.set("intellij-swagger")
-    version.set("2022.1") // Recommended to use the lowest supported version to compile against
+    version.set("2022.3") // Recommended to use the lowest supported version to compile against
 }
 
 group = "org.zalando.intellij"
 version = if (project.version != Project.DEFAULT_VERSION) project.version else "SNAPSHOT"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
