@@ -32,6 +32,11 @@ jobs:
     - name: Validate Gradle Wrapper
       uses: gradle/wrapper-validation-action@v1
 
+    # Address the "No space left on device" issue
+    # From here: https://github.com/jlumbroso/free-disk-space
+    - name: Free disk space
+      run: sudo rm -rf /usr/local/lib/android || true
+
     - name: Assemble plugin
       run: ./gradlew assemble
 
