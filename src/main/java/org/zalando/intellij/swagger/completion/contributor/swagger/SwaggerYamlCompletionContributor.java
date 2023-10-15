@@ -58,12 +58,12 @@ public class SwaggerYamlCompletionContributor extends CompletionContributor {
               .ifPresent(ValueCompletion::fill);
 
           for (SwaggerCustomFieldCompletionFactory ep :
-              SwaggerCustomFieldCompletionFactory.EP_NAME.getExtensions()) {
+              SwaggerCustomFieldCompletionFactory.EP_NAME.getExtensionList()) {
             ep.from(completionHelper, result).ifPresent(FieldCompletion::fill);
           }
 
           for (SwaggerCustomValueCompletionFactory ep :
-              SwaggerCustomValueCompletionFactory.EP_NAME.getExtensions()) {
+              SwaggerCustomValueCompletionFactory.EP_NAME.getExtensionList()) {
             ep.from(completionHelper, result).ifPresent(ValueCompletion::fill);
           }
 

@@ -58,12 +58,12 @@ public class OpenApiYamlCompletionContributor extends CompletionContributor {
               .ifPresent(ValueCompletion::fill);
 
           for (OpenApiCustomFieldCompletionFactory ep :
-              OpenApiCustomFieldCompletionFactory.EP_NAME.getExtensions()) {
+              OpenApiCustomFieldCompletionFactory.EP_NAME.getExtensionList()) {
             ep.from(completionHelper, result).ifPresent(FieldCompletion::fill);
           }
 
           for (OpenApiCustomValueCompletionFactory ep :
-              OpenApiCustomValueCompletionFactory.EP_NAME.getExtensions()) {
+              OpenApiCustomValueCompletionFactory.EP_NAME.getExtensionList()) {
             ep.from(completionHelper, result).ifPresent(ValueCompletion::fill);
           }
 
