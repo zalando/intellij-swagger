@@ -54,7 +54,7 @@ public class OpenApiJsonCompletionContributor extends CompletionContributor {
             OpenApiFieldCompletionFactory.from(completionHelper, result)
                 .ifPresent(FieldCompletion::fill);
             for (OpenApiCustomFieldCompletionFactory ep :
-                OpenApiCustomFieldCompletionFactory.EP_NAME.getExtensions()) {
+                OpenApiCustomFieldCompletionFactory.EP_NAME.getExtensionList()) {
               ep.from(completionHelper, result).ifPresent(FieldCompletion::fill);
             }
           } else {
@@ -62,7 +62,7 @@ public class OpenApiJsonCompletionContributor extends CompletionContributor {
                     completionHelper, CompletionResultSetFactory.forValue(parameters, result))
                 .ifPresent(ValueCompletion::fill);
             for (OpenApiCustomValueCompletionFactory ep :
-                OpenApiCustomValueCompletionFactory.EP_NAME.getExtensions()) {
+                OpenApiCustomValueCompletionFactory.EP_NAME.getExtensionList()) {
               ep.from(completionHelper, result).ifPresent(ValueCompletion::fill);
             }
           }

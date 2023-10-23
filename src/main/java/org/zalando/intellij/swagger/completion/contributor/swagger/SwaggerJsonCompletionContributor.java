@@ -54,7 +54,7 @@ public class SwaggerJsonCompletionContributor extends CompletionContributor {
             SwaggerFieldCompletionFactory.from(completionHelper, result)
                 .ifPresent(FieldCompletion::fill);
             for (SwaggerCustomFieldCompletionFactory ep :
-                SwaggerCustomFieldCompletionFactory.EP_NAME.getExtensions()) {
+                SwaggerCustomFieldCompletionFactory.EP_NAME.getExtensionList()) {
               ep.from(completionHelper, result).ifPresent(FieldCompletion::fill);
             }
           } else {
@@ -62,7 +62,7 @@ public class SwaggerJsonCompletionContributor extends CompletionContributor {
                     completionHelper, CompletionResultSetFactory.forValue(parameters, result))
                 .ifPresent(ValueCompletion::fill);
             for (SwaggerCustomValueCompletionFactory ep :
-                SwaggerCustomValueCompletionFactory.EP_NAME.getExtensions()) {
+                SwaggerCustomValueCompletionFactory.EP_NAME.getExtensionList()) {
               ep.from(completionHelper, result).ifPresent(ValueCompletion::fill);
             }
           }
