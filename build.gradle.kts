@@ -11,7 +11,7 @@ plugins {
     id("com.diffplug.spotless") version "6.22.0"
     id("idea")
     id("java")
-    id("com.github.ben-manes.versions") version "0.49.0"
+    id("com.github.ben-manes.versions") version "0.50.0"
 }
 
 intellij {
