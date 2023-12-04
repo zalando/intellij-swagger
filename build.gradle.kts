@@ -6,7 +6,7 @@ buildscript {
 }
 
 plugins {
-    id("org.jetbrains.intellij") version "1.16.0"
+    id("org.jetbrains.intellij") version "1.16.1"
     id("jacoco")
     id("com.diffplug.spotless") version "6.23.2"
     id("idea")
