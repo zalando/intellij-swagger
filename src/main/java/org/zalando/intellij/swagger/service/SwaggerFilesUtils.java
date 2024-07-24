@@ -1,5 +1,6 @@
 package org.zalando.intellij.swagger.service;
 
+import com.intellij.openapi.util.io.FileUtilRt;
 import com.intellij.util.Url;
 import com.intellij.util.Urls;
 import java.io.File;
@@ -9,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class SwaggerFilesUtils {
 
   public static Url convertSwaggerLocationToUrl(@NotNull final Path swaggerHtmlDirectory) {
-    return Urls.newUri("file", swaggerHtmlDirectory + File.separator + "index.html");
+    return Urls.newUri("file", FileUtilRt.toSystemIndependentName(swaggerHtmlDirectory + File.separator + "index.html"));
   }
 
   public static boolean isFileReference(final String text) {
