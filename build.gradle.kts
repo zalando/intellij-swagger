@@ -16,7 +16,8 @@ plugins {
 
 intellij {
     //Bundled plugin dependencies
-    plugins.set(listOf("yaml", "com.intellij.java", "org.jetbrains.plugins.yaml"))
+    // "com.intellij.modules.json" to be added when minimum required version is at least 2024.3
+    plugins.set(listOf("com.intellij.java", "org.jetbrains.plugins.yaml"))
     pluginName.set("intellij-swagger")
     version.set("2022.3") // Recommended to use the lowest supported version to compile against
 }
