@@ -9,9 +9,9 @@ name: Build Plugin
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
-    branches: [ "master" ]
+    branches: ["master"]
 
 permissions:
   contents: read
@@ -22,23 +22,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
 
-    - name: Validate Gradle Wrapper
-      uses: gradle/actions/wrapper-validation@v3
+      - name: Validate Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@v3
 
-    # Address the "No space left on device" issue
-    # From here: https://github.com/jlumbroso/free-disk-space
-    - name: Free disk space
-      run: sudo rm -rf /usr/local/lib/android || true
+      # Address the "No space left on device" issue
+      # From here: https://github.com/jlumbroso/free-disk-space
+      - name: Free disk space
+        run: |
+             sudo rm -rf /usr/local/lib/android || true
+             sudo rm -rf "$AGENT_TOOLSDIRECTORY/CodeQL" || true
 
-    - name: Assemble plugin
-      run: ./gradlew assemble
+      - name: Assemble plugin
+        run: ./gradlew assemble
 
-    - name: Check plugin
-      run: ./gradlew check runPluginVerifier
+      - name: Check plugin
+        run: ./gradlew check runPluginVerifier
