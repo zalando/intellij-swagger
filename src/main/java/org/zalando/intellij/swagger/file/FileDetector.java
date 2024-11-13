@@ -17,8 +17,8 @@ public class FileDetector {
       "[\"'](2\\.0)[\"']"; // Must be "2.0", yaml does allow '2.0'
   private static final String OPEN_API_KEY = "openapi";
   private static final String OPEN_API_VERSION =
-      ".*(3(\\.\\d+)+)(?![\\d\\.]).*"; // openapi uses semantic versioning so 3.*.* would be
-  // allowed.
+      // openapi uses semantic versioning so 3.*.* would be allowed.
+      ".*(3(\\.\\d+)+)(?![\\d\\.]).*";
 
   public boolean isMainSwaggerJsonFile(final PsiFile psiFile) {
     return hasJsonRootKey(psiFile, String.format("$.%s", SWAGGER_KEY), SWAGGER_VERSION);

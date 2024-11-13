@@ -74,6 +74,6 @@ tasks {
 
 spotless {
     java {
-        googleJavaFormat("1.16.0")
+        googleJavaFormat()
     }
 }
