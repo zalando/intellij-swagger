@@ -35,7 +35,7 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("com.fasterxml.jackson:jackson-bom:2.18.1"))
+    implementation(platform("com.fasterxml.jackson:jackson-bom:2.18.2"))
     implementation("commons-io:commons-io:2.18.0")
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("com.google.guava:guava:33.3.1-jre")
