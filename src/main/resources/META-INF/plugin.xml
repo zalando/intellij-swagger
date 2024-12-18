@@ -3,7 +3,13 @@
     <name>Zalando OpenAPI Editor</name>
     <vendor email="sebastian.monte@zalando.de" url="https://tech.zalando.com/">Zalando SE</vendor>
 
+    <!-- Module dependencies -->
+    <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.json</depends>  <!-- Bundled plugin starting from 2024.3 -->
+
+    <!-- Bundled plugin dependencies -->
+    <depends>com.intellij.java</depends>
     <depends>org.jetbrains.plugins.yaml</depends>
 
     <description><![CDATA[
