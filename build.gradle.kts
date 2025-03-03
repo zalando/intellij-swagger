@@ -42,7 +42,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-core")
     implementation("com.fasterxml.jackson.core:jackson-databind")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.12.0")
-    testImplementation("org.mockito:mockito-core:5.15.2")
+    testImplementation("org.mockito:mockito-core:5.16.0")
 }
 
 tasks {
