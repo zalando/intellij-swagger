@@ -37,7 +37,7 @@ dependencies {
     implementation(platform("com.fasterxml.jackson:jackson-bom:2.18.3"))
     implementation("commons-io:commons-io:2.18.0")
     implementation("com.google.code.gson:gson:2.12.1")
-    implementation("com.google.guava:guava:33.4.5-jre")
+    implementation("com.google.guava:guava:33.4.6-jre")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
     implementation("com.fasterxml.jackson.core:jackson-core")
     implementation("com.fasterxml.jackson.core:jackson-databind")
