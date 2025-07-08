@@ -8,7 +8,7 @@ buildscript {
 plugins {
     id("org.jetbrains.intellij") version "1.17.4"
     id("jacoco")
-    id("com.diffplug.spotless") version "7.0.2"
+    id("com.diffplug.spotless") version "7.1.0"
     id("idea")
     id("java")
 }
